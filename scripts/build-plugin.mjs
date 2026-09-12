@@ -58,6 +58,7 @@ const root = `dist/${profile}/plugins/apexrest-apex`;
 await rm(`dist/${profile}`, { recursive: true, force: true });
 await mkdir(`${root}/.codex-plugin`, { recursive: true });
 await cp('plugins/apexrest-apex/skills', `${root}/skills`, { recursive: true });
+await cp('plugins/apexrest-apex/assets', `${root}/assets`, { recursive: true });
 await cp('dist/runtime', `${root}/runtime`, { recursive: true });
 for (const file of ['LICENSE', 'NOTICE']) await cp(file, `${root}/${file}`);
 await cp('dist/resources', `${root}/resources`, { recursive: true });

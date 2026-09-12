@@ -33,7 +33,7 @@ import {
   success,
   withLock,
   writeJson
-} from "./chunk-3V2P7PPB.mjs";
+} from "./chunk-36MM2V54.mjs";
 
 // packages/core/src/metadata.ts
 var metadataRequest = external_exports.strictObject({
@@ -1837,17 +1837,17 @@ async function dispatch(operation, input = {}, signal) {
       case "setup":
       case "plugin.install":
       case "plugin.update": {
-        const { setup: setup2 } = await import("./chunk-LWVFSTQX.mjs");
+        const { setup: setup2 } = await import("./chunk-DDHXSNGK.mjs");
         data = await setup2(parsed);
         break;
       }
       case "plugin.validate": {
-        const { validateNative } = await import("./chunk-LWVFSTQX.mjs");
+        const { validateNative } = await import("./chunk-DDHXSNGK.mjs");
         data = await validateNative(text("from"));
         break;
       }
       case "plugin.uninstall": {
-        const { uninstallNative } = await import("./chunk-LWVFSTQX.mjs");
+        const { uninstallNative } = await import("./chunk-DDHXSNGK.mjs");
         data = await uninstallNative(text("home") ?? managedHome(), Boolean(parsed.keepRuntime));
         break;
       }

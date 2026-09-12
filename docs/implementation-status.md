@@ -4,6 +4,12 @@ English | [Українська](implementation-status.uk.md)
 
 The original build specification remains unchanged. This is working code and an installable beta, not a stable-qualified product. [acceptance.json](acceptance.json) separates implementation, verification, evidence and blockers for every A01–A28 criterion.
 
+## Plugin and documentation logo
+
+The owner-supplied [APEXREST pencil-and-ruler logo](assets/README.md) is included in the native plugin, both README languages, the documentation index and every generated site header. The horizontal source is used in site headers, and the composer icon frames the symbol. Display SVGs preserve the original paths and colors while trimming empty margins and adding a white background. This change concerns branding and packaging; Oracle and native-host lifecycle evidence retains its original scope.
+
+Local verification on 2026-09-12 passed: build, bundle freshness/integrity, both plugin manifest validations, lint, 37 EN/UK documentation pairs and 13 packaging tests. XML checks confirmed that original vector geometry and colors are preserved, and asset comparisons confirmed identical documentation/plugin logo copies. Separate Codex in-app browser observations verified the Ukrainian documentation at desktop width, the English documentation at 320 px width, and the icon at 98 px and 32 px on light and dark backgrounds. The installed plugin has not been refreshed for this branding change; native logo rendering remains unverified.
+
 ## Plugin website metadata
 
 The plugin metadata declares `interface.websiteURL` as `https://apex.rest` for the Codex details page. The generated and installed native manifests carry the same value. On 2026-09-12, Codex CLI confirmed that the plugin from the local repository marketplace was installed and enabled; all 198 installed bundle file hashes matched and the installed CLI validated the package. Visual confirmation of the Website field remains unavailable because the computer-use tool does not permit access to the Codex app. This scoped installation check does not refresh the full native lifecycle or Oracle evidence.

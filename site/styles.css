@@ -57,11 +57,22 @@ summary:focus-visible {
   border-bottom: 4px solid #92c9aa;
 }
 .brand {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
   font-weight: 800;
   letter-spacing: 0.05em;
   text-decoration: none;
   color: #f2f8ed;
   font-size: 1.15rem;
+}
+.brand img {
+  display: block;
+  width: 192px;
+  height: 50px;
+  flex-shrink: 0;
+  object-fit: contain;
+  border-radius: 0.3rem;
 }
 .brand:hover {
   color: white;
@@ -148,6 +159,9 @@ main img {
   border: 1px solid var(--line);
   border-radius: 0.8rem;
   background: white;
+}
+main img[src$='/apexrest-logo.svg'] {
+  max-width: 320px;
 }
 main h2,
 main h3,
@@ -266,6 +280,11 @@ footer {
   }
   .top {
     flex-wrap: wrap;
+  }
+  .brand {
+    width: 100%;
+    flex-wrap: wrap;
+    font-size: 0.9rem;
   }
   .badge {
     font-size: 0.7rem;

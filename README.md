@@ -2,6 +2,8 @@
 
 English | [Українська](README.uk.md)
 
+![APEXREST logo with a colored pencil and ruler](docs/assets/apexrest-logo.svg)
+
 [![Local quality gates](https://github.com/apexrest-dev/apexrest-codex/actions/workflows/ci.yml/badge.svg)](https://github.com/apexrest-dev/apexrest-codex/actions/workflows/ci.yml)
 
 **Build and change Oracle APEX applications with Codex, from source to a verified import.**

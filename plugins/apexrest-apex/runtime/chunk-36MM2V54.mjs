@@ -1395,6 +1395,9 @@ var metadata_default = {
     longDescription: "Independent APEXREST tooling for controlled Oracle APEX development, deployment and testing.",
     developerName: "APEXREST",
     websiteURL: "https://apex.rest",
+    composerIcon: "./assets/apexrest-icon.svg",
+    logo: "./assets/apexrest-logo.svg",
+    logoDark: "./assets/apexrest-logo.svg",
     category: "Productivity",
     capabilities: ["Read", "Write"],
     defaultPrompt: [
