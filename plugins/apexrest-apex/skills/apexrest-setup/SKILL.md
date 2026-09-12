@@ -1,0 +1,11 @@
+---
+name: apexrest-setup
+description: Set up APEXREST for Codex, diagnose local toolchain capabilities and guide connection onboarding. Use for APEXREST setup or missing runtime tools.
+---
+
+Call apexrest_doctor first. Distinguish detected tools, validated compiler, installed native plugin and database connectivity.
+Run the bundled installer only under the host's approved filesystem/network scope. Never change host trust or copy login tokens.
+Request connection references through local onboarding; never ask for passwords in chat.
+If a dependency is missing, run the explicit setup workflow. No download runs during MCP startup.
+An existing clean supported APEX installation is sufficient for ordinary deployment. APEXREST service tables and utPLSQL are not client/deploy setup prerequisites. Local deployment history/coordination is the default; utPLSQL is needed only for SQL suites, and database control tables only for the explicitly selected optional database mode.
+After reinstall, use a new Codex thread. A saved JSON file does not prove host discovery or readiness.

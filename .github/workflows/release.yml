@@ -1,0 +1,39 @@
+name: Publish an authorized verified release
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing immutable reviewed tag
+        required: true
+permissions:
+  contents: read
+jobs:
+  release:
+    environment: apexrest-release
+    runs-on: [self-hosted, apexrest-release-trusted]
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ inputs.tag }}
+          persist-credentials: false
+      - name: Require immutable reviewed tag and enabled publisher
+        env:
+          RELEASE_TAG: ${{ inputs.tag }}
+        run: |
+          test "$(git describe --tags --exact-match HEAD)" = "$RELEASE_TAG"
+          node --input-type=module -e 'import fs from "node:fs"; const p=JSON.parse(fs.readFileSync("publisher.config.json")); if(!p.enabled||!p.githubRepository)process.exit(3);'
+      - run: npm ci --ignore-scripts
+      - run: node scripts/verify-local.mjs
+      # Runner must provide externally retained, source-bound Oracle/platform evidence.
+      - run: npm run check-release-readiness
+      - run: npm run release:dry-run
+      - name: Require an externally signed release manifest
+        run: node --input-type=module -e 'import fs from "node:fs"; const m=JSON.parse(fs.readFileSync("dist/releases/release-manifest.json"));if(!m.signature)process.exit(3);'
+      - name: Publish immutable artifacts after protected environment approval
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ inputs.tag }}
+          GH_REPO: ${{ github.repository }}
+        run: gh release create "$RELEASE_TAG" --verify-tag --title "APEXREST $RELEASE_TAG" --notes-file docs/release-notes.md dist/releases/*

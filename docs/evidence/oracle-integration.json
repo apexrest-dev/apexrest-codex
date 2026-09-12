@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "timestamp": "2026-09-12T12:40:08.289Z",
+  "sourceDigest": "735de337d3a4eb41131721579c303042a11310bee0545972bf6d97a2184bcd69",
+  "mock": false,
+  "status": "blocked",
+  "checks": [],
+  "prerequisites": [
+    "APEXREST_INTEGRATION_PROJECT",
+    "APEXREST_INTEGRATION_ENV",
+    "APEXREST_INTEGRATION_ALLOW_WRITES=true",
+    "Named SQLcl connections, target grants, control tables, APEX 26.1+, utPLSQL, authenticated browser profile"
+  ],
+  "blocker": "Error: Authorized disposable integration project/environment/write consent are not configured. No DB write attempted.",
+  "followup": {
+    "timestamp": "2026-09-12T13:20:34.021Z",
+    "evidence": "docs/evidence/clean-apex-deployment.json",
+    "connectedTargetVerified": true,
+    "serviceTablesRequired": false,
+    "fullIntegrationStatus": "blocked",
+    "blockers": [
+      "Actual Oracle apply/restore/migration failure injection unexecuted.",
+      "Required utPLSQL and authenticated CRUD suites remain unavailable.",
+      "Independent-machine coordination requires external serialization or explicit database mode."
+    ]
+  }
+}

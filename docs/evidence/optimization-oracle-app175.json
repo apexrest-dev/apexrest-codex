@@ -1,0 +1,241 @@
+{
+  "createdAt": "2026-09-12T14:52:02.617514+00:00",
+  "scope": "Actual SQLcl/Oracle through built stdio MCP; no native Codex discovery, database writes or automated application tests.",
+  "platform": "darwin-arm64",
+  "node": "v24.21.0",
+  "apex": "26.1.1",
+  "compiler": "SQLcl: Release 26.1.2.0 Production Build: 26.1.2.132.1334",
+  "targetApplicationId": 175,
+  "plan": {
+    "method": "Sequential plans of unchanged sources and target; fresh MCP and worker per sample. Wall time includes startup and up to 250 ms completion polling. Descriptive samples, not a CI threshold.",
+    "before": {
+      "createdAt": "2026-09-12T14:45:44.612Z",
+      "node": "v24.21.0",
+      "platform": "darwin-arm64",
+      "scope": "Actual SQLcl/Oracle through built stdio MCP; no native Codex discovery, database writes or automated application tests.",
+      "method": "Sequential plans of unchanged sources and target; fresh MCP and worker per sample. Wall time includes startup and up to 250 ms completion polling. Descriptive samples, not a CI threshold.",
+      "runtimeFiles": {
+        "apexrest.mjs": "c2270302a7d7beb988ec2fd992d6fa2d455eb3d746499c970be3ae928a67d496",
+        "chunk-6RPRA4RG.mjs": "f6258baca1d63c07fbce76927441f02917f0d4d1272dc7bc57c43c6c7102f0af",
+        "chunk-BGRVWTQW.mjs": "645043b0b56756aef6f77dd1ce677f6cccbedb0eeb0a6e3c9f9216a6eb3616e8",
+        "chunk-CNAM3JMU.mjs": "669c5a5609fc552f7224f838db8484dae80f53d9b3a53682fe18cdbaead9a992",
+        "chunk-EKTKMQTR.mjs": "7b1a5c0a0805c9e72a2d91445ca572e56f2ddb598026f2c70c74c91d55ca8135",
+        "chunk-M2KXWD2O.mjs": "3afabd823aa41da0e9445428a5332d5882ef4824aaec07a1b211e2e08b370f50",
+        "chunk-QDK6Q4HX.mjs": "ce86ad958660617b6f621f7b71cd3256efcdcd853320ead65f4d5a909d32556e",
+        "mcp.mjs": "1038fd9a2cde6a4e28ec2673b1cb451acf790d50309ff1115a59fa1148a6097f"
+      },
+      "samples": [
+        {
+          "jobId": "5f5ded2b-4acf-408d-b54c-12f8671f5a45",
+          "wallMs": 20838.525708,
+          "compiler": "SQLcl: Release 26.1.2.0 Production Build: 26.1.2.132.1334",
+          "sourceDigest": "7af55f9c4cc088cb6e52daf2dc60539777f37696be86d9ee5940476dacf573a2",
+          "targetDigest": "3a373debb013f192dbfb86ed734f5a636b13699de6738bd7ebc3e6f54b9626a9",
+          "fingerprint": "5c1ad5f42ee82e128e6f96976e00987fdaa5a75edae0115dc75edf49f3698491",
+          "configurationDigest": "eda17768d91410cc71f6be8dcdc2dfe9054724e0b00253879e91e34162b6ac70",
+          "toolchainDigest": "d8faaf565c1e4110eeb2c695f6d5514ddf0a58ef56328968f4bdc9dc2a43954b"
+        },
+        {
+          "jobId": "39210620-7979-4dd9-9aa2-d38fc53f1bfb",
+          "wallMs": 20083.805749999996,
+          "compiler": "SQLcl: Release 26.1.2.0 Production Build: 26.1.2.132.1334",
+          "sourceDigest": "7af55f9c4cc088cb6e52daf2dc60539777f37696be86d9ee5940476dacf573a2",
+          "targetDigest": "3a373debb013f192dbfb86ed734f5a636b13699de6738bd7ebc3e6f54b9626a9",
+          "fingerprint": "5c1ad5f42ee82e128e6f96976e00987fdaa5a75edae0115dc75edf49f3698491",
+          "configurationDigest": "eda17768d91410cc71f6be8dcdc2dfe9054724e0b00253879e91e34162b6ac70",
+          "toolchainDigest": "d8faaf565c1e4110eeb2c695f6d5514ddf0a58ef56328968f4bdc9dc2a43954b"
+        },
+        {
+          "jobId": "b3023859-1fd4-40ba-b3cc-aa6cdfd64381",
+          "wallMs": 19856.830792,
+          "compiler": "SQLcl: Release 26.1.2.0 Production Build: 26.1.2.132.1334",
+          "sourceDigest": "7af55f9c4cc088cb6e52daf2dc60539777f37696be86d9ee5940476dacf573a2",
+          "targetDigest": "3a373debb013f192dbfb86ed734f5a636b13699de6738bd7ebc3e6f54b9626a9",
+          "fingerprint": "5c1ad5f42ee82e128e6f96976e00987fdaa5a75edae0115dc75edf49f3698491",
+          "configurationDigest": "eda17768d91410cc71f6be8dcdc2dfe9054724e0b00253879e91e34162b6ac70",
+          "toolchainDigest": "d8faaf565c1e4110eeb2c695f6d5514ddf0a58ef56328968f4bdc9dc2a43954b"
+        }
+      ],
+      "medianMs": 20083.805749999996
+    },
+    "after": {
+      "createdAt": "2026-09-12T14:47:48.457Z",
+      "node": "v24.21.0",
+      "platform": "darwin-arm64",
+      "scope": "Actual SQLcl/Oracle through built stdio MCP; no native Codex discovery, database writes or automated application tests.",
+      "method": "Sequential plans of unchanged sources and target; fresh MCP and worker per sample. Wall time includes startup and up to 250 ms completion polling. Descriptive samples, not a CI threshold.",
+      "runtimeFiles": {
+        "apexrest.mjs": "8ff13d2832e51fc8f4e67b89a4cc6b80e39add3d9126ec1ff80864a4a87b30c5",
+        "chunk-5VERS4SC.mjs": "43e0b897af3fa4a0dc190b9a3a846d783fab65ac9580092bd3b4c479bc0a3466",
+        "chunk-MTUGEAFV.mjs": "5d035aae23480702e211db2ce9a0679de61f8ac16de788ca1dc4d7d9472ce1fa",
+        "chunk-OP22HVEY.mjs": "97d2d65ee8a5295848ddfbd7ae7e8db36c5c1443d8f9374bdaf8ace1f3867913",
+        "chunk-POAOSK77.mjs": "1560d862854ea207f343b60e51bcba73c7c5464794553fa4a389562f0008f779",
+        "chunk-V54PIBCN.mjs": "895b217415ac5bbd1af57ee57389551f603eba15cd5be7f9ef7a017ad393d888",
+        "chunk-XSYZADMG.mjs": "4424ef70c6f0631a67fc1828589f30a9e58aed6f5924f2b9571b06d2f94e4c73",
+        "mcp.mjs": "6d0cca2c8d2dc2a53290c4de8e363a514cb4b5ed0b768046f302c5dbc65e5ecd"
+      },
+      "samples": [
+        {
+          "jobId": "6f2d6872-3ac6-4e20-91a4-9603fc5566a1",
+          "wallMs": 10523.10375,
+          "compiler": "SQLcl: Release 26.1.2.0 Production Build: 26.1.2.132.1334",
+          "sourceDigest": "7af55f9c4cc088cb6e52daf2dc60539777f37696be86d9ee5940476dacf573a2",
+          "targetDigest": "3a373debb013f192dbfb86ed734f5a636b13699de6738bd7ebc3e6f54b9626a9",
+          "fingerprint": "5c1ad5f42ee82e128e6f96976e00987fdaa5a75edae0115dc75edf49f3698491",
+          "configurationDigest": "eda17768d91410cc71f6be8dcdc2dfe9054724e0b00253879e91e34162b6ac70",
+          "toolchainDigest": "d8faaf565c1e4110eeb2c695f6d5514ddf0a58ef56328968f4bdc9dc2a43954b"
+        },
+        {
+          "jobId": "e7793667-bbcc-4c77-ac2b-bc0cd8ebc482",
+          "wallMs": 9494.993583,
+          "compiler": "SQLcl: Release 26.1.2.0 Production Build: 26.1.2.132.1334",
+          "sourceDigest": "7af55f9c4cc088cb6e52daf2dc60539777f37696be86d9ee5940476dacf573a2",
+          "targetDigest": "3a373debb013f192dbfb86ed734f5a636b13699de6738bd7ebc3e6f54b9626a9",
+          "fingerprint": "5c1ad5f42ee82e128e6f96976e00987fdaa5a75edae0115dc75edf49f3698491",
+          "configurationDigest": "eda17768d91410cc71f6be8dcdc2dfe9054724e0b00253879e91e34162b6ac70",
+          "toolchainDigest": "d8faaf565c1e4110eeb2c695f6d5514ddf0a58ef56328968f4bdc9dc2a43954b"
+        },
+        {
+          "jobId": "0f4f03a4-f4f1-4a86-b9c0-06f61029c023",
+          "wallMs": 9733.013917,
+          "compiler": "SQLcl: Release 26.1.2.0 Production Build: 26.1.2.132.1334",
+          "sourceDigest": "7af55f9c4cc088cb6e52daf2dc60539777f37696be86d9ee5940476dacf573a2",
+          "targetDigest": "3a373debb013f192dbfb86ed734f5a636b13699de6738bd7ebc3e6f54b9626a9",
+          "fingerprint": "5c1ad5f42ee82e128e6f96976e00987fdaa5a75edae0115dc75edf49f3698491",
+          "configurationDigest": "eda17768d91410cc71f6be8dcdc2dfe9054724e0b00253879e91e34162b6ac70",
+          "toolchainDigest": "d8faaf565c1e4110eeb2c695f6d5514ddf0a58ef56328968f4bdc9dc2a43954b"
+        }
+      ],
+      "medianMs": 9733.013917
+    },
+    "reductionPercent": 51.538000127291596,
+    "inputsUnchanged": true
+  },
+  "apply": {
+    "method": "One optimized same-source authorized import. Historical wall times are estimates from job-directory birthtime to completed state; latest also measured around MCP runner including up to 1.5 s polling. Historical imports include page revisions, so no controlled repeated-apply median is claimed.",
+    "historicalSamples": [
+      {
+        "jobId": "db9a1144-eb66-4bff-b710-6841a632409c",
+        "runId": "3abe92c8-58f0-4328-af81-a6c5394b2d3f",
+        "estimatedWallMs": 71359.42673683167
+      },
+      {
+        "jobId": "8e153f1a-5511-46b4-bfb0-ad218084eddc",
+        "runId": "6f5849b5-9bcd-4f36-9b52-a0ad264e4c42",
+        "estimatedWallMs": 73126.74880027771
+      },
+      {
+        "jobId": "8d8864aa-693c-45d6-9bab-1fcb8d2183db",
+        "runId": "313d1488-6ac1-4d2f-919d-262c399f54df",
+        "estimatedWallMs": 71944.43774223328
+      }
+    ],
+    "optimizedJobEstimate": {
+      "jobId": "890e3ec5-ab43-4066-9c1b-3bab6606ee4d",
+      "runId": "78f7922d-446a-4b69-b443-27d8bb094acd",
+      "estimatedWallMs": 32975.68869590759
+    },
+    "optimizedRunnerWallMs": 33413.738665985875,
+    "journalMilestones": {
+      "3abe92c8-58f0-4328-af81-a6c5394b2d3f": [
+        {
+          "state": "approved",
+          "at": "2026-09-12T14:35:10.832Z"
+        },
+        {
+          "state": "backing_up",
+          "at": "2026-09-12T14:35:10.847Z"
+        },
+        {
+          "state": "migrating",
+          "at": "2026-09-12T14:35:30.689Z"
+        },
+        {
+          "state": "importing",
+          "at": "2026-09-12T14:35:30.709Z"
+        },
+        {
+          "state": "verifying",
+          "at": "2026-09-12T14:35:47.781Z"
+        },
+        {
+          "state": "testing",
+          "at": "2026-09-12T14:35:55.542Z"
+        },
+        {
+          "state": "succeeded",
+          "at": "2026-09-12T14:35:55.553Z"
+        }
+      ],
+      "78f7922d-446a-4b69-b443-27d8bb094acd": [
+        {
+          "state": "approved",
+          "at": "2026-09-12T14:49:26.688Z"
+        },
+        {
+          "state": "backing_up",
+          "at": "2026-09-12T14:49:26.707Z"
+        },
+        {
+          "state": "migrating",
+          "at": "2026-09-12T14:49:39.217Z"
+        },
+        {
+          "state": "importing",
+          "at": "2026-09-12T14:49:39.234Z"
+        },
+        {
+          "state": "verifying",
+          "at": "2026-09-12T14:49:46.870Z"
+        },
+        {
+          "state": "testing",
+          "at": "2026-09-12T14:49:49.534Z"
+        },
+        {
+          "state": "succeeded",
+          "at": "2026-09-12T14:49:49.542Z"
+        }
+      ]
+    },
+    "status": "succeeded",
+    "unchangedFinalExport": true,
+    "sqlBackupVerified": true,
+    "grantRemoved": true
+  },
+  "implementation": {
+    "targetVerificationSessions": {
+      "before": 3,
+      "after": 1,
+      "alwaysFresh": true
+    },
+    "helpCache": "Per-adapter, successful help only; fresh version plus executable/Java/bin/lib file identity; concurrent probes share only a cancellation lifetime; unknown layouts bypass cache.",
+    "parallelism": "Independent read-only planning/apply preflight only; all operations settle before failure; no overlapping writes.",
+    "jsonDiagnostics": "Oracle error text inside successful result rows is data; process/envelope/stderr errors remain failures."
+  },
+  "checks": {
+    "unit": 64,
+    "contracts": 5,
+    "packaging": 5,
+    "typecheck": "passed",
+    "lint": "passed",
+    "build": "passed",
+    "skillsValidated": 8,
+    "newRegressionTests": 16,
+    "testsAreLocalFixtures": true
+  },
+  "workflow": {
+    "entrypointBytesBefore": 10801,
+    "entrypointBytesAfter": 12562,
+    "conditionalDashboardReferenceBytes": 1710,
+    "avoidsDuplicateCompileBeforePlan": true,
+    "namedTestAppImportAuthorizationPreserved": true
+  },
+  "limitations": [
+    "One macOS host and one existing Oracle application; no general latency guarantee or new-app timing claim.",
+    "Actual stdio MCP evidence is not refreshed native Codex discovery/install lifecycle evidence.",
+    "Full Oracle restore/fault-injection, CRUD/utPLSQL and cross-platform release gates remain open.",
+    "Built local plugin profiles refreshed; no globally installed APEXREST plugin was present to reinstall and release archives were not refreshed."
+  ],
+  "sourceDigest": "c63601c50147ca82b95f7b8f35dbdec5e4b8b254b1b44bfd192076eca713fac0"
+}

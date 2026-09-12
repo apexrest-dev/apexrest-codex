@@ -1,0 +1,141 @@
+{
+  "schemaVersion": 1,
+  "sourceDigest": "735de337d3a4eb41131721579c303042a11310bee0545972bf6d97a2184bcd69",
+  "timestamp": "2026-09-12T12:37:51.045Z",
+  "platform": "darwin",
+  "arch": "arm64",
+  "node": "v24.21.0",
+  "sqlcl": "<user-home>/sqlcl/bin/sql",
+  "javaHomeConfigured": true,
+  "mock": false,
+  "status": "passed",
+  "runs": [
+    {
+      "template": "blank-app",
+      "initialization": {
+        "root": "<temporary-directory>/apexrest-oracle-WlAuF1/blank-app",
+        "template": "blank-app",
+        "configuration": {
+          "schemaVersion": 1,
+          "projectId": "blank-app",
+          "application": {
+            "sourceDir": "src/apex/blank-app",
+            "alias": "blank-app"
+          },
+          "database": {
+            "migrationsDir": "src/database/migrations",
+            "packagesDir": "src/database/packages",
+            "testsDir": "tests/sql"
+          },
+          "toolchain": {
+            "lockFile": "apexrest.toolchain.lock.json"
+          },
+          "environments": {},
+          "tests": {
+            "unitDir": "tests/unit",
+            "apiDir": "tests/api",
+            "e2eDir": "tests/e2e",
+            "requiredSuites": [],
+            "defaultBrowser": "chromium",
+            "mutationAllowedEnvironments": []
+          },
+          "artifacts": {
+            "directory": ".apexrest/artifacts",
+            "retentionDays": 7
+          }
+        },
+        "nextActions": [
+          "Configure explicit target identity and connection references.",
+          "Review project code and grant project trust before running it."
+        ]
+      },
+      "validation": {
+        "status": "passed",
+        "compiler": {
+          "version": "SQLcl: Release 26.1.2.0 Production Build: 26.1.2.132.1334",
+          "helpHash": "80a2419c1511e15012d6c89948907e201fc26dd84734e888764b7d51adada61d"
+        },
+        "mmd": {
+          "mmdVersion": "26.1.0+3102"
+        },
+        "sourceDigest": "b36f67aa8a4153e9c5ca5875d7d4fddca2161e678ef1290935e9489881bccd79",
+        "output": "Validation successful.\n\n\n"
+      },
+      "mmdSha256": "f30f4fc62ad14eb26bfc32468f295886307d583c219581fa8abf6c5235b2030c"
+    },
+    {
+      "template": "customer-crm",
+      "initialization": {
+        "root": "<temporary-directory>/apexrest-oracle-WlAuF1/customer-crm",
+        "template": "customer-crm",
+        "configuration": {
+          "schemaVersion": 1,
+          "projectId": "customer-crm",
+          "application": {
+            "sourceDir": "src/apex/customer-crm",
+            "alias": "customer-crm"
+          },
+          "database": {
+            "migrationsDir": "src/database/migrations",
+            "packagesDir": "src/database/packages",
+            "testsDir": "tests/sql"
+          },
+          "toolchain": {
+            "lockFile": "apexrest.toolchain.lock.json"
+          },
+          "environments": {},
+          "tests": {
+            "unitDir": "tests/unit",
+            "apiDir": "tests/api",
+            "e2eDir": "tests/e2e",
+            "requiredSuites": [
+              "sql",
+              "e2e"
+            ],
+            "defaultBrowser": "chromium",
+            "mutationAllowedEnvironments": []
+          },
+          "artifacts": {
+            "directory": ".apexrest/artifacts",
+            "retentionDays": 7
+          }
+        },
+        "nextActions": [
+          "Configure explicit target identity and connection references.",
+          "Review project code and grant project trust before running it."
+        ]
+      },
+      "validation": {
+        "status": "passed",
+        "compiler": {
+          "version": "SQLcl: Release 26.1.2.0 Production Build: 26.1.2.132.1334",
+          "helpHash": "80a2419c1511e15012d6c89948907e201fc26dd84734e888764b7d51adada61d"
+        },
+        "mmd": {
+          "mmdVersion": "26.1.0+3102"
+        },
+        "sourceDigest": "1a41bb9e52cf967af8d0c71074acf2688d30efc7f2c6fe8ca1d43d68ca5436bc",
+        "output": "Validation successful.\n\n\n"
+      },
+      "mmdSha256": "f30f4fc62ad14eb26bfc32468f295886307d583c219581fa8abf6c5235b2030c"
+    }
+  ],
+  "publicationRedaction": {
+    "scope": "Local filesystem path prefixes only; evidence results and source/artifact hashes are unchanged.",
+    "originalFileSha256": "4c5506d3bc03bb3850c59c1b2520b2814b133c4fd9a0afb7353c6f2e28a1dcc2",
+    "redactedAt": "2026-09-12T14:59:35.469252+00:00",
+    "replacements": {
+      "user-home": "<user-home>/",
+      "temporary-directory": "<temporary-directory>/"
+    },
+    "occurrencesByCategory": {
+      "user-home": 1,
+      "macos-temporary": 2
+    },
+    "fields": [
+      ".sqlcl",
+      ".runs[0].initialization.root",
+      ".runs[1].initialization.root"
+    ]
+  }
+}

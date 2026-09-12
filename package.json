@@ -1,0 +1,47 @@
+{
+  "name": "@apexrest/codex",
+  "version": "0.1.0-beta.1",
+  "private": true,
+  "description": "Native Codex plugin for Oracle APEX development, deployment and testing",
+  "license": "Apache-2.0",
+  "type": "module",
+  "engines": {
+    "node": ">=24 <27"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "bin": {
+    "apexrest": "dist/runtime/apexrest.mjs"
+  },
+  "scripts": {
+    "build": "node scripts/build-plugin.mjs",
+    "typecheck": "tsc --noEmit -p tsconfig.base.json",
+    "lint": "node scripts/lint.mjs",
+    "test:unit": "node scripts/test.mjs unit",
+    "test:contracts": "node --test tests/contracts/*.test.mjs",
+    "test:packaging": "node --test tests/packaging/*.test.mjs",
+    "test:installers": "node scripts/test.mjs installers",
+    "test:integration": "node scripts/integration.mjs",
+    "test:native-codex": "node scripts/native-smoke.mjs",
+    "site:build": "node scripts/build-site.mjs",
+    "release:dry-run": "node scripts/package-release.mjs",
+    "check-release-readiness": "node scripts/check-release-readiness.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.30.0",
+    "tar": "7.5.22",
+    "yauzl": "3.4.0",
+    "zod": "4.6.2"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "@types/node": "24.10.1",
+    "@types/yauzl": "2.10.3",
+    "ajv": "8.20.0",
+    "esbuild": "0.28.2",
+    "fflate": "0.8.3",
+    "prettier": "3.9.6",
+    "typescript": "7.0.2"
+  }
+}

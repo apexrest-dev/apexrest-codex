@@ -1,0 +1,19 @@
+{
+  "basePath": "/codex/",
+  "title": "APEXREST for Codex",
+  "pages": [
+    { "slug": "", "title": "Overview", "source": "site/content/index.md" },
+    { "slug": "install", "title": "Install", "source": "site/content/install.md" },
+    { "slug": "docs", "title": "Quickstart", "source": "site/content/quickstart.md" },
+    { "slug": "existing-app", "title": "Existing applications", "source": "docs/existing-app.md" },
+    { "slug": "configuration", "title": "Configuration", "source": "docs/configuration.md" },
+    { "slug": "versions", "title": "Supported versions", "source": "site/content/versions.md" },
+    { "slug": "deployment", "title": "Deployment safety", "source": "docs/deployment-safety.md" },
+    { "slug": "testing", "title": "Testing", "source": "docs/testing.md" },
+    { "slug": "troubleshooting", "title": "Troubleshooting", "source": "docs/troubleshooting.md" },
+    { "slug": "releases", "title": "Releases", "source": "site/content/releases.md" },
+    { "slug": "security", "title": "Security and privacy", "source": "SECURITY.md" },
+    { "slug": "contributing", "title": "Contributing", "source": "CONTRIBUTING.md" },
+    { "slug": "architecture", "title": "Architecture", "source": "docs/architecture.md" }
+  ]
+}

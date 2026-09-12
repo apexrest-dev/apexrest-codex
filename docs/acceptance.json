@@ -1,0 +1,378 @@
+{
+  "schemaVersion": 1,
+  "asOf": "2026-09-12",
+  "release": "0.1.0-beta.1",
+  "overall": "partial-local-beta",
+  "statusSemantics": {
+    "implemented": "Executable code exists; does not imply live verification.",
+    "passed": "Specified local evidence passed; platform/scope limits remain explicit.",
+    "partial": "Only part of criterion or verification matrix is covered.",
+    "blocked": "External target/access or unimplemented dependent fixture prevents verification."
+  },
+  "criteria": [
+    {
+      "id": "A01",
+      "criterion": "Native package валідний за реальною схемою Codex/Agent Plugins",
+      "implementation": "implemented",
+      "verification": "passed",
+      "evidence": ["tests/packaging/packages.test.mjs", "docs/evidence/local-checks.json"],
+      "blocker": null
+    },
+    {
+      "id": "A02",
+      "criterion": "Codex host показує plugin і підтримує enable/disable без ручного skills-only встановлення",
+      "implementation": "implemented",
+      "verification": "passed",
+      "evidence": [
+        "scripts/native-smoke.mjs",
+        "docs/evidence/native-codex-compat.json",
+        "docs/evidence/oracle-app175-readonly.json"
+      ],
+      "blocker": "Verified only on Codex 0.154.0 macOS arm64; portable MCP not discovered."
+    },
+    {
+      "id": "A03",
+      "criterion": "MCP викликається з native install location поза monorepo",
+      "implementation": "implemented",
+      "verification": "passed",
+      "evidence": [
+        "scripts/native-smoke.mjs",
+        "docs/evidence/native-codex-compat.json",
+        "docs/evidence/oracle-app175-readonly.json"
+      ],
+      "blocker": null
+    },
+    {
+      "id": "A04",
+      "criterion": "Основний bootstrap встановлює client dependencies і реєструє plugin без ручного JSON/TOML редагування",
+      "implementation": "partial",
+      "verification": "partial",
+      "evidence": [
+        "packages/installer/src/toolchain.ts",
+        "scripts/setup-smoke.mjs",
+        "docs/evidence/setup-local.json"
+      ],
+      "blocker": "macOS client path exercised; Linux/Windows/WSL2 not executed. Project-only Codex scope is blocked."
+    },
+    {
+      "id": "A05",
+      "criterion": "Повторний setup ідемпотентний; interruptions відновлюються; concurrent setup захищений",
+      "implementation": "partial",
+      "verification": "partial",
+      "evidence": [
+        "packages/core/src/fs.ts",
+        "tests/unit/deployment.test.ts",
+        "docs/evidence/native-codex-compat.json"
+      ],
+      "blocker": "Same-host dead lock recovery and repeated offline setup tested; bootstrap interruption/upgrade matrix on all OSes remains incomplete."
+    },
+    {
+      "id": "A06",
+      "criterion": "Download integrity failure блокує запуск; offline/cache miss не приховує мережеві запити",
+      "implementation": "implemented",
+      "verification": "passed",
+      "evidence": [
+        "tests/installers/installer.test.ts",
+        "tests/packaging/packages.test.mjs",
+        "docs/evidence/local-checks.json",
+        "docs/evidence/optimization-local.json"
+      ],
+      "blocker": "Vendor/browser network channels still require per-platform clean-machine evidence; Playwright browser payload integrity is delegated to Playwright."
+    },
+    {
+      "id": "A07",
+      "criterion": "Existing Codex settings, Java/Node і чужі plugins не пошкоджуються",
+      "implementation": "implemented",
+      "verification": "partial",
+      "evidence": [
+        "packages/installer/src/native.ts",
+        "docs/evidence/native-codex-compat.json",
+        "docs/evidence/setup-local.json"
+      ],
+      "blocker": "Unrelated Codex setting and reused runtimes checked; foreign plugin and every upgrade/failure path require additional fixture coverage."
+    },
+    {
+      "id": "A08",
+      "criterion": "New-app template проходить реальний Oracle compiler validation",
+      "implementation": "implemented",
+      "verification": "passed",
+      "evidence": ["docs/evidence/oracle-local.json", "docs/evidence/native-codex-compat.json"],
+      "blocker": null
+    },
+    {
+      "id": "A09",
+      "criterion": "Existing-app export/adopt не затирає local edits і не губить компоненти",
+      "implementation": "partial",
+      "verification": "partial",
+      "evidence": [
+        "packages/core/src/oracle.ts",
+        "docs/existing-app.md",
+        "scripts/integration.mjs",
+        "tests/unit/core.test.ts",
+        "docs/evidence/oracle-app175-readonly.json",
+        "docs/evidence/clean-apex-deployment.json",
+        "docs/evidence/dashboard-app175.json",
+        "docs/evidence/optimization-oracle-app175.json"
+      ],
+      "blocker": "App 175 import changes only page 1; other 20 exported files including login/global pages and shared LOVs remain byte-identical to baseline. Repeated final import preserves all 21 exported files. Broader no-op normalization/component fixtures remain incomplete."
+    },
+    {
+      "id": "A10",
+      "criterion": "`.apex` metadata/MMD зберігаються; unsupported capability не симулюється",
+      "implementation": "implemented",
+      "verification": "partial",
+      "evidence": [
+        "docs/evidence/oracle-local.json",
+        "packages/core/src/oracle.ts",
+        "tests/unit/core.test.ts",
+        "docs/evidence/oracle-app175-readonly.json",
+        "docs/evidence/dashboard-app175.json",
+        "docs/evidence/optimization-oracle-app175.json"
+      ],
+      "blocker": "App 175 post-import MMD and 20 unaffected exported files preserve their original bytes; repeated final import/export is stable. Unsupported-component rejection matrix remains required."
+    },
+    {
+      "id": "A11",
+      "criterion": "Source mutation після plan і target drift блокують apply",
+      "implementation": "implemented",
+      "verification": "partial",
+      "evidence": [
+        "packages/core/src/deploy.ts",
+        "tests/unit/deployment.test.ts",
+        "docs/evidence/local-checks.json",
+        "docs/evidence/clean-apex-deployment.json",
+        "docs/evidence/optimization-oracle-app175.json"
+      ],
+      "blocker": "Source and target-drift behavior tested with fixtures; actual DB drift requires an authorized target."
+    },
+    {
+      "id": "A12",
+      "criterion": "Target DB/service/workspace/schema/app ID перевірені перед write",
+      "implementation": "implemented",
+      "verification": "partial",
+      "evidence": [
+        "packages/core/src/oracle.ts",
+        "docs/evidence/oracle-integration.json",
+        "docs/evidence/oracle-app175-readonly.json",
+        "docs/evidence/clean-apex-deployment.json",
+        "docs/evidence/dashboard-app175.json",
+        "docs/evidence/optimization-oracle-app175.json"
+      ],
+      "blocker": "Actual app 175 built-MCP apply executes fresh DB/service/schema/workspace/app checks before import and after completion. Mismatch failures are unit fixtures; full connected negative matrix remains incomplete."
+    },
+    {
+      "id": "A13",
+      "criterion": "Existing-app backup створений та перевірений до import; restore має окремий plan",
+      "implementation": "implemented",
+      "verification": "partial",
+      "evidence": [
+        "packages/core/src/deploy.ts",
+        "tests/unit/deployment.test.ts",
+        "docs/evidence/oracle-app175-readonly.json",
+        "docs/evidence/clean-apex-deployment.json",
+        "docs/evidence/dashboard-app175.json",
+        "docs/evidence/optimization-oracle-app175.json"
+      ],
+      "blocker": "Four actual app 175 imports created and verified complete SQL backups before writes; final backup hashes rechecked. Actual Oracle restore and restore-failure evidence remains open."
+    },
+    {
+      "id": "A14",
+      "criterion": "Migrations checksum/journal працюють; немає сліпого повторного застосування",
+      "implementation": "implemented",
+      "verification": "partial",
+      "evidence": [
+        "packages/core/src/deploy.ts",
+        "templates/database-control/install.sql",
+        "tests/unit/deployment.test.ts",
+        "docs/evidence/clean-apex-deployment.json"
+      ],
+      "blocker": "Default local checksum/history persistence, started-before-execution and interruption protection passed in fixtures. Actual Oracle DDL interruption/reconciliation remains unverified; database journal mode is optional."
+    },
+    {
+      "id": "A15",
+      "criterion": "Одночасні deploys із різних runners до одного target координуються",
+      "implementation": "partial",
+      "verification": "partial",
+      "evidence": [
+        "packages/core/src/deploy.ts",
+        "templates/database-control/install.sql",
+        "docs/evidence/clean-apex-deployment.json"
+      ],
+      "blocker": "Actual separate Node runner contention is verified within one local managed home/schema. Independent homes/machines require external serialization or optional DB control; real distributed Oracle contention remains unverified."
+    },
+    {
+      "id": "A16",
+      "criterion": "Timeout/cancel/disconnect обробляють `outcome_unknown` і reconciliation",
+      "implementation": "partial",
+      "verification": "partial",
+      "evidence": [
+        "packages/core/src/jobs.ts",
+        "packages/core/src/process.ts",
+        "tests/unit/deployment.test.ts",
+        "docs/evidence/clean-apex-deployment.json",
+        "docs/evidence/optimization-oracle-app175.json"
+      ],
+      "blocker": "Timeout/unknown write state tested with fixtures and real subprocess timeout; real DB disconnect/process-tree termination and reconciliation matrix incomplete."
+    },
+    {
+      "id": "A17",
+      "criterion": "Production не виконується через самостійно проставлений агентом `approved=true`",
+      "implementation": "implemented",
+      "verification": "partial",
+      "evidence": ["packages/core/src/config.ts", "packages/core/src/deploy.ts", "tests/unit/core.test.ts"],
+      "blocker": "Strict schema and missing production authority rejection tested. Protected-runner signature/approval integration is not configured."
+    },
+    {
+      "id": "A18",
+      "criterion": "utPLSQL suite дає реальний результат; framework відсутній не означає passed",
+      "implementation": "implemented",
+      "verification": "blocked",
+      "evidence": [
+        "packages/core/src/testing.ts",
+        "templates/customer-crm/project/tests/sql/test_customers.sql",
+        "docs/evidence/oracle-integration.json",
+        "docs/evidence/oracle-app175-readonly.json"
+      ],
+      "blocker": "Actual megasport probe sees no UT package. No utPLSQL suite was run; the empty required SQL suite fails the quality gate."
+    },
+    {
+      "id": "A19",
+      "criterion": "Browser E2E доводить authenticated CRUD і negative validation, не лише HTTP 200",
+      "implementation": "partial",
+      "verification": "partial",
+      "evidence": [
+        "templates/customer-crm/project/tests/e2e/customer-crud.spec.mjs",
+        "packages/testkit/src/apex.ts",
+        "docs/evidence/oracle-integration.json",
+        "docs/evidence/oracle-app175-readonly.json",
+        "docs/evidence/dashboard-app175.json",
+        "docs/evidence/optimization-oracle-app175.json"
+      ],
+      "blocker": "Authenticated Codex in-app dashboard filters, dates, charts and real empty state are verified. This page is not a CRUD fixture; automated authenticated CRUD/negative validation and mobile breakpoint coverage remain absent."
+    },
+    {
+      "id": "A20",
+      "criterion": "Required empty/skipped/blocked suite робить quality gate незеленим",
+      "implementation": "implemented",
+      "verification": "passed",
+      "evidence": [
+        "tests/unit/core.test.ts",
+        "packages/core/src/testing.ts",
+        "docs/evidence/local-checks.json",
+        "docs/evidence/oracle-app175-readonly.json"
+      ],
+      "blocker": null
+    },
+    {
+      "id": "A21",
+      "criterion": "Secrets відсутні в Git, argv, MCP output, logs і public artifacts",
+      "implementation": "partial",
+      "verification": "partial",
+      "evidence": [
+        "SECURITY.md",
+        "packages/core/src/result.ts",
+        "packages/core/src/artifacts.ts",
+        "tests/packaging/packages.test.mjs"
+      ],
+      "blocker": "Credential references, private auth, redaction and bundle scan verified locally. No claim of exhaustive business-secret detection or full live trace audit."
+    },
+    {
+      "id": "A22",
+      "criterion": "CLI/MCP однаково застосовують policy та error classification",
+      "implementation": "implemented",
+      "verification": "passed",
+      "evidence": [
+        "tests/contracts/mcp.test.mjs",
+        "packages/core/src/service.ts",
+        "docs/evidence/local-checks.json",
+        "docs/evidence/oracle-app175-readonly.json",
+        "docs/evidence/clean-apex-deployment.json",
+        "docs/evidence/optimization-local.json",
+        "docs/evidence/optimization-oracle-app175.json"
+      ],
+      "blocker": null
+    },
+    {
+      "id": "A23",
+      "criterion": "Update/uninstall не пошкоджують user projects, backups або чужі configurations",
+      "implementation": "partial",
+      "verification": "partial",
+      "evidence": [
+        "packages/installer/src/native.ts",
+        "packages/installer/src/setup.ts",
+        "docs/evidence/native-codex-compat.json"
+      ],
+      "blocker": "Product uninstall checked in clean profile; full cross-version/platform update/rollback coverage incomplete."
+    },
+    {
+      "id": "A24",
+      "criterion": "GitHub artifact і apex.rest site build узгоджені за version/checksums",
+      "implementation": "implemented",
+      "verification": "passed",
+      "evidence": [
+        "scripts/package-release.mjs",
+        "dist/releases/release-manifest.json",
+        "site-dist/releases/manifest.json"
+      ],
+      "blocker": "Local artifact/site versions and checksums only. No remote GitHub/apex.rest publication."
+    },
+    {
+      "id": "A25",
+      "criterion": "Stable release заблокований без required native-host/Oracle integration evidence",
+      "implementation": "implemented",
+      "verification": "passed",
+      "evidence": ["scripts/check-release-readiness.mjs", "dist/releases/release-readiness.json"],
+      "blocker": null
+    },
+    {
+      "id": "A26",
+      "criterion": "Документація відрізняє verified/experimental/planned можливості та platform profiles",
+      "implementation": "implemented",
+      "verification": "passed",
+      "evidence": [
+        "docs/implementation-status.md",
+        "docs/next-actions.md",
+        "toolchains/compatibility.json",
+        "README.md",
+        "docs/evidence/clean-apex-deployment.json",
+        "docs/evidence/optimization-oracle-app175.json"
+      ],
+      "blocker": null
+    },
+    {
+      "id": "A27",
+      "criterion": "Startup не підвантажує весь Oracle manual/schema/traces у context",
+      "implementation": "implemented",
+      "verification": "passed",
+      "evidence": [
+        "packages/core/src/references.ts",
+        "packages/mcp/src/server.ts",
+        "tests/contracts/mcp.test.mjs",
+        "docs/evidence/native-codex-compat.json",
+        "docs/evidence/optimization-local.json",
+        "docs/evidence/optimization-oracle-app175.json"
+      ],
+      "blocker": null
+    },
+    {
+      "id": "A28",
+      "criterion": "Sandbox, якщо позначений supported, реально provision-ить стек і не видаляє дані через звичайний `down`",
+      "implementation": "unsupported",
+      "verification": "not_applicable",
+      "evidence": ["packages/core/src/sandbox.ts", "toolchains/compatibility.json"],
+      "blocker": "No supported sandbox claim. Legitimate complete Linux DB/APEX/ORDS/utPLSQL provisioning tuple is not implemented or verified."
+    }
+  ],
+  "amendments": [
+    {
+      "date": "2026-09-12",
+      "rule": "Clean supported APEX deployment requires no APEXREST service tables; local control is default.",
+      "source": "docs/adr/007-clean-apex-deployment.md"
+    },
+    {
+      "date": "2026-09-12",
+      "rule": "An explicit named development/test application request includes its necessary import; record actual user authorization in exact-plan short-lived grants. Applicable application-only checks may replace unrelated suites only with user-approved scope; no absent suite is passed.",
+      "source": "AGENTS.md#authorized-application-import-rule-user-amendment-2026-09-12"
+    }
+  ]
+}

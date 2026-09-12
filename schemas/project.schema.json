@@ -1,0 +1,250 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "number",
+      "const": 1
+    },
+    "projectId": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,100}$"
+    },
+    "application": {
+      "type": "object",
+      "properties": {
+        "sourceDir": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "alias": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,100}$"
+        }
+      },
+      "required": [
+        "sourceDir",
+        "alias"
+      ],
+      "additionalProperties": false
+    },
+    "database": {
+      "type": "object",
+      "properties": {
+        "migrationsDir": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "packagesDir": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "testsDir": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        }
+      },
+      "required": [
+        "migrationsDir",
+        "packagesDir",
+        "testsDir"
+      ],
+      "additionalProperties": false
+    },
+    "toolchain": {
+      "type": "object",
+      "properties": {
+        "lockFile": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        }
+      },
+      "required": [
+        "lockFile"
+      ],
+      "additionalProperties": false
+    },
+    "environments": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,100}$"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "development",
+              "test",
+              "production"
+            ]
+          },
+          "readConnectionRef": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,100}$"
+          },
+          "deployConnectionRef": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,100}$"
+          },
+          "workspace": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_$#]{0,127}$"
+          },
+          "parsingSchema": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_$#]{0,127}$"
+          },
+          "applicationId": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "baseUrl": {
+            "type": "string",
+            "format": "uri"
+          },
+          "databaseIdentity": {
+            "type": "object",
+            "properties": {
+              "dbUniqueName": {
+                "type": "string",
+                "minLength": 1
+              },
+              "serviceName": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "dbUniqueName",
+              "serviceName"
+            ],
+            "additionalProperties": false
+          },
+          "allowedOrigins": {
+            "default": [],
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uri"
+            }
+          },
+          "expectedMarker": {
+            "type": "string",
+            "minLength": 1
+          },
+          "deploymentControl": {
+            "type": "string",
+            "enum": [
+              "local",
+              "database"
+            ]
+          }
+        },
+        "required": [
+          "kind",
+          "readConnectionRef",
+          "deployConnectionRef",
+          "workspace",
+          "parsingSchema",
+          "applicationId",
+          "baseUrl",
+          "databaseIdentity",
+          "allowedOrigins"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "tests": {
+      "type": "object",
+      "properties": {
+        "unitDir": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "apiDir": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "e2eDir": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "requiredSuites": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "unit",
+              "sql",
+              "api",
+              "e2e"
+            ]
+          }
+        },
+        "defaultBrowser": {
+          "type": "string",
+          "const": "chromium"
+        },
+        "mutationAllowedEnvironments": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,100}$"
+          }
+        }
+      },
+      "required": [
+        "unitDir",
+        "apiDir",
+        "e2eDir",
+        "requiredSuites",
+        "defaultBrowser",
+        "mutationAllowedEnvironments"
+      ],
+      "additionalProperties": false
+    },
+    "artifacts": {
+      "type": "object",
+      "properties": {
+        "directory": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "retentionDays": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 365
+        }
+      },
+      "required": [
+        "directory",
+        "retentionDays"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "projectId",
+    "application",
+    "database",
+    "toolchain",
+    "environments",
+    "tests",
+    "artifacts"
+  ],
+  "additionalProperties": false
+}

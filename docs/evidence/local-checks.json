@@ -1,0 +1,122 @@
+{
+  "schemaVersion": 1,
+  "timestamp": "2026-09-12T13:14:40.617Z",
+  "node": "v24.21.0",
+  "platform": "darwin",
+  "arch": "arm64",
+  "sourceDigest": "db9497a46ed685d7f54c564e56664ccb2a5b106fc2bc488cf7c2a8f1dfe6213a",
+  "status": "passed",
+  "oracleIntegration": false,
+  "checks": [
+    {
+      "command": "npm ci --offline",
+      "exitCode": 0,
+      "durationMs": 1282,
+      "logSha256": "23ecaeacf093c2a6235b1e6c863decfd218a7bfb168853d7b4cfcbd44d5b5d35",
+      "testSummary": []
+    },
+    {
+      "command": "npm run lint",
+      "exitCode": 0,
+      "durationMs": 507,
+      "logSha256": "bd5bfc4cb859d26471220c33288fe2e198da5ff88b0f073e6589c8576aa12699",
+      "testSummary": []
+    },
+    {
+      "command": "npm run typecheck",
+      "exitCode": 0,
+      "durationMs": 794,
+      "logSha256": "82e6cff3228cb90e8bec27fbae7731cc62eabde5d51fb1ea9ed87da19f741afd",
+      "testSummary": []
+    },
+    {
+      "command": "npm run test:unit",
+      "exitCode": 0,
+      "durationMs": 1602,
+      "logSha256": "3121880f86f4ddd7072942e9c22954a1f076b54e255fbbf86984e90b8c92fc32",
+      "testSummary": [
+        "ℹ tests 46",
+        "ℹ pass 46",
+        "ℹ fail 0",
+        "ℹ cancelled 0",
+        "ℹ skipped 0"
+      ]
+    },
+    {
+      "command": "npm run test:installers",
+      "exitCode": 0,
+      "durationMs": 227,
+      "logSha256": "47ef0b3dfc45cf204df7325991a9c948e9035807771eb2def925fcbe6ac0907f",
+      "testSummary": [
+        "ℹ tests 10",
+        "ℹ pass 10",
+        "ℹ fail 0",
+        "ℹ cancelled 0",
+        "ℹ skipped 0"
+      ]
+    },
+    {
+      "command": "npm run build",
+      "exitCode": 0,
+      "durationMs": 301,
+      "logSha256": "f2d804329f2a2690eaeece285b80b191cbc8e657fbca299b137d38db59e86c71",
+      "testSummary": []
+    },
+    {
+      "command": "npm run test:contracts",
+      "exitCode": 0,
+      "durationMs": 418,
+      "logSha256": "953e7386c0e287a305192c00d0d0c7d0d5c9a4d7178234aa26cf231681f3f285",
+      "testSummary": [
+        "ℹ tests 3",
+        "ℹ pass 3",
+        "ℹ fail 0",
+        "ℹ cancelled 0",
+        "ℹ skipped 0"
+      ]
+    },
+    {
+      "command": "npm run site:build",
+      "exitCode": 0,
+      "durationMs": 129,
+      "logSha256": "d7b1dc88547f78066ca8e362d12e0f12c1786d270e5f8977cf09e1c80140d106",
+      "testSummary": []
+    },
+    {
+      "command": "npm run test:packaging",
+      "exitCode": 0,
+      "durationMs": 769,
+      "logSha256": "b46b07f309cf6b27c8d9bfb0e9751f2f1daa8cd651f9a7c75769b773320bc346",
+      "testSummary": [
+        "ℹ tests 5",
+        "ℹ pass 5",
+        "ℹ fail 0",
+        "ℹ cancelled 0",
+        "ℹ skipped 0"
+      ]
+    },
+    {
+      "command": "npm run release:dry-run",
+      "exitCode": 0,
+      "durationMs": 860,
+      "logSha256": "d0dac8616b07bcd825bd2e0f769ad0397a9811cb3724d5b9d8dec34badedd0cd",
+      "testSummary": []
+    }
+  ],
+  "correctedFailures": [
+    {
+      "command": "npm run test:packaging",
+      "exitCode": 1,
+      "durationMs": 804,
+      "logSha256": "6d0600cdbc53a2509a1a7c3279afef573886a67dabdf5ba7eeae426799033ceb",
+      "testSummary": [
+        "ℹ tests 5",
+        "ℹ pass 4",
+        "ℹ fail 1",
+        "ℹ cancelled 0",
+        "ℹ skipped 0"
+      ],
+      "reason": "New documentation link did not resolve to a site route; corrected the documentation reference."
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+node_modules/
+dist/
+site-dist/
+site-dist.zip
+.DS_Store
+.apexrest/
+plugins/apexrest-apex/runtime/
+*.tgz
+*.log
+.env
+.env.*
+!.env.example
+playwright/.auth/
+test-results/
+playwright-report/
+*.wallet
+coverage/

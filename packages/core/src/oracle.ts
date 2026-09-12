@@ -1,0 +1,475 @@
+import path from 'node:path';
+import { cp, mkdir, mkdtemp, readFile, readdir, realpath, rename, stat } from 'node:fs/promises';
+import { managedHome, parse, refName } from './config.ts';
+import type { Environment, ProjectContext } from './config.ts';
+import type { Connection } from './connections.ts';
+import { canonical, contained, exists, hash, inventory, readJson, writeJson } from './fs.ts';
+import { Fault } from './result.ts';
+import { runProcess } from './process.ts';
+import type { ProcessRequest, ProcessResult } from './process.ts';
+export type Runner = (request: ProcessRequest) => Promise<ProcessResult>;
+export function sqlclToken(value: string) {
+  if (!value || /[\r\n\x00"&]/.test(value))
+    throw new Fault(
+      'INVALID_SQLCL_TOKEN',
+      'SQLcl argument contains a forbidden quote, newline or substitution character.',
+      2,
+    );
+  return '"' + value.replaceAll('\\', '/') + '"';
+}
+export function sqlLiteral(value: string) {
+  if (/[\x00-\x1f]/.test(value) || value.length > 1024)
+    throw new Fault('INVALID_SQL_LITERAL', 'Invalid SQL literal.', 2);
+  return "'" + value.replaceAll("'", "''") + "'";
+}
+export function oracleDiagnostics(r: ProcessResult, mutation = false, format: 'text' | 'json' = 'text') {
+  const stdout = r.stdout.replace(/\x1b\[[0-9;]*m/g, ''),
+    stderr = r.stderr.replace(/\x1b\[[0-9;]*m/g, ''),
+    output = stdout + '\n' + stderr;
+  if (r.cancelled || r.timedOut || r.truncated)
+    throw new Fault(
+      r.truncated ? 'OUTPUT_LIMIT' : r.cancelled ? 'CANCELLED' : 'TIMEOUT',
+      'SQLcl did not complete with a confirmed outcome.',
+      6,
+      mutation ? 'outcome_unknown' : 'cancelled',
+    );
+  let diagnostics = output;
+  if (format === 'json') {
+    // Error messages returned as data (for example an APEX activity log row)
+    // are not SQLcl failures. Strip only rows of a decoded result envelope;
+    // keep stderr, surrounding output and envelope error metadata observable.
+    const start = stdout.indexOf('{'),
+      end = stdout.lastIndexOf('}');
+    try {
+      const envelope = JSON.parse(stdout.slice(start, end + 1)) as {
+        results?: { items?: unknown[] }[];
+      };
+      if (
+        Array.isArray(envelope.results) &&
+        envelope.results.length > 0 &&
+        envelope.results.every((result) => Array.isArray(result.items))
+      )
+        diagnostics =
+          stdout.slice(0, start) +
+          JSON.stringify({
+            ...envelope,
+            results: envelope.results.map(({ items: _items, ...metadata }) => metadata),
+          }) +
+          stdout.slice(end + 1) +
+          '\n' +
+          stderr;
+    } catch {
+      // Malformed or command-error JSON receives the normal text diagnostics.
+    }
+  }
+  if (/ORA-01017|ORA-28000|ORA-28001/i.test(diagnostics))
+    throw new Fault('AUTHENTICATION_FAILED', 'Oracle authentication failed.', 4, 'blocked');
+  if (/ORA-01031/i.test(diagnostics))
+    throw new Fault('DB_PRIVILEGE', 'Oracle privileges are insufficient.', 4, 'blocked');
+  if (
+    r.code !== 0 ||
+    /(?:ORA-|PLS-|SP2-|SQLCL-)[0-9]+|(?:^|\n)\s*(?:Error(?:\s|:)|Unknown command|Invalid command|Invalid option|Compilation failed|Validation failed)|not connected|Unable to|No APEXlang files/i.test(
+      diagnostics,
+    )
+  )
+    throw new Fault(
+      'ORACLE_COMMAND_FAILED',
+      output.trim().slice(0, 6000) || 'SQLcl exited without success.',
+      1,
+    );
+  return output;
+}
+export class OracleAdapter {
+  private capabilityHelp: { key: string; help: string } | undefined;
+  private pendingHelp: { key: string; signal: AbortSignal | undefined; result: Promise<string> }[] = [];
+  constructor(
+    private runner: Runner = runProcess,
+    private executable = process.env.APEXREST_SQLCL ?? 'sql',
+  ) {}
+  async settings() {
+    const file = path.join(managedHome(), 'runtime.json');
+    const state = (await exists(file)) ? ((await readJson(file)) as { sqlcl?: string; java?: string }) : {};
+    return {
+      executable: process.env.APEXREST_SQLCL ?? state.sqlcl ?? this.executable,
+      javaHome:
+        process.env.APEXREST_JAVA_HOME ??
+        (state.java ? path.dirname(path.dirname(state.java)) : process.env.JAVA_HOME),
+    };
+  }
+  async session(
+    input: string,
+    connection?: Connection,
+    mutation = false,
+    signal?: AbortSignal,
+    cwd?: string,
+    format: 'text' | 'json' = 'text',
+  ) {
+    const work = cwd ?? (await this.stage());
+    const settings = await this.settings();
+    const args = ['-S', '-L', ...(connection ? ['-name', parse(refName, connection.name)] : ['/nolog'])];
+    const env: NodeJS.ProcessEnv = {
+      ...process.env,
+      SQLPATH: '',
+      ORACLE_PATH: '',
+      TNS_ADMIN: process.env.TNS_ADMIN,
+      JAVA_HOME: settings.javaHome,
+    };
+    delete env.NODE_OPTIONS;
+    delete env.JAVA_TOOL_OPTIONS;
+    delete env._JAVA_OPTIONS;
+    delete env.JDK_JAVA_OPTIONS;
+    const result = await this.runner({
+      executable: settings.executable,
+      args,
+      cwd: work,
+      env,
+      input:
+        'set define off\nset echo off\nset feedback off\nwhenever oserror exit failure rollback\nwhenever sqlerror exit failure rollback\n' +
+        input +
+        '\nexit\n',
+      timeoutMs: 180000,
+      ...(signal ? { signal } : {}),
+    });
+    return { ...result, output: oracleDiagnostics(result, mutation, format), work };
+  }
+  async stage() {
+    const root = path.join(managedHome(), 'staging');
+    await mkdir(root, { recursive: true, mode: 0o700 });
+    return mkdtemp(path.join(root, 'oracle-'));
+  }
+  private async capabilityKey(settings: Awaited<ReturnType<OracleAdapter['settings']>>, version: string) {
+    // Only cache bundled help for an identifiable SQLcl installation. Bare PATH
+    // commands and custom layouts retain fresh help probes on every call.
+    if (!path.isAbsolute(settings.executable)) return;
+    try {
+      const executable = await realpath(settings.executable);
+      const bin = path.dirname(executable);
+      if (path.basename(bin) !== 'bin') return;
+      const files: Record<string, string[]> = {};
+      const walk = async (directory: string): Promise<void> => {
+        for (const entry of await readdir(directory, { withFileTypes: true })) {
+          const file = path.join(directory, entry.name);
+          if (entry.isSymbolicLink()) throw new Error('Untracked SQLcl dependency');
+          if (entry.isDirectory()) await walk(file);
+          else if (entry.isFile()) {
+            const info = await stat(file, { bigint: true });
+            files[file] = [info.dev, info.ino, info.mode, info.size, info.mtimeNs, info.ctimeNs].map(String);
+          } else throw new Error('Untracked SQLcl dependency');
+        }
+      };
+      await walk(bin);
+      await walk(path.join(path.dirname(bin), 'lib'));
+      return hash(canonical({ ...settings, executable, version, files }));
+    } catch {
+      // A cache miss must never replace the actual capability check.
+      return;
+    }
+  }
+  async capabilities(signal?: AbortSignal) {
+    const settings = await this.settings();
+    const version = await this.runner({
+      executable: settings.executable,
+      args: ['-version'],
+      cwd: await this.stage(),
+      env: { ...process.env, JAVA_HOME: settings.javaHome },
+      timeoutMs: 15000,
+      ...(signal ? { signal } : {}),
+    });
+    oracleDiagnostics(version);
+    const currentVersion = version.stdout.trim();
+    const key = await this.capabilityKey(settings, currentVersion);
+    let help: string;
+    if (key && this.capabilityHelp?.key === key) help = this.capabilityHelp.help;
+    else {
+      const probe = async () => {
+        const help = (await this.session('help apex', undefined, false, signal)).output;
+        this.capabilityHelp =
+          key && key === (await this.capabilityKey(settings, currentVersion)) ? { key, help } : undefined;
+        return help;
+      };
+      if (!key) help = await probe();
+      else {
+        // Share only calls with the same cancellation lifetime. One cancelled
+        // caller must never cancel an unrelated caller's capability probe.
+        let pending = this.pendingHelp.find((entry) => entry.key === key && entry.signal === signal);
+        if (!pending) {
+          pending = { key, signal, result: probe() };
+          this.pendingHelp.push(pending);
+        }
+        try {
+          help = await pending.result;
+        } finally {
+          this.pendingHelp = this.pendingHelp.filter((entry) => entry !== pending);
+        }
+      }
+    }
+    if (signal?.aborted) throw new Fault('CANCELLED', 'Capability check cancelled.', 6, 'cancelled');
+    const commands = Object.fromEntries(
+      ['generate', 'export', 'validate', 'import'].map((command) => [
+        command,
+        new RegExp('\\b' + command + '\\b', 'i').test(help),
+      ]),
+    );
+    return { version: currentVersion, commands, helpHash: hash(help), help };
+  }
+  async requireCapability(name: 'generate' | 'export' | 'validate' | 'import', signal?: AbortSignal) {
+    const capabilities = await this.capabilities(signal);
+    if (!capabilities.commands[name])
+      throw new Fault('UNSUPPORTED_CAPABILITY', `This SQLcl does not advertise apex ${name}.`, 3, 'blocked');
+    return { version: capabilities.version, helpHash: capabilities.helpHash };
+  }
+  async generate(name: string, alias: string) {
+    const compiler = await this.requireCapability('generate');
+    const stage = await this.stage();
+    const result = await this.session(
+      `apex generate -name ${sqlclToken(name)} -alias ${sqlclToken(parse(refName, alias))} -dir ${sqlclToken(stage)}`,
+      undefined,
+      false,
+      undefined,
+      stage,
+    );
+    const directory = await this.findApplication(stage);
+    return { directory, compiler, output: result.output, files: await inventory(directory) };
+  }
+  async findApplication(root: string): Promise<string> {
+    if (await exists(path.join(root, 'application.apx'))) return root;
+    const found: string[] = [];
+    for (const entry of await readdir(root, { withFileTypes: true }))
+      if (entry.isDirectory()) {
+        const dir = path.join(root, entry.name);
+        if (await exists(path.join(dir, 'application.apx'))) found.push(dir);
+        else
+          for (const sub of await readdir(dir, { withFileTypes: true }))
+            if (sub.isDirectory() && (await exists(path.join(dir, sub.name, 'application.apx'))))
+              found.push(path.join(dir, sub.name));
+      }
+    if (found.length !== 1)
+      throw new Fault(
+        'ORACLE_OUTPUT_MISSING',
+        'Expected exactly one generated/exported APEXlang application.',
+        1,
+      );
+    return found[0]!;
+  }
+  async validate(source: string, signal?: AbortSignal) {
+    const compiler = await this.requireCapability('validate', signal);
+    const before = await inventory(source);
+    if (!before['.apex/apexlang.json'])
+      throw new Fault(
+        'MMD_METADATA_REQUIRED',
+        'Preserve Oracle-generated .apex/apexlang.json before validation.',
+        3,
+      );
+    const stage = await this.stage(),
+      copy = path.join(stage, 'application');
+    await cp(source, copy, { recursive: true });
+    const result = await this.session(
+      `apex validate -input ${sqlclToken(copy)}`,
+      undefined,
+      false,
+      signal,
+      stage,
+    );
+    if (
+      !/validat(?:ion|ed).*?(?:success|complete)|successfully.*validat|compil(?:ation|ed).*?(?:success|complete)|successfully.*compil/is.test(
+        result.output,
+      )
+    )
+      throw new Fault(
+        'VALIDATION_UNCONFIRMED',
+        result.output.slice(0, 4000) || 'Compiler returned no success marker.',
+        1,
+      );
+    if (canonical(before) !== canonical(await inventory(source)))
+      throw new Fault('SOURCE_DRIFT', 'Source changed during validation.', 5);
+    return {
+      status: 'passed',
+      compiler,
+      mmd: JSON.parse(await readFile(path.join(source, '.apex/apexlang.json'), 'utf8')) as unknown,
+      sourceDigest: hash(canonical(before)),
+      output: result.output,
+    };
+  }
+  async exportApplication(env: Environment, connection: Connection, format: 'APEXLANG' | 'SQL' = 'APEXLANG') {
+    await this.requireCapability('export');
+    const stage = await this.stage();
+    const result = await this.session(
+      `apex export -applicationid ${env.applicationId} -exptype ${format} -skipExportDate -expOriginalIds -dir ${sqlclToken(stage)}`,
+      connection,
+      false,
+      undefined,
+      stage,
+    );
+    const directory = format === 'APEXLANG' ? await this.findApplication(stage) : stage;
+    const files = await inventory(directory);
+    if (
+      !Object.keys(files).length ||
+      (format === 'SQL' && !Object.keys(files).some((f) => f.endsWith('.sql')))
+    )
+      throw new Fault('EMPTY_BACKUP', 'Oracle export produced no usable files.', 1);
+    return { directory, files, digest: hash(canonical(files)), format, output: result.output };
+  }
+  async jsonQuery(sql: string, connection: Connection, bindings: Record<string, string | number> = {}) {
+    const preamble = Object.entries(bindings)
+      .map(([key, value]) => {
+        if (!/^p_[a-z_]+$/.test(key)) throw new Fault('INVALID_BIND', 'Invalid internal bind name.', 2);
+        return `variable ${key} ${typeof value === 'number' ? 'number' : 'varchar2(1024)'}\nexec :${key} := ${typeof value === 'number' ? value : sqlLiteral(value)};`;
+      })
+      .join('\n');
+    const result = await this.session(
+      `${preamble}\nset sqlformat json\n${sql};`,
+      connection,
+      false,
+      undefined,
+      undefined,
+      'json',
+    );
+    const start = result.output.indexOf('{'),
+      end = result.output.lastIndexOf('}');
+    if (start < 0) throw new Fault('EMPTY_QUERY_RESULT', 'SQLcl did not return its JSON result envelope.', 1);
+    let json: unknown;
+    try {
+      json = JSON.parse(result.output.slice(start, end + 1));
+    } catch {
+      throw new Fault('INVALID_ORACLE_JSON', 'Cannot decode Oracle metadata result.', 1);
+    }
+    const resultSets = (json as { results?: { items?: Record<string, unknown>[] }[] }).results;
+    if (!Array.isArray(resultSets) || !Array.isArray(resultSets[0]?.items))
+      throw new Fault('INVALID_ORACLE_JSON', 'SQLcl result has no items collection.', 1);
+    return resultSets[0]!.items!;
+  }
+  async identity(connection: Connection) {
+    const rows = await this.jsonQuery(
+      "select sys_context('USERENV','DB_UNIQUE_NAME') db_unique_name, sys_context('USERENV','SERVICE_NAME') service_name, sys_context('USERENV','CURRENT_SCHEMA') parsing_schema from dual",
+      connection,
+    );
+    if (rows.length !== 1) throw new Fault('IDENTITY_UNCONFIRMED', 'Database identity was not confirmed.', 3);
+    return rows[0]!;
+  }
+  async verifyTarget(env: Environment, connection: Connection) {
+    // One read-only statement observes all target identifiers in the same live
+    // SQLcl session. Never reuse this result between plan/apply/write checks.
+    const rows = await this.jsonQuery(
+      `select 'identity' target_record,
+        sys_context('USERENV','DB_UNIQUE_NAME') db_unique_name,
+        sys_context('USERENV','SERVICE_NAME') service_name,
+        sys_context('USERENV','CURRENT_SCHEMA') parsing_schema,
+        null workspace_id, null workspace, null application_id, null alias, null owner
+       from dual
+       union all
+       select 'workspace', null, null, null, workspace_id, workspace, null, null, null
+       from apex_workspaces where workspace = :p_workspace
+       union all
+       select 'application', null, null, null, null, workspace, application_id, alias, owner
+       from apex_applications where application_id = :p_app_id`,
+      connection,
+      { p_workspace: env.workspace, p_app_id: env.applicationId },
+    );
+    const identities = rows.filter((row) => row.target_record === 'identity');
+    if (identities.length !== 1)
+      throw new Fault('IDENTITY_UNCONFIRMED', 'Database identity was not confirmed.', 3);
+    const identity = {
+      db_unique_name: identities[0]!.db_unique_name,
+      service_name: identities[0]!.service_name,
+      parsing_schema: identities[0]!.parsing_schema,
+    };
+    if (
+      identity.db_unique_name !== env.databaseIdentity.dbUniqueName ||
+      identity.service_name !== env.databaseIdentity.serviceName ||
+      identity.parsing_schema !== env.parsingSchema
+    )
+      throw new Fault(
+        'TARGET_MISMATCH',
+        'Connection does not match the configured database/service/schema.',
+        5,
+        'conflict',
+      );
+    const workspaces = rows
+      .filter((row) => row.target_record === 'workspace')
+      .map((row) => ({ workspace_id: row.workspace_id, workspace: row.workspace }));
+    if (workspaces.length !== 1)
+      throw new Fault(
+        'WORKSPACE_UNCONFIRMED',
+        'Configured workspace is absent or inaccessible.',
+        4,
+        'blocked',
+      );
+    const applications = rows
+      .filter((row) => row.target_record === 'application')
+      .map((row) => ({
+        application_id: row.application_id,
+        alias: row.alias,
+        owner: row.owner,
+        workspace: row.workspace,
+      }));
+    if (
+      applications.length > 1 ||
+      applications.some((a) => a.workspace !== env.workspace || a.owner !== env.parsingSchema)
+    )
+      throw new Fault(
+        'APPLICATION_TARGET_MISMATCH',
+        'Application belongs to a different workspace or parsing schema.',
+        5,
+      );
+    return { identity, workspace: workspaces[0]!, application: applications[0] ?? null };
+  }
+  async nativeDeployment(ctx: ProjectContext, env: Environment, source: string) {
+    const output = path.join(await this.stage(), 'deployment.json');
+    const defaults = path.join(source, 'deployments/default.json');
+    const native = (await exists(defaults))
+      ? (JSON.parse(await readFile(defaults, 'utf8')) as Record<string, unknown>)
+      : {};
+    const oldApp = (native.app ?? {}) as Record<string, unknown>;
+    await writeJson(output, {
+      ...native,
+      app: {
+        ...oldApp,
+        id: env.applicationId,
+        alias: ctx.config.application.alias,
+        databaseSession: { ...((oldApp.databaseSession as object) ?? {}), parsingSchema: env.parsingSchema },
+      },
+      workspace: { name: env.workspace },
+    });
+    return output;
+  }
+  async importApplication(
+    ctx: ProjectContext,
+    env: Environment,
+    connection: Connection,
+    source: string,
+    signal?: AbortSignal,
+  ) {
+    await this.requireCapability('import', signal);
+    const config = await this.nativeDeployment(ctx, env, source);
+    const result = await this.session(
+      `apex import -input ${sqlclToken(source)} -deployment ${sqlclToken(config)} -workspace ${sqlclToken(env.workspace)} -schema ${sqlclToken(env.parsingSchema)} -id ${env.applicationId}`,
+      connection,
+      true,
+      signal,
+    );
+    if (!/import.*(?:success|complete)|successfully.*import/is.test(result.output))
+      throw new Fault(
+        'IMPORT_UNCONFIRMED',
+        'Import returned without a tested success marker; reconcile the target.',
+        6,
+        'outcome_unknown',
+      );
+    return result.output;
+  }
+}
+export async function installSources(source: string, root: string, destination: string) {
+  const target = await contained(root, destination);
+  if (await exists(target))
+    throw new Fault(
+      'LOCAL_EDITS_CONFLICT',
+      'Destination already exists; export remains in staging. Review and merge explicitly.',
+      5,
+      'conflict',
+    );
+  await mkdir(path.dirname(target), { recursive: true });
+  const staging = await mkdtemp(path.join(path.dirname(target), '.apexrest-copy-'));
+  await inventory(source);
+  await cp(source, staging, { recursive: true });
+  await rename(staging, target);
+  return { directory: target, files: await inventory(target) };
+}

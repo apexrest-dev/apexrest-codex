@@ -1,0 +1,112 @@
+#!/usr/bin/env node
+import { dispatch } from '../../core/src/service.ts';
+import { schemas } from '../../core/src/operations.ts';
+import type { Operation } from '../../core/src/operations.ts';
+import { failure, Fault } from '../../core/src/result.ts';
+import { executeJob } from '../../core/src/jobs.ts';
+import { loadProject } from '../../core/src/config.ts';
+const argv = process.argv.slice(2);
+const positional: Record<string, string[]> = {
+  'project.init': ['directory'],
+  'connection.add': ['name'],
+  'connection.test': ['name'],
+  'connection.remove': ['name'],
+  'docs.search': ['query'],
+  'docs.read': ['id'],
+  'jobs.status': ['id'],
+  'jobs.cancel': ['id'],
+  'artifacts.read': ['id'],
+};
+function operationFrom(args: string[]) {
+  const first = args[0];
+  if (['doctor', 'version', 'setup'].includes(first ?? '')) return { op: first!, start: 1 };
+  if (first === 'test' && ['unit', 'sql', 'api', 'e2e', 'all'].includes(args[1] ?? ''))
+    return { op: 'test.run', start: 2, suite: args[1] };
+  return { op: args.slice(0, 2).join('.'), start: 2 };
+}
+const selected = operationFrom(argv);
+function help() {
+  const key = selected.op as Operation;
+  const lines = [
+    'APEXREST for Codex — independent Oracle APEX developer tools',
+    'Usage: apexrest <command> [options]',
+    '',
+    ...Object.keys(schemas)
+      .filter((x) => !['docs.read', 'metadata.read', 'test.run'].includes(x))
+      .map((x) => '  ' + x.replace('.', ' ')),
+    '  test unit|sql|api|e2e|all [--env NAME]',
+    '  mcp',
+    '',
+    '--json emits one structured JSON result; diagnostics use stderr.',
+    'Use --project PATH for project operations. Environment never defaults.',
+    'Exit codes: 0 success, 1 failed, 2 input, 3 dependency, 4 approval, 5 conflict, 6 unknown/cancelled.',
+  ];
+  if (schemas[key])
+    lines.push(
+      '',
+      `Options for ${selected.op.replace('.', ' ')}:`,
+      ...Object.keys(schemas[key].shape).map(
+        (k) => '  --' + k.replace(/[A-Z]/g, (c) => '-' + c.toLowerCase()),
+      ),
+      ...(positional[key] ?? []).map((p) => '  <' + p + '>'),
+    );
+  console.log(lines.join('\n'));
+}
+try {
+  if (!argv.length || argv.includes('--help') || argv.includes('-h')) help();
+  else if (argv[0] === '--job-worker') {
+    if (argv.length !== 3) throw new Fault('INVALID_INPUT', 'Invalid internal job request.', 2);
+    await executeJob(await loadProject(argv[1]!), argv[2]!, dispatch);
+  } else if (argv[0] === 'mcp') {
+    if (argv.length !== 1) throw new Fault('INVALID_INPUT', 'mcp accepts no arguments.', 2);
+    const { startMcp } = await import('../../mcp/src/server.ts');
+    await startMcp();
+  } else {
+    const selectedOp = argv[0] === '--version' ? { op: 'version', start: 1 } : selected;
+    if (!(selectedOp.op in schemas)) throw new Fault('INVALID_INPUT', 'Unknown command. Use --help.', 2);
+    const schema = schemas[selectedOp.op as Operation];
+    const input: Record<string, unknown> = selected.suite ? { suite: selected.suite } : {};
+    const booleans = new Set([
+      'json',
+      'yes',
+      'nonInteractive',
+      'offline',
+      'dryRun',
+      'acceptOracleLicense',
+      'skipBrowser',
+      'installOsDeps',
+      'nativeOnly',
+      'keepRuntime',
+      'headed',
+    ]);
+    const numbers = new Set(['appId', 'offset', 'limit']);
+    let index = 0;
+    for (let i = selectedOp.start; i < argv.length; i++) {
+      const token = argv[i]!;
+      if (token.startsWith('--')) {
+        const name = token.slice(2).replace(/-([a-z])/g, (_, c: string) => c.toUpperCase());
+        if (name === 'json') continue;
+        if (!(name in schema.shape) || name in input)
+          throw new Fault('INVALID_INPUT', `Unknown or duplicate option: ${token}`, 2);
+        if (booleans.has(name)) input[name] = true;
+        else {
+          const value = argv[++i];
+          if (!value || value.startsWith('--'))
+            throw new Fault('INVALID_INPUT', `Missing value for ${token}`, 2);
+          input[name] = numbers.has(name) ? Number(value) : value;
+        }
+      } else {
+        const field = positional[selectedOp.op]?.[index++];
+        if (!field || field in input) throw new Fault('INVALID_INPUT', `Unexpected argument: ${token}`, 2);
+        input[field] = token;
+      }
+    }
+    const result = await dispatch(selectedOp.op, input);
+    console.log(JSON.stringify(result, null, argv.includes('--json') ? 0 : 2));
+    process.exitCode = result.exitCode;
+  }
+} catch (e) {
+  const result = failure(selected.op, e);
+  console.log(JSON.stringify(result));
+  process.exitCode = result.exitCode;
+}

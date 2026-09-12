@@ -1,0 +1,89 @@
+{
+  "createdAt": "2026-09-12T14:52:02.617514+00:00",
+  "target": {
+    "applicationId": 175,
+    "workspace": "MEGASPORT",
+    "parsingSchema": "MEGASPORT",
+    "environment": "dashboard",
+    "kind": "test"
+  },
+  "transport": "Actual locally built MCP stdio server; not native Codex tool discovery",
+  "scope": "Full application import completed; only page 1 source changed",
+  "compiler": "SQLcl: Release 26.1.2.0 Production Build: 26.1.2.132.1334",
+  "validationStatus": "passed",
+  "sourceDigest": "7af55f9c4cc088cb6e52daf2dc60539777f37696be86d9ee5940476dacf573a2",
+  "planDigest": "b00c6a4b54b25b22f41ceace7bb0d3b740a0fe2e9af603d150f7853ea2ecf25c",
+  "planExpiresAt": "2026-09-12T15:18:18.214Z",
+  "preservation": {
+    "baselineFiles": 21,
+    "unchangedFiles": 20,
+    "changedFiles": ["pages/p00001-home.apx"],
+    "authenticationChanged": false,
+    "mmdChanged": false,
+    "repeatedFinalImportExportUnchangedFiles": 21
+  },
+  "sourceReadChecks": {
+    "scenarios": [
+      "30 days/all stores",
+      "7 days/all stores",
+      "90 days/all stores",
+      "30 days/one store",
+      "30 days/no matches"
+    ],
+    "status": "passed",
+    "assertions": 33,
+    "queriesAreReadOnly": true,
+    "unicodeHarness": "Non-ASCII SQL literals encoded as to_char(unistr(...)) to preserve literal values over SQLcl stdin"
+  },
+  "qualityGate": {
+    "originalProfileRequired": ["sql", "e2e"],
+    "originalProfileStatus": "failed-empty",
+    "originalProfilePreserved": true,
+    "authorizedAppOnlyProfileRequired": [],
+    "automatedSuitesRun": 0,
+    "reason": "User explicitly authorized application import and application-only source/browser verification; unrelated empty suites remain recorded, not passed."
+  },
+  "deployment": {
+    "applied": true,
+    "successfulImports": 4,
+    "latestRunId": "78f7922d-446a-4b69-b443-27d8bb094acd",
+    "latestState": "succeeded",
+    "grantPresent": false,
+    "grantRemovedAfterAttempt": true,
+    "databaseMigrations": 0,
+    "businessTableWrites": false,
+    "backup": {
+      "schemaVersion": 1,
+      "backupId": "c3c68493-21f3-4d57-9f76-e2160a9a9d1d",
+      "targetDigest": "3a373debb013f192dbfb86ed734f5a636b13699de6738bd7ebc3e6f54b9626a9",
+      "environment": "dashboard",
+      "digest": "1c658ba312ee07a5b4b327867c91b0c66556b8da909f1685f31461a374e2af64",
+      "files": {
+        "f175.sql": "b60846d2a068e95d4046c2f9d4c3574471dba526f8f03a10bcb7cdc2badd940a"
+      },
+      "restoreProcedure": "Reviewed SQL export import; application metadata only. Schema/data recovery is separate."
+    },
+    "coordination": "local managed-home-schema"
+  },
+  "inAppBrowser": {
+    "available": true,
+    "authenticated": true,
+    "page": 1,
+    "dashboardVerified": true,
+    "observations": [
+      "30-day default KPI values, dates and three charts render",
+      "7-day AJAX filter updates KPI values, date range and chart labels",
+      "90-day KPI values and date range reconcile",
+      "30-day one-store KPI values and store chart reconcile",
+      "7-day real store without operations shows zero KPIs, undefined ratios and empty top charts",
+      "Latest optimized import reload and 7-day AJAX filter verified"
+    ],
+    "automatedE2E": false,
+    "responsiveBreakpointTested": false
+  },
+  "limitations": [
+    "Source monetary currency not independently confirmed; no currency symbol claimed",
+    "No automated SQL/CRUD suite or Oracle restore/fault-injection coverage claimed",
+    "Separate mobile breakpoint verification not performed"
+  ]
+}
