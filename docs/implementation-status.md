@@ -4,6 +4,10 @@ English | [Українська](implementation-status.uk.md)
 
 The original build specification remains unchanged. This is working code and an installable beta, not a stable-qualified product. [acceptance.json](acceptance.json) separates implementation, verification, evidence and blockers for every A01–A28 criterion.
 
+## Plugin website metadata
+
+The plugin metadata declares `interface.websiteURL` as `https://apex.rest` for the Codex details page. The generated and installed native manifests carry the same value. On 2026-09-12, Codex CLI confirmed that the plugin from the local repository marketplace was installed and enabled; all 198 installed bundle file hashes matched and the installed CLI validated the package. Visual confirmation of the Website field remains unavailable because the computer-use tool does not permit access to the Codex app. This scoped installation check does not refresh the full native lifecycle or Oracle evidence.
+
 ## APEXlang retrieval for Codex
 
 The [APEXlang optimization](apexlang-optimization.md) adds direct component routes, complete pinned Oracle contracts/templates, ranked bounded lookup, release-version matching, grammar aliases and an offline search accelerator. Twelve deterministic retrieval cases pass. The [native check](evidence/apexlang-codex.json) verifies discovery and retrieval in an isolated Codex 0.154.0 macOS arm64 profile. The [compiler check](evidence/apexlang-compiler.json) verifies three offline application compositions with unchanged MMD. These checks do not establish model generation success rates, connected SQL results or application browser behavior. The build now emits only the Codex native package; existing installations and publication are unchanged.

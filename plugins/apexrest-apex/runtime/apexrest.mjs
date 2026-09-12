@@ -4,12 +4,12 @@ import {
   dispatch,
   executeJob,
   schemas
-} from "./chunk-YNODPOIA.mjs";
+} from "./chunk-D6QZKEGY.mjs";
 import {
   Fault,
   failure,
   loadProject
-} from "./chunk-MTUGEAFV.mjs";
+} from "./chunk-3V2P7PPB.mjs";
 
 // packages/cli/src/main.ts
 var argv = process.argv.slice(2);
@@ -64,7 +64,7 @@ try {
     await executeJob(await loadProject(argv[1]), argv[2], dispatch);
   } else if (argv[0] === "mcp") {
     if (argv.length !== 1) throw new Fault("INVALID_INPUT", "mcp accepts no arguments.", 2);
-    const { startMcp } = await import("./chunk-ITGGGFUO.mjs");
+    const { startMcp } = await import("./chunk-ONJVLTZS.mjs");
     await startMcp();
   } else {
     const selectedOp = argv[0] === "--version" ? { op: "version", start: 1 } : selected;

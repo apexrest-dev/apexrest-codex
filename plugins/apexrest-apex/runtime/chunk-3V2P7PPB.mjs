@@ -1394,6 +1394,7 @@ var metadata_default = {
     shortDescription: "Oracle APEX development workflows",
     longDescription: "Independent APEXREST tooling for controlled Oracle APEX development, deployment and testing.",
     developerName: "APEXREST",
+    websiteURL: "https://apex.rest",
     category: "Productivity",
     capabilities: ["Read", "Write"],
     defaultPrompt: [
