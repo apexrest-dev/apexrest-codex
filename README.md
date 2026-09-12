@@ -1,5 +1,7 @@
 # APEXREST for Codex
 
+English | [Українська](README.uk.md)
+
 [![Local quality gates](https://github.com/apexrest-dev/apexrest-codex/actions/workflows/ci.yml/badge.svg)](https://github.com/apexrest-dev/apexrest-codex/actions/workflows/ci.yml)
 
 **Build and change Oracle APEX applications with Codex, from source to a verified import.**

@@ -1,5 +1,7 @@
 # Configuration and connections
 
+English | [Українська](configuration.uk.md)
+
 A project has one `apexrest.json` and one pinned toolchain lock. `project init` creates both, with an empty environment map. Every target operation requires an explicit environment; the plugin never guesses a database, workspace or application ID.
 
 ## Configure an environment

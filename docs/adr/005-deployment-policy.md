@@ -1,5 +1,7 @@
 # ADR 005: deployment-policy
 
+English | [Українська](005-deployment-policy.uk.md)
+
 Status: accepted for local beta; integration claims require evidence.
 
 Amended by [ADR 007](007-clean-apex-deployment.md): local control is the default; the DB row lease is optional.

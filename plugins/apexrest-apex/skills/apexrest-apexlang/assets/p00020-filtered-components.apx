@@ -1,0 +1,152 @@
+page 20 (
+    name: Retrieval Fixture
+    alias: FILTERED-COMPONENTS
+    title: Retrieval Fixture
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region filters (
+        name: Filters
+        type: staticContent
+        layout {
+            sequence: 10
+            slot: BODY
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+    )
+    pageItem P20_FILTER (
+        type: textField
+        label {
+            label: Category
+        }
+        layout {
+            sequence: 10
+            region: @filters
+            slot: regionBody
+        }
+        appearance {
+            template: @/optional-floating
+            templateOptions: #DEFAULT#
+        }
+    )
+    region totals (
+        name: Fixture Totals
+        type: chart
+        layout {
+            sequence: 20
+            slot: BODY
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        chart {
+            type: bar
+        }
+        axis x (
+            name: x
+        )
+        axis y (
+            name: y
+        )
+        series totals (
+            name: Fixture Values
+            execution {
+                sequence: 10
+            }
+            source {
+                type: sqlQuery
+                pageItemsToSubmit: P20_FILTER
+                sqlQuery:
+                    ```sql
+                    select 'Fixture A' as LABEL, 10 as VALUE from dual
+                    where :P20_FILTER is null or :P20_FILTER = 'A'
+                    ```
+            }
+            columnMapping {
+                label: LABEL
+                value: VALUE
+            }
+        )
+    )
+    region cards (
+        name: Fixture Cards
+        type: cards
+        source {
+            location: localDatabase
+            type: sqlQuery
+            pageItemsToSubmit: P20_FILTER
+            sqlQuery:
+                ```sql
+                select 1 as ID, 'Fixture A' as TITLE from dual
+                where :P20_FILTER is null or :P20_FILTER = 'A'
+                ```
+        }
+        layout {
+            sequence: 30
+            slot: BODY
+        }
+        appearance {
+            template: @/cards-container
+            templateOptions: #DEFAULT#
+        }
+        card {
+            primaryKeyColumn1: ID
+        }
+        title {
+            column: TITLE
+        }
+    )
+    dynamicAction refresh-results (
+        name: Refresh Results
+        execution {
+            sequence: 10
+        }
+        when {
+            event: change
+            selectionType: items
+            items: P20_FILTER
+        }
+        action refresh-chart (
+            action: refresh
+            affectedElements {
+                selectionType: region
+                region: @totals
+            }
+            execution {
+                sequence: 10
+            }
+        )
+        action refresh-cards (
+            action: refresh
+            affectedElements {
+                selectionType: region
+                region: @cards
+            }
+            execution {
+                sequence: 20
+            }
+        )
+    )
+    validation filter-required (
+        name: Filter Required
+        execution {
+            sequence: 10
+        }
+        validation {
+            type: itemIsNotNull
+            item: P20_FILTER
+        }
+        error {
+            errorMessage: Enter a category.
+            associatedItem: @P20_FILTER
+        }
+    )
+)

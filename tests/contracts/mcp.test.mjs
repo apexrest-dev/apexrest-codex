@@ -119,7 +119,7 @@ test('MCP malformed JSON yields protocol response without process banners', asyn
   await new Promise((resolve) => child.on('exit', resolve));
   for (const line of stdout.trim().split('\n').filter(Boolean)) assert.doesNotThrow(() => JSON.parse(line));
 });
-for (const profile of ['portable', 'codex-compat'])
+for (const profile of ['codex-compat'])
   test(`${profile} copied outside checkout resolves shared chunks, references and job worker via both entrypoints`, async (t) => {
     const root = await realpath(await mkdtemp(path.join(tmpdir(), 'apexrest-relocated-')));
     t.after(() => rm(root, { recursive: true, force: true }));

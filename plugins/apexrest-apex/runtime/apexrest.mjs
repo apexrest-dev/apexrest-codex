@@ -4,7 +4,7 @@ import {
   dispatch,
   executeJob,
   schemas
-} from "./chunk-OP22HVEY.mjs";
+} from "./chunk-YNODPOIA.mjs";
 import {
   Fault,
   failure,
@@ -64,7 +64,7 @@ try {
     await executeJob(await loadProject(argv[1]), argv[2], dispatch);
   } else if (argv[0] === "mcp") {
     if (argv.length !== 1) throw new Fault("INVALID_INPUT", "mcp accepts no arguments.", 2);
-    const { startMcp } = await import("./chunk-IPUJ65MM.mjs");
+    const { startMcp } = await import("./chunk-ITGGGFUO.mjs");
     await startMcp();
   } else {
     const selectedOp = argv[0] === "--version" ? { op: "version", start: 1 } : selected;

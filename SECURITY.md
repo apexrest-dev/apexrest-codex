@@ -1,5 +1,7 @@
 # Security and privacy
 
+English | [Українська](SECURITY.uk.md)
+
 APEXREST handles executable application source and access to Oracle environments. Use explicit targets, reviewed project trust and least-privilege connections. The current beta has open verification gates; see [implementation status](docs/implementation-status.md).
 
 ## Report a vulnerability

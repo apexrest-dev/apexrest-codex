@@ -89,7 +89,7 @@ export function renderMarkdown(text, context) {
       },
       table(token) {
         defaultRenderer.parser = this.parser;
-        return `<div class="table-scroll" role="region" aria-label="Documentation table" tabindex="0">${defaultRenderer.table(token)}</div>\n`;
+        return `<div class="table-scroll" role="region" aria-label="${escapeHtml(context.tableLabel ?? 'Documentation table')}" tabindex="0">${defaultRenderer.table(token)}</div>\n`;
       },
     },
   });

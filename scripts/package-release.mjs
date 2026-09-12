@@ -14,12 +14,12 @@ const add = async (name, bytes, kind, extra = {}) => {
   await writeFile(root + '/' + name, bytes);
   artifacts.push({ name, kind, bytes: bytes.length, sha256: sha256(bytes), ...extra });
 };
-for (const profile of ['portable', 'codex-compat'])
+for (const profile of ['codex-compat'])
   await add(
     `apexrest-apex-${version}-${profile}.zip`,
     await zipTree('dist/' + profile, zipSync),
     'native-plugin',
-    { profile, compatibility: profile === 'portable' ? 'experimental' : 'macos-arm64-verified' },
+    { profile, compatibility: 'macos-arm64-verified' },
   );
 for (const platform of ['darwin-arm64', 'linux-x64', 'win32-x64']) {
   const staging = 'dist/runtime-package-' + platform;

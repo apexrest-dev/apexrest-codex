@@ -1,5 +1,7 @@
 # Architecture
 
+English | [Українська](architecture.uk.md)
+
 APEXREST uses one policy-aware core for the CLI and the native Codex MCP server. Eight skills guide the workflow; fourteen MCP tools expose bounded operations. Both interfaces validate inputs against the same strict Zod schemas before execution.
 
 ![APEXREST architecture from Codex through source, deployment planning, Oracle and verification.](assets/overview.svg)
@@ -16,7 +18,7 @@ APEXREST uses one policy-aware core for the CLI and the native Codex MCP server.
 | `packages/testkit/`                       | Browser/API helpers for application tests                                                        |
 | `resources/`, `templates/`, `toolchains/` | Pinned references, project starters and toolchain definitions                                    |
 
-`plugins/metadata.json` drives two package layouts: the portable manifest and the Codex compatibility profile. The build shares ESM runtime chunks and copies skills, reference fragments, schemas, templates and locks into self-contained packages. Managed installation binds MCP to absolute runtime paths. MCP startup performs no dependency downloads and does not require an extra global MCP registration.
+`plugins/metadata.json` drives the native Codex compatibility package. Codex is the only product target; the former experimental portable artifact is retired. The build shares ESM runtime chunks and copies skills, reference fragments, schemas, templates and locks into self-contained packages. Managed installation binds MCP to absolute runtime paths. MCP startup performs no dependency downloads and does not require an extra global MCP registration.
 
 ## Request lifecycle
 

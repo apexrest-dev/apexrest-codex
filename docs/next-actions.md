@@ -1,6 +1,12 @@
 # Next actions and exact dependencies
 
-The repository provides English documentation, accessible architecture/deployment diagrams, direct GitHub marketplace installation, a self-contained native bundle, integrity gates and cross-platform CI. [Getting started](getting-started.md) covers installation. [Implementation status](implementation-status.md), [local checks](evidence/local-checks.json) and [native installation evidence](evidence/native-repository.json) state the actual scope and source digest of each verification run.
+English | [Українська](next-actions.uk.md)
+
+APEXlang retrieval optimization is implemented and locally checked; see [its measured scope](apexlang-optimization.md). The next quality step is a broader fixed set of Codex authoring tasks with compiler attempts, elapsed time and context usage recorded, followed by authorized connected/browser checks. The twelve retrieval cases and three compiled compositions do not replace these task-level evaluations. Codex is the sole product target; portable-package release work is retired.
+
+The repository provides English and Ukrainian documentation, accessible architecture/deployment diagrams in both languages, direct GitHub marketplace installation, a self-contained native bundle, integrity gates and cross-platform CI. [Getting started](getting-started.md) covers installation. [Implementation status](implementation-status.md), [local checks](evidence/local-checks.json) and [native installation evidence](evidence/native-repository.json) state the actual scope and source digest of each verification run.
+
+Keep both documentation languages synchronized for future changes and run `npm run docs:check`, the site build and packaging checks. Documentation checks and site browser observations do not refresh Oracle or native-host evidence.
 
 The installable beta retains these stable release dependencies:
 

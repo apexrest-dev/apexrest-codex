@@ -1,5 +1,7 @@
 # Getting started
 
+English | [Українська](getting-started.uk.md)
+
 Install the native Codex plugin, verify its local runtime, then configure an explicit Oracle target. The repository includes the plugin runtime: users do not need to build TypeScript or run `npm ci` for native installation.
 
 The current distribution is beta. Native-host evidence is specific to the tested Codex and platform combination; [stable release gates](next-actions.md) remain open.

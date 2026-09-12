@@ -68,3 +68,67 @@ test('reference cache preserves ordering and bounds and refreshes after replacem
   assert.deepEqual(await referenceSearch('keyword'), []);
   assert.equal((await referenceRead(references[0]!.id, 0, 5000)).content, references[0]!.text);
 });
+
+test('ranked lookup returns owning syntax, exact versions, match windows and stable pagination', async (t) => {
+  const root = await mkdtemp(path.join(tmpdir(), 'apexrest-ranked-'));
+  const previous = process.env.APEXREST_RESOURCES;
+  process.env.APEXREST_RESOURCES = root;
+  t.after(async () => {
+    if (previous === undefined) delete process.env.APEXREST_RESOURCES;
+    else process.env.APEXREST_RESOURCES = previous;
+    await rm(root, { recursive: true, force: true });
+  });
+  const entries = Array.from({ length: 12 }, (_, i) => ({
+    id: 'incidental-' + i,
+    title: 'Unrelated example ' + i,
+    kind: 'template',
+    family: 'examples',
+    version: '26.1@pinned',
+    source: 'local-fixture',
+    text: 'A chart series example. ' + 'x'.repeat(1800),
+  }));
+  entries.push({
+    id: 'owner',
+    title: 'chart-series',
+    kind: 'grammar',
+    family: 'grammar',
+    version: '26.1@pinned',
+    source: 'local-fixture',
+    text: '<chart-series> ::= ' + 'x'.repeat(2500) + ' "pageItemsToSubmit" <query-source>\n',
+  });
+  entries.push({
+    id: 'query-rule',
+    title: 'query-source',
+    kind: 'grammar',
+    family: 'grammar',
+    version: '26.1@pinned',
+    source: 'local-fixture',
+    text: '<query-source> ::= "sqlQuery"\n',
+  });
+  await writeJson(path.join(root, 'references/index.json'), entries);
+  const first = await referenceSearch('chart series', '26.1', { limit: 3 });
+  assert.equal(first[0]?.id, 'owner', 'owning production must outrank earlier incidental mentions');
+  assert.equal(first[0]?.totalMatches, 13);
+  assert.equal(first[0]?.nextResultOffset, 3);
+  const second = await referenceSearch('chart series', '26.1', { offset: 3, limit: 3 });
+  assert.ok(second.every((hit) => !first.some((prior) => prior.id === hit.id)));
+  assert.equal((await referenceSearch('chart series', '26.1@other')).length, 0);
+  assert.equal((await referenceSearch('chart series', '26.2')).length, 0);
+  assert.equal((await referenceSearch('chart series', '26.1@pinned', { kind: 'grammar' })).length, 1);
+  assert.equal((await referenceSearch('chart series', '26.1', { family: 'grammar' })).length, 1);
+  const property = (await referenceSearch('pageItemsToSubmit', '26.1'))[0]!;
+  assert.ok(property.offset > 1200);
+  assert.match(property.text, /pageItemsToSubmit/);
+  assert.equal(property.text, entries[12]!.text.slice(property.offset, property.offset + 1200));
+  const spaced = (await referenceSearch('page items to submit', '26.1'))[0]!;
+  assert.equal(spaced.id, property.id);
+  assert.match(spaced.text, /pageItemsToSubmit/);
+  assert.equal((await referenceSearch('owner'))[0]?.id, 'owner');
+  assert.deepEqual(await referenceSearch('!!!'), []);
+  assert.deepEqual(await referenceSearch('   '), []);
+  assert.deepEqual(await referenceSearch('not-present anywhere'), []);
+  const production = await referenceRead('grammar:chart-series', 2400, 500);
+  assert.equal(production.id, 'owner');
+  assert.ok(production.related.includes('query-rule'));
+  assert.equal(production.content, entries[12]!.text.slice(2400, 2900));
+});

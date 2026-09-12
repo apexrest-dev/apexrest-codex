@@ -51,61 +51,56 @@ await build({
   },
 });
 for (const name of ['apexrest', 'mcp']) await chmod(`dist/runtime/${name}.mjs`, 0o755);
-for (const profile of ['portable', 'codex-compat']) {
-  const root = `dist/${profile}/plugins/apexrest-apex`;
-  await rm(`dist/${profile}`, { recursive: true, force: true });
-  await mkdir(root, { recursive: true });
-  await cp('plugins/apexrest-apex/skills', `${root}/skills`, { recursive: true });
-  await cp('dist/runtime', `${root}/runtime`, { recursive: true });
-  for (const file of ['LICENSE', 'NOTICE']) await cp(file, `${root}/${file}`);
-  await cp('dist/resources', `${root}/resources`, { recursive: true });
-  const { interface: presentation, ...identity } = metadata;
-  const portable = profile === 'portable';
-  const manifest = portable
-    ? {
-        $schema: 'https://agent-plugins.org/schemas/1.0.0/plugin.schema.json',
-        ...identity,
-        extensions: { 'com.openai': { interface: presentation } },
-      }
-    : { ...metadata, skills: './skills/', mcpServers: './.mcp.json' };
-  if (!portable) await mkdir(`${root}/.codex-plugin`);
-  await writeFile(
-    `${root}/${portable ? 'plugin.json' : '.codex-plugin/plugin.json'}`,
-    JSON.stringify(manifest, null, 2) + '\n',
-  );
-  const mcp = {
-    ...(portable ? { $schema: 'https://agent-plugins.org/schemas/1.0.0/mcp.schema.json' } : {}),
-    mcpServers: {
-      apexrest: {
-        ...(portable ? { type: 'stdio' } : {}),
-        command: 'node',
-        // Codex resolves relative cwd against the installed plugin root. It does
-        // not interpolate the portable Agent Plugins ${PLUGIN_ROOT} variable.
-        args: [portable ? '${PLUGIN_ROOT}/runtime/mcp.mjs' : 'runtime/mcp.mjs'],
-        ...(!portable ? { cwd: '.' } : {}),
-      },
+// Codex is the only product target. Remove the former generated experimental package.
+await rm('dist/portable', { recursive: true, force: true });
+const profile = 'codex-compat';
+const root = `dist/${profile}/plugins/apexrest-apex`;
+await rm(`dist/${profile}`, { recursive: true, force: true });
+await mkdir(`${root}/.codex-plugin`, { recursive: true });
+await cp('plugins/apexrest-apex/skills', `${root}/skills`, { recursive: true });
+await cp('dist/runtime', `${root}/runtime`, { recursive: true });
+for (const file of ['LICENSE', 'NOTICE']) await cp(file, `${root}/${file}`);
+await cp('dist/resources', `${root}/resources`, { recursive: true });
+await writeFile(
+  `${root}/.codex-plugin/plugin.json`,
+  JSON.stringify(
+    {
+      ...metadata,
+      skills: './skills/',
+      mcpServers: './.mcp.json',
     },
-  };
-  await writeFile(`${root}/${portable ? 'mcp.json' : '.mcp.json'}`, JSON.stringify(mcp, null, 2) + '\n');
-  await mkdir(`dist/${profile}/.agents/plugins`, { recursive: true });
-  await writeFile(
-    `dist/${profile}/.agents/plugins/marketplace.json`,
-    JSON.stringify(
-      {
-        name: 'apexrest',
-        interface: { displayName: 'APEXREST' },
-        plugins: [
-          {
-            name: metadata.name,
-            source: { source: 'local', path: './plugins/apexrest-apex' },
-            policy: { installation: 'AVAILABLE', authentication: 'ON_USE' },
-            category: 'Productivity',
-          },
-        ],
-      },
-      null,
-      2,
-    ) + '\n',
-  );
-}
-console.log('Built self-contained portable and codex-compat native packages.');
+    null,
+    2,
+  ) + '\n',
+);
+await writeFile(
+  `${root}/.mcp.json`,
+  JSON.stringify(
+    {
+      mcpServers: { apexrest: { command: 'node', args: ['runtime/mcp.mjs'], cwd: '.' } },
+    },
+    null,
+    2,
+  ) + '\n',
+);
+await mkdir(`dist/${profile}/.agents/plugins`, { recursive: true });
+await writeFile(
+  `dist/${profile}/.agents/plugins/marketplace.json`,
+  JSON.stringify(
+    {
+      name: 'apexrest',
+      interface: { displayName: 'APEXREST' },
+      plugins: [
+        {
+          name: metadata.name,
+          source: { source: 'local', path: './plugins/apexrest-apex' },
+          policy: { installation: 'AVAILABLE', authentication: 'ON_USE', products: ['codex'] },
+          category: 'Productivity',
+        },
+      ],
+    },
+    null,
+    2,
+  ) + '\n',
+);
+console.log('Built the self-contained Codex native package.');

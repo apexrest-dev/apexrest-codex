@@ -1,5 +1,7 @@
 # Publisher setup
 
+English | [Українська](publishing.uk.md)
+
 The user selected [apexrest-dev/apexrest-codex](https://github.com/apexrest-dev/apexrest-codex) as the source repository. Git origin and `publisher.config.json.githubRepository` use that repository. Source commits and pushes are authorized; the release publisher remains disabled. No GitHub release, tag, npm package, site, DNS or TLS change is made by this repository configuration.
 
 Before release publication, the owner must create a protected release environment and externally managed signing key, verify Node/Java/SQLcl/browser licensing, run real native-host tests for each release platform, and complete Oracle/utPLSQL/CRUD evidence against the exact immutable commit. Configure GitHub private vulnerability reporting and a verified security contact. npm is optional and requires ownership verification for `@apexrest/codex`.

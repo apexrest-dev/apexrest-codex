@@ -1,6 +1,7 @@
 import { readFile, writeFile, mkdir, rm, cp, readdir } from 'node:fs/promises';
 import { escapeHtml as escape, renderMarkdown } from './lib/site-markdown.mjs';
 const config = JSON.parse(await readFile('site/site.config.json', 'utf8')),
+  locales = JSON.parse(await readFile('site/locales.json', 'utf8')),
   publisher = JSON.parse(await readFile('publisher.config.json', 'utf8')),
   pkg = JSON.parse(await readFile('package.json', 'utf8'));
 const base = process.env.APEXREST_SITE_BASE_PATH ?? publisher.basePath ?? config.basePath;
@@ -13,26 +14,49 @@ await rm('site-dist', { recursive: true, force: true });
 await mkdir('site-dist/assets', { recursive: true });
 for (const file of ['styles.css', 'search.js']) await cp('site/' + file, 'site-dist/assets/' + file);
 for (const asset of assets) await cp(asset, 'site-dist/assets/' + asset.slice('docs/assets/'.length));
-const search = [];
+const search = Object.fromEntries(Object.keys(locales).map((lang) => [lang, []]));
 for (const page of config.pages) {
+  const locale = locales[page.lang];
+  if (!locale) throw new Error(`Unknown documentation language: ${page.lang}`);
+  const localeBase = base + locale.prefix;
   const text = (await readFile(page.source, 'utf8')).replaceAll('{{version}}', pkg.version);
   const route = base + (page.slug ? page.slug + '/' : '');
-  search.push({ title: page.title, url: route, text: text.replace(/[`#*]/g, '') });
+  search[page.lang].push({ title: page.title, url: route, text: text.replace(/[`#*]/g, '') });
   const nav = config.pages
+    .filter((p) => p.lang === page.lang)
     .map(
       (p) =>
         `<li><a href="${base + (p.slug ? p.slug + '/' : '')}"${p.slug === page.slug ? ' aria-current="page"' : ''}>${escape(p.title)}</a></li>`,
     )
     .join('');
-  const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https:; style-src 'self'; script-src 'self'; object-src 'none'; base-uri 'none'"><meta name="description" content="Independent APEXREST tools for native Codex and Oracle APEX development. Verified capabilities and explicit deployment evidence."><title>${escape(page.title)} · APEXREST</title><link rel="stylesheet" href="${base}assets/styles.css"><script src="${base}assets/search.js" defer></script></head><body data-base="${base}"><a class="skip" href="#main">Skip to content</a><header class="top"><a class="brand" href="${base}">APEXREST / CODEX</a><span class="badge">BETA · ${pkg.version}</span></header><div class="layout"><aside class="sidebar"><details open><summary>Documentation</summary><nav aria-label="Documentation"><ul>${nav}</ul></nav></details><label class="search-label" for="search">Search documentation</label><input id="search" type="search" placeholder="Try “backup”" autocomplete="off"><ul class="search-results" id="search-results" aria-live="polite"></ul></aside><main id="main" tabindex="-1"><div class="eyebrow">Independent Oracle APEX tooling</div>${renderMarkdown(text, { source: page.source, base, pages: config.pages, assets, repository })}</main></div><footer>APEXREST · Apache-2.0 · Source build ${pkg.version} · Not an official Oracle or OpenAI product</footer></body></html>`;
+  const alternates = Object.entries(locales).map(([lang, translation]) => {
+    const counterpart = config.pages.find((p) => p.lang === lang && p.key === page.key);
+    if (!counterpart) throw new Error(`Missing ${lang} page for ${page.key}`);
+    return { lang, name: translation.name, url: base + (counterpart.slug ? counterpart.slug + '/' : '') };
+  });
+  const languages = alternates
+    .map(
+      (p) =>
+        `<a lang="${p.lang}" hreflang="${p.lang}" href="${p.url}"${p.lang === page.lang ? ' aria-current="page"' : ''}>${escape(p.name)}</a>`,
+    )
+    .join('');
+  const alternateLinks = alternates
+    .map((p) => `<link rel="alternate" hreflang="${p.lang}" href="${p.url}">`)
+    .join('');
+  const html = `<!doctype html><html lang="${page.lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https:; style-src 'self'; script-src 'self'; object-src 'none'; base-uri 'none'"><meta name="description" content="${escape(locale.description)}"><title>${escape(page.title)} · APEXREST</title>${alternateLinks}<link rel="stylesheet" href="${base}assets/styles.css"><script src="${base}assets/search.js" defer></script></head><body data-base="${localeBase}" data-search-empty="${escape(locale.empty)}" data-search-error="${escape(locale.error)}"><a class="skip" href="#main">${escape(locale.skip)}</a><header class="top"><a class="brand" href="${localeBase}">APEXREST / CODEX</a><nav class="languages" aria-label="${escape(locale.language)}">${languages}</nav><span class="badge">BETA · ${pkg.version}</span></header><div class="layout"><aside class="sidebar"><details open><summary>${escape(locale.documentation)}</summary><nav aria-label="${escape(locale.documentation)}"><ul>${nav}</ul></nav></details><label class="search-label" for="search">${escape(locale.search)}</label><input id="search" type="search" placeholder="${escape(locale.placeholder)}" autocomplete="off"><ul class="search-results" id="search-results" aria-live="polite"></ul></aside><main id="main" tabindex="-1"><div class="eyebrow">${escape(locale.eyebrow)}</div>${renderMarkdown(text, { source: page.source, base, pages: config.pages, assets, repository, tableLabel: locale.table })}</main></div><footer>APEXREST · Apache-2.0 · ${escape(locale.sourceBuild)} ${pkg.version} · ${escape(locale.independent)}</footer></body></html>`;
   await mkdir('site-dist/' + page.slug, { recursive: true });
   await writeFile('site-dist/' + page.slug + (page.slug ? '/' : '') + 'index.html', html);
 }
-await writeFile('site-dist/search-index.json', JSON.stringify(search));
+for (const [lang, entries] of Object.entries(search)) {
+  await writeFile('site-dist/' + locales[lang].prefix + 'search-index.json', JSON.stringify(entries));
+}
 await writeFile(
   'site-dist/llms.txt',
   `# APEXREST for Codex\nIndependent local beta ${pkg.version}. No published stable release.\n\n` +
-    search.map((p) => `- [${p.title}](${p.url})`).join('\n') +
+    Object.values(search)
+      .flat()
+      .map((p) => `- [${p.title}](${p.url})`)
+      .join('\n') +
     '\n',
 );
 await mkdir('site-dist/releases', { recursive: true });
@@ -54,7 +78,8 @@ console.log(
     status: 'built',
     directory: 'site-dist',
     basePath: base,
-    pages: search.length,
+    pages: config.pages.length,
+    languages: Object.keys(locales),
     published: false,
   }),
 );

@@ -1,5 +1,7 @@
 # ADR 001: packaging
 
+English | [Українська](001-packaging.uk.md)
+
 Status: accepted for local beta; integration claims require evidence.
 
-Use separate portable and Codex compatibility packages generated from one metadata record. The real Codex 0.154.0 host exposes MCP through compatibility only. Ship portable as experimental; schema validity does not imply host runtime support.
+Codex is the sole product target under the user amendment of 2026-09-12. Generate only the native `codex-compat` package from the shared metadata record, with `.codex-plugin/plugin.json` and the Codex product restriction in the marketplace. The former portable package is retired; its prior schema/native observations remain historical evidence. The installer retains legacy package-reading compatibility for existing installations.

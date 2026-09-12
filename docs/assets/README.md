@@ -1,6 +1,8 @@
 # Documentation graphics
 
-These English SVGs are maintained directly in this repository. They use native vector shapes and system fonts, with no scripts, external resources or embedded HTML. Each graphic has an accessible title and description, and a `viewBox` for proportional resizing.
+English | [Українська](README.uk.md)
+
+These English and Ukrainian SVGs are maintained directly in this repository; Ukrainian filenames end in `.uk.svg`. They use native vector shapes and system fonts, with no scripts, external resources or embedded HTML. Each graphic has an accessible title and description, and a `viewBox` for proportional resizing.
 
 | Asset                                      | Purpose                                                            | Text reference                               |
 | ------------------------------------------ | ------------------------------------------------------------------ | -------------------------------------------- |

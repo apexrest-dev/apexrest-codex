@@ -1,10 +1,12 @@
 # Install in Codex
 
+English | [Українська](install.uk.md)
+
 Install the native plugin directly from the [APEXREST repository](https://github.com/apexrest-dev/apexrest-codex). The repository includes a built plugin bundle; using it does not require compiling the TypeScript project.
 
 ## 1. Check the prerequisites
 
-Install Node.js 24 LTS and make `node` available on `PATH`. Native plugin registration was tested with Codex 0.154.0 on macOS arm64. See the [support matrix](versions/) for other environments.
+Install Node.js 24 LTS and make `node` available on `PATH`. Native plugin registration was tested with Codex 0.154.0 on macOS arm64. See the [support matrix](versions.md) for other environments.
 
 ## 2. Add the repository and plugin
 

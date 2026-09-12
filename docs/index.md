@@ -1,5 +1,7 @@
 # Documentation
 
+English | [Українська](index.uk.md)
+
 APEXREST is a native Codex plugin for Oracle APEX development, controlled imports and verification. The current version is a beta with separate implementation and evidence records; documentation does not certify the remaining release gates.
 
 ## Start here
@@ -22,7 +24,7 @@ APEXREST is a native Codex plugin for Oracle APEX development, controlled import
 - [Contributing](../CONTRIBUTING.md): local workflow, validation and review requirements.
 - [Security and privacy](../SECURITY.md): credentials, code trust, reports and recovery.
 - [Research](research.md): reviewed upstream material and compatibility decisions.
-- [Architecture decisions](adr/): the rationale for supported implementation choices.
+- [Architecture decisions](adr/): the rationale for supported implementation choices; Ukrainian files end in `.uk.md`.
 
 ## Inspect the evidence
 

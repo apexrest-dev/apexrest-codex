@@ -1,5 +1,7 @@
 # From source to a verified application
 
+English | [Українська](quickstart.uk.md)
+
 Follow the canonical [Getting started guide](../../docs/getting-started.md) for plugin installation, toolchain setup and your first application.
 
 ![Authorized deployment passes validation, target checks, backup, import and runtime verification](../../docs/assets/deployment-flow.svg)

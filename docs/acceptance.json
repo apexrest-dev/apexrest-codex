@@ -12,10 +12,14 @@
   "criteria": [
     {
       "id": "A01",
-      "criterion": "Native package validates against the actual Codex/Agent Plugins schema",
+      "criterion": "Native Codex package declares the native manifest, skill/MCP paths and exclusive Codex product routing",
       "implementation": "implemented",
       "verification": "passed",
-      "evidence": ["tests/packaging/packages.test.mjs", "docs/evidence/local-checks.json"],
+      "evidence": [
+        "tests/packaging/packages.test.mjs",
+        "docs/evidence/local-checks.json",
+        "docs/evidence/apexlang-codex.json"
+      ],
       "blocker": null
     },
     {
@@ -26,7 +30,8 @@
       "evidence": [
         "scripts/native-smoke.mjs",
         "docs/evidence/native-codex-compat.json",
-        "docs/evidence/native-repository.json"
+        "docs/evidence/native-repository.json",
+        "docs/evidence/apexlang-codex.json"
       ],
       "blocker": "Verified only on Codex 0.154.0 macOS arm64; portable MCP not discovered."
     },
@@ -38,7 +43,8 @@
       "evidence": [
         "scripts/native-smoke.mjs",
         "docs/evidence/native-codex-compat.json",
-        "docs/evidence/native-repository.json"
+        "docs/evidence/native-repository.json",
+        "docs/evidence/apexlang-codex.json"
       ],
       "blocker": null
     },
@@ -96,7 +102,11 @@
       "criterion": "The new-app template passes real Oracle compiler validation",
       "implementation": "implemented",
       "verification": "passed",
-      "evidence": ["docs/evidence/oracle-local.json", "docs/evidence/native-codex-compat.json"],
+      "evidence": [
+        "docs/evidence/oracle-local.json",
+        "docs/evidence/native-codex-compat.json",
+        "docs/evidence/apexlang-compiler.json"
+      ],
       "blocker": null
     },
     {
@@ -120,7 +130,8 @@
       "evidence": [
         "docs/evidence/oracle-local.json",
         "packages/core/src/oracle.ts",
-        "tests/unit/core.test.ts"
+        "tests/unit/core.test.ts",
+        "docs/evidence/apexlang-compiler.json"
       ],
       "blocker": "Real compiler validation retains template MMD metadata. Existing-app metadata/component preservation and unsupported-component rejection matrix remain unverified."
     },
@@ -206,7 +217,11 @@
       "criterion": "An agent cannot authorize production by setting `approved=true` itself",
       "implementation": "implemented",
       "verification": "partial",
-      "evidence": ["packages/core/src/config.ts", "packages/core/src/deploy.ts", "tests/unit/core.test.ts"],
+      "evidence": [
+        "packages/core/src/config.ts",
+        "packages/core/src/deploy.ts",
+        "tests/unit/core.test.ts"
+      ],
       "blocker": "Strict schema and missing production authority rejection tested. Protected-runner signature/approval integration is not configured."
     },
     {
@@ -300,7 +315,10 @@
       "criterion": "Stable release is blocked without required native-host and Oracle integration evidence",
       "implementation": "implemented",
       "verification": "passed",
-      "evidence": ["scripts/check-release-readiness.mjs", "dist/releases/release-readiness.json"],
+      "evidence": [
+        "scripts/check-release-readiness.mjs",
+        "dist/releases/release-readiness.json"
+      ],
       "blocker": null
     },
     {
@@ -312,7 +330,10 @@
         "docs/implementation-status.md",
         "docs/next-actions.md",
         "toolchains/compatibility.json",
-        "README.md"
+        "README.md",
+        "README.uk.md",
+        "scripts/check-docs.mjs",
+        "docs/evidence/documentation-bilingual.json"
       ],
       "blocker": null
     },
@@ -326,7 +347,10 @@
         "packages/mcp/src/server.ts",
         "tests/contracts/mcp.test.mjs",
         "docs/evidence/native-codex-compat.json",
-        "docs/evidence/optimization-local.json"
+        "docs/evidence/optimization-local.json",
+        "docs/evidence/apexlang-codex.json",
+        "docs/evidence/apexlang-retrieval.json",
+        "tests/unit/apexlang-corpus.test.ts"
       ],
       "blocker": null
     },
@@ -335,7 +359,10 @@
       "criterion": "A sandbox labelled supported actually provisions the stack and preserves data during ordinary `down`",
       "implementation": "unsupported",
       "verification": "not_applicable",
-      "evidence": ["packages/core/src/sandbox.ts", "toolchains/compatibility.json"],
+      "evidence": [
+        "packages/core/src/sandbox.ts",
+        "toolchains/compatibility.json"
+      ],
       "blocker": "No supported sandbox claim. Legitimate complete Linux DB/APEX/ORDS/utPLSQL provisioning tuple is not implemented or verified."
     }
   ],
@@ -349,6 +376,11 @@
       "date": "2026-09-12",
       "rule": "An explicit named development/test application request includes its necessary import; record actual user authorization in exact-plan short-lived grants. Applicable application-only checks may replace unrelated suites only with user-approved scope; no absent suite is passed.",
       "source": "AGENTS.md#authorized-application-import-rule-user-amendment-2026-09-12"
+    },
+    {
+      "date": "2026-09-12",
+      "rule": "The plugin targets Codex exclusively; retire experimental portable artifacts and optimize APEXlang authoring for Codex.",
+      "source": "docs/adr/001-packaging.md"
     }
   ]
 }

@@ -79,7 +79,7 @@ test('documentation escapes raw HTML and excludes unsafe links, credential URLs 
 });
 
 test('built site copies infographic SVGs and keeps a restrictive browser policy', async () => {
-  for (const name of ['overview.svg', 'deployment-flow.svg']) {
+  for (const name of ['overview.svg', 'deployment-flow.svg', 'overview.uk.svg', 'deployment-flow.uk.svg']) {
     assert.equal(
       await readFile('site-dist/assets/' + name, 'utf8'),
       await readFile('docs/assets/' + name, 'utf8'),
@@ -89,6 +89,46 @@ test('built site copies infographic SVGs and keeps a restrictive browser policy'
   assert.match(html, /Content-Security-Policy/);
   assert.match(html, /object-src 'none'/);
   assert.match(html, /<img src="\/codex\/assets\/overview.svg"/);
+});
+
+test('site keeps navigation and search in the selected language and switches to the corresponding page', async () => {
+  const config = JSON.parse(await readFile('site/site.config.json', 'utf8'));
+  const locales = JSON.parse(await readFile('site/locales.json', 'utf8'));
+  assert.equal(new Set(config.pages.map((page) => page.slug)).size, config.pages.length);
+  for (const [lang, locale] of Object.entries(locales)) {
+    const expected = config.pages.filter((page) => page.lang === lang);
+    const index = JSON.parse(await readFile(`site-dist/${locale.prefix}search-index.json`, 'utf8'));
+    assert.deepEqual(
+      index.map((row) => row.url),
+      expected.map((page) => `/codex/${page.slug ? page.slug + '/' : ''}`),
+    );
+    for (const page of expected) {
+      const html = await readFile(`site-dist/${page.slug ? page.slug + '/' : ''}index.html`, 'utf8');
+      assert.ok(html.includes(`<html lang="${lang}">`));
+      assert.ok(html.includes(`data-base="/codex/${locale.prefix}"`));
+      assert.ok(html.includes(`data-search-empty="${locale.empty}"`));
+      assert.ok(html.includes(`data-search-error="${locale.error}"`));
+      assert.ok(html.includes(`>${locale.search}</label>`));
+      const sidebar = html.match(/<aside[\s\S]*?<\/aside>/)[0];
+      const sidebarLinks = [...sidebar.matchAll(/href="([^"]+)"/g)].map((match) => match[1]);
+      assert.deepEqual(
+        sidebarLinks,
+        index.map((row) => row.url),
+      );
+      const switcher = html.match(/<nav class="languages"[\s\S]*?<\/nav>/)[0];
+      for (const other of Object.keys(locales)) {
+        const matches = config.pages.filter((p) => p.key === page.key && p.lang === other);
+        assert.equal(matches.length, 1, `${page.key}: expected one ${other} counterpart`);
+        const counterpart = matches[0];
+        const url = `/codex/${counterpart.slug ? counterpart.slug + '/' : ''}`;
+        assert.ok(switcher.includes(`hreflang="${other}" href="${url}"`));
+        assert.ok(html.includes(`<link rel="alternate" hreflang="${other}" href="${url}">`));
+      }
+      if (html.includes('<table>')) assert.ok(html.includes(`aria-label="${locale.table}"`));
+    }
+  }
+  const ukrainian = JSON.parse(await readFile('site-dist/uk/search-index.json', 'utf8'));
+  assert.ok(ukrainian.some((row) => row.text.toLowerCase().includes('розгортання')));
 });
 
 test('built documentation links point to existing sections and each page has unique IDs', async () => {

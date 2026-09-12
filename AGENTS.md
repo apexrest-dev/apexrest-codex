@@ -1,6 +1,6 @@
 # Working language
 
-Use English for communication, code, CLI help and public documentation. Preserve the original build specification unchanged as historical input.
+Use English for code, CLI help and agent skill instructions. Maintain public documentation in English and Ukrainian, with matching `.md` and `.uk.md` files and reciprocal language links. Update both versions together; keep commands, configuration keys and evidence claims consistent. Preserve the original build specification unchanged as historical input.
 
 # Source repository
 

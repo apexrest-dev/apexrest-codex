@@ -123,7 +123,14 @@ var schemas = {
   "connection.list": external_exports.strictObject(base),
   "connection.test": external_exports.strictObject({ ...base, name: refName }),
   "connection.remove": external_exports.strictObject({ ...base, name: refName }),
-  "docs.search": external_exports.strictObject({ query: external_exports.string().min(1).max(256), version: external_exports.string().optional() }),
+  "docs.search": external_exports.strictObject({
+    query: external_exports.string().min(1).max(256),
+    version: external_exports.string().optional(),
+    kind: external_exports.enum(["grammar", "template", "contract", "guide"]).optional(),
+    family: external_exports.string().min(1).max(200).optional(),
+    offset: external_exports.number().int().min(0).max(1e4).default(0),
+    limit: external_exports.number().int().min(1).max(8).default(8)
+  }),
   "docs.read": external_exports.strictObject({
     id: external_exports.string().max(200),
     offset: external_exports.number().int().min(0).default(0),
@@ -187,13 +194,13 @@ var toolCatalog = [
   {
     name: "apexrest_reference_search",
     operation: "docs.search",
-    description: "Search bounded version-aware local references.",
+    description: "Find ranked Oracle syntax, contracts and templates. Use exact property names or English component terms; filter by kind/family. Version accepts a release or pinned snapshot. Results include match offsets and required contracts.",
     readOnly: true
   },
   {
     name: "apexrest_reference_read",
     operation: "docs.read",
-    description: "Read a bounded reference fragment by registered ID.",
+    description: "Read Oracle reference by result ID or grammar:production-name. Follow requires for template contracts; related resolves grammar symbols. Continue with nextOffset when needed.",
     readOnly: true
   },
   {
@@ -424,7 +431,21 @@ async function doctor() {
 
 // packages/core/src/references.ts
 import path3 from "node:path";
-import { stat } from "node:fs/promises";
+import { stat, readFile } from "node:fs/promises";
+
+// packages/core/src/reference-index.ts
+var referenceWords = (text) => text.replace(/([a-z\d])([A-Z])/g, "$1 $2").toLowerCase().match(/[\p{L}\p{N}]+/gu) ?? [];
+var normalizeReference = (text) => referenceWords(text).join(" ");
+function buildReferencePostings(entries) {
+  const postings = /* @__PURE__ */ Object.create(null);
+  entries.forEach((entry, position) => {
+    for (const word of new Set(referenceWords(entry.id + " " + (entry.title ?? "") + " " + entry.text)))
+      (postings[word] ??= []).push(position);
+  });
+  return postings;
+}
+
+// packages/core/src/references.ts
 var references = [
   {
     id: "apexlang-lifecycle",
@@ -439,29 +460,47 @@ var references = [
     text: "Use an explicit environment. Plans bind source hashes and target identity. Recheck drift, acquire local coordination by default and create an export backup before writes. Clean APEX deployment needs no service tables. Local runners must share one managed home; independent machines need external serialization or explicitly selected database coordination. DDL cannot be generally rolled back. Interrupted writes require reconciliation. Production requires an external approval boundary."
   }
 ];
-async function referenceSearch(query, version) {
-  const terms = query.toLowerCase().split(/\W+/).filter(Boolean);
-  const results = [];
-  for (const { reference, searchText } of (await referenceIndex()).searchable) {
-    if ((!version || reference.version === version) && terms.every((term) => searchText.includes(term))) {
-      results.push({ ...reference, text: reference.text.slice(0, 1200) });
-      if (results.length === 8) break;
-    }
-  }
-  return results;
+var stopwords = /* @__PURE__ */ new Set(["a", "an", "the", "for", "with", "and", "of", "to", "in"]);
+var termsFor = (text) => [...new Set(referenceWords(text).filter((word) => !stopwords.has(word)))];
+function versionMatches(actual, requested) {
+  if (!requested) return true;
+  return actual === requested || !requested.includes("@") && actual.split("@")[0] === requested;
 }
-function indexReferences(upstream) {
+function indexReferences(upstream, file, digest) {
   const entries = [...references, ...upstream];
   const byId = /* @__PURE__ */ new Map();
-  for (const entry of entries) if (!byId.has(entry.id)) byId.set(entry.id, entry);
-  return {
-    upstream,
-    byId,
-    searchable: entries.map((reference) => ({
-      reference,
-      searchText: (reference.id + reference.text).toLowerCase()
-    }))
-  };
+  const bySymbol = /* @__PURE__ */ new Map();
+  const searchable = entries.map((reference) => {
+    if (!byId.has(reference.id)) byId.set(reference.id, reference);
+    const symbol = reference.text.match(/^<([^>\n]+)>\s*::=/)?.[1];
+    if (symbol) bySymbol.set(symbol, reference.id);
+    const title = reference.title ?? symbol ?? reference.id;
+    return { reference, title, titleText: normalizeReference(title) };
+  });
+  let pendingPostings;
+  const postings = () => pendingPostings ??= (async () => {
+    if (file) {
+      try {
+        const prebuilt = await readJson(path3.join(path3.dirname(file), "search.json"));
+        if (prebuilt && prebuilt.schemaVersion === 1 && prebuilt.indexSha256 === digest && prebuilt.postings && Object.values(prebuilt.postings).every(
+          (list) => Array.isArray(list) && list.every(
+            (n) => Number.isInteger(n) && Number(n) >= 0 && Number(n) < upstream.length
+          )
+        )) {
+          const result = buildReferencePostings(references);
+          for (const [term, list] of Object.entries(prebuilt.postings))
+            result[term] = [
+              ...result[term] ?? [],
+              ...list.map((position) => position + references.length)
+            ];
+          return result;
+        }
+      } catch {
+      }
+    }
+    return buildReferencePostings(entries);
+  })();
+  return { upstream, byId, bySymbol, searchable, postings, queries: /* @__PURE__ */ new Map() };
 }
 var cached;
 async function referenceIndex() {
@@ -476,7 +515,9 @@ async function referenceIndex() {
   }
   const stamp = `${info.dev}:${info.ino}:${info.size}:${info.mtimeNs}:${info.ctimeNs}`;
   if (cached?.file === file && cached.stamp === stamp) return cached.pending;
-  const pending = readJson(file).then((entries) => indexReferences(entries));
+  const pending = readFile(file, "utf8").then(
+    (raw) => indexReferences(JSON.parse(raw), file, hash(raw))
+  );
   cached = { file, stamp, pending };
   try {
     return await pending;
@@ -485,20 +526,107 @@ async function referenceIndex() {
     throw error;
   }
 }
-async function referenceRead(id, offset, limit) {
-  const item = (await referenceIndex()).byId.get(id);
-  if (!item) throw new Fault("REFERENCE_NOT_FOUND", "No registered reference with this ID.", 2);
+function snippet(text, query, terms) {
+  const lower = text.toLowerCase();
+  let matchOffset = lower.indexOf(query.trim().toLowerCase());
+  if (matchOffset < 0) {
+    const pattern = referenceWords(query).join("[\\s._:-]*");
+    if (pattern) matchOffset = lower.search(new RegExp(pattern, "u"));
+  }
+  if (matchOffset < 0) {
+    const locations = terms.map((term) => lower.indexOf(term)).filter((offset2) => offset2 >= 0);
+    matchOffset = locations.length ? Math.min(...locations) : -1;
+  }
+  const offset = Math.max(0, Math.min(matchOffset - 160, text.length - 1200));
   return {
-    id,
+    text: text.slice(offset, offset + 1200),
+    offset,
+    matchOffset: matchOffset < 0 ? null : matchOffset,
+    length: text.length,
+    nextOffset: offset + 1200 < text.length ? offset + 1200 : null
+  };
+}
+async function referenceSearch(query, version, options = {}) {
+  const index = await referenceIndex();
+  const normalized = normalizeReference(query);
+  const terms = termsFor(query);
+  if (!terms.length) return [];
+  const key = JSON.stringify([query.trim(), version, options.kind, options.family]);
+  let ranked = index.queries.get(key);
+  if (!ranked) {
+    const postings = await index.postings();
+    const lists = terms.map((term) => postings[term] ?? []).sort((a, b) => a.length - b.length);
+    const membership = lists.slice(1).map((list) => new Set(list));
+    const candidates = (lists[0] ?? []).filter((position) => membership.every((list) => list.has(position)));
+    const exactId = index.byId.get(query) ?? index.byId.get(index.bySymbol.get(query.replace(/^grammar:/, "")) ?? "");
+    if (exactId) {
+      const position = index.searchable.findIndex(({ reference }) => reference === exactId);
+      if (!candidates.includes(position)) candidates.push(position);
+    }
+    ranked = candidates.filter((position) => {
+      const r = index.searchable[position].reference;
+      return versionMatches(r.version, version) && (!options.kind || r.kind === options.kind) && (!options.family || r.family === options.family || r.family?.startsWith(options.family + "/"));
+    }).map((position) => {
+      const { reference, titleText } = index.searchable[position];
+      const exact = reference === exactId;
+      const titleTerms = termsFor(titleText);
+      const bodyText = normalizeReference(reference.text);
+      const adjacentHits = terms.slice(1).filter((term, i) => bodyText.includes(terms[i] + " " + term)).length;
+      const titleHits = terms.filter((term) => titleTerms.includes(term)).length;
+      const score = (exact ? 1e4 : 0) + (titleText === normalized ? 2e3 : 0) + (titleText.includes(normalized) ? 400 : 0) + titleHits * 50 + (titleHits === terms.length ? 200 : 0) + (bodyText.includes(normalized) ? 40 : 0) + adjacentHits * 60 + (reference.text.includes('"' + query.trim() + '"') ? 80 : 0) + (reference.kind === "contract" ? 5 : 0) + 1 / (1 + reference.text.length / 1e3);
+      return { position, score };
+    }).sort((a, b) => b.score - a.score || a.position - b.position).map(({ position }) => position);
+    if (index.queries.size >= 64) index.queries.delete(index.queries.keys().next().value);
+    index.queries.set(key, ranked);
+  }
+  const offset = options.offset ?? 0;
+  return ranked.slice(offset, offset + (options.limit ?? 8)).map((position) => {
+    const { reference: r, title } = index.searchable[position];
+    return {
+      id: r.id,
+      title,
+      version: r.version,
+      source: r.source,
+      kind: r.kind ?? "guide",
+      family: r.family ?? "workflow",
+      ...snippet(r.text, query, terms),
+      requires: r.requires ?? [],
+      totalMatches: ranked.length,
+      nextResultOffset: offset + (options.limit ?? 8) < ranked.length ? offset + (options.limit ?? 8) : null
+    };
+  });
+}
+async function referenceRead(id, offset, limit) {
+  const index = await referenceIndex();
+  const item = index.byId.get(id) ?? index.byId.get(index.bySymbol.get(id.replace(/^grammar:/, "")) ?? "");
+  if (!item)
+    throw new Fault("REFERENCE_NOT_FOUND", "No registered reference with this ID or grammar symbol.", 2);
+  const content = item.text.slice(offset, offset + limit);
+  const symbols = [...content.matchAll(/<([^>\n]+)>/g)].map((match) => index.bySymbol.get(match[1]));
+  const related = [
+    ...new Set(
+      [...item.related ?? [], ...symbols].filter(
+        (target) => Boolean(target) && target !== item.id
+      )
+    )
+  ];
+  return {
+    id: item.id,
+    title: item.title ?? item.id,
     version: item.version,
     source: item.source,
-    content: item.text.slice(offset, offset + limit),
+    content,
+    offset,
+    length: item.text.length,
     nextOffset: offset + limit < item.text.length ? offset + limit : null,
+    requires: item.requires ?? [],
+    related: related.slice(0, 16),
+    relatedCount: related.length,
     classification: "vendor-reference-data"
   };
 }
 async function referenceSync(version, dryRun) {
-  const entries = (await referenceIndex()).upstream.filter((r) => r.version === version);
+  const entries = (await referenceIndex()).upstream.filter((r) => versionMatches(r.version, version));
   if (!entries.length)
     throw new Fault(
       "REFERENCE_VERSION_UNAVAILABLE",
@@ -549,7 +677,7 @@ async function editConnection(name, value) {
 
 // packages/core/src/deploy.ts
 import path6 from "node:path";
-import { readFile, mkdir, cp, open } from "node:fs/promises";
+import { readFile as readFile2, mkdir, cp, open } from "node:fs/promises";
 import { randomUUID as randomUUID2, verify } from "node:crypto";
 
 // packages/core/src/deployment-control.ts
@@ -780,7 +908,7 @@ async function authorizePlan(ctx, plan, env2) {
     if (payload.planDigest !== plan.digest || payload.targetDigest !== plan.targetDigest || Date.parse(payload.expiresAt) <= Date.now() || !verify(
       null,
       Buffer.from(canonical(payload)),
-      await readFile(process.env.APEXREST_APPROVAL_PUBLIC_KEY_FILE),
+      await readFile2(process.env.APEXREST_APPROVAL_PUBLIC_KEY_FILE),
       Buffer.from(signature, "base64")
     ))
       throw new Fault(
@@ -823,7 +951,7 @@ async function sourceInventory(ctx) {
     "playwright.config.mjs"
   ])
     if (await exists(path6.join(ctx.root, relative)))
-      files[relative] = hash(await readFile(await contained(ctx.root, relative)));
+      files[relative] = hash(await readFile2(await contained(ctx.root, relative)));
   return Object.fromEntries(Object.entries(files).sort());
 }
 var DeploymentService = class {
@@ -884,7 +1012,7 @@ var DeploymentService = class {
       if (!migration && !pkg) continue;
       if (!file.endsWith(".sql"))
         throw new Fault("UNSUPPORTED_DB_SOURCE", "Database execution directories accept .sql files only.", 3);
-      const sql = await readFile(await contained(ctx.root, file), "utf8");
+      const sql = await readFile2(await contained(ctx.root, file), "utf8");
       risks.push(...migrationRisk(sql).map((r) => `${r}:${file}`));
       if (migration) {
         const version = path6.basename(file);
@@ -925,7 +1053,7 @@ var DeploymentService = class {
       sourceDigest: hash(canonical(sources)),
       sources,
       configurationDigest: hash(canonical(ctx.config)),
-      toolchainDigest: hash(await readFile(lock)),
+      toolchainDigest: hash(await readFile2(lock)),
       compiler: validation.compiler.version,
       targetDigest: targetDigest(env2),
       target: current.target,
@@ -950,7 +1078,7 @@ var DeploymentService = class {
       throw new Fault("PLAN_TARGET_MISMATCH", "Plan project or target differs from the current request.", 5);
     if (Date.parse(plan.expiresAt) <= Date.now())
       throw new Fault("PLAN_EXPIRED", "Create and review a new plan.", 5);
-    if (plan.sourceDigest !== hash(canonical(await sourceInventory(ctx))) || plan.configurationDigest !== hash(canonical(ctx.config)) || plan.toolchainDigest !== hash(await readFile(await contained(ctx.root, ctx.config.toolchain.lockFile))))
+    if (plan.sourceDigest !== hash(canonical(await sourceInventory(ctx))) || plan.configurationDigest !== hash(canonical(ctx.config)) || plan.toolchainDigest !== hash(await readFile2(await contained(ctx.root, ctx.config.toolchain.lockFile))))
       throw new Fault("SOURCE_DRIFT", "Sources, configuration or toolchain lock changed after review.", 5);
     if (plan.backupRequired !== Boolean(plan.target.application))
       throw new Fault("PLAN_TAMPERED", "Backup requirement does not match reviewed target.", 5);
@@ -972,7 +1100,7 @@ var DeploymentService = class {
         if (kind === "migration" && previous && (previous.checksum !== sha256 || previous.status !== "succeeded"))
           throw new Fault("MIGRATION_HISTORY_CONFLICT", "Migration requires reconciliation.", 5);
         if (kind !== "migration" || !previous) expected.push({ kind, file, sha256 });
-        const risks = migrationRisk(await readFile(await contained(ctx.root, file), "utf8")).map(
+        const risks = migrationRisk(await readFile2(await contained(ctx.root, file), "utf8")).map(
           (r) => `${r}:${file}`
         );
         if (risks.some((r) => !plan.risks.includes(r)))
@@ -1118,7 +1246,7 @@ end;
         const source = await contained(ctx.root, file), destination = await contained(snapshot, file);
         await mkdir(path6.dirname(destination), { recursive: true });
         await cp(source, destination);
-        if (hash(await readFile(destination)) !== sha)
+        if (hash(await readFile2(destination)) !== sha)
           throw new Fault("SOURCE_DRIFT", "Source changed while freezing deployment.", 5);
       }
       if (controller.signal.aborted)
@@ -1315,13 +1443,13 @@ commit;`,
 // packages/core/src/testing.ts
 import path8 from "node:path";
 import { spawn as spawn2 } from "node:child_process";
-import { mkdir as mkdir2, readFile as readFile3, cp as cp2, chmod } from "node:fs/promises";
+import { mkdir as mkdir2, readFile as readFile4, cp as cp2, chmod } from "node:fs/promises";
 import { randomUUID as randomUUID4 } from "node:crypto";
 
 // packages/core/src/artifacts.ts
 import path7 from "node:path";
 import { randomUUID as randomUUID3 } from "node:crypto";
-import { readFile as readFile2, readdir, rm as rm2 } from "node:fs/promises";
+import { readFile as readFile3, readdir, rm as rm2 } from "node:fs/promises";
 var ArtifactService = class {
   constructor(ctx) {
     this.ctx = ctx;
@@ -1355,7 +1483,7 @@ var ArtifactService = class {
         "Authentication and credential artifacts cannot be read through tools.",
         4
       );
-    const content = await readFile2(await contained(directory, id + ".txt"), "utf8");
+    const content = await readFile3(await contained(directory, id + ".txt"), "utf8");
     if (hash(content) !== metadata.sha256)
       throw new Fault("ARTIFACT_CHANGED", "Artifact integrity check failed.", 5);
     return {
@@ -1573,7 +1701,7 @@ end;
         failures: stats.unexpected + stats.flaky + (report.errors?.length ?? 0),
         skipped: stats.skipped
       };
-      const artifactId = await artifacts.save(await readFile3(reportFile, "utf8"), "playwright-report");
+      const artifactId = await artifacts.save(await readFile4(reportFile, "utf8"), "playwright-report");
       return {
         suite,
         status: result.timedOut || result.cancelled ? "cancelled" : !counts.tests ? "empty" : result.code === 0 && !counts.failures ? "passed" : "failed",
@@ -1743,7 +1871,7 @@ async function dispatch(operation, input = {}, signal) {
         data = await oracle.identity(await resolveConnection(text("name")));
         break;
       case "docs.search":
-        data = await referenceSearch(text("query"), text("version"));
+        data = await referenceSearch(text("query"), text("version"), schemas["docs.search"].parse(parsed));
         break;
       case "docs.read":
         data = await referenceRead(text("id"), Number(parsed.offset), Number(parsed.limit));

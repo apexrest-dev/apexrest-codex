@@ -1,5 +1,7 @@
 # Testing and verification
 
+English | [Українська](testing.uk.md)
+
 Choose checks that establish the behavior being changed, then record what actually ran. Unit fixtures, compiler validation, connected Oracle results, native Codex discovery and browser observations are different evidence classes.
 
 ## Local development checks

@@ -43,7 +43,8 @@
     },
     "portable": {
       "codex": "0.154.0",
-      "status": "mcp-not-discovered"
+      "status": "retired-codex-only-product",
+      "historicalResult": "mcp-not-discovered"
     }
   }
 }

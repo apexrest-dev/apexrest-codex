@@ -1,5 +1,13 @@
 # Changelog
 
+English | [Українська](CHANGELOG.uk.md)
+
+## Unreleased
+
+- Maintain English and Ukrainian guides, README files and diagrams, with reciprocal language links.
+- Add Ukrainian site routes, localized navigation and search, and a switch to the same page in the other language.
+- Check documentation coverage, executable-example parity and local links alongside the site packaging checks.
+
 ## 0.1.0-beta.1 — repository distribution
 
 - Install directly from the GitHub repository through a native Codex marketplace. The checked-in bundle includes the CLI, MCP server, references, templates and eight skills.

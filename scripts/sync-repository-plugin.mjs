@@ -37,6 +37,7 @@ if (check) {
   }
   console.log(`Repository plugin ${packageVersion}: source, integrity and fresh build verified.`);
 } else {
+  await cp('dist/codex-compat/.agents/plugins/marketplace.json', '.agents/plugins/marketplace.json');
   for (const entry of generatedPluginEntries.filter((name) => name !== 'bundle-manifest.json')) {
     const destination = path.join(repositoryPlugin, entry);
     await rm(destination, { force: true, recursive: true });

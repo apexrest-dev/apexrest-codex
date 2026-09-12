@@ -29,7 +29,8 @@
     "check-release-readiness": "node scripts/check-release-readiness.mjs",
     "plugin:sync": "npm run build && node scripts/sync-repository-plugin.mjs",
     "plugin:check": "node scripts/sync-repository-plugin.mjs --check",
-    "test:repository-plugin": "node scripts/repository-plugin-smoke.mjs"
+    "test:repository-plugin": "node scripts/repository-plugin-smoke.mjs",
+    "docs:check": "node scripts/check-docs.mjs"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "1.30.0",

@@ -1,0 +1,46 @@
+# APEXlang authoring in Codex
+
+English | [Українська](apexlang-optimization.uk.md)
+
+APEXREST targets Codex exclusively. The build emits the native `codex-compat` package with `.codex-plugin/plugin.json`; the generated marketplace restricts the product to `codex`. The previous experimental portable artifact is retired. Existing historical evidence and the original build specification are retained.
+
+## Retrieval and authoring
+
+The APEXlang skill routes Codex directly to the relevant component family, then its required contracts and selected scenario. A bundled, compiler-checked chart/cards/filter composition provides a small starting point when that pattern fits. The original Oracle documents remain data; their orchestration and deployment instructions do not replace APEXREST workflows or user authorization.
+
+The pinned Oracle snapshot contains **637 complete template/syntax documents and 4,872 grammar fragments**. Stable legacy IDs remain valid. A reproducible offline builder verifies the archive hash, preserves original text and grammar boundaries, resolves contract dependencies and generates a search accelerator. It does not download documentation during Codex startup or normal lookup.
+
+Search ranks exact IDs, owning productions, titles and adjacent query terms before incidental mentions. It handles camelCase and separated words, returns a window around the match, supports family/kind filters and bounded result pagination. `version: "26.1"` includes the pinned 26.1 snapshot; an explicit snapshot must match exactly. `grammar:series-source-property` supports direct reading. Documents expose `requires` and bounded `related` IDs without automatically expanding their content.
+
+The runtime caches the corpus and up to 64 query rankings. File identity/size/timestamps invalidate that cache; the accelerator must match the corpus hash. Missing, stale or malformed accelerators fall back to indexing the actual corpus. Reference bodies are not read during the MCP handshake.
+
+## Measurements and limits
+
+[Retrieval evidence](evidence/apexlang-retrieval.json) records seven fresh processes and 100 repeated lookups per process on macOS arm64 with a warm filesystem. The fixed twelve-case set covers properties, charts, grids, items, validations, dynamic actions and LOVs. The baseline uses the previous corpus/API; the current version adds documents and filters. The report separately records relevance without a version filter so the old release-selector bug does not conceal that comparison.
+
+| Local measurement | Previous implementation | Current implementation |
+| --- | ---: | ---: |
+| First lookup, median | 6.74 ms | 47.14 ms |
+| Repeated lookup, median | 0.427 ms | 0.029 ms |
+
+Current expected-first-result coverage: 12/12 selected retrieval cases. This is a deterministic regression set, not an unseen model-generation benchmark.
+
+Repeated local lookups are substantially faster; first lookup is slower because the corpus and index are larger. These measurements establish retrieval performance and expected first-result coverage for this fixture set. They do not establish a percentage improvement in model-generated applications, total task duration or native-host context tokens. The skill body and selected references still consume context when Codex reads them.
+
+## Verification and reproduction
+
+[Native Codex evidence](evidence/apexlang-codex.json) checks discovery and read-only retrieval in a disposable Codex 0.154.0 profile on macOS arm64. It does not update the user's installed plugin. [Oracle evidence](evidence/apexlang-compiler.json) records real offline SQLcl compilation of the blank app, CRM and the filtered chart/cards fixture with unchanged MMD. The fixture was corrected for required chart axes and filename/alias agreement before the final passing run. SQL was not executed and application/browser behavior was not tested.
+
+```sh
+npm run typecheck
+npm run test:unit
+npm run build
+npm run test:contracts
+node scripts/benchmark-apexlang-references.mjs docs/evidence/apexlang-retrieval.json
+node scripts/verify-apexlang-patterns.mjs docs/evidence/apexlang-compiler.json
+node scripts/verify-apexlang-codex.mjs docs/evidence/apexlang-codex.json
+```
+
+The compiler command requires the supported local SQLcl, selected through `APEXREST_SQLCL` when it is outside `PATH`. The native check requires the Codex CLI. Neither command connects to an Oracle database. To compare an earlier implementation, supply its saved bundled reference module and resource directory as the benchmark's third and fourth arguments. To rebuild the corpus, supply the exact reviewed archive to `node scripts/build-apexlang-references.mjs`; its pinned hash is recorded in the builder and snapshot manifest.
+
+Connected component/runtime coverage, broader task-level generation evaluations and other native platforms remain separate work. See [implementation status](implementation-status.md) and [next actions](next-actions.md).

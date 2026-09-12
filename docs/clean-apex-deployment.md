@@ -1,5 +1,7 @@
 # Deployment without service tables
 
+English | [Українська](clean-apex-deployment.uk.md)
+
 The user amended the plugin rules on 2026-09-12: missing APEXREST service tables must not block ordinary deployment to a clean supported APEX installation. The original build specification is preserved; this amendment is recorded in AGENTS.md and ADR 007.
 
 ## Implemented

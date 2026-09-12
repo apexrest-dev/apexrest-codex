@@ -20,8 +20,9 @@ input.addEventListener('input', async () => {
       li.append(a);
       results.append(li);
     }
-    if (!results.children.length) results.textContent = 'No matching documentation.';
+    if (!results.children.length) results.textContent = document.body.dataset.searchEmpty;
   } catch {
-    results.textContent = 'Search index unavailable. Use the navigation links.';
+    if (input.value.trim().toLowerCase() !== query) return;
+    results.textContent = document.body.dataset.searchError;
   }
 });

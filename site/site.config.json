@@ -2,19 +2,201 @@
   "basePath": "/codex/",
   "title": "APEXREST for Codex",
   "pages": [
-    { "slug": "", "title": "Overview", "source": "site/content/index.md" },
-    { "slug": "install", "title": "Install", "source": "site/content/install.md" },
-    { "slug": "docs", "title": "Documentation", "source": "docs/index.md" },
-    { "slug": "getting-started", "title": "Getting started", "source": "docs/getting-started.md" },
-    { "slug": "existing-app", "title": "Existing applications", "source": "docs/existing-app.md" },
-    { "slug": "configuration", "title": "Configuration", "source": "docs/configuration.md" },
-    { "slug": "versions", "title": "Supported versions", "source": "site/content/versions.md" },
-    { "slug": "deployment", "title": "Deployment safety", "source": "docs/deployment-safety.md" },
-    { "slug": "testing", "title": "Testing", "source": "docs/testing.md" },
-    { "slug": "troubleshooting", "title": "Troubleshooting", "source": "docs/troubleshooting.md" },
-    { "slug": "releases", "title": "Releases", "source": "site/content/releases.md" },
-    { "slug": "security", "title": "Security and privacy", "source": "SECURITY.md" },
-    { "slug": "contributing", "title": "Contributing", "source": "CONTRIBUTING.md" },
-    { "slug": "architecture", "title": "Architecture", "source": "docs/architecture.md" }
+    {
+      "slug": "",
+      "title": "Overview",
+      "source": "site/content/index.md",
+      "lang": "en",
+      "key": "overview"
+    },
+    {
+      "slug": "install",
+      "title": "Install",
+      "source": "site/content/install.md",
+      "lang": "en",
+      "key": "install"
+    },
+    {
+      "slug": "docs",
+      "title": "Documentation",
+      "source": "docs/index.md",
+      "lang": "en",
+      "key": "docs"
+    },
+    {
+      "slug": "getting-started",
+      "title": "Getting started",
+      "source": "docs/getting-started.md",
+      "lang": "en",
+      "key": "getting-started"
+    },
+    {
+      "slug": "existing-app",
+      "title": "Existing applications",
+      "source": "docs/existing-app.md",
+      "lang": "en",
+      "key": "existing-app"
+    },
+    {
+      "slug": "configuration",
+      "title": "Configuration",
+      "source": "docs/configuration.md",
+      "lang": "en",
+      "key": "configuration"
+    },
+    {
+      "slug": "versions",
+      "title": "Supported versions",
+      "source": "site/content/versions.md",
+      "lang": "en",
+      "key": "versions"
+    },
+    {
+      "slug": "deployment",
+      "title": "Deployment safety",
+      "source": "docs/deployment-safety.md",
+      "lang": "en",
+      "key": "deployment"
+    },
+    {
+      "slug": "testing",
+      "title": "Testing",
+      "source": "docs/testing.md",
+      "lang": "en",
+      "key": "testing"
+    },
+    {
+      "slug": "troubleshooting",
+      "title": "Troubleshooting",
+      "source": "docs/troubleshooting.md",
+      "lang": "en",
+      "key": "troubleshooting"
+    },
+    {
+      "slug": "releases",
+      "title": "Releases",
+      "source": "site/content/releases.md",
+      "lang": "en",
+      "key": "releases"
+    },
+    {
+      "slug": "security",
+      "title": "Security and privacy",
+      "source": "SECURITY.md",
+      "lang": "en",
+      "key": "security"
+    },
+    {
+      "slug": "contributing",
+      "title": "Contributing",
+      "source": "CONTRIBUTING.md",
+      "lang": "en",
+      "key": "contributing"
+    },
+    {
+      "slug": "architecture",
+      "title": "Architecture",
+      "source": "docs/architecture.md",
+      "lang": "en",
+      "key": "architecture"
+    },
+    {
+      "slug": "uk",
+      "title": "Огляд",
+      "source": "site/content/index.uk.md",
+      "lang": "uk",
+      "key": "overview"
+    },
+    {
+      "slug": "uk/install",
+      "title": "Встановлення",
+      "source": "site/content/install.uk.md",
+      "lang": "uk",
+      "key": "install"
+    },
+    {
+      "slug": "uk/docs",
+      "title": "Документація",
+      "source": "docs/index.uk.md",
+      "lang": "uk",
+      "key": "docs"
+    },
+    {
+      "slug": "uk/getting-started",
+      "title": "Початок роботи",
+      "source": "docs/getting-started.uk.md",
+      "lang": "uk",
+      "key": "getting-started"
+    },
+    {
+      "slug": "uk/existing-app",
+      "title": "Наявні застосунки",
+      "source": "docs/existing-app.uk.md",
+      "lang": "uk",
+      "key": "existing-app"
+    },
+    {
+      "slug": "uk/configuration",
+      "title": "Конфігурація",
+      "source": "docs/configuration.uk.md",
+      "lang": "uk",
+      "key": "configuration"
+    },
+    {
+      "slug": "uk/versions",
+      "title": "Підтримувані версії",
+      "source": "site/content/versions.uk.md",
+      "lang": "uk",
+      "key": "versions"
+    },
+    {
+      "slug": "uk/deployment",
+      "title": "Безпека розгортання",
+      "source": "docs/deployment-safety.uk.md",
+      "lang": "uk",
+      "key": "deployment"
+    },
+    {
+      "slug": "uk/testing",
+      "title": "Тестування",
+      "source": "docs/testing.uk.md",
+      "lang": "uk",
+      "key": "testing"
+    },
+    {
+      "slug": "uk/troubleshooting",
+      "title": "Усунення несправностей",
+      "source": "docs/troubleshooting.uk.md",
+      "lang": "uk",
+      "key": "troubleshooting"
+    },
+    {
+      "slug": "uk/releases",
+      "title": "Випуски",
+      "source": "site/content/releases.uk.md",
+      "lang": "uk",
+      "key": "releases"
+    },
+    {
+      "slug": "uk/security",
+      "title": "Безпека й приватність",
+      "source": "SECURITY.uk.md",
+      "lang": "uk",
+      "key": "security"
+    },
+    {
+      "slug": "uk/contributing",
+      "title": "Участь у розробці",
+      "source": "CONTRIBUTING.uk.md",
+      "lang": "uk",
+      "key": "contributing"
+    },
+    {
+      "slug": "uk/architecture",
+      "title": "Архітектура",
+      "source": "docs/architecture.uk.md",
+      "lang": "uk",
+      "key": "architecture"
+    }
   ]
 }

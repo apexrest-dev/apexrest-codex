@@ -1,5 +1,7 @@
 # Troubleshooting
 
+English | [Українська](troubleshooting.uk.md)
+
 Start with `apexrest doctor --json`, then use the reported capability or error code. A detected executable, a validated compiler, native Codex discovery and a working database connection are separate states.
 
 ## The plugin is installed but tools are missing

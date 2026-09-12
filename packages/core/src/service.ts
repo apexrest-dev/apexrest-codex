@@ -79,7 +79,7 @@ export async function dispatch(operation: string, input: Record<string, unknown>
         data = await oracle.identity(await resolveConnection(text('name')));
         break;
       case 'docs.search':
-        data = await referenceSearch(text('query'), text('version'));
+        data = await referenceSearch(text('query'), text('version'), schemas['docs.search'].parse(parsed));
         break;
       case 'docs.read':
         data = await referenceRead(text('id'), Number(parsed.offset), Number(parsed.limit));

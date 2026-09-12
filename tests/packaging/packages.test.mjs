@@ -4,26 +4,26 @@ import { readFile, mkdtemp, writeFile, mkdir, cp } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
-import { Ajv2020 } from 'ajv/dist/2020.js';
 import { zipSync, unzipSync } from 'fflate';
 import { sha256, zipTree, files } from '../../scripts/lib/release.mjs';
 const pkg = JSON.parse(await readFile('package.json', 'utf8'));
-test('portable package validates against retrieved official schemas', async () => {
-  const ajv = new Ajv2020({ strict: false });
-  for (const name of ['plugin', 'mcp']) {
-    const schema = JSON.parse(await readFile(`schemas/vendor/${name}.schema.json`));
-    const value = JSON.parse(await readFile(`dist/portable/plugins/apexrest-apex/${name}.json`));
-    assert.ok(ajv.validate(schema, value), ajv.errorsText());
-  }
+test('Codex package declares native skills, local MCP and exclusive product routing', async () => {
+  const root = 'dist/codex-compat/plugins/apexrest-apex';
+  const manifest = JSON.parse(await readFile(root + '/.codex-plugin/plugin.json'));
+  const mcp = JSON.parse(await readFile(root + '/.mcp.json'));
+  assert.equal(manifest.skills, './skills/');
+  assert.equal(manifest.mcpServers, './.mcp.json');
+  assert.deepEqual(mcp.mcpServers.apexrest, { command: 'node', args: ['runtime/mcp.mjs'], cwd: '.' });
+  const marketplace = JSON.parse(await readFile('dist/codex-compat/.agents/plugins/marketplace.json'));
+  assert.deepEqual(marketplace.plugins[0].policy.products, ['codex']);
+  await assert.rejects(readFile('dist/portable/plugins/apexrest-apex/plugin.json'), { code: 'ENOENT' });
 });
-test('both profiles are self-contained, same version, eight bounded skills and no author paths', async () => {
-  for (const profile of ['portable', 'codex-compat']) {
+test('Codex package is self-contained, same version, eight bounded skills and no author paths', async () => {
+  for (const profile of ['codex-compat']) {
     const root = `dist/${profile}/plugins/apexrest-apex`;
     const list = await files(root);
     assert.equal(list.filter((f) => /^skills\/[^/]+\/SKILL.md$/.test(f)).length, 8);
-    const manifest = JSON.parse(
-      await readFile(root + '/' + (profile === 'portable' ? 'plugin.json' : '.codex-plugin/plugin.json')),
-    );
+    const manifest = JSON.parse(await readFile(root + '/' + '.codex-plugin/plugin.json'));
     assert.equal(manifest.version, pkg.version);
     assert.ok(list.includes('resources/templates/blank-app/application/.apex/apexlang.json'));
     for (const file of list.filter((f) => /\.(?:json|mjs|md)$/.test(f))) {
@@ -67,7 +67,7 @@ test('site has all required routes, working internal links and accessible struct
   assert.ok(all.includes('llms.txt'));
   for (const file of all.filter((f) => f.endsWith('.html'))) {
     const html = await readFile('site-dist/' + file, 'utf8');
-    assert.match(html, /<html lang="en"/);
+    assert.match(html, new RegExp(`<html lang="${file.startsWith('uk/') ? 'uk' : 'en'}"`));
     assert.match(html, /id="main"/);
     assert.match(html, /for="search"/);
     for (const link of [...html.matchAll(/(?:href|src)="(\/codex\/[^"#]*)"/g)].map((m) => m[1])) {

@@ -1,10 +1,16 @@
 # Implementation status — beta 0.1.0-beta.1
 
+English | [Українська](implementation-status.uk.md)
+
 The original build specification remains unchanged. This is working code and an installable beta, not a stable-qualified product. [acceptance.json](acceptance.json) separates implementation, verification, evidence and blockers for every A01–A28 criterion.
+
+## APEXlang retrieval for Codex
+
+The [APEXlang optimization](apexlang-optimization.md) adds direct component routes, complete pinned Oracle contracts/templates, ranked bounded lookup, release-version matching, grammar aliases and an offline search accelerator. Twelve deterministic retrieval cases pass. The [native check](evidence/apexlang-codex.json) verifies discovery and retrieval in an isolated Codex 0.154.0 macOS arm64 profile. The [compiler check](evidence/apexlang-compiler.json) verifies three offline application compositions with unchanged MMD. These checks do not establish model generation success rates, connected SQL results or application browser behavior. The build now emits only the Codex native package; existing installations and publication are unchanged.
 
 | Area                | Implemented                                                                                                                       | Public verification                                                                                                                   | Remaining boundary                                                                                 |
 | ------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| Native plugin       | Two layouts, one identity, eight skills, bundled CLI/MCP and native registration                                                  | Codex 0.154.0 on macOS arm64: installation outside the checkout, tool discovery, generate/validate jobs, enable/disable and uninstall | Other native host/platform combinations and a refreshed complete lifecycle for release             |
+| Native plugin       | One Codex layout, one identity, eight skills, bundled CLI/MCP and native registration                                                  | Codex 0.154.0 on macOS arm64: installation outside the checkout, tool discovery, generate/validate jobs, enable/disable and uninstall | Other native host/platform combinations and a refreshed complete lifecycle for release             |
 | Client installation | Bash/PowerShell bootstrap, pinned hashes, safe archives, managed dependencies, locks and recovery                                 | macOS setup, repeated offline setup, Chromium launch, settings preservation and installer fixtures                                    | Clean-machine Linux/Windows/WSL2 execution and complete interruption/upgrade matrix                |
 | APEXlang            | SQLcl generate/export/adopt/validate/diff, non-overwrite staging and metadata preservation                                        | Real blank-app and CRM compiler reports; source and preservation fixtures                                                             | Connected existing-app round trips, broader component coverage and unsupported-component rejection |
 | Deployment          | Immutable plans, fresh identity and drift checks, SQL backups, frozen sources, migration history, coordination and reconciliation | Local fixtures exercise policy, checksums, backups, locks and failure handling                                                        | Source-bound connected import, restore and fault-injection qualification                           |
@@ -17,6 +23,8 @@ The original build specification remains unchanged. This is working code and an 
 [evidence/local-checks.json](evidence/local-checks.json) records the latest consolidated local run: Node version, source digest, exit codes, durations and log hashes. Private console logs remain under `.apexrest/check-logs/`. The suite contains 64 unit, 14 installer, six CLI/MCP contract and 12 packaging tests. Unit and installer fixtures are not Oracle integration evidence.
 
 The repository bundle is checked with `npm run plugin:check`. It validates source freshness, every bundled file hash, native marketplace parity and agreement with a fresh build. `npm run plugin:sync` regenerates it after source changes. These checks run in Linux, macOS and Windows CI.
+
+The separate [bilingual documentation report](evidence/documentation-bilingual.json) records 36 English/Ukrainian document pairs, 28 generated routes and 13 passing packaging tests, including language navigation and search-index isolation. `npm run docs:check` checks companion coverage, executable-example parity, heading structure and local links. In-app browser observations cover language switching, search, diagrams and a narrow layout; they are recorded separately and do not refresh Oracle or native-host evidence.
 
 The [hosted CI report](evidence/repository-ci.json) records its exact commit and source digest. Hosted tests exercise local code, packaging and site generation; they do not certify native Codex lifecycle or connected Oracle operations. Earlier reports retain their original source digests and must be refreshed before contributing to a stable release gate.
 
@@ -44,7 +52,7 @@ The runtime also combines fresh target identity reads, invalidates cached compil
 
 ## Public distribution
 
-[apexrest-dev/apexrest-codex](https://github.com/apexrest-dev/apexrest-codex) is the canonical source repository. It contains the native marketplace and self-contained plugin bundle, English documentation and two accessible SVG diagrams for architecture and deployment. The static site has 14 routes with tables, diagrams, safe Markdown and validated anchors.
+[apexrest-dev/apexrest-codex](https://github.com/apexrest-dev/apexrest-codex) is the canonical source repository. It contains the native marketplace and self-contained plugin bundle, English and Ukrainian documentation and two accessible SVG diagrams in both languages for architecture and deployment. The static site has 28 routes, 14 per language, with tables, diagrams, safe Markdown, validated anchors, a page language switch and separate search indexes.
 
 [In-app site observations](evidence/repository-site-browser.json) describe their limited documentation-page scope. `dist/releases/` contains local archives, checksums and readiness reports; `site-dist/` contains the generated documentation. No vendor binaries, private browser state or raw local-machine evidence are included in public packages.
 

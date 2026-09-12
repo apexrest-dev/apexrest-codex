@@ -1,10 +1,12 @@
 # Build Oracle APEX applications in Codex
 
+English | [Українська](index.uk.md)
+
 APEXREST brings application source, Oracle compilation, controlled imports and runtime verification into one native Codex plugin.
 
 **Open source · Apache-2.0 · Beta {{version}}**
 
-[Install in Codex](install/) · [Get started](../../docs/getting-started.md) · [Explore the source](https://github.com/apexrest-dev/apexrest-codex)
+[Install in Codex](install.md) · [Get started](../../docs/getting-started.md) · [Explore the source](https://github.com/apexrest-dev/apexrest-codex)
 
 ![APEXREST connects Codex to native APEX source, Oracle validation, controlled deployment and verification](../../docs/assets/overview.svg)
 
@@ -27,4 +29,4 @@ Read the [runtime optimization review](../../docs/optimization-review.md) and [d
 
 The Codex compatibility profile and real Oracle template compilation have been exercised on macOS arm64. Automated local tests, compiler results and native-host checks are recorded separately. Stable release qualification still requires the remaining platform and connected integration evidence.
 
-Use the [support matrix](versions/), [implementation status](../../docs/implementation-status.md) and [release process](releases/) to assess your environment. APEXREST is independent tooling, not an official Oracle or OpenAI product.
+Use the [support matrix](versions.md), [implementation status](../../docs/implementation-status.md) and [release process](releases.md) to assess your environment. APEXREST is independent tooling, not an official Oracle or OpenAI product.

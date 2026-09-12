@@ -1,6 +1,10 @@
 # Contributing
 
-APEXREST is developed in [apexrest-dev/apexrest-codex](https://github.com/apexrest-dev/apexrest-codex). Public code, CLI help, documentation, examples and diagrams use English. Keep changes focused and make claims match the evidence.
+English | [Українська](CONTRIBUTING.uk.md)
+
+APEXREST is developed in [apexrest-dev/apexrest-codex](https://github.com/apexrest-dev/apexrest-codex). Code, CLI help and agent skill instructions use English. Public documentation and diagrams are maintained in English and Ukrainian. Keep changes focused and make claims match the evidence.
+
+Update each English `.md` guide and its `.uk.md` companion together, including reciprocal language links. Translate explanatory text, prompt examples and image descriptions; preserve executable examples, configuration keys, paths, version numbers and evidence boundaries. Machine-readable evidence, third-party notices and the original build specification retain their original content. Site navigation and search stay within the selected language, and the language switch opens the corresponding page. Run `npm run docs:check` and the site checks after documentation changes.
 
 ## Set up a checkout
 

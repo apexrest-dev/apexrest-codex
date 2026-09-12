@@ -1,5 +1,9 @@
 # Plugin optimization review — 2026-09-12
 
+English | [Українська](optimization-review.uk.md)
+
+This report records the earlier runtime experiment. The subsequent [Codex APEXlang optimization](apexlang-optimization.md) expands the reference corpus and changes ranking; its measurements and limitations are separate.
+
 Reviewed runtime startup, MCP responses, references and skills, installer downloads, package construction, source inventories, deployment checks, background jobs and test execution. Implemented changes target measured repeated work and peak memory use. The original build specification remains unchanged.
 
 ## Measured results

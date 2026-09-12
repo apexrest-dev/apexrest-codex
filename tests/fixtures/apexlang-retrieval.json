@@ -1,0 +1,24 @@
+[
+  {
+    "query": "pageItemsToSubmit",
+    "kind": "grammar",
+    "expected": "series-source-property",
+    "visible": "pageItemsToSubmit"
+  },
+  {
+    "query": "pageAccessProtection",
+    "kind": "grammar",
+    "expected": "page-security-property",
+    "visible": "pageAccessProtection"
+  },
+  { "query": "chart series", "kind": "contract", "expected": "chart._series._common" },
+  { "query": "chart bar", "kind": "template", "expected": "chart.bar" },
+  { "query": "dynamic actions refresh", "kind": "template", "expected": "refresh-region-on-change" },
+  { "query": "form initialization", "kind": "template", "expected": "processes.form-initialization" },
+  { "query": "lovs dynamic query", "kind": "template", "expected": "lovs.dynamic.query" },
+  { "query": "interactive grid", "kind": "contract", "expected": "interactive-grid._index" },
+  { "query": "popup lov", "kind": "contract", "expected": "popup-lov._index" },
+  { "query": "validations not null", "kind": "template", "expected": "validations.item" },
+  { "query": "cards media", "kind": "template", "expected": "cards.standard" },
+  { "query": "date picker", "kind": "contract", "expected": "date-picker._index" }
+]

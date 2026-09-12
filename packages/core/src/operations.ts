@@ -45,7 +45,14 @@ export const schemas = {
   'connection.list': z.strictObject(base),
   'connection.test': z.strictObject({ ...base, name: refName }),
   'connection.remove': z.strictObject({ ...base, name: refName }),
-  'docs.search': z.strictObject({ query: z.string().min(1).max(256), version: z.string().optional() }),
+  'docs.search': z.strictObject({
+    query: z.string().min(1).max(256),
+    version: z.string().optional(),
+    kind: z.enum(['grammar', 'template', 'contract', 'guide']).optional(),
+    family: z.string().min(1).max(200).optional(),
+    offset: z.number().int().min(0).max(10000).default(0),
+    limit: z.number().int().min(1).max(8).default(8),
+  }),
   'docs.read': z.strictObject({
     id: z.string().max(200),
     offset: z.number().int().min(0).default(0),
@@ -118,13 +125,15 @@ export const toolCatalog: {
   {
     name: 'apexrest_reference_search',
     operation: 'docs.search',
-    description: 'Search bounded version-aware local references.',
+    description:
+      'Find ranked Oracle syntax, contracts and templates. Use exact property names or English component terms; filter by kind/family. Version accepts a release or pinned snapshot. Results include match offsets and required contracts.',
     readOnly: true,
   },
   {
     name: 'apexrest_reference_read',
     operation: 'docs.read',
-    description: 'Read a bounded reference fragment by registered ID.',
+    description:
+      'Read Oracle reference by result ID or grammar:production-name. Follow requires for template contracts; related resolves grammar symbols. Continue with nextOffset when needed.',
     readOnly: true,
   },
   {

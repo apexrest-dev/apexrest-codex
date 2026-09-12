@@ -1,5 +1,7 @@
 # Deployment and recovery
 
+English | [Українська](deployment-safety.uk.md)
+
 The 2026-09-12 user amendment treats an explicit create/update/import request for an identified development/test application as authorization for the necessary scoped import. After reviewing the concrete plan, the agent may record the existing instruction as a short-lived local deploy grant bound to the exact project, target and plan; preserve unrelated policy, retain the authorization record, and remove that grant after the attempt. Do not ask the same permission twice or stop at a plan. This records consent already given and does not invent consent, authorize unrelated database writes, or replace protected production signatures. Identity, SQL backup, drift, coordination, source freezing and unknown-outcome handling remain mandatory.
 
 Application-only verification may use an explicitly authorized isolated profile with compiler, real read-only SQL reconciliation and in-app browser observations, while retaining the original required-suite profile and its historical results. No configured automated suites means none ran, not that SQL/E2E passed. See the [test skill](../plugins/apexrest-apex/skills/apexrest-test/SKILL.md#application-only-verification-scope).
