@@ -29,6 +29,8 @@ codex plugin add apexrest-apex@apexrest
 codex plugin list --json
 ```
 
+The exact GitHub installation path was verified with Codex 0.154.0, Node 24.21.0 and macOS arm64; see the [native installation report](evidence/native-repository.json).
+
 This registers the repository's `apexrest` marketplace and its `apexrest-apex` plugin in the selected Codex profile. Start a new Codex task after installation, then ask:
 
 > Use APEXREST to check my setup. Call the plugin's doctor and distinguish native tool availability, compiler readiness and database connectivity. Guide me through any missing local setup without requesting passwords in chat.

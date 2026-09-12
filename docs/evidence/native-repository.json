@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "timestamp": "2026-09-12T15:19:12.548Z",
+  "timestamp": "2026-09-12T15:23:37.887Z",
   "sourceDigest": "fb904b636722885a7ca8e57f35021e12e879a209cbf64b8be68f731c1041dbe2",
-  "installationSource": "local-repository",
+  "installationSource": "apexrest-dev/apexrest-codex",
   "platform": "darwin",
   "arch": "arm64",
   "node": "v24.21.0",
