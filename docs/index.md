@@ -18,7 +18,7 @@ APEXREST is a native Codex plugin for Oracle APEX development, controlled import
 ## Understand and extend
 
 - [Architecture](architecture.md): packages, process boundaries and durable state.
-- [Optimization review](optimization-review.md): measured local and connected improvements.
+- [Optimization review](optimization-review.md): local measurements and runtime optimizations.
 - [Contributing](../CONTRIBUTING.md): local workflow, validation and review requirements.
 - [Security and privacy](../SECURITY.md): credentials, code trust, reports and recovery.
 - [Research](research.md): reviewed upstream material and compatibility decisions.
@@ -29,8 +29,6 @@ APEXREST is a native Codex plugin for Oracle APEX development, controlled import
 - [Implementation status](implementation-status.md): what exists and what was actually exercised.
 - [Acceptance matrix](acceptance.json): implementation, verification, evidence and blockers for each requirement.
 - [Next actions](next-actions.md): the open stable-release gates and their prerequisites.
-- [Connected read-only verification](verification-app175.md): the original target inspection checkpoint.
-- [Dashboard trial](dashboard-app175.md): subsequent authorized imports and authenticated browser observations.
 
 Historical reports retain their original source digest and scope. A later success does not relabel an earlier blocked run, and an earlier blocked run does not erase a separately recorded later result.
 

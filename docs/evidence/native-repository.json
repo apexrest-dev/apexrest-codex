@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "timestamp": "2026-09-12T15:23:37.887Z",
-  "sourceDigest": "fb904b636722885a7ca8e57f35021e12e879a209cbf64b8be68f731c1041dbe2",
-  "installationSource": "apexrest-dev/apexrest-codex",
+  "timestamp": "2026-09-12T15:55:43.587Z",
+  "sourceDigest": "6009b8596f09c5c70b71913fd44a7c36ba652a28e8ef9863e710b9a76fd85678",
+  "installationSource": "local-repository",
   "platform": "darwin",
   "arch": "arm64",
   "node": "v24.21.0",
@@ -19,7 +19,7 @@
     "explicit-project-inspection-outside-plugin-cache"
   ],
   "installedVersion": "0.1.0-beta.1",
-  "installedSourceDigest": "fb904b636722885a7ca8e57f35021e12e879a209cbf64b8be68f731c1041dbe2",
+  "installedSourceDigest": "6009b8596f09c5c70b71913fd44a7c36ba652a28e8ef9863e710b9a76fd85678",
   "tools": [
     "apexrest_apex_export",
     "apexrest_apex_generate",

@@ -11,17 +11,5 @@
     "APEXREST_INTEGRATION_ALLOW_WRITES=true",
     "Named SQLcl connections, target grants, control tables, APEX 26.1+, utPLSQL, authenticated browser profile"
   ],
-  "blocker": "Error: Authorized disposable integration project/environment/write consent are not configured. No DB write attempted.",
-  "followup": {
-    "timestamp": "2026-09-12T13:20:34.021Z",
-    "evidence": "docs/evidence/clean-apex-deployment.json",
-    "connectedTargetVerified": true,
-    "serviceTablesRequired": false,
-    "fullIntegrationStatus": "blocked",
-    "blockers": [
-      "Actual Oracle apply/restore/migration failure injection unexecuted.",
-      "Required utPLSQL and authenticated CRUD suites remain unavailable.",
-      "Independent-machine coordination requires external serialization or explicit database mode."
-    ]
-  }
+  "blocker": "Error: Authorized disposable integration project/environment/write consent are not configured. No DB write attempted."
 }

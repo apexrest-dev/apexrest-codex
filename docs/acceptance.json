@@ -26,7 +26,6 @@
       "evidence": [
         "scripts/native-smoke.mjs",
         "docs/evidence/native-codex-compat.json",
-        "docs/evidence/oracle-app175-readonly.json",
         "docs/evidence/native-repository.json"
       ],
       "blocker": "Verified only on Codex 0.154.0 macOS arm64; portable MCP not discovered."
@@ -39,7 +38,6 @@
       "evidence": [
         "scripts/native-smoke.mjs",
         "docs/evidence/native-codex-compat.json",
-        "docs/evidence/oracle-app175-readonly.json",
         "docs/evidence/native-repository.json"
       ],
       "blocker": null
@@ -110,13 +108,9 @@
         "packages/core/src/oracle.ts",
         "docs/existing-app.md",
         "scripts/integration.mjs",
-        "tests/unit/core.test.ts",
-        "docs/evidence/oracle-app175-readonly.json",
-        "docs/evidence/clean-apex-deployment.json",
-        "docs/evidence/dashboard-app175.json",
-        "docs/evidence/optimization-oracle-app175.json"
+        "tests/unit/core.test.ts"
       ],
-      "blocker": "App 175 import changes only page 1; other 20 exported files including login/global pages and shared LOVs remain byte-identical to baseline. Repeated final import preserves all 21 exported files. Broader no-op normalization/component fixtures remain incomplete."
+      "blocker": "Local edit preservation is covered by unit fixtures. Actual existing-app no-op export/import and page/LOV preservation evidence is not included; normalization/component fixtures remain incomplete."
     },
     {
       "id": "A10",
@@ -126,12 +120,9 @@
       "evidence": [
         "docs/evidence/oracle-local.json",
         "packages/core/src/oracle.ts",
-        "tests/unit/core.test.ts",
-        "docs/evidence/oracle-app175-readonly.json",
-        "docs/evidence/dashboard-app175.json",
-        "docs/evidence/optimization-oracle-app175.json"
+        "tests/unit/core.test.ts"
       ],
-      "blocker": "App 175 post-import MMD and 20 unaffected exported files preserve their original bytes; repeated final import/export is stable. Unsupported-component rejection matrix remains required."
+      "blocker": "Real compiler validation retains template MMD metadata. Existing-app metadata/component preservation and unsupported-component rejection matrix remain unverified."
     },
     {
       "id": "A11",
@@ -141,9 +132,7 @@
       "evidence": [
         "packages/core/src/deploy.ts",
         "tests/unit/deployment.test.ts",
-        "docs/evidence/local-checks.json",
-        "docs/evidence/clean-apex-deployment.json",
-        "docs/evidence/optimization-oracle-app175.json"
+        "docs/evidence/local-checks.json"
       ],
       "blocker": "Source and target-drift behavior tested with fixtures; actual DB drift requires an authorized target."
     },
@@ -155,12 +144,10 @@
       "evidence": [
         "packages/core/src/oracle.ts",
         "docs/evidence/oracle-integration.json",
-        "docs/evidence/oracle-app175-readonly.json",
-        "docs/evidence/clean-apex-deployment.json",
-        "docs/evidence/dashboard-app175.json",
-        "docs/evidence/optimization-oracle-app175.json"
+        "tests/unit/oracle-performance.test.ts",
+        "docs/evidence/local-checks.json"
       ],
-      "blocker": "Actual app 175 built-MCP apply executes fresh DB/service/schema/workspace/app checks before import and after completion. Mismatch failures are unit fixtures; full connected negative matrix remains incomplete."
+      "blocker": "Fresh target identity and mismatch failures are covered by unit fixtures. Actual connected pre-write/post-write checks and the full negative matrix remain unverified."
     },
     {
       "id": "A13",
@@ -170,12 +157,9 @@
       "evidence": [
         "packages/core/src/deploy.ts",
         "tests/unit/deployment.test.ts",
-        "docs/evidence/oracle-app175-readonly.json",
-        "docs/evidence/clean-apex-deployment.json",
-        "docs/evidence/dashboard-app175.json",
-        "docs/evidence/optimization-oracle-app175.json"
+        "docs/evidence/local-checks.json"
       ],
-      "blocker": "Four actual app 175 imports created and verified complete SQL backups before writes; final backup hashes rechecked. Actual Oracle restore and restore-failure evidence remains open."
+      "blocker": "Backup-before-import ordering is covered by unit fixtures. Actual Oracle backup, restore and restore-failure evidence remains open."
     },
     {
       "id": "A14",
@@ -186,7 +170,7 @@
         "packages/core/src/deploy.ts",
         "templates/database-control/install.sql",
         "tests/unit/deployment.test.ts",
-        "docs/evidence/clean-apex-deployment.json"
+        "docs/evidence/local-checks.json"
       ],
       "blocker": "Default local checksum/history persistence, started-before-execution and interruption protection passed in fixtures. Actual Oracle DDL interruption/reconciliation remains unverified; database journal mode is optional."
     },
@@ -198,9 +182,10 @@
       "evidence": [
         "packages/core/src/deploy.ts",
         "templates/database-control/install.sql",
-        "docs/evidence/clean-apex-deployment.json"
+        "tests/unit/deployment.test.ts",
+        "docs/evidence/local-checks.json"
       ],
-      "blocker": "Actual separate Node runner contention is verified within one local managed home/schema. Independent homes/machines require external serialization or optional DB control; real distributed Oracle contention remains unverified."
+      "blocker": "Separate Node runner contention is covered by local fixtures within one managed home/schema. Independent homes/machines require external serialization or optional DB control; real distributed Oracle contention remains unverified."
     },
     {
       "id": "A16",
@@ -211,8 +196,8 @@
         "packages/core/src/jobs.ts",
         "packages/core/src/process.ts",
         "tests/unit/deployment.test.ts",
-        "docs/evidence/clean-apex-deployment.json",
-        "docs/evidence/optimization-oracle-app175.json"
+        "tests/unit/core.test.ts",
+        "docs/evidence/local-checks.json"
       ],
       "blocker": "Timeout/unknown write state tested with fixtures and real subprocess timeout; real DB disconnect/process-tree termination and reconciliation matrix incomplete."
     },
@@ -232,25 +217,21 @@
       "evidence": [
         "packages/core/src/testing.ts",
         "templates/customer-crm/project/tests/sql/test_customers.sql",
-        "docs/evidence/oracle-integration.json",
-        "docs/evidence/oracle-app175-readonly.json"
+        "docs/evidence/oracle-integration.json"
       ],
-      "blocker": "Actual megasport probe sees no UT package. No utPLSQL suite was run; the empty required SQL suite fails the quality gate."
+      "blocker": "No real utPLSQL suite result is included. An authorized integration target with utPLSQL is required; empty or blocked required suites fail the quality gate."
     },
     {
       "id": "A19",
       "criterion": "Browser E2E proves authenticated CRUD and negative validation, beyond HTTP 200",
       "implementation": "partial",
-      "verification": "partial",
+      "verification": "blocked",
       "evidence": [
         "templates/customer-crm/project/tests/e2e/customer-crud.spec.mjs",
         "packages/testkit/src/apex.ts",
-        "docs/evidence/oracle-integration.json",
-        "docs/evidence/oracle-app175-readonly.json",
-        "docs/evidence/dashboard-app175.json",
-        "docs/evidence/optimization-oracle-app175.json"
+        "docs/evidence/oracle-integration.json"
       ],
-      "blocker": "Authenticated Codex in-app dashboard filters, dates, charts and real empty state are verified. This page is not a CRUD fixture; automated authenticated CRUD/negative validation and mobile breakpoint coverage remain absent."
+      "blocker": "Authenticated CRUD, negative validation and mobile breakpoint verification require an authorized integration target and authenticated browser profile; no executed application browser evidence is included."
     },
     {
       "id": "A20",
@@ -260,8 +241,7 @@
       "evidence": [
         "tests/unit/core.test.ts",
         "packages/core/src/testing.ts",
-        "docs/evidence/local-checks.json",
-        "docs/evidence/oracle-app175-readonly.json"
+        "docs/evidence/local-checks.json"
       ],
       "blocker": null
     },
@@ -287,10 +267,7 @@
         "tests/contracts/mcp.test.mjs",
         "packages/core/src/service.ts",
         "docs/evidence/local-checks.json",
-        "docs/evidence/oracle-app175-readonly.json",
-        "docs/evidence/clean-apex-deployment.json",
-        "docs/evidence/optimization-local.json",
-        "docs/evidence/optimization-oracle-app175.json"
+        "docs/evidence/optimization-local.json"
       ],
       "blocker": null
     },
@@ -335,9 +312,7 @@
         "docs/implementation-status.md",
         "docs/next-actions.md",
         "toolchains/compatibility.json",
-        "README.md",
-        "docs/evidence/clean-apex-deployment.json",
-        "docs/evidence/optimization-oracle-app175.json"
+        "README.md"
       ],
       "blocker": null
     },
@@ -351,8 +326,7 @@
         "packages/mcp/src/server.ts",
         "tests/contracts/mcp.test.mjs",
         "docs/evidence/native-codex-compat.json",
-        "docs/evidence/optimization-local.json",
-        "docs/evidence/optimization-oracle-app175.json"
+        "docs/evidence/optimization-local.json"
       ],
       "blocker": null
     },

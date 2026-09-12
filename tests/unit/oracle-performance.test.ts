@@ -20,7 +20,7 @@ const result = (stdout: string, changes: Partial<ProcessResult> = {}): ProcessRe
 const target = {
   workspace: 'FIXTURE',
   parsingSchema: 'FIXTURE',
-  applicationId: 175,
+  applicationId: 1001,
   databaseIdentity: { dbUniqueName: 'DB', serviceName: 'SERVICE' },
 } as Environment;
 const connection = { kind: 'sqlcl-store', name: 'fixture' } as const;
@@ -34,7 +34,7 @@ const rows = () => [
   { target_record: 'workspace', workspace_id: 123, workspace: 'FIXTURE' },
   {
     target_record: 'application',
-    application_id: 175,
+    application_id: 1001,
     alias: 'fixture',
     owner: 'FIXTURE',
     workspace: 'FIXTURE',
@@ -65,7 +65,7 @@ test('target verification uses one live read-only session and preserves the exis
   assert.deepEqual(await oracle.verifyTarget(target, connection), {
     identity: { db_unique_name: 'DB', service_name: 'SERVICE', parsing_schema: 'FIXTURE' },
     workspace: { workspace_id: 123, workspace: 'FIXTURE' },
-    application: { application_id: 175, alias: 'fixture', owner: 'FIXTURE', workspace: 'FIXTURE' },
+    application: { application_id: 1001, alias: 'fixture', owner: 'FIXTURE', workspace: 'FIXTURE' },
   });
   assert.equal(calls.length, 1);
   assert.match(calls[0]!.input!, /union all/);

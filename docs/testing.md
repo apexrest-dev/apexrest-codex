@@ -38,8 +38,6 @@ For a page or dashboard change, validate with the real Oracle compiler, reconcil
 
 CRUD and utPLSQL are required when the change or configured suite scope calls for them. An explicitly authorized isolated application-only profile can declare no automated suites and record its source/browser checks separately. Preserve the established profile and historical failures. No configured suites means no automated SQL/E2E tests ran.
 
-The [app 175 dashboard trial](dashboard-app175.md) records actual query reconciliation, imports and authenticated filter/chart/empty-state observations. It is not full automated CRM, restore or cross-platform certification.
-
 ## In-app browser verification
 
 For user-visible application changes, use the Codex in-app browser when it and the deployed target are available. Follow the [plugin's browser rule](../plugins/apexrest-apex/skills/apexrest-test/SKILL.md#in-app-browser-verification).

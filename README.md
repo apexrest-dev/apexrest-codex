@@ -10,7 +10,7 @@ APEXREST connects native Codex skills and MCP tools to Oracle SQLcl. Generate AP
 
 ![APEXREST connects a Codex request to APEXlang source, a verified deployment plan, Oracle APEX and runtime checks.](docs/assets/overview.svg)
 
-> **Beta: `0.1.0-beta.1`.** Real Oracle application imports and Codex native installation have been exercised in the environments recorded below. Stable release readiness is still blocked by the remaining integration, recovery and platform checks. Independent APEXREST tooling; not an official Oracle or OpenAI product.
+> **Beta: `0.1.0-beta.1`.** Real Oracle template compilation and Codex native installation have been exercised in the environments recorded below. Stable release readiness is still blocked by the remaining integration, recovery and platform checks. Independent APEXREST tooling; not an official Oracle or OpenAI product.
 
 ## Install in Codex
 
@@ -65,25 +65,13 @@ The workflow reuses project discovery, batches related edits and avoids a redund
 
 A clean supported APEX installation is sufficient. APEXREST service tables are **not required**: durable local migration history and coordination are the default. Independent machines need external serialization or the explicitly selected database coordination mode. [Understand the deployment boundary](docs/deployment-safety.md).
 
-## Measured on a real APEX application
-
-![A real application trial measured plan time at 20.08 versus 9.73 seconds and one optimized import at 33.4 seconds versus approximately 71 to 73 seconds in the earlier trial.](docs/assets/performance.svg)
-
-| Connected operation                      |                Before |      After |
-| ---------------------------------------- | --------------------: | ---------: |
-| Plan: median of three samples per build  |               20.08 s | **9.73 s** |
-| Apply, including backup and verification | Approximately 71–73 s | **33.4 s** |
-
-The plan comparison used identical inputs on macOS arm64, SQLcl 26.1.2 and APEX 26.1.1. The apply comparison is one optimized unchanged-source import against earlier page-revision runs; it is not a repeated-apply benchmark. No new-app creation time or cross-platform speedup is claimed. [Method, samples and limitations](docs/optimization-review.md#connected-apex-workflow-follow-up).
-
 ## What has been verified
 
-| Area                | Available evidence                                                                                 | Remaining scope                                                                       |
-| ------------------- | -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| Native Codex plugin | Isolated installation, discovery, tool calls and lifecycle on Codex 0.154.0 / macOS arm64          | Other host and platform combinations; evidence must be refreshed for a stable release |
-| Oracle APEXlang     | Real blank/CRM compilation and connected existing-app export, validation and preservation checks   | Broader component and unsupported-component fixtures                                  |
-| Application import  | Actual test-app imports with SQL backup, target/drift checks and default local coordination        | Restore, interruption and fault-injection scenarios                                   |
-| Dashboard behavior  | Real read-only query reconciliation and authenticated in-app filter/chart/empty-state observations | Full automated SQL/CRUD integration; separate mobile breakpoint evidence              |
+| Area                | Available evidence                                                                        | Remaining scope                                                                          |
+| ------------------- | ----------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| Native Codex plugin | Isolated installation, discovery, tool calls and lifecycle on Codex 0.154.0 / macOS arm64 | Other host and platform combinations; evidence must be refreshed for a stable release    |
+| Oracle APEXlang     | Real blank/CRM compilation with local SQLcl, without a database connection                | Connected imports, broader component coverage and unsupported-component fixtures         |
+| Local runtime       | Unit, CLI/MCP contract, installer and packaging checks with explicitly labelled fixtures  | Connected recovery, fault-injection, SQL/CRUD integration and application browser checks |
 
 Unit tests, mocked failure scenarios, real Oracle operations and native-host checks are recorded separately. See the [acceptance matrix](docs/acceptance.json), [implementation status](docs/implementation-status.md) and [remaining release gates](docs/next-actions.md). A missing or skipped integration suite is not a passing result.
 

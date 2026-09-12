@@ -11,7 +11,7 @@ The current distribution is beta. Native-host evidence is specific to the tested
 | Codex with native plugin support        | Plugin registration; Codex CLI 0.154.0 was exercised on macOS arm64 |
 | Node 24 LTS available on `PATH`         | Starting the repository plugin's bundled MCP runtime                |
 | Java 21 and reviewed SQLcl 26.1.2       | Oracle generation, validation, export and import                    |
-| Existing supported Oracle APEX target   | Connected workflows; the recorded trial used APEX 26.1.1            |
+| Existing supported Oracle APEX target   | Connected workflows require APEX 26.1+                              |
 | Named SQLcl connections                 | Authorized access to the configured target, saved locally           |
 | Chromium and relevant test dependencies | Browser/API suites; utPLSQL only when a SQL suite requires it       |
 
@@ -29,7 +29,7 @@ codex plugin add apexrest-apex@apexrest
 codex plugin list --json
 ```
 
-The exact GitHub installation path was verified with Codex 0.154.0, Node 24.21.0 and macOS arm64; see the [native installation report](evidence/native-repository.json).
+Native plugin installation was verified with Codex 0.154.0, Node 24.21.0 and macOS arm64; the [native installation report](evidence/native-repository.json) records the exact installation source and verification scope.
 
 This registers the repository's `apexrest` marketplace and its `apexrest-apex` plugin in the selected Codex profile. Start a new Codex task after installation, then ask:
 

@@ -9,7 +9,7 @@
     "English document language and visible content",
     "Overview and installation navigation",
     "Backup search returns matching documentation",
-    "Accessible SVG overview and performance images load",
+    "Accessible SVG overview image loads",
     "No horizontal overflow at observed CSS widths 872 and 325",
     "Mobile navigation collapsed on initial load",
     "Temporary viewport reset",
@@ -17,11 +17,22 @@
   ],
   "assets": {
     "deployment-flow.svg": "195596b080ac077aa7dcf63732572846d4b1c42e02fc2a08beef030742e83784",
-    "overview.svg": "1a8aa0cf407a5c9c91d0871e217f6822e3934d6b08082704d73230ee51121f5f",
-    "performance.svg": "30663ddca0715469290c98189ffa7549c97d62a2efb49e91543ced57da5cdd87"
+    "overview.svg": "1a8aa0cf407a5c9c91d0871e217f6822e3934d6b08082704d73230ee51121f5f"
   },
   "limitations": [
     "Interactive browser observations are separate from automated tests.",
-    "Other documentation routes have automated link/anchor coverage; not every route was visually inspected."
-  ]
+    "Other documentation routes have automated link/anchor coverage; not every route was visually inspected.",
+    "These observations apply to the timestamped documentation build and listed assets; later content changes have not been reverified by this record."
+  ],
+  "followup": {
+    "timestamp": "2026-09-12T15:57:16.940878+00:00",
+    "sourceDigest": "6009b8596f09c5c70b71913fd44a7c36ba652a28e8ef9863e710b9a76fd85678",
+    "routes": ["/codex/"],
+    "checks": [
+      "Overview renders architecture, workflow table and generic implementation guidance.",
+      "Content-removal search returns no matching documentation.",
+      "Documentation layout inspected in the Codex in-app browser."
+    ],
+    "scope": "Current overview at the default viewport only; earlier mobile and installation checks retain their original timestamp."
+  }
 }

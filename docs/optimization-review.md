@@ -34,30 +34,20 @@ Local validation: 48 unit tests, 14 installer tests, 5 CLI/MCP contract tests an
 
 ## Remaining boundaries
 
-Database identity, source/target drift, backup hashes, approvals, locks and migration history are still read and verified at their existing boundaries. Repeated SQLcl capability probes and full source inventories remain potential profiling targets for an authorized connected run; no Oracle speedup is claimed. Deployment/test operations that may share state remain sequential. Automatic removal of staging, backups or durable history is outside this change.
+Database identity, source/target drift, backup hashes, approvals, locks and migration history are still read and verified at their existing boundaries. The SQLcl workflow optimizations below are separate from these local measurements; no Oracle speedup is claimed. Deployment/test operations that may share state remain sequential. Automatic removal of staging, backups or durable history is outside this change.
 
 The original specification still lacks a current measured native-host context-token count; the byte counts above do not fill that gap. Platform/native and connected integration gates remain open. Rebuilt local artifacts are not a published or installed upgrade.
 
 Reproduce current measurements from the repository root with `npm run build`, then `node scripts/benchmark-optimization.mjs .apexrest/optimization-current.json`. The historical baseline is retained in the evidence report; recreating it requires the recorded original runtime bytes and original download implementation.
 
-## Connected APEX workflow follow-up
-
-The authorized [application 175 dashboard trial](dashboard-app175.md) supplied actual SQLcl bottlenecks and browser feedback. [Connected evidence](evidence/optimization-oracle-app175.json) records the before/after runtime hashes, unchanged input digests, samples and deployment journal milestones. These new changes supersede the earlier section's statement that repeated SQLcl probes remain unoptimized; the earlier local measurements retain their original scope.
-
-| Actual connected operation                  |                Before |                  After |
-| ------------------------------------------- | --------------------: | ---------------------: |
-| Plan, median of three fresh MCP/worker runs |               20.08 s | 9.73 s (51.5% shorter) |
-| One target verification, SQLcl sessions     |                     3 |                      1 |
-| Apply, including backup and verification    | approximately 71–73 s |                 33.4 s |
-
-Plan samples use identical sources, compiler, configuration, toolchain, target identity and target fingerprint on macOS arm64, Node 24.21.0, SQLcl 26.1.2 and APEX 26.1.1. Wall time includes MCP startup and completion polling. The apply comparison is descriptive: earlier durations come from job-directory creation to completion across three page revisions; the latest is one measured unchanged-source import. It is not a controlled repeated-apply median or a guarantee for other apps. No new-app creation time was measured.
+## SQLcl workflow optimizations
 
 `verifyTarget` reads DB/service/schema/workspace/application in one fresh SELECT instead of opening three SQLcl sessions. Successful `help apex` results are reused within one adapter only when fresh version, executable, Java and bin/lib file identity still match. Unknown layouts bypass the cache; failed probes are not cached. Concurrent probes share only the same cancellation lifetime. Every capability check still probes the compiler version, and live target state is never cached.
 
 Planning overlaps independent local compilation and target reads. Apply overlaps only its independent read-only preflight. Every concurrent operation settles before an error is returned; no lease or write begins after a failed check. Source/config/toolchain hashes, both target drift checks, SQL backup verification, frozen source, coordination and unknown-outcome protection remain in place. Historical `ORA-...` text inside successful JSON result rows no longer turns an activity-log query into a command failure; real process, stderr and envelope errors remain failures.
 
-Four skills now reuse discovery, batch coherent edits and source checks, use planning's existing compiler validation, monitor the returned job ID, and complete already-authorized test imports without duplicate permission requests. Dashboard-only guidance covers native AJAX refresh, submitted items and asynchronous chart loading. Entrypoint instructions grew from 10,801 to 12,562 bytes; the conditional dashboard reference is 1,710 bytes. This is intentional workflow guidance, not a claim of reduced context tokens. Current tools remain the same fourteen tools.
+The workflow skills reuse discovery, batch coherent edits and source checks, use planning's existing compiler validation, monitor the returned job ID, and complete already-authorized test imports without duplicate permission requests. Dashboard-only guidance covers native AJAX refresh, submitted items and asynchronous chart loading. Current tools remain the same fourteen tools.
 
-Validation: 64 unit tests (16 new scheduling/cache/diagnostic regressions), five CLI/MCP contract tests and five packaging tests pass, as do typecheck, lint, build and all eight skill validators. Fixtures are labelled as fixtures. The real optimized import succeeded, its SQL backup hashes verify, and all 21 final export files match the preceding final export. In-app reload/filter checks pass. No automated SQL/CRUD suite ran in the user-approved application-only profile.
+Scheduling, cache and diagnostic regression tests use explicitly labelled fixtures. Their results do not establish connected Oracle timings, successful imports or application browser behavior. See [implementation status](implementation-status.md) for local checks and outstanding integration evidence.
 
-To reproduce the read-only plan benchmark, build first, then run `node scripts/benchmark-oracle-workflow.mjs PROJECT ENV RUNTIME_DIR OUTPUT.json 3` with the existing `APEXREST_HOME`, connection and managed runtimes. The script never applies a plan, creates only local plan/job artifacts and stops without retrying an unknown job outcome. Keep the old runtime directory to compare versions. Built local plugin profiles are refreshed; no globally installed APEXREST plugin was present to reinstall, and release archives/native lifecycle/platform/full integration evidence were not refreshed.
+To measure read-only plan performance on an authorized target, build first, then run `node scripts/benchmark-oracle-workflow.mjs PROJECT ENV RUNTIME_DIR OUTPUT.json 3` with the existing `APEXREST_HOME`, connection and managed runtimes. The script never applies a plan, creates only local plan/job artifacts and stops without retrying an unknown job outcome. Keep the old runtime directory to compare versions. Record input digests, runtime identities, samples and limitations separately for each benchmark.

@@ -79,7 +79,7 @@ test('documentation escapes raw HTML and excludes unsafe links, credential URLs 
 });
 
 test('built site copies infographic SVGs and keeps a restrictive browser policy', async () => {
-  for (const name of ['overview.svg', 'deployment-flow.svg', 'performance.svg']) {
+  for (const name of ['overview.svg', 'deployment-flow.svg']) {
     assert.equal(
       await readFile('site-dist/assets/' + name, 'utf8'),
       await readFile('docs/assets/' + name, 'utf8'),
