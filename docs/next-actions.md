@@ -2,7 +2,7 @@
 
 English | [Українська](next-actions.uk.md)
 
-The supplied APEXREST logo is wired into the repository plugin and bilingual documentation. After installing this updated bundle, inspect the plugin card, details page and composer icon in Codex. Site rendering and package asset checks do not establish native UI rendering. Publication remains a separate authorized action.
+The transparent APEXREST symbol without lettering is wired into the repository plugin and bilingual documentation. After installing this updated bundle, inspect the plugin card, details page and composer icon in Codex. Site rendering and package asset checks do not establish native UI rendering. Publication remains a separate authorized action.
 
 The local Codex installation is updated and enabled, with `https://apex.rest` verified in its manifest. Reopen the plugin details page to confirm the displayed Website value; computer-use access to the Codex app is unavailable. Start a new Codex task to pick up the installed skills and tools. Distribution publication remains a separate authorized action.
 

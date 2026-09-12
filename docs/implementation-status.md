@@ -6,9 +6,9 @@ The original build specification remains unchanged. This is working code and an 
 
 ## Plugin and documentation logo
 
-The owner-supplied [APEXREST pencil-and-ruler logo](assets/README.md) is included in the native plugin, both README languages, the documentation index and every generated site header. The horizontal source is used in site headers, and the composer icon frames the symbol. Display SVGs preserve the original paths and colors while trimming empty margins and adding a white background. This change concerns branding and packaging; Oracle and native-host lifecycle evidence retains its original scope.
+The [APEXREST pencil-and-ruler symbol](assets/README.md) is used without lettering or a background in the native plugin, both README languages, the documentation index and every site header. The SVG removes the lettering paths and preserves the original symbol geometry and colors. Logo-specific site styles have no background or border. This change concerns branding and packaging; Oracle and native-host lifecycle evidence retains its original scope.
 
-Local verification on 2026-09-12 passed: build, bundle freshness/integrity, both plugin manifest validations, lint, 37 EN/UK documentation pairs and 13 packaging tests. XML checks confirmed that original vector geometry and colors are preserved, and asset comparisons confirmed identical documentation/plugin logo copies. Separate Codex in-app browser observations verified the Ukrainian documentation at desktop width, the English documentation at 320 px width, and the icon at 98 px and 32 px on light and dark backgrounds. The installed plugin has not been refreshed for this branding change; native logo rendering remains unverified.
+Local verification on 2026-09-12 passed: build, bundle freshness/integrity, both plugin manifest validations, lint, 37 EN/UK documentation pairs and 13 packaging tests. XML checks verified six identical source/build assets with the original symbol geometry and colors, no lettering paths and no background shapes. Separate Codex in-app browser observations confirmed transparency on the dark header and light documentation background, with no wordmark or image border. The installed plugin has not been refreshed for this branding change; native logo rendering remains unverified.
 
 ## Plugin website metadata
 

@@ -68,8 +68,8 @@ summary:focus-visible {
 }
 .brand img {
   display: block;
-  width: 192px;
-  height: 50px;
+  width: 56px;
+  height: 56px;
   flex-shrink: 0;
   object-fit: contain;
   border-radius: 0.3rem;
@@ -161,7 +161,10 @@ main img {
   background: white;
 }
 main img[src$='/apexrest-logo.svg'] {
-  max-width: 320px;
+  max-width: 144px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
 }
 main h2,
 main h3,

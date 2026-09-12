@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
   "version": "0.1.0-beta.1",
-  "sourceDigest": "50fed4814957fc47b5b3d2781c0838b363c5703300103f7b445a29a38e30389d",
+  "sourceDigest": "a93e4ec0579ff67029c465259a9123a1866ff3856c9ce24807277e75a3d0a99f",
   "files": {
     ".codex-plugin/plugin.json": "5669b04e1922ea28c7d6c59327d93f4e9d5bd7ad876d10566b93b62022deb700",
     ".mcp.json": "5a43389fcbf012a31301fe61bca4f643eef2ec0ff71dd53b502687a1753263b7",
-    "assets/apexrest-icon.svg": "1dac1ddf5d2962019e9e446a8c62bd1d07f16f1bd59df21f24168f68ec2547da",
-    "assets/apexrest-logo.svg": "678678e7d18dbcd6b0be9551c4855120da6d42776f2db77d334086699239665d",
+    "assets/apexrest-icon.svg": "b0c6fc0074d2b9fd43913c29daab17d70c9dbf11d7bef5c4791141f5b9537976",
+    "assets/apexrest-logo.svg": "b0c6fc0074d2b9fd43913c29daab17d70c9dbf11d7bef5c4791141f5b9537976",
     "LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
     "NOTICE": "2aa5205d452c60730ab6293e698f5df1d0ac5958706a913bc9e6a2044f142707",
     "resources/playwright/auth.mjs": "5590dee8b9c8e59597f1cc45cb932965e1465f4bb38eda06a9a005898aa43ef8",

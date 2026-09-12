@@ -2,7 +2,7 @@
 
 English | [Українська](README.uk.md)
 
-![APEXREST logo with a colored pencil and ruler](docs/assets/apexrest-logo.svg)
+![APEXREST pencil and ruler symbol](docs/assets/apexrest-logo.svg)
 
 [![Local quality gates](https://github.com/apexrest-dev/apexrest-codex/actions/workflows/ci.yml/badge.svg)](https://github.com/apexrest-dev/apexrest-codex/actions/workflows/ci.yml)
 

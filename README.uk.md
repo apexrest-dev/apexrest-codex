@@ -2,7 +2,7 @@
 
 [English](README.md) | Українська
 
-![Логотип APEXREST із кольоровими олівцем і лінійкою](docs/assets/apexrest-logo.svg)
+![Символ APEXREST: олівець і лінійка](docs/assets/apexrest-logo.svg)
 
 [![Локальні перевірки якості](https://github.com/apexrest-dev/apexrest-codex/actions/workflows/ci.yml/badge.svg)](https://github.com/apexrest-dev/apexrest-codex/actions/workflows/ci.yml)
 

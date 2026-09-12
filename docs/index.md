@@ -2,7 +2,7 @@
 
 English | [Українська](index.uk.md)
 
-![APEXREST logo with a colored pencil and ruler](assets/apexrest-logo.svg)
+![APEXREST pencil and ruler symbol](assets/apexrest-logo.svg)
 
 APEXREST is a native Codex plugin for Oracle APEX development, controlled imports and verification. The current version is a beta with separate implementation and evidence records; documentation does not certify the remaining release gates.
 
