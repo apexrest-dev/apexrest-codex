@@ -79,7 +79,10 @@ for (const profile of ['portable', 'codex-compat']) {
       apexrest: {
         ...(portable ? { type: 'stdio' } : {}),
         command: 'node',
-        args: ['${PLUGIN_ROOT}/runtime/mcp.mjs'],
+        // Codex resolves relative cwd against the installed plugin root. It does
+        // not interpolate the portable Agent Plugins ${PLUGIN_ROOT} variable.
+        args: [portable ? '${PLUGIN_ROOT}/runtime/mcp.mjs' : 'runtime/mcp.mjs'],
+        ...(!portable ? { cwd: '.' } : {}),
       },
     },
   };

@@ -3,6 +3,7 @@ name: apexrest-setup
 description: Set up APEXREST for Codex, diagnose local toolchain capabilities and guide connection onboarding. Use for APEXREST setup or missing runtime tools.
 ---
 
+Pass the absolute workspace `project` path on project-scoped MCP calls. The native server starts in its installed plugin directory, which is not the user project.
 Call apexrest_doctor first. Distinguish detected tools, validated compiler, installed native plugin and database connectivity.
 Run the bundled installer only under the host's approved filesystem/network scope. Never change host trust or copy login tokens.
 Request connection references through local onboarding; never ask for passwords in chat.

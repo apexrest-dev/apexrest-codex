@@ -4,7 +4,6 @@ site-dist/
 site-dist.zip
 .DS_Store
 .apexrest/
-plugins/apexrest-apex/runtime/
 *.tgz
 *.log
 .env

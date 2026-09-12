@@ -1,13 +1,55 @@
 # Troubleshooting
 
-Run `doctor --json` first. Detected executables, locally validated compiler, native host discovery and database readiness are separate states. Setup can return needs-user-action after successful native registration when connection or consent is missing.
+Start with `apexrest doctor --json`, then use the reported capability or error code. A detected executable, a validated compiler, native Codex discovery and a working database connection are separate states.
 
-Codex 0.154.0: use the codex-compat ZIP. The portable manifest passed schema validation and plugin discovery, but this tested host did not load its MCP tools. Reload/new thread after enablement. Inspect the plugin's native registration; never add a second global MCP server as a workaround.
+## The plugin is installed but tools are missing
 
-SQLcl: use the pinned 26.1.2.132.1334 with Java 21. The system may have a different Java; `APEXREST_JAVA_HOME` or managed setup selects the reviewed JRE. Compilation diagnostics may occur with process exit 0; the adapter checks output and success markers. Preserve `.apex/apexlang.json`; do not fabricate an MMD version.
+Start a new Codex task after registration or update. Check native plugin listing and enablement in the same Codex profile. The tested Codex 0.154.0 host requires the compatibility package: the portable manifest passed schema validation and discovery but did not expose MCP tools on that host.
 
-Offline: preload exact SHA-keyed vendor artifacts and npm/browser caches. A cache miss is a blocker; `--offline` never falls back to download. Corrupted cache fails integrity. Disk space, TLS/proxy and Linux browser OS dependencies are reported separately. `--install-os-deps` is an explicit request for Playwright's system package installation and may require elevation.
+Use the [repository installation guide](getting-started.md#install-the-plugin) for the supported registration path. Do not add a second global MCP server to conceal a failed native installation. `needs-user-action` after setup can mean registration succeeded while connection onboarding or Oracle license consent is still missing.
 
-Concurrent setup returns LOCKED. An exclusive lock with a proven dead PID on this same host is recovered under a separate recovery gate. Unknown ownership, another host or an interrupted recovery gate remains blocked for manual inspection; never guess that a live lock is stale. Native package copies use a staging directory and atomic rename; completed components are probed on rerun.
+## SQLcl is present but compilation fails
 
-`OUTCOME_UNKNOWN` after a write: inspect deployment state/journal and actual target history. A DB writing lease must not be cleared on TTL alone. Contact the target administrator for reconciliation. No generic force option exists.
+The reviewed local combination is SQLcl 26.1.2.132.1334 with Java 21. The system Java can differ; managed setup or `APEXREST_JAVA_HOME` selects the intended JRE. Inspect exact compiler diagnostics rather than relying only on process exit code: SQLcl can print an error and still exit zero.
+
+Preserve Oracle-generated `.apex/apexlang.json` and component IDs. Never invent an MMD version or edit internal APEX tables to work around a compiler incompatibility. Use the references for the selected toolchain version and make a focused source correction.
+
+## The target or policy check fails
+
+| Symptom                                       | Action                                                                                              |
+| --------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `PROJECT_TRUST_REQUIRED`                      | Review executable project code and add its canonical path to the private user policy.               |
+| Missing environment or identity mismatch      | Check the selected `--env`, connection, database/service, workspace, schema and application ID.     |
+| Expired or mismatched plan                    | Create a new plan from the intended current source and target; do not edit a plan in place.         |
+| Missing service tables in ordinary deployment | Use the default local mode; only explicitly selected database coordination requires control tables. |
+| A required suite is empty or blocked          | Supply its real tests/dependency or resolve its authorized scope; do not count it as passed.        |
+
+Connection credentials belong in SQLcl's local store. Do not put them in an issue or prompt. See [configuration](configuration.md).
+
+## Browser authentication or charts do not work
+
+Complete login locally and check that the actual application page is accessible. Automated browser auth and a Codex in-app session are separate contexts; success in one does not prove the other is authenticated. Explicitly allow required SSO/CDN origins for automated tests.
+
+Wait for asynchronous APEX chart regions to finish loading before judging an empty chart. After a filter action, verify that the relevant page items were submitted and every affected region refreshed. Use the native dashboard guidance in the plugin when designing AJAX refresh. A loading overlay or an old tab with a pending navigation may require a fresh page inspection before changing source.
+
+## Offline, proxy or download errors
+
+Preload the exact SHA-keyed vendor artifacts and required npm/browser caches. `--offline` never falls back to the network; a cache miss is a dependency blocker and a corrupt artifact fails integrity. Inspect disk space, proxy/CA settings and platform-specific browser dependencies separately.
+
+`--install-os-deps` explicitly requests Playwright's system package installation and may require elevation. Oracle license acceptance remains separate from technical setup consent. No dependency download runs during MCP startup.
+
+## Setup is locked or interrupted
+
+Concurrent setup reports `LOCKED`. A proven dead process on the same host can be recovered through the dedicated recovery gate. Unknown ownership, another host or an interrupted recovery gate requires inspection; do not guess that a live lock is stale.
+
+Native packages are copied through staging and atomic rename. A rerun probes completed components. Preserve unrelated plugins and the private managed state; deleting everything is not a normal repair step.
+
+## A deployment reports `OUTCOME_UNKNOWN`
+
+Do not repeat apply or clear a writing lease merely because its TTL expired. Oracle DDL or an application import may have committed before the connection was lost. Inspect the deployment state, journal, current target history and SQL backup; reconcile with the target administrator before choosing a recovery action.
+
+Use `apexrest deploy status --project PROJECT --run RUN_ID` for the recorded deployment run. Restore has its own plan and exact approval, and restores APEX metadata only. Business-data and schema recovery require their own procedure. See [deployment and recovery](deployment-safety.md).
+
+## Report a reproducible problem
+
+Include the plugin version, OS/architecture, Codex version, exact sanitized command, error code and the smallest source example that reproduces the issue. Distinguish local fixture results from Oracle or native-host observations. Review diagnostics for paths, credentials and business data before attaching them to [an issue](https://github.com/apexrest-dev/apexrest-codex/issues). Use [private reporting guidance](../SECURITY.md) for sensitive findings.

@@ -2,11 +2,12 @@ import { spawn } from 'node:child_process';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { sourceDigest, sha256 } from './lib/release.mjs';
 const commands = [
-  ['ci'],
+  ['ci', '--ignore-scripts'],
   ['run', 'lint'],
   ['run', 'typecheck'],
   ['run', 'test:unit'],
   ['run', 'build'],
+  ['run', 'plugin:check'],
   ['run', 'test:contracts'],
   ['run', 'test:installers'],
   ['run', 'site:build'],

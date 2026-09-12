@@ -26,7 +26,10 @@
     "test:native-codex": "node scripts/native-smoke.mjs",
     "site:build": "node scripts/build-site.mjs",
     "release:dry-run": "node scripts/package-release.mjs",
-    "check-release-readiness": "node scripts/check-release-readiness.mjs"
+    "check-release-readiness": "node scripts/check-release-readiness.mjs",
+    "plugin:sync": "npm run build && node scripts/sync-repository-plugin.mjs",
+    "plugin:check": "node scripts/sync-repository-plugin.mjs --check",
+    "test:repository-plugin": "node scripts/repository-plugin-smoke.mjs"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "1.30.0",
@@ -41,6 +44,7 @@
     "ajv": "8.20.0",
     "esbuild": "0.28.2",
     "fflate": "0.8.3",
+    "marked": "18.0.7",
     "prettier": "3.9.6",
     "typescript": "7.0.2"
   }

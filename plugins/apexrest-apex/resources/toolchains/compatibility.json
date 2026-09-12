@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "baseline": {
+    "node": "24.21.0",
+    "sqlcl": "26.1.2.132.1334",
+    "apex": "26.1+",
+    "mmd": "26.1.0+3102"
+  },
+  "platforms": [
+    {
+      "os": "darwin",
+      "arch": "arm64",
+      "client": "verified",
+      "oracleIntegration": "not-configured",
+      "sandbox": "unsupported"
+    },
+    {
+      "os": "linux",
+      "arch": "x64",
+      "client": "unverified",
+      "oracleIntegration": "not-configured",
+      "sandbox": "unverified"
+    },
+    {
+      "os": "win32",
+      "arch": "x64",
+      "client": "unverified",
+      "oracleIntegration": "not-configured",
+      "sandbox": "unsupported"
+    },
+    {
+      "os": "wsl2",
+      "arch": "x64",
+      "client": "unverified",
+      "oracleIntegration": "not-configured",
+      "sandbox": "unsupported"
+    }
+  ],
+  "nativeProfiles": {
+    "codex-compat": {
+      "codex": "0.154.0",
+      "status": "verified"
+    },
+    "portable": {
+      "codex": "0.154.0",
+      "status": "mcp-not-discovered"
+    }
+  }
+}

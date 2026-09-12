@@ -126,6 +126,55 @@ main {
   max-width: 850px;
   min-width: 0;
 }
+main img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 1.5rem 0;
+  border: 1px solid var(--line);
+  border-radius: 0.8rem;
+  background: white;
+}
+main h2,
+main h3,
+main h4 {
+  scroll-margin-top: 1rem;
+}
+.table-scroll {
+  max-width: 100%;
+  margin: 1.4rem 0;
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+}
+.table-scroll:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.9rem;
+}
+th,
+td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--line);
+}
+th {
+  background: #e4efe6;
+}
+tr:last-child td {
+  border-bottom: 0;
+}
+blockquote {
+  margin: 1.5rem 0;
+  padding: 0.25rem 1.2rem;
+  border-left: 4px solid #92c9aa;
+  background: #eaf1e7;
+}
 .eyebrow {
   text-transform: uppercase;
   letter-spacing: 0.14em;

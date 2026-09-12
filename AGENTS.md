@@ -1,6 +1,6 @@
 # Working language
 
-Explain work to the user in Ukrainian. Code, CLI help and primary public documentation use English.
+Use English for communication, code, CLI help and public documentation. Preserve the original build specification unchanged as historical input.
 
 # Source repository
 

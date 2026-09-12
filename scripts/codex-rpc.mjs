@@ -1,9 +1,9 @@
 import { spawn } from 'node:child_process';
 import { createInterface } from 'node:readline';
-export async function codexRpc({ home, cwd }) {
+export async function codexRpc({ home, cwd, env = globalThis.process.env }) {
   const process = spawn('codex', ['app-server', '--stdio'], {
     cwd,
-    env: { ...globalThis.process.env, CODEX_HOME: home },
+    env: { ...env, CODEX_HOME: home },
     stdio: ['pipe', 'pipe', 'pipe'],
   });
   let id = 0,

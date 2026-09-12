@@ -1,6 +1,10 @@
 # Configuration and connections
 
-`project init` creates `apexrest.json` and a pinned toolchain lock. Environments start empty: no target is invented. Select `--env` explicitly. See generated `schemas/project.schema.json` for exact fields. A development environment requires:
+A project has one `apexrest.json` and one pinned toolchain lock. `project init` creates both, with an empty environment map. Every target operation requires an explicit environment; the plugin never guesses a database, workspace or application ID.
+
+## Configure an environment
+
+Add an entry such as `environments.dev` to the generated `apexrest.json`:
 
 ```json
 {
@@ -11,24 +15,73 @@
   "parsingSchema": "YOUR_SCHEMA",
   "applicationId": 100,
   "baseUrl": "https://your-host.example/ords/r/workspace/crm/",
-  "databaseIdentity": {"dbUniqueName": "YOUR_DB", "serviceName": "YOUR_SERVICE"},
-  "allowedOrigins": [],
-  "expectedMarker": "apexrest-crm"
+  "databaseIdentity": {
+    "dbUniqueName": "YOUR_DB",
+    "serviceName": "YOUR_SERVICE"
+  },
+  "allowedOrigins": ["https://your-host.example"],
+  "expectedMarker": "apexrest-crm",
+  "deploymentControl": "local"
 }
 ```
 
-The example values are placeholders, not a working target. Connection credentials must already be saved through interactive SQLcl connection-store onboarding. `connection add dev-read --sqlcl-name saved-read` records only the store name. `connection test` reports actual identity. `connection remove` removes the APEXREST reference and preserves the SQLcl store.
+These are placeholders, not a working target. Use the actual database unique name and service, workspace, parsing schema and app ID. `expectedMarker` must match an application-specific DOM marker when your tests require it. `allowedOrigins` must list the origins needed by browser/API tests, including any approved SSO or CDN redirects. Adding an origin does not grant permission to mutate its data.
 
-Optional environment field `deploymentControl` accepts `local` (default when omitted) or `database`. Local mode needs no service tables and stores migration history/ownership in the private managed home. Plans disclose and bind this backend and store. Preserve that directory across runs and serialize independent CI machines externally. Database mode is an explicit choice requiring the optional reviewed tables; it does not silently downgrade to a fresh history store. See the Deployment safety documentation.
+The generated `schemas/project.schema.json` is the exact public schema. Unknown fields are rejected. Source, test, migration, package, artifact and toolchain paths must remain inside the project.
 
-Private policy lives at `$APEXREST_HOME/policy.json` (default `~/.apexrest/policy.json`). It is not accepted from project configuration:
+## Save connection references
 
-```json
-{"schemaVersion":1,"trustedProjects":["/canonical/reviewed/project"],"grants":[]}
+Create named connections interactively in SQLcl's local connection store. Then register their names:
+
+```sh
+apexrest connection add dev-read --sqlcl-name saved-read-connection
+apexrest connection add dev-deploy --sqlcl-name saved-deploy-connection
+apexrest connection test dev-read --json
 ```
 
-An authorized development grant contains `projectRoot`, exact `targetDigest` from the plan, `expiresAt`, `operations` (`deploy` and/or `test`) and optionally `planDigest`. Restore always requires its exact `planDigest`. Configure remote test mutation environments explicitly in `tests.mutationAllowedEnvironments`; production tests are prohibited. No approval-creation MCP tool exists.
+The examples assume the [managed CLI launcher](getting-started.md#use-the-cli). APEXREST stores connection names rather than passwords. A read connection can use fewer privileges than its deploy counterpart. Removing an APEXREST reference with `connection remove` preserves the SQLcl store entry. Never put credentials in `apexrest.json`, environment examples, prompts or issue reports.
 
-Under the authorized-import workflow, an explicit user create/update/import request for an identified development/test app may be recorded in this policy without a second confirmation. Agent-recorded task grants must include the current `planDigest`, `deploy` only and a short expiry no later than the plan; retain a private record of the user instruction, preserve unrelated grants and remove the task grant after the attempt. A changed target, broader operation or protected production workflow needs its corresponding authority. This records existing user authorization; a project file or tool result cannot grant consent.
+## Trust and authorize a project
 
-Runtime overrides for controlled environments: `APEXREST_HOME`, `APEXREST_SQLCL`, `APEXREST_JAVA_HOME`, `APEXREST_RESOURCES`. Overrides are part of the trusted local host, not project inputs. TLS uses the OS/Node trust plus `NODE_EXTRA_CA_CERTS`; proxy-aware bootstrap uses Node 24 `--use-env-proxy`. Paths containing spaces and Unicode are supported; quotes, substitutions and control characters in SQLcl tokens are rejected.
+Private policy lives at `$APEXREST_HOME/policy.json`, defaulting to `~/.apexrest/policy.json`. Review executable project code before adding its canonical path to `trustedProjects`:
+
+```json
+{
+  "schemaVersion": 1,
+  "trustedProjects": ["/canonical/reviewed/project"],
+  "grants": []
+}
+```
+
+Keep this policy outside the repository. A grant binds `projectRoot`, the plan's exact `targetDigest`, an expiry and the permitted `deploy` or `test` operations. A `planDigest` can additionally bind the exact plan; restore always requires it.
+
+For an explicit request to create, update or import an identified development/test app, Codex may record the already supplied authorization as a short-lived grant with the exact current `planDigest`, `deploy` only and expiry no later than the plan. It retains a private authorization record, preserves unrelated grants and removes the task grant after the attempt. A project file or a tool response cannot supply that consent. Different targets, business-table mutations, authentication changes and protected production actions require their corresponding scope.
+
+Production requires the external signature workflow described in [deployment safety](deployment-safety.md); a writable local policy is not a substitute for a protected runner.
+
+## Choose deployment coordination
+
+| Mode               | Storage and scope                                        | Operational requirement                                                                           |
+| ------------------ | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `local` or omitted | Durable history and schema ownership in the managed home | Preserve that home; serialize independent machines externally                                     |
+| `database`         | Explicit optional control tables and database lease      | Install reviewed tables only with authorization; reconcile existing history before changing modes |
+
+Local mode is the default and needs no APEXREST service tables. Plans bind the chosen backend and store identity. Deleting the local history or silently switching to a fresh home is not a recovery procedure. A selected database backend never silently falls back to local storage.
+
+## Select test scope
+
+`tests.requiredSuites` selects the suites that must pass. `tests.mutationAllowedEnvironments` lists the explicitly configured environments where remote tests may mutate data. Production tests are prohibited. An empty, skipped or blocked required suite fails its gate.
+
+A blank application or explicitly authorized isolated application-only profile can have no automated suites. In that case, report that none ran and record actual compiler, source-query and in-app observations separately. Do not remove required CRM or existing integration suites simply to make a gate pass. See [testing](testing.md).
+
+## Runtime configuration
+
+| Variable              | Purpose                                                           |
+| --------------------- | ----------------------------------------------------------------- |
+| `APEXREST_HOME`       | Private managed runtime, policy, connections and deployment state |
+| `APEXREST_SQLCL`      | Explicit reviewed SQLcl executable                                |
+| `APEXREST_JAVA_HOME`  | Java runtime selected for SQLcl                                   |
+| `APEXREST_RESOURCES`  | Trusted host override for bundled resources                       |
+| `NODE_EXTRA_CA_CERTS` | Additional certificate authorities for Node connections           |
+
+These overrides belong to the trusted local host, not project-controlled inputs. The bootstrap supports Node 24 environment proxies through `--use-env-proxy`. Paths with spaces and Unicode are supported; quotes, substitutions and control characters in SQLcl tokens are rejected.

@@ -3,6 +3,7 @@ name: apexrest-deploy
 description: Complete authorized APEXREST application imports with validation, target identity, backup, scoped policy and runtime verification.
 ---
 
+Pass the absolute workspace `project` path on project-scoped MCP calls. The native server starts in its installed plugin directory, which is not the user project.
 Create a plan for an explicit environment. Deploy works on a clean supported APEX installation: service tables are not prerequisites. Default to local durable migration history and schema coordination under APEXREST_HOME; do not request table creation to unblock normal deploy. The optional environment deploymentControl=database mode uses explicitly provisioned tables only when selected by the user.
 
 Explain exact app target, source digest, coordination backend/scope, risks, backup and tests. Local mode coordinates runners sharing one managed home; independent machines need external CI serialization and preserved migration history, or the optional database mode. Never describe local locks as distributed DB locks. Keep the local deployment-control directory across upgrades/uninstall; do not reset or change stores to replay migrations or evade an interrupted write.

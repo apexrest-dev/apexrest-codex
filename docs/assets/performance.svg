@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" fill="none" role="img" aria-labelledby="title desc">
+  <title id="title">Measured APEXREST optimization results on application 175</title>
+  <desc id="desc">With real SQLcl and Oracle on one macOS host, median deployment planning time fell from 20.08 seconds to 9.73 seconds, a 51.5 percent reduction. Each side used three samples with unchanged source and target. An optimized authorized import took 33.4 seconds in one run; earlier imports took approximately 71 to 73 seconds and included page revisions, so these import figures are descriptive rather than a controlled repeated benchmark. Results are not a general speed guarantee.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1200" y2="760" gradientUnits="userSpaceOnUse"><stop stop-color="#10263A"/><stop offset="1" stop-color="#071522"/></linearGradient>
+    <linearGradient id="accent" x1="54" y1="0" x2="1146" y2="0" gradientUnits="userSpaceOnUse"><stop stop-color="#5DE4CC"/><stop offset="1" stop-color="#81B7FF"/></linearGradient>
+    <linearGradient id="bar" x1="178" y1="0" x2="543" y2="0" gradientUnits="userSpaceOnUse"><stop stop-color="#4FD1BF"/><stop offset="1" stop-color="#8BEDD5"/></linearGradient>
+    <style>text{font-family:Arial,Helvetica,sans-serif}.eyebrow{font-size:14px;font-weight:700;letter-spacing:2px;fill:#79DFD4}.heading{font-size:42px;font-weight:700;fill:#F5FAFF}.body{font-size:18px;fill:#B8C9D9}.caption{font-size:15px;fill:#A8BFCE}.label{font-size:17px;fill:#CAD9E4}.value{font-size:24px;font-weight:700;fill:#F5FAFF}</style>
+  </defs>
+  <rect x="1" y="1" width="1198" height="758" rx="24" fill="url(#background)" stroke="#294153" stroke-width="2"/>
+  <path d="M56 1H1144" stroke="url(#accent)" stroke-width="3"/>
+  <text class="eyebrow" x="54" y="57">MEASURED ON A REAL ORACLE APPLICATION</text>
+  <text class="heading" x="54" y="116">Less waiting between APEX changes.</text>
+  <text class="body" x="54" y="158">Application 175 · SQLcl 26.1 · APEX 26.1 · macOS arm64 · September 12, 2026</text>
+
+  <rect x="54" y="198" width="1092" height="270" rx="16" fill="#112C3F" stroke="#355366"/>
+  <text x="80" y="238" font-size="23" font-weight="700" fill="#F5FAFF">Deployment planning</text>
+  <text class="caption" x="80" y="265">Median wall time · 3 samples before + 3 after · unchanged source and target</text>
+  <path d="M178 300V410M301.75 300V410M425.5 300V410M549.25 300V410M673 300V410" stroke="#2C475A" stroke-width="1"/>
+  <text class="label" x="80" y="331">Before</text>
+  <rect x="178" y="302" width="497" height="43" rx="7" fill="#56778F"/>
+  <text class="value" x="691" y="331">20.08 s</text>
+  <text class="label" x="80" y="394">After</text>
+  <rect x="178" y="365" width="241" height="43" rx="7" fill="url(#bar)"/>
+  <text class="value" x="435" y="394">9.73 s</text>
+  <g class="caption" text-anchor="middle"><text x="178" y="438">0 s</text><text x="301.75" y="438">5 s</text><text x="425.5" y="438">10 s</text><text x="549.25" y="438">15 s</text><text x="673" y="438">20 s</text></g>
+  <path d="M838 225V442" stroke="#345467"/>
+  <text x="992" y="324" text-anchor="middle" font-size="66" font-weight="700" fill="#80E8D2">51.5%</text>
+  <text x="992" y="360" text-anchor="middle" font-size="21" fill="#DBF5EE">less planning time</text>
+  <text class="caption" x="992" y="409" text-anchor="middle">Fresh target checks retained</text>
+
+  <rect x="54" y="492" width="1092" height="146" rx="16" fill="#122B3B" stroke="#355366"/>
+  <text x="80" y="532" font-size="23" font-weight="700" fill="#F5FAFF">Application import</text>
+  <text class="caption" x="80" y="561">Descriptive comparison</text>
+  <text class="caption" x="80" y="588">One optimized run</text>
+  <text class="caption" x="80" y="615">Historical estimates include page revisions.</text>
+  <text x="600" y="556" text-anchor="middle" font-size="40" font-weight="700" fill="#C2D3E1">~71–73 s</text>
+  <text class="caption" x="600" y="590" text-anchor="middle">Earlier imports</text>
+  <path d="M760 543H822M812 533L824 543L812 553" stroke="#6E9AAB" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="984" y="556" text-anchor="middle" font-size="48" font-weight="700" fill="#80E8D2">33.4 s</text>
+  <text class="caption" x="984" y="590" text-anchor="middle">Optimized authorized import</text>
+
+  <text class="caption" x="54" y="677">Actual SQLcl / Oracle through stdio MCP. One host and one existing application; no general latency guarantee.</text>
+  <text class="caption" x="54" y="703">Measured wall time includes process startup and job polling. Mock tests are separate from these observations.</text>
+  <text x="54" y="734" font-size="14" fill="#79DFD4">Evidence: docs/evidence/optimization-oracle-app175.json</text>
+  <text x="1146" y="734" text-anchor="end" font-size="14" fill="#8FAABD">Methodology: docs/optimization-review.md</text>
+</svg>

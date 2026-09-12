@@ -1,0 +1,12 @@
+APEXREST for Codex
+Copyright 2026 APEXREST contributors.
+Independent software. Not an official Oracle or OpenAI product.
+
+Oracle APEXlang reference fragments and adapted form/report/dashboard examples:
+Copyright Oracle and/or its affiliates. Licensed under UPL-1.0.
+Pinned source and hashes: toolchains/sources.lock.json.
+Full license: resources/references/ORACLE-LICENSE.txt.
+Oracle-generated blank-app files retain their original headers and MMD metadata.
+Node.js, Java, SQLcl and Chromium are downloaded separately from their vendors.
+No Oracle or Java executable is redistributed in APEXREST packages.
+Bundled dependency license texts and a CycloneDX SBOM accompany each local release.

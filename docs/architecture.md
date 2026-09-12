@@ -1,11 +1,43 @@
 # Architecture
 
-The CLI parser and the fourteen-tool MCP server dispatch to one strict Zod-validated core service. Core owns project/environment resolution, references, SQLcl, deployment, tests, artifacts and background jobs. Installer owns vendor downloads, extraction, managed dependencies and native registration. Testkit provides Playwright helpers; it does not impersonate Oracle.
+APEXREST uses one policy-aware core for the CLI and the native Codex MCP server. Eight skills guide the workflow; fourteen MCP tools expose bounded operations. Both interfaces validate inputs against the same strict Zod schemas before execution.
 
-`plugins/metadata.json` drives the two independent package layouts. `scripts/build-plugin.mjs` bundles ESM runtime and copies eight skills, reference fragments, schemas, templates and toolchain locks. No MCP startup path refers back to this repository or downloads anything. Installer specializes a private copied manifest to absolute Node and runtime paths. There is no duplicate global MCP server.
+![APEXREST architecture from Codex through source, deployment planning, Oracle and verification.](assets/overview.svg)
 
-Long MCP tasks return a job ID, continue in a detached CLI worker and write bounded status. Poll with `apexrest_job_status`; request cancellation with `apexrest_job_cancel`. A missing heartbeat is outcome_unknown, not proof of rollback. Workers time out after 15 minutes. SQLcl processes time out with classified diagnostics even if SQLcl printed an error and exited zero.
+## Components
 
-References are indexed data from a pinned reviewed Oracle snapshot, loaded in bounded fragments on request. Upstream Oracle router instructions and arbitrary scripts are not installed. Database descriptions, source comments and test output are untrusted data, not instructions to expand permissions.
+| Component                                 | Responsibility                                                                                   |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| `plugins/apexrest-apex/skills/`           | Task routing, APEXlang workflow, setup, deployment, review and browser verification instructions |
+| `packages/mcp/`                           | Stdio MCP catalog, structured responses and asynchronous job dispatch                            |
+| `packages/cli/`                           | CLI parsing and JSON output, backed by the same operation schemas                                |
+| `packages/core/`                          | Configuration, connections, references, SQLcl, deployment policy, testing, jobs and artifacts    |
+| `packages/installer/`                     | Reviewed downloads, safe extraction, managed runtimes and native registration                    |
+| `packages/testkit/`                       | Browser/API helpers for application tests                                                        |
+| `resources/`, `templates/`, `toolchains/` | Pinned references, project starters and toolchain definitions                                    |
 
-Filesystem boundaries reject traversal, symlinks and special files. State uses atomic writes and exclusive locks. Process execution is shell-free. Configuration and source hashes, DB identity, migration history and exported app content bind deployment plans.
+`plugins/metadata.json` drives two package layouts: the portable manifest and the Codex compatibility profile. The build shares ESM runtime chunks and copies skills, reference fragments, schemas, templates and locks into self-contained packages. Managed installation binds MCP to absolute runtime paths. MCP startup performs no dependency downloads and does not require an extra global MCP registration.
+
+## Request lifecycle
+
+Short operations return a structured result. Long MCP operations return a job ID and continue in a detached worker. Poll that ID with `apexrest_job_status`; cancel through `apexrest_job_cancel`. Do not restart an operation merely because its first response is a job handle.
+
+Workers maintain bounded logs, a durable status file and a heartbeat. A lost heartbeat or interruption during a write can produce `outcome_unknown`; it does not prove a rollback. Workers have a 15-minute deadline. SQLcl has separate process timeouts and classified diagnostics, including commands that print an error despite returning exit code zero.
+
+## Oracle boundary
+
+All application generation, export, validation and import use real Oracle SQLcl. APEXlang source is validated in staging, preserving the working tree and Oracle `.apex` metadata. Reviewed version-aware references are local indexed data; upstream router instructions and arbitrary scripts are not installed as agent authority.
+
+The optimized adapter combines target identity fields in one fresh query. It reuses successful capability help only while runtime identities remain valid, probes the compiler version again and never caches live target state. Planning overlaps independent compilation and read-only target work; apply overlaps independent preflight reads. All preflight tasks settle before an error is returned or a write begins.
+
+## Deployment boundary
+
+A plan binds source, configuration, compiler/toolchain, target identity, target content and migration history. Apply verifies that binding, checks current identity and drift, creates a copied and checksummed SQL backup for an existing app, freezes the sources and takes ownership before writing. Post-import checks and configured test gates remain part of completion.
+
+Local durable history and ownership are the default. They coordinate runners sharing one managed home for a database/service/parsing-schema scope. Separate machines need external serialization or the optional database-backed mode; filesystem locking is not a distributed database guarantee. See [deployment safety](deployment-safety.md) for exact failure and recovery behavior.
+
+## Trust and data handling
+
+Project SQL, tests and APEXlang are executable inputs. The project must be reviewed and trusted locally. Database descriptions, source comments, reference content and test output are data, not instructions to expand permissions. Credentials stay in local connection and auth stores.
+
+Filesystem operations reject traversal, symlinks and special files where the policy requires contained files. State uses atomic writes and exclusive ownership; subprocesses execute without a shell. Artifact readers expose bounded registered text and apply redaction. These controls do not replace the host's permission boundary or protected production approval. See [security](../SECURITY.md).

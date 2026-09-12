@@ -1,19 +1,32 @@
-# APEX development, inside Codex.
+# Build Oracle APEX applications in Codex
 
-A native plugin for real Oracle APEXlang workflows: generate an application, validate with SQLcl, review a deployment plan and inspect test evidence.
+APEXREST brings application source, Oracle compilation, controlled imports and runtime verification into one native Codex plugin.
 
-**Independent APEXREST tooling. Local beta {{version}}.** Not an official Oracle or OpenAI product.
+**Open source · Apache-2.0 · Beta {{version}}**
 
-## Start with an application
+[Install in Codex](install/) · [Get started](../../docs/getting-started.md) · [Explore the source](https://github.com/apexrest-dev/apexrest-codex)
 
-Generate a blank app or the customer CRM. Keep Oracle's native source files and metadata. Ask Codex for the relevant reference, then run the real compiler on a staged copy.
+![APEXREST connects Codex to native APEX source, Oracle validation, controlled deployment and verification](../../docs/assets/overview.svg)
 
-## Make each deployment reviewable
+## Create, change and verify
 
-Bind a plan to exact sources and target identity. Back up the existing application, coordinate runners, record migration outcomes and require application tests. Uncertain outcomes stay uncertain until reconciled.
+| Your task              | The plugin workflow                                                                                               |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| Start an application   | Generate a blank application or CRM from native APEXlang templates.                                               |
+| Change an existing app | Export its current source, make a focused edit and validate with the Oracle compiler.                             |
+| Import the change      | Review source and target details, preserve a backup and apply within the authorized scope.                        |
+| Check the result       | Run the relevant source and test checks, then verify visible behavior in the Codex in-app browser when available. |
 
-## Know what was actually checked
+## Faster iteration with the same deployment checks
 
-The compatibility plugin was installed and exercised through Codex 0.154.0 on macOS arm64. Both templates passed local SQLcl compilation. Live database deployment, utPLSQL, authenticated CRUD and other client platforms still require integration evidence.
+A real application trial drove fewer SQLcl startups and parallel read-only preflight work. The measured plan time fell from 20.08 to 9.73 seconds. A representative import completed in 33.4 seconds, compared with approximately 71–73 seconds in earlier runs. These are observed trial results, not a latency guarantee.
 
-[Install from a local release](install/) · [Read the workflow](docs/) · [Review deployment limits](deployment/)
+![Measured plan and import times from the authorized APEX application trial](../../docs/assets/performance.svg)
+
+Read the [measurement scope](../../docs/optimization-review.md) and [deployment safeguards](../../docs/deployment-safety.md).
+
+## Evidence you can inspect
+
+The Codex compatibility profile and a real APEX application import have been exercised on macOS arm64. Automated local tests, Oracle observations and browser checks are recorded separately. Stable release qualification still requires the remaining platform and integration evidence.
+
+Use the [support matrix](versions/), [implementation status](../../docs/implementation-status.md) and [release process](releases/) to assess your environment. APEXREST is independent tooling, not an official Oracle or OpenAI product.

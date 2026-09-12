@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdtemp, readFile, readdir, mkdir, writeFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
+import { gzipSync } from 'node:zlib';
 import { zipSync } from 'fflate';
 import { download } from '../../packages/installer/src/download.ts';
 import type { Artifact } from '../../packages/installer/src/download.ts';
@@ -156,9 +157,9 @@ test('moving URL and fake checksums fail before fetch', async () => {
 test('safe extraction works in paths with spaces and Unicode', async () => {
   const root = await temporary();
   const file = path.join(root, 'test.zip');
-  await writeFile(file, zipSync({ 'nested/Україна.txt': Buffer.from('data') }));
+  await writeFile(file, zipSync({ 'nested/café.txt': Buffer.from('data') }));
   await extractArchive(file, path.join(root, 'space path'), 'zip');
-  assert.equal(await readFile(path.join(root, 'space path/nested/Україна.txt'), 'utf8'), 'data');
+  assert.equal(await readFile(path.join(root, 'space path/nested/café.txt'), 'utf8'), 'data');
 });
 test('zip traversal is rejected without writing outside destination', async () => {
   const root = await temporary();
@@ -178,7 +179,6 @@ test('unsupported platforms do not silently enable emulation', () => {
 });
 test('tar extraction accepts normal files and rejects escaping vendor links', async () => {
   const tar = await import('tar');
-  const { symlink } = await import('node:fs/promises');
   const root = await temporary();
   const source = path.join(root, 'source');
   await mkdir(source);
@@ -186,10 +186,16 @@ test('tar extraction accepts normal files and rejects escaping vendor links', as
   await tar.c({ cwd: source, file: path.join(root, 'safe.tar.gz'), gzip: true }, ['safe.txt']);
   await extractArchive(path.join(root, 'safe.tar.gz'), path.join(root, 'safe-out'), 'tar.gz');
   assert.equal(await readFile(path.join(root, 'safe-out/safe.txt'), 'utf8'), 'real tar fixture');
-  await symlink('../../escape', path.join(source, 'bad-link'));
-  await tar.c({ cwd: source, file: path.join(root, 'bad.tar.gz'), gzip: true }, ['bad-link']);
+  // Build the malicious archive directly so the test does not need host
+  // symlink privileges (in particular on Windows).
+  const header = Buffer.alloc(512);
+  new tar.Header({ path: 'bad-link', type: 'SymbolicLink', linkpath: '../../escape', size: 0 }).encode(
+    header,
+  );
+  await writeFile(path.join(root, 'bad.tar.gz'), gzipSync(Buffer.concat([header, Buffer.alloc(1024)])));
   await assert.rejects(
     extractArchive(path.join(root, 'bad.tar.gz'), path.join(root, 'bad-out'), 'tar.gz', true),
+    { code: 'UNSAFE_ARCHIVE' },
   );
   assert.equal(await exists(path.join(root, 'escape')), false);
 });

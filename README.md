@@ -1,67 +1,115 @@
 # APEXREST for Codex
 
-Source repository: [apexrest-dev/apexrest-codex](https://github.com/apexrest-dev/apexrest-codex).
+**Build and change Oracle APEX applications with Codex, from source to a verified import.**
 
-Create, inspect and validate Oracle APEXlang applications from a native Codex plugin. Plan controlled deployments and run SQL and browser tests using the same core policy through CLI and MCP.
+APEXREST connects native Codex skills and MCP tools to Oracle SQLcl. Generate APEXlang, adopt an existing app, edit pages and shared components, plan the change, import it into an authorized target, and check the result in the Codex in-app browser.
 
-Deploy works with a clean supported APEX installation: APEXREST service tables are not required. Local durable migration history and coordination are the default; database coordination is an explicit optional mode. See [clean APEX deployment](docs/clean-apex-deployment.md) for the rule change and actual verification.
+[Get started](docs/getting-started.md) · [Documentation](docs/index.md) · [Deployment safety](docs/deployment-safety.md) · [Verification status](docs/implementation-status.md) · [Contributing](CONTRIBUTING.md)
 
-**Local beta, not a verified stable release.** Codex 0.154.0 compatibility profile and SQLcl 26.1.2 local compilation were exercised on macOS arm64. Database deployment, existing-app round trips, utPLSQL, authenticated CRM CRUD and Windows/Linux host setup require their own evidence. See [acceptance matrix](docs/acceptance.json), [actual results](docs/implementation-status.md) and [next actions](docs/next-actions.md).
+![APEXREST connects a Codex request to APEXlang source, a verified deployment plan, Oracle APEX and runtime checks.](docs/assets/overview.svg)
 
-Independent APEXREST tooling, not an official Oracle or OpenAI plugin. [Українською](README.uk.md).
+> **Beta: `0.1.0-beta.1`.** Real Oracle application imports and Codex native installation have been exercised in the environments recorded below. Stable release readiness is still blocked by the remaining integration, recovery and platform checks. Independent APEXREST tooling; not an official Oracle or OpenAI product.
 
-## Install from the local release
+## Install in Codex
 
-Build with Node 24 LTS:
+With Node 24 LTS on `PATH` and a Codex CLI that supports native plugins:
 
 ```sh
-npm ci
+codex plugin marketplace add apexrest-dev/apexrest-codex
+codex plugin add apexrest-apex@apexrest
+```
+
+The repository includes the bundled runtime; no `npm ci` or local build is needed for this installation. Start a new Codex task after registration. The [installation guide](docs/getting-started.md#install-the-plugin) covers verification, Oracle runtime setup, managed installation and removal. Installation does not create a database or deploy an application.
+
+After installation, start a new Codex task and ask:
+
+> Use APEXREST to check my setup. Report the compiler, connection and target checks that still need attention.
+
+You need a Codex host with native plugin support. Oracle work also needs the reviewed Node, Java and SQLcl runtimes, an existing supported APEX target and a locally saved SQLcl connection. The [quickstart](docs/getting-started.md) explains each step; never paste passwords into a prompt.
+
+## What you can build
+
+| Workflow                       | What APEXREST does                                                                                                        |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
+| Create an application          | Generate real Oracle APEXlang and start from a blank app or the customer CRM template.                                    |
+| Change an existing application | Export into a new directory, preserve Oracle IDs and `.apex` metadata, and edit the source under version control.         |
+| Build a dashboard              | Use real source queries, native APEX components, submitted filter items and runtime checks.                               |
+| Deploy a change                | Bind an immutable plan to source, toolchain and target; back up an existing app; import under the required authorization. |
+| Test and diagnose              | Run configured unit, SQL, API or browser suites; inspect bounded diagnostics and background-job results.                  |
+
+An explicit request to create, update or import an identified development/test app includes the necessary scoped import. Codex records that existing authorization and completes the workflow. Production uses a separate, externally signed approval on a protected runner.
+
+## Start with a concrete request
+
+**Create an app**
+
+> Use APEXREST to create a customer CRM in the configured development environment. Include customer search, a validated edit form and a dashboard. Complete the plan, authorized import and relevant runtime checks.
+
+**Change an existing app**
+
+> Use APEXREST to adopt application 100 from the configured test environment into a new project. Add a sales dashboard using real database measures. Preserve the existing pages, shared components and authentication, then import and verify the change.
+
+**Make the next edit**
+
+> Update the dashboard filters to refresh the affected native regions. Reuse the existing project and connection, reconcile the measures, import into the same test app and verify the interactions in the in-app browser.
+
+Replace example IDs and environment names with your actual target. Codex asks for missing non-secret identity information; it does not guess a database or expand the request to unrelated schema writes.
+
+## A short path from edit to import
+
+![Deployment flow: inspect once, edit coherent changes, validate within planning, review the bound plan, back up and import, then verify. Identity, drift and authorization remain checked before writes.](docs/assets/deployment-flow.svg)
+
+The workflow reuses project discovery, batches related edits and avoids a redundant compiler run immediately before planning. Independent read-only preflight checks run concurrently. Every write still requires fresh target checks, source and target drift checks, coordination, and a verified backup for an existing application.
+
+A clean supported APEX installation is sufficient. APEXREST service tables are **not required**: durable local migration history and coordination are the default. Independent machines need external serialization or the explicitly selected database coordination mode. [Understand the deployment boundary](docs/deployment-safety.md).
+
+## Measured on a real APEX application
+
+![A real application trial measured plan time at 20.08 versus 9.73 seconds and one optimized import at 33.4 seconds versus approximately 71 to 73 seconds in the earlier trial.](docs/assets/performance.svg)
+
+| Connected operation                      |                Before |      After |
+| ---------------------------------------- | --------------------: | ---------: |
+| Plan: median of three samples per build  |               20.08 s | **9.73 s** |
+| Apply, including backup and verification | Approximately 71–73 s | **33.4 s** |
+
+The plan comparison used identical inputs on macOS arm64, SQLcl 26.1.2 and APEX 26.1.1. The apply comparison is one optimized unchanged-source import against earlier page-revision runs; it is not a repeated-apply benchmark. No new-app creation time or cross-platform speedup is claimed. [Method, samples and limitations](docs/optimization-review.md#connected-apex-workflow-follow-up).
+
+## What has been verified
+
+| Area                | Available evidence                                                                                 | Remaining scope                                                                       |
+| ------------------- | -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| Native Codex plugin | Isolated installation, discovery, tool calls and lifecycle on Codex 0.154.0 / macOS arm64          | Other host and platform combinations; evidence must be refreshed for a stable release |
+| Oracle APEXlang     | Real blank/CRM compilation and connected existing-app export, validation and preservation checks   | Broader component and unsupported-component fixtures                                  |
+| Application import  | Actual test-app imports with SQL backup, target/drift checks and default local coordination        | Restore, interruption and fault-injection scenarios                                   |
+| Dashboard behavior  | Real read-only query reconciliation and authenticated in-app filter/chart/empty-state observations | Full automated SQL/CRUD integration; separate mobile breakpoint evidence              |
+
+Unit tests, mocked failure scenarios, real Oracle operations and native-host checks are recorded separately. See the [acceptance matrix](docs/acceptance.json), [implementation status](docs/implementation-status.md) and [remaining release gates](docs/next-actions.md). A missing or skipped integration suite is not a passing result.
+
+## Develop locally
+
+Use Node 24 LTS and the committed npm lockfile:
+
+```sh
+npm ci --ignore-scripts
 npm run build
-npm run site:build
-npm run release:dry-run
-```
-
-The build writes `dist/releases/install-local.txt` with the exact archive filename and SHA-256 for this version. Review it, then execute that local Bash or PowerShell command. `--yes` authorizes technical setup; `--accept-oracle-license` is separate consent for the linked vendor terms. Dependencies are installed under `~/.apexrest`; existing compatible runtimes can be reused. The installer registers a local native marketplace and binds MCP to absolute paths in the managed installation. Reload Codex after setup. It does not ask you to edit MCP JSON or install global skills.
-
-`--dry-run`, `--offline`, `--cache-dir`, `--home`, `--codex-home` and `--native-only` are supported. Project-only Codex enablement is explicitly blocked on the tested client; a dedicated Codex profile is available through `--codex-home`. Runtime binaries, database accounts and browser credentials are not included in the release.
-
-## Use
-
-Use `~/.apexrest/bin/apexrest` (or `<--home>/bin/apexrest`; Windows: `apexrest.ps1`). The examples below abbreviate that path as `apexrest`. Use the generated launcher in the managed home, or the bundled `runtime/apexrest.mjs` with Node 24. No shell profile is edited.
-
-```sh
-apexrest doctor --json
-apexrest project init ./crm --template customer-crm
-apexrest connection add dev-read --sqlcl-name saved-read-connection
-apexrest connection add dev-deploy --sqlcl-name saved-deploy-connection
-apexrest apex validate --project ./crm --json
-apexrest deploy plan --project ./crm --env dev --out plans/dev.json
-apexrest deploy apply --project ./crm --plan plans/dev.json
-apexrest test auth --project ./crm --env dev
-apexrest test all --project ./crm --env dev --json
-```
-
-Before executing trusted project code, review it and add its canonical path to the private user policy. Configure exact DB/service/workspace/schema/application identity in `apexrest.json`. Named SQLcl credentials stay in the local SQLcl store. Remote tests and deployment require explicit target grants; production requires an externally signed plan in protected CI. Setup and doctor never deploy an application or provision a database.
-
-An explicit request to create or update an identified development/test app includes its necessary import. The workflow records existing user authorization as a short-lived exact-plan grant and continues through runtime verification without asking the same permission twice. Application-only checks are scoped separately from full CRUD/SQL integration; see [deployment and verification rules](docs/deployment-safety.md).
-
-CRM contains a customers table, server validation, report, modal CRUD form and dashboard. Its APEXlang compiles with the real Oracle compiler. SQL and browser test code is supplied, but passing live application evidence is not available in this checkout.
-
-## Build and verification
-
-```sh
 npm run lint
 npm run typecheck
 npm run test:unit
 npm run test:contracts
-npm run test:packaging
 npm run test:installers
-npm run test:native-codex
-npm run test:integration
+npm run site:build
+npm run test:packaging
 ```
 
-Unit/installer fixtures are not Oracle evidence. Integration exits with a blocker when prerequisites are absent. `check-release-readiness` rejects stable readiness without current native-host, Oracle integration and platform evidence. Dry run builds unsigned local artifacts and a readiness report; it never publishes.
+After source or resource changes, run `npm run plugin:sync` to refresh the checked-in native bundle. `npm run plugin:check` compares it with a fresh build. `npm run test:repository-plugin` checks its native installation in an isolated Codex profile. Native-host and Oracle checks require their documented prerequisites. `npm run release:dry-run` creates local artifacts and a readiness report; `npm run check-release-readiness` fails while required evidence is missing. Neither command publishes a release. See [contributing](CONTRIBUTING.md) and [testing](docs/testing.md).
 
-Read [architecture](docs/architecture.md), [configuration](docs/configuration.md), [deployment safety](docs/deployment-safety.md), [testing](docs/testing.md), [troubleshooting](docs/troubleshooting.md), [research](docs/research.md), [security](SECURITY.md), [contributing](CONTRIBUTING.md) and [publisher setup](docs/publishing.md).
+## Documentation and support
 
-The static website builds to `site-dist/` for future placement under `/codex/`. No public install endpoint or remote release has been published by this build.
+- [Getting started](docs/getting-started.md): install, connect, create or adopt, plan and verify.
+- [Configuration](docs/configuration.md): explicit targets, connection references and private policy.
+- [Architecture](docs/architecture.md): one core behind the CLI, MCP and skills.
+- [Troubleshooting](docs/troubleshooting.md): setup, compiler, auth and recovery diagnostics.
+- [Security](SECURITY.md): credential boundaries, trusted code and private reports.
+- [Publisher setup](docs/publishing.md): protected release workflow and outstanding prerequisites.
+
+Report reproducible bugs through [GitHub issues](https://github.com/apexrest-dev/apexrest-codex/issues), with sanitized diagnostics. Follow [SECURITY.md](SECURITY.md) for sensitive reports. Licensed under [Apache-2.0](LICENSE).

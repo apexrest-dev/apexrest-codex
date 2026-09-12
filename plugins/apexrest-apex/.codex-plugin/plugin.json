@@ -1,0 +1,27 @@
+{
+  "name": "apexrest-apex",
+  "version": "0.1.0-beta.1",
+  "description": "Develop, deploy and test Oracle APEX applications with Codex.",
+  "author": {
+    "name": "APEXREST",
+    "url": "https://apex.rest"
+  },
+  "license": "Apache-2.0",
+  "interface": {
+    "displayName": "APEXREST for Codex",
+    "shortDescription": "Oracle APEX development workflows",
+    "longDescription": "Independent APEXREST tooling for controlled Oracle APEX development, deployment and testing.",
+    "developerName": "APEXREST",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Check my APEXREST setup and show the next required action.",
+      "Validate this APEXlang application and explain the diagnostics."
+    ]
+  },
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json"
+}

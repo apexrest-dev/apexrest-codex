@@ -1,0 +1,20 @@
+{
+  "name": "apexrest",
+  "interface": {
+    "displayName": "APEXREST"
+  },
+  "plugins": [
+    {
+      "name": "apexrest-apex",
+      "source": {
+        "source": "local",
+        "path": "./plugins/apexrest-apex"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_USE"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

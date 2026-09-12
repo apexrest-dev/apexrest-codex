@@ -2,6 +2,21 @@ import { readFile, readdir, lstat } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
 export const sha256 = (bytes) => createHash('sha256').update(bytes).digest('hex');
+export const repositoryPlugin = 'plugins/apexrest-apex';
+export const generatedPluginEntries = [
+  'runtime',
+  'resources',
+  '.codex-plugin',
+  '.mcp.json',
+  'LICENSE',
+  'NOTICE',
+  'bundle-manifest.json',
+];
+export function isGeneratedPluginFile(file) {
+  return generatedPluginEntries.some(
+    (entry) => file === `${repositoryPlugin}/${entry}` || file.startsWith(`${repositoryPlugin}/${entry}/`),
+  );
+}
 export async function files(root, prefix = '') {
   const found = [];
   for (const entry of (await readdir(path.join(root, prefix), { withFileTypes: true })).sort((a, b) =>
@@ -29,10 +44,19 @@ export async function sourceDigest() {
     'toolchains',
     'site',
   ]) {
-    for (const file of await files(root))
-      inventory[root + '/' + file] = sha256(await readFile(path.join(root, file)));
+    for (const file of await files(root)) {
+      const name = root + '/' + file;
+      if (!isGeneratedPluginFile(name)) inventory[name] = sha256(await readFile(path.join(root, file)));
+    }
   }
-  for (const file of ['package.json', 'package-lock.json', 'publisher.config.json', 'tsconfig.base.json'])
+  for (const file of [
+    'package.json',
+    'package-lock.json',
+    'publisher.config.json',
+    'tsconfig.base.json',
+    'LICENSE',
+    'NOTICE',
+  ])
     inventory[file] = sha256(await readFile(file));
   return sha256(JSON.stringify(Object.fromEntries(Object.entries(inventory).sort())));
 }

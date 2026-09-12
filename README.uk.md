@@ -1,17 +1,5 @@
-# APEXREST для Codex
+# Documentation has moved
 
-Репозиторій коду: [apexrest-dev/apexrest-codex](https://github.com/apexrest-dev/apexrest-codex).
+All maintained product documentation is in English.
 
-Нативний плагін Codex для створення й перевірки Oracle APEXlang, планування деплою та запуску тестів. Це незалежний інструмент APEXREST.
-
-Деплой працює з чистою підтримуваною APEX-інсталяцією без службових таблиць APEXREST. Типовий режим використовує локальний журнал міграцій і блокування; координація через БД є окремою явною опцією. [Зміна правил і фактичні перевірки](docs/clean-apex-deployment.md).
-
-Поточна версія — локальна beta. Compat-пакет реально перевірено через Codex 0.154.0 на macOS arm64; blank-app і CRM проходять компіляцію SQLcl 26.1.2. Перевірка живого деплою, utPLSQL, CRUD у браузері й інших платформ ще потрібна. [Матриця](docs/acceptance.json) окремо фіксує реалізацію, докази й блокери.
-
-Для складання: `npm ci`, `npm run build`, `npm run site:build`, `npm run release:dry-run`. Точна команда встановлення зі створеного ZIP та його SHA-256 міститься у `dist/releases/install-local.txt`. Автоінсталятор працює у користувацькому каталозі; ліцензія Oracle і системне підвищення прав потребують окремої згоди. Паролі не передавайте у чат.
-
-Згенерований CLI підтримує `doctor`, `project init`, `apex validate`, `deploy plan`, `deploy apply`, `test auth`, `test all`. Для БД потрібні явно задане середовище, збережені SQLcl-з’єднання та приватна політика дозволів. Production вимагає зовнішнього підписаного дозволу CI на конкретний план.
-
-Явний запит створити або оновити визначений тестовий/dev-додаток охоплює необхідний імпорт. Плагін фіксує вже наданий дозвіл для конкретного плану й завершує роботу перевіркою додатка без повторного запиту того самого підтвердження. Для зміни лише сторінки застосовуються відповідні перевірки компілятора, SQL-джерел і in-app браузера; [правила імпорту](docs/deployment-safety.md).
-
-Детальні команди й обмеження: [README](README.md). Фактичні результати: [implementation-status](docs/implementation-status.md). Релізи GitHub і публікація сайту apex.rest залишаються окремими діями.
+Start with the [main README](README.md), [getting started](docs/getting-started.md) or the [documentation index](docs/index.md). This file remains only to preserve existing links.

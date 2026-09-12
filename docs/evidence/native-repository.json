@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "timestamp": "2026-09-12T15:19:12.548Z",
+  "sourceDigest": "fb904b636722885a7ca8e57f35021e12e879a209cbf64b8be68f731c1041dbe2",
+  "installationSource": "local-repository",
+  "platform": "darwin",
+  "arch": "arm64",
+  "node": "v24.21.0",
+  "host": "codex-cli 0.154.0",
+  "status": "passed",
+  "oracleIntegration": false,
+  "checks": [
+    "repository-marketplace-registration",
+    "native-install-without-local-build",
+    "14-native-mcp-tools-connected",
+    "eight-native-skills-discovered",
+    "bundled-reference-search-through-native-host",
+    "doctor-through-native-host",
+    "explicit-project-inspection-outside-plugin-cache"
+  ],
+  "installedVersion": "0.1.0-beta.1",
+  "installedSourceDigest": "fb904b636722885a7ca8e57f35021e12e879a209cbf64b8be68f731c1041dbe2",
+  "tools": [
+    "apexrest_apex_export",
+    "apexrest_apex_generate",
+    "apexrest_apex_validate",
+    "apexrest_artifact_read",
+    "apexrest_deploy_apply",
+    "apexrest_deploy_plan",
+    "apexrest_doctor",
+    "apexrest_job_cancel",
+    "apexrest_job_status",
+    "apexrest_metadata_read",
+    "apexrest_project_inspect",
+    "apexrest_reference_read",
+    "apexrest_reference_search",
+    "apexrest_test_run"
+  ]
+}

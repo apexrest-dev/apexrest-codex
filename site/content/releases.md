@@ -4,4 +4,4 @@ This build produces native ZIPs, platform runtime ZIPs, bootstraps, checksums, a
 
 The generated `releases/manifest.json` binds installer and native artifact versions/checksums. The full local manifest and release-readiness report are in `dist/releases/`. Unsigned beta artifacts are not a published stable release.
 
-Stable readiness is blocked without native-host evidence on each target platform and actual Oracle deployment, utPLSQL and authenticated browser evidence bound to current sources. Dry run never creates tags, releases or npm packages.
+The repository marketplace supports installation from source control today. Stable release qualification separately requires source-bound native-host evidence on each target platform and the remaining Oracle, utPLSQL and authenticated application test evidence. The existing application trial does not replace those broader release gates. Dry run never creates tags, releases or npm packages.

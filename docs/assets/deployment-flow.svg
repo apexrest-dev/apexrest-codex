@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" fill="none" role="img" aria-labelledby="title desc">
+  <title id="title">APEXREST controlled deployment workflow</title>
+  <desc id="desc">Five steps: edit application source; compile and create a digest-bound plan; verify the live target and drift and make a backup; perform the authorized import using frozen source and a durable journal; then verify the result with scoped checks and the in-app browser when available. Local migration history and single-machine coordination are the default. Production requires protected external approval. Unknown outcomes require reconciliation rather than a blind retry.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1200" y2="760" gradientUnits="userSpaceOnUse"><stop stop-color="#10263A"/><stop offset="1" stop-color="#071522"/></linearGradient>
+    <linearGradient id="accent" x1="54" y1="0" x2="1146" y2="0" gradientUnits="userSpaceOnUse"><stop stop-color="#5DE4CC"/><stop offset="1" stop-color="#81B7FF"/></linearGradient>
+    <marker id="arrow" markerWidth="6" markerHeight="8" refX="5" refY="4" orient="auto"><path d="M0 1L5 4L0 7" stroke="#70CECD" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <style>text{font-family:Arial,Helvetica,sans-serif}.eyebrow{font-size:14px;font-weight:700;letter-spacing:2px;fill:#79DFD4}.heading{font-size:42px;font-weight:700;fill:#F5FAFF}.body{font-size:18px;fill:#B8C9D9}.card-title{font-size:23px;font-weight:700;fill:#F5FAFF}.card-body{font-size:16px;fill:#BDD0DE}.caption{font-size:15px;fill:#A8BFCE}.number{font-size:20px;font-weight:700;fill:#9AEEE0}</style>
+  </defs>
+  <rect x="1" y="1" width="1198" height="758" rx="24" fill="url(#background)" stroke="#294153" stroke-width="2"/>
+  <path d="M56 1H1144" stroke="url(#accent)" stroke-width="3"/>
+  <text class="eyebrow" x="54" y="57">FROM SOURCE TO A VERIFIED CHANGE</text>
+  <text class="heading" x="54" y="116">Fast delivery. Explicit boundaries.</text>
+  <text class="body" x="54" y="158">Carry an authorized application change through import and runtime verification.</text>
+
+  <path d="M82 222H1118" stroke="#365E69" stroke-width="2"/>
+  <g fill="#112E3B" stroke="#65CCBF" stroke-width="2">
+    <circle cx="82" cy="222" r="23"/><circle cx="306" cy="222" r="23"/><circle cx="530" cy="222" r="23"/><circle cx="754" cy="222" r="23"/><circle cx="978" cy="222" r="23"/>
+  </g>
+  <g class="number" text-anchor="middle"><text x="82" y="229">1</text><text x="306" y="229">2</text><text x="530" y="229">3</text><text x="754" y="229">4</text><text x="978" y="229">5</text></g>
+
+  <rect x="54" y="266" width="202" height="198" rx="14" fill="#122D42" stroke="#355366"/>
+  <rect x="278" y="266" width="202" height="198" rx="14" fill="#122D42" stroke="#355366"/>
+  <rect x="502" y="266" width="202" height="198" rx="14" fill="#173741" stroke="#508B84"/>
+  <rect x="726" y="266" width="202" height="198" rx="14" fill="#173741" stroke="#508B84"/>
+  <rect x="950" y="266" width="196" height="198" rx="14" fill="#122D42" stroke="#355366"/>
+  <path d="M262 365H272" stroke="#70CECD" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M486 365H496" stroke="#70CECD" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M710 365H720" stroke="#70CECD" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M934 365H944" stroke="#70CECD" stroke-width="2" marker-end="url(#arrow)"/>
+  <text class="card-title" x="74" y="305">Edit</text>
+  <text class="card-body" x="74" y="344">Inspect the application.</text>
+  <text class="card-body" x="74" y="371">Change scoped source.</text>
+  <path d="M74 399H236" stroke="#345367"/>
+  <text class="caption" x="74" y="435">APEXlang + migrations</text>
+
+  <text class="card-title" x="298" y="305">Compile + plan</text>
+  <text class="card-body" x="298" y="344">Validate with SQLcl.</text>
+  <text class="card-body" x="298" y="371">Review the change.</text>
+  <path d="M298 399H460" stroke="#345367"/>
+  <text class="caption" x="298" y="435">Source + target digests</text>
+
+  <text class="card-title" x="522" y="305">Safety checks</text>
+  <text class="card-body" x="522" y="344">Fresh target and drift.</text>
+  <text class="card-body" x="522" y="371">Backup before writes.</text>
+  <path d="M522 399H684" stroke="#456C70"/>
+  <text class="caption" x="522" y="435">Identity + coordination</text>
+
+  <text class="card-title" x="746" y="305">Import</text>
+  <text class="card-body" x="746" y="344">Use authorized scope.</text>
+  <text class="card-body" x="746" y="371">Use frozen source.</text>
+  <path d="M746 399H908" stroke="#456C70"/>
+  <text class="caption" x="746" y="435">Durable import journal</text>
+
+  <text class="card-title" x="970" y="305">Verify</text>
+  <text class="card-body" x="970" y="344">Run relevant checks.</text>
+  <text class="card-body" x="970" y="371">Inspect app behavior.</text>
+  <path d="M970 399H1126" stroke="#345367"/>
+  <text class="caption" x="970" y="430">In-app browser</text>
+  <text class="caption" x="970" y="450">when available</text>
+
+  <rect x="54" y="502" width="534" height="151" rx="14" fill="#102B3B" stroke="#355366"/>
+  <path d="M80 530H102V551H80ZM85 525H97V530M86 540H96" stroke="#77DBCF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="118" y="546" font-size="21" font-weight="700" fill="#F5FAFF">Local by default</text>
+  <text class="card-body" x="80" y="578">Durable migration history and single-machine coordination.</text>
+  <text class="card-body" x="80" y="605">Database-backed coordination is an explicit optional mode.</text>
+  <text class="caption" x="80" y="634">No service tables required for a normal plan and apply.</text>
+
+  <rect x="612" y="502" width="534" height="151" rx="14" fill="#172B3A" stroke="#536274"/>
+  <path d="M640 529L652 525L664 529V539C664 548 652 554 652 554C652 554 640 548 640 539ZM647 539L651 543L658 535" stroke="#A9C9FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="680" y="546" font-size="21" font-weight="700" fill="#F5FAFF">Authorization follows the target</text>
+  <text class="card-body" x="638" y="578">Dev/test imports stay within the user's identified app scope.</text>
+  <text class="card-body" x="638" y="605">Production requires protected external approval.</text>
+  <text class="caption" x="638" y="634">Application import does not authorize unrelated data writes.</text>
+
+  <path d="M54 688H1146" stroke="#2E4659"/>
+  <circle cx="62" cy="716" r="5" fill="#E8BF77"/>
+  <text x="78" y="721" font-size="15" fill="#C6D5DF">An unknown write outcome requires reconciliation. Never blindly retry an import.</text>
+  <text x="1146" y="721" text-anchor="end" font-size="14" fill="#8FAABD">docs/deployment-safety.md</text>
+</svg>

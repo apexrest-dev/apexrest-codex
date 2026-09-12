@@ -1,7 +1,55 @@
 # Contributing
 
-Use Node 24 LTS and `npm ci`. Keep TypeScript strict, ESM and public CLI/MCP schemas synchronized. Execute the mandatory local checks in README. Change source and behavior tests together; never replace real Oracle/native smoke with a fixture.
+APEXREST is developed in [apexrest-dev/apexrest-codex](https://github.com/apexrest-dev/apexrest-codex). Public code, CLI help, documentation, examples and diagrams use English. Keep changes focused and make claims match the evidence.
 
-Preserve Oracle-generated `.apex` and IDs. Use reviewed documentation fragments for the selected compiler version. Dependency/schema upgrades need pinned URLs/hashes, license review, an ADR and real compatibility evidence. Do not alter the original build specification as a way of changing acceptance.
+## Set up a checkout
 
-Local release builds are unsigned beta candidates until all required evidence is bound to the exact source digest. Publishing, tagging, credentials and server provisioning are separate maintainer actions. Submit focused changes with test commands, environment and unresolved limitations.
+Use Node 24 LTS and the committed lockfile:
+
+```sh
+git clone https://github.com/apexrest-dev/apexrest-codex.git
+cd apexrest-codex
+npm ci --ignore-scripts
+npm run build
+```
+
+After source, dependency, skill or resource changes, run `npm run plugin:sync`. It builds and refreshes the checked-in self-contained plugin bundle used by repository installations. Commit the resulting bundle with its source changes.
+
+The normal build does not deploy an app or install Oracle binaries. Native-host setup, vendor downloads, connection onboarding and remote integration have their own prerequisites. See [getting started](docs/getting-started.md).
+
+## Validate a change
+
+```sh
+npm run lint
+npm run typecheck
+npm run test:unit
+npm run test:contracts
+npm run test:installers
+npm run site:build
+npm run test:packaging
+```
+
+Run the checks relevant to the changed behavior, including build before packaging tests. Run `npm run plugin:check` after a fresh build to verify that the checked-in plugin matches its generated runtime/resources. `npm run test:repository-plugin` exercises the repository bundle in a fresh isolated Codex profile without connecting to or writing an Oracle target. Native registration changes also need the real isolated Codex lifecycle check; Oracle adapter or application changes need appropriate real compiler/target evidence when a target is authorized and available. If a required environment is absent, record the blocker rather than substituting a mock result. See [testing](docs/testing.md).
+
+## Engineering expectations
+
+- Keep TypeScript strict, use ESM, and synchronize public CLI/MCP schemas with behavior.
+- Preserve Oracle-generated `.apex` metadata, IDs, unrelated components and working-tree edits.
+- Bind plans to source and target; preserve backup, drift, authorization, coordination and unknown-outcome checks.
+- Keep secrets, browser state, local runtimes, raw business data and private backups out of source control.
+- Update documentation and the relevant acceptance/evidence records when behavior or verification changes.
+- Review dependency upgrades with pinned URLs/hashes, licensing, an architecture decision and actual compatibility evidence.
+
+Preserve `APEXREST_CODEX_PLUGIN_BUILD_SPEC.md` as historical input. Record authorized requirement amendments in the project rules and architecture decisions; do not rewrite the specification to make acceptance easier.
+
+## Open a pull request
+
+Describe the concrete problem and resulting behavior. Include the validation actually run, its environment and any remaining limitation. Explain safety or compatibility tradeoffs when they matter. Reproduce a bug before widening a fix, and avoid unrelated formatting or dependency churn.
+
+Use a `codex/` branch for Codex-created work unless the maintainer requests a different name. Review the staged diff for credentials and private artifacts before committing. A contribution does not authorize deployments, paid resources, release tags or publication.
+
+## Release work
+
+Before packaging a release, run `npm run plugin:sync`, then `npm run plugin:check`, and verify the native repository installation with `npm run test:repository-plugin`. `npm run release:dry-run` creates unsigned local beta artifacts and a readiness report. Stable readiness requires current evidence bound to the exact immutable source. Publishing requires the separate protected workflow and maintainer authorization; it is not part of a normal build or pull request. See [publisher setup](docs/publishing.md).
+
+Report security issues using [SECURITY.md](SECURITY.md), not public issue attachments containing secrets.

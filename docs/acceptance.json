@@ -12,7 +12,7 @@
   "criteria": [
     {
       "id": "A01",
-      "criterion": "Native package валідний за реальною схемою Codex/Agent Plugins",
+      "criterion": "Native package validates against the actual Codex/Agent Plugins schema",
       "implementation": "implemented",
       "verification": "passed",
       "evidence": ["tests/packaging/packages.test.mjs", "docs/evidence/local-checks.json"],
@@ -20,31 +20,33 @@
     },
     {
       "id": "A02",
-      "criterion": "Codex host показує plugin і підтримує enable/disable без ручного skills-only встановлення",
+      "criterion": "The Codex host lists the plugin and supports enable/disable without a manual skills-only installation",
       "implementation": "implemented",
       "verification": "passed",
       "evidence": [
         "scripts/native-smoke.mjs",
         "docs/evidence/native-codex-compat.json",
-        "docs/evidence/oracle-app175-readonly.json"
+        "docs/evidence/oracle-app175-readonly.json",
+        "docs/evidence/native-repository.json"
       ],
       "blocker": "Verified only on Codex 0.154.0 macOS arm64; portable MCP not discovered."
     },
     {
       "id": "A03",
-      "criterion": "MCP викликається з native install location поза monorepo",
+      "criterion": "MCP runs from the native installation location outside the monorepo",
       "implementation": "implemented",
       "verification": "passed",
       "evidence": [
         "scripts/native-smoke.mjs",
         "docs/evidence/native-codex-compat.json",
-        "docs/evidence/oracle-app175-readonly.json"
+        "docs/evidence/oracle-app175-readonly.json",
+        "docs/evidence/native-repository.json"
       ],
       "blocker": null
     },
     {
       "id": "A04",
-      "criterion": "Основний bootstrap встановлює client dependencies і реєструє plugin без ручного JSON/TOML редагування",
+      "criterion": "The primary bootstrap installs client dependencies and registers the plugin without manual JSON/TOML edits",
       "implementation": "partial",
       "verification": "partial",
       "evidence": [
@@ -56,7 +58,7 @@
     },
     {
       "id": "A05",
-      "criterion": "Повторний setup ідемпотентний; interruptions відновлюються; concurrent setup захищений",
+      "criterion": "Repeated setup is idempotent; interruptions recover and concurrent setup is protected",
       "implementation": "partial",
       "verification": "partial",
       "evidence": [
@@ -68,7 +70,7 @@
     },
     {
       "id": "A06",
-      "criterion": "Download integrity failure блокує запуск; offline/cache miss не приховує мережеві запити",
+      "criterion": "Download integrity failure blocks execution; offline/cache misses do not conceal network requests",
       "implementation": "implemented",
       "verification": "passed",
       "evidence": [
@@ -81,7 +83,7 @@
     },
     {
       "id": "A07",
-      "criterion": "Existing Codex settings, Java/Node і чужі plugins не пошкоджуються",
+      "criterion": "Existing Codex settings, Java/Node runtimes and unrelated plugins are preserved",
       "implementation": "implemented",
       "verification": "partial",
       "evidence": [
@@ -93,7 +95,7 @@
     },
     {
       "id": "A08",
-      "criterion": "New-app template проходить реальний Oracle compiler validation",
+      "criterion": "The new-app template passes real Oracle compiler validation",
       "implementation": "implemented",
       "verification": "passed",
       "evidence": ["docs/evidence/oracle-local.json", "docs/evidence/native-codex-compat.json"],
@@ -101,7 +103,7 @@
     },
     {
       "id": "A09",
-      "criterion": "Existing-app export/adopt не затирає local edits і не губить компоненти",
+      "criterion": "Existing-app export/adopt preserves local edits and application components",
       "implementation": "partial",
       "verification": "partial",
       "evidence": [
@@ -118,7 +120,7 @@
     },
     {
       "id": "A10",
-      "criterion": "`.apex` metadata/MMD зберігаються; unsupported capability не симулюється",
+      "criterion": "`.apex` metadata/MMD are preserved; unsupported capabilities are not simulated",
       "implementation": "implemented",
       "verification": "partial",
       "evidence": [
@@ -133,7 +135,7 @@
     },
     {
       "id": "A11",
-      "criterion": "Source mutation після plan і target drift блокують apply",
+      "criterion": "Source mutation after planning and target drift block apply",
       "implementation": "implemented",
       "verification": "partial",
       "evidence": [
@@ -147,7 +149,7 @@
     },
     {
       "id": "A12",
-      "criterion": "Target DB/service/workspace/schema/app ID перевірені перед write",
+      "criterion": "Target DB/service/workspace/schema/application ID are verified before writes",
       "implementation": "implemented",
       "verification": "partial",
       "evidence": [
@@ -162,7 +164,7 @@
     },
     {
       "id": "A13",
-      "criterion": "Existing-app backup створений та перевірений до import; restore має окремий plan",
+      "criterion": "An existing-app backup is created and verified before import; restore uses a separate plan",
       "implementation": "implemented",
       "verification": "partial",
       "evidence": [
@@ -177,7 +179,7 @@
     },
     {
       "id": "A14",
-      "criterion": "Migrations checksum/journal працюють; немає сліпого повторного застосування",
+      "criterion": "Migration checksums and journals work without blind reapplication",
       "implementation": "implemented",
       "verification": "partial",
       "evidence": [
@@ -190,7 +192,7 @@
     },
     {
       "id": "A15",
-      "criterion": "Одночасні deploys із різних runners до одного target координуються",
+      "criterion": "Concurrent deployments from different runners to the same target are coordinated",
       "implementation": "partial",
       "verification": "partial",
       "evidence": [
@@ -202,7 +204,7 @@
     },
     {
       "id": "A16",
-      "criterion": "Timeout/cancel/disconnect обробляють `outcome_unknown` і reconciliation",
+      "criterion": "Timeout, cancellation and disconnect handling preserve `outcome_unknown` and support reconciliation",
       "implementation": "partial",
       "verification": "partial",
       "evidence": [
@@ -216,7 +218,7 @@
     },
     {
       "id": "A17",
-      "criterion": "Production не виконується через самостійно проставлений агентом `approved=true`",
+      "criterion": "An agent cannot authorize production by setting `approved=true` itself",
       "implementation": "implemented",
       "verification": "partial",
       "evidence": ["packages/core/src/config.ts", "packages/core/src/deploy.ts", "tests/unit/core.test.ts"],
@@ -224,7 +226,7 @@
     },
     {
       "id": "A18",
-      "criterion": "utPLSQL suite дає реальний результат; framework відсутній не означає passed",
+      "criterion": "The utPLSQL suite returns real results; a missing framework does not count as passed",
       "implementation": "implemented",
       "verification": "blocked",
       "evidence": [
@@ -237,7 +239,7 @@
     },
     {
       "id": "A19",
-      "criterion": "Browser E2E доводить authenticated CRUD і negative validation, не лише HTTP 200",
+      "criterion": "Browser E2E proves authenticated CRUD and negative validation, beyond HTTP 200",
       "implementation": "partial",
       "verification": "partial",
       "evidence": [
@@ -252,7 +254,7 @@
     },
     {
       "id": "A20",
-      "criterion": "Required empty/skipped/blocked suite робить quality gate незеленим",
+      "criterion": "An empty, skipped or blocked required suite fails the quality gate",
       "implementation": "implemented",
       "verification": "passed",
       "evidence": [
@@ -265,7 +267,7 @@
     },
     {
       "id": "A21",
-      "criterion": "Secrets відсутні в Git, argv, MCP output, logs і public artifacts",
+      "criterion": "Secrets are absent from Git, process arguments, MCP output, logs and public artifacts",
       "implementation": "partial",
       "verification": "partial",
       "evidence": [
@@ -278,7 +280,7 @@
     },
     {
       "id": "A22",
-      "criterion": "CLI/MCP однаково застосовують policy та error classification",
+      "criterion": "CLI and MCP apply policy and error classification consistently",
       "implementation": "implemented",
       "verification": "passed",
       "evidence": [
@@ -294,7 +296,7 @@
     },
     {
       "id": "A23",
-      "criterion": "Update/uninstall не пошкоджують user projects, backups або чужі configurations",
+      "criterion": "Update/uninstall preserves user projects, backups and unrelated configurations",
       "implementation": "partial",
       "verification": "partial",
       "evidence": [
@@ -306,7 +308,7 @@
     },
     {
       "id": "A24",
-      "criterion": "GitHub artifact і apex.rest site build узгоджені за version/checksums",
+      "criterion": "GitHub artifacts and the apex.rest site build have matching versions and checksums",
       "implementation": "implemented",
       "verification": "passed",
       "evidence": [
@@ -314,11 +316,11 @@
         "dist/releases/release-manifest.json",
         "site-dist/releases/manifest.json"
       ],
-      "blocker": "Local artifact/site versions and checksums only. No remote GitHub/apex.rest publication."
+      "blocker": "Local artifact/site versions and checksums verified. Public GitHub source distribution is available; no signed GitHub release or apex.rest site deployment is claimed."
     },
     {
       "id": "A25",
-      "criterion": "Stable release заблокований без required native-host/Oracle integration evidence",
+      "criterion": "Stable release is blocked without required native-host and Oracle integration evidence",
       "implementation": "implemented",
       "verification": "passed",
       "evidence": ["scripts/check-release-readiness.mjs", "dist/releases/release-readiness.json"],
@@ -326,7 +328,7 @@
     },
     {
       "id": "A26",
-      "criterion": "Документація відрізняє verified/experimental/planned можливості та platform profiles",
+      "criterion": "Documentation distinguishes verified, experimental and planned capabilities and platform profiles",
       "implementation": "implemented",
       "verification": "passed",
       "evidence": [
@@ -341,7 +343,7 @@
     },
     {
       "id": "A27",
-      "criterion": "Startup не підвантажує весь Oracle manual/schema/traces у context",
+      "criterion": "Startup does not load the complete Oracle manual, schema or traces into context",
       "implementation": "implemented",
       "verification": "passed",
       "evidence": [
@@ -356,7 +358,7 @@
     },
     {
       "id": "A28",
-      "criterion": "Sandbox, якщо позначений supported, реально provision-ить стек і не видаляє дані через звичайний `down`",
+      "criterion": "A sandbox labelled supported actually provisions the stack and preserves data during ordinary `down`",
       "implementation": "unsupported",
       "verification": "not_applicable",
       "evidence": ["packages/core/src/sandbox.ts", "toolchains/compatibility.json"],

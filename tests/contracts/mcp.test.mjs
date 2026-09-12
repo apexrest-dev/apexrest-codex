@@ -56,6 +56,61 @@ test('CLI stdout remains a single JSON envelope for invalid options', () => {
   assert.equal(r.status, 2);
   assert.equal(JSON.parse(r.stdout).ok, false);
 });
+test('MCP project tools require an explicit absolute path before dispatch or job creation', async (t) => {
+  const client = new Client({ name: 'explicit-project-contract', version: '1.0.0' });
+  t.after(() => client.close());
+  await client.connect(
+    new StdioClientTransport({
+      command: process.execPath,
+      args: [path.join(runtime, 'mcp.mjs')],
+      cwd: runtime,
+      stderr: 'pipe',
+    }),
+  );
+  const inputs = {
+    apexrest_project_inspect: {},
+    apexrest_metadata_read: { env: 'dev', kind: 'objects', schema: 'FIXTURE' },
+    apexrest_apex_generate: { name: 'Fixture', output: 'new-app' },
+    apexrest_apex_export: { env: 'dev', output: 'exports/app' },
+    apexrest_apex_validate: {},
+    apexrest_deploy_plan: { env: 'dev', out: 'plans/dev.json' },
+    apexrest_deploy_apply: { plan: 'plans/dev.json' },
+    apexrest_test_run: { suite: 'unit' },
+    apexrest_job_status: { id: '12345678-1234-4123-8123-123456789abc' },
+    apexrest_job_cancel: { id: '12345678-1234-4123-8123-123456789abc' },
+    apexrest_artifact_read: { id: '12345678-1234-4123-8123-123456789abc' },
+  };
+  const catalog = await client.listTools();
+  for (const tool of catalog.tools) {
+    if (tool.name.startsWith('apexrest_reference_')) {
+      assert.equal(tool.inputSchema.properties.project, undefined);
+      continue;
+    }
+    assert.match(tool.inputSchema.properties.project.description, /Absolute path.*installation directory/);
+    if (tool.name === 'apexrest_doctor') {
+      assert.ok(!tool.inputSchema.required?.includes('project'));
+    } else {
+      assert.ok(tool.inputSchema.required.includes('project'), tool.name);
+      assert.ok(Object.hasOwn(inputs, tool.name), `${tool.name} needs an input fixture`);
+      const missing = JSON.parse(
+        (await client.callTool({ name: tool.name, arguments: inputs[tool.name] })).content[0].text,
+      );
+      assert.equal(missing.diagnostics[0].code, 'INVALID_INPUT', tool.name);
+      assert.match(missing.summary, /^project:/);
+    }
+    for (const project of ['.', '../project', 'project']) {
+      const response = await client.callTool({
+        name: tool.name,
+        arguments: { ...(inputs[tool.name] ?? {}), project },
+      });
+      const result = JSON.parse(response.content[0].text);
+      assert.equal(response.isError, true, tool.name);
+      assert.equal(result.diagnostics[0].code, 'INVALID_INPUT', tool.name);
+      assert.match(result.summary, /absolute project directory/);
+      assert.equal(result.data, undefined, 'Invalid paths must not create a background job');
+    }
+  }
+});
 test('MCP malformed JSON yields protocol response without process banners', async () => {
   const child = spawn(process.execPath, [path.join(runtime, 'mcp.mjs')], { stdio: 'pipe' });
   let stdout = '';
@@ -82,6 +137,13 @@ for (const profile of ['portable', 'codex-compat'])
       { cwd: root, env, encoding: 'utf8' },
     );
     assert.equal(initialized.status, 0, initialized.stdout + initialized.stderr);
+    const inspectedFromCli = spawnSync(process.execPath, [cli, 'project', 'inspect', '--json'], {
+      cwd: project,
+      env,
+      encoding: 'utf8',
+    });
+    assert.equal(inspectedFromCli.status, 0, inspectedFromCli.stdout + inspectedFromCli.stderr);
+    assert.equal(JSON.parse(inspectedFromCli.stdout).data.root, project);
     await mkdir(env.APEXREST_HOME);
     await writeFile(
       path.join(env.APEXREST_HOME, 'policy.json'),
@@ -97,7 +159,7 @@ for (const profile of ['portable', 'codex-compat'])
       const transport = new StdioClientTransport({
         command: process.execPath,
         args,
-        cwd: root,
+        cwd: plugin,
         env,
         stderr: 'pipe',
       });
@@ -105,6 +167,16 @@ for (const profile of ['portable', 'codex-compat'])
         await client.connect(transport);
         const catalog = await client.listTools();
         assert.deepEqual(await client.listTools(), catalog);
+        const inspected = JSON.parse(
+          (await client.callTool({ name: 'apexrest_project_inspect', arguments: { project } })).content[0]
+            .text,
+        );
+        assert.equal(inspected.ok, true, JSON.stringify(inspected));
+        assert.equal(
+          inspected.data.root,
+          project,
+          'MCP must inspect the selected project outside its runtime directory',
+        );
         const found = JSON.parse(
           (
             await client.callTool({

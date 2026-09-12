@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "timestamp": "2026-09-12T15:22:05.864311+00:00",
+  "status": "passed",
+  "verificationKind": "observed-codex-in-app-browser",
+  "oracleIntegration": false,
+  "routes": ["/codex/", "/codex/install/"],
+  "checks": [
+    "English document language and visible content",
+    "Overview and installation navigation",
+    "Backup search returns matching documentation",
+    "Accessible SVG overview and performance images load",
+    "No horizontal overflow at observed CSS widths 872 and 325",
+    "Mobile navigation collapsed on initial load",
+    "Temporary viewport reset",
+    "No observed browser console errors or warnings"
+  ],
+  "assets": {
+    "deployment-flow.svg": "195596b080ac077aa7dcf63732572846d4b1c42e02fc2a08beef030742e83784",
+    "overview.svg": "1a8aa0cf407a5c9c91d0871e217f6822e3934d6b08082704d73230ee51121f5f",
+    "performance.svg": "30663ddca0715469290c98189ffa7549c97d62a2efb49e91543ced57da5cdd87"
+  },
+  "limitations": [
+    "Interactive browser observations are separate from automated tests.",
+    "Other documentation routes have automated link/anchor coverage; not every route was visually inspected."
+  ]
+}

@@ -1,11 +1,33 @@
 # Security and privacy
 
-Do not send credentials, cookies, wallets, real customer data or unredacted browser reports in issues. No public security mailbox has been configured; report privately to the repository owner through an already verified channel. GitHub private vulnerability reporting requires owner setup before it can be advertised.
+APEXREST handles executable application source and access to Oracle environments. Use explicit targets, reviewed project trust and least-privilege connections. The current beta has open verification gates; see [implementation status](docs/implementation-status.md).
 
-Secrets belong in SQLcl's named connection store and private `.apexrest/auth` files (0600). Connection references contain names, not passwords. Browser login is local and interactive; recording, traces, screenshots and video are off. Reports are private and bounded; the public release excludes runtime caches, auth state and raw evidence containing local machine paths. Redaction is defense in depth and cannot identify every business secret. Review reports before sharing.
+## Report a vulnerability
 
-Project SQL, tests and generated APEXlang are executable code. Review and trust the project before execution. The local user and host permission boundary remain authoritative; APEXREST cannot prevent an agent with unrestricted shell/file access from modifying its own user policy. Production signing keys and approval verification configuration must be controlled by a protected external runner, inaccessible to untrusted repository code. Do not run privileged workflows against PR code.
+Do not include credentials, cookies, wallets, connection strings with passwords, real customer data or unredacted browser reports in public issues. No verified public security mailbox is configured. Contact the repository owner privately through an already verified channel; do not assume that an unverified email address belongs to the project.
 
-Downloads enforce vendor host allowlists, HTTPS, pinned hashes, size limits and safe extraction. npm package integrity comes from a committed lockfile; browser revisions come from pinned Playwright. Browser CDN payload verification is delegated to Playwright and is not independently SHA-pinned by APEXREST; this is an explicit supply-chain limitation. No npm postinstall hook downloads tools. Oracle licenses and Linux package installation require separate consent.
+GitHub private vulnerability reporting must be enabled by the owner before it can be offered as a supported reporting channel. For ordinary non-sensitive bugs, use [GitHub issues](https://github.com/apexrest-dev/apexrest-codex/issues).
 
-Do not automatically clear a deployment lease in phase `writing`, even after its TTL. Oracle DDL may have committed. Reconcile the target, migration journal and SQL backup with a DBA first. Restore is application metadata recovery; database data/DDL recovery requires its own procedure.
+## Credentials and reports
+
+SQLcl credentials stay in its named connection store. APEXREST connection references contain names rather than passwords. Browser auth state is private under the managed home, uses restrictive file permissions and expires. Interactive login is local, with recording, traces, screenshots and video disabled in the auth workflow.
+
+Reports are bounded and private by default. Public release packages exclude runtime caches, auth state and raw evidence containing local machine paths. Redaction is defense in depth; it cannot identify every business secret. Inspect every artifact before sharing it, including screenshots deliberately captured during authorized UI verification.
+
+## Project and host trust
+
+Project SQL, tests and APEXlang are executable code. Review the project before granting trust. Database metadata, comments, references and test output are not instructions to broaden permissions. Keep the private policy outside the repository.
+
+The local user and host permissions remain authoritative. APEXREST cannot prevent an agent with unrestricted shell/file access from modifying its own writable policy. An existing scoped user instruction can be recorded for a development/test import; it cannot authorize unrelated changes or production. Production signing keys and verification configuration belong to a protected external runner, inaccessible to untrusted repository code. Do not run privileged workflows against pull-request code.
+
+## Supply chain
+
+Vendor downloads enforce allowed hosts, HTTPS, pinned hashes, size limits and safe extraction. npm dependencies use the committed lockfile; browser revisions use pinned Playwright. Playwright performs browser CDN download verification; APEXREST does not independently pin those payloads by SHA-256. This is an explicit remaining supply-chain limitation.
+
+No npm postinstall hook downloads tools. MCP startup performs no dependency downloads. Oracle license acceptance and Linux system package installation require their own consent. Review a source checkout and the local package digest before installation; repository installation is not a signed stable-release guarantee.
+
+## Deployment and recovery
+
+Plans bind source, toolchain, target identity and current target state. Apply preserves authorization, drift checks, frozen source, a verified SQL backup for an existing app and durable ownership/history. Local coordination protects runners sharing the same managed home; it does not serialize independent machines.
+
+Do not clear a deployment lease in the writing phase because its TTL expired. Oracle DDL may have committed. Reconcile the target, journal and backup with the administrator before retrying. An APEX metadata restore does not recover business data or destructive schema changes. See [deployment safety](docs/deployment-safety.md).

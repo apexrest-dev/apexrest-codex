@@ -1,10 +1,11 @@
 import { spawnSync } from 'node:child_process';
 import { readFile } from 'node:fs/promises';
-import { files } from './lib/release.mjs';
+import { files, isGeneratedPluginFile } from './lib/release.mjs';
 const targets = [];
 for (const root of ['packages', 'scripts', 'tests', 'plugins', 'site'])
   for (const file of await files(root))
-    if (/\.(ts|mjs|js|json|css)$/.test(file)) targets.push(root + '/' + file);
+    if (/\.(ts|mjs|js|json|css)$/.test(file) && !isGeneratedPluginFile(root + '/' + file))
+      targets.push(root + '/' + file);
 const r = spawnSync(
   process.execPath,
   ['node_modules/prettier/bin/prettier.cjs', '--check', ...targets, 'package.json', 'tsconfig.base.json'],

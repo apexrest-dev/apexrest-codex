@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" fill="none" role="img" aria-labelledby="title desc">
+  <title id="title">APEXREST for Codex: from a development request to native Oracle APEX</title>
+  <desc id="desc">Codex skills use one shared MCP and CLI runtime, which runs real SQLcl commands against Oracle APEX. The workflow combines source-controlled application changes, fewer repeated runtime probes, and recorded delivery evidence. Clean APEX installations do not require APEXREST control tables.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1200" y2="720" gradientUnits="userSpaceOnUse"><stop stop-color="#10263A"/><stop offset="1" stop-color="#071522"/></linearGradient>
+    <linearGradient id="accent" x1="54" y1="0" x2="1146" y2="0" gradientUnits="userSpaceOnUse"><stop stop-color="#5DE4CC"/><stop offset="1" stop-color="#81B7FF"/></linearGradient>
+    <marker id="arrow" markerWidth="6" markerHeight="8" refX="5" refY="4" orient="auto"><path d="M0 1L5 4L0 7" stroke="#70CECD" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <style>text{font-family:Arial,Helvetica,sans-serif}.eyebrow{font-size:14px;font-weight:700;letter-spacing:2px;fill:#79DFD4}.heading{font-size:44px;font-weight:700;fill:#F5FAFF}.body{font-size:18px;fill:#B8C9D9}.card-title{font-size:23px;font-weight:700;fill:#F5FAFF}.card-body{font-size:17px;fill:#BDD0DE}.caption{font-size:15px;fill:#A8BFCE}.line{stroke:#73DCD0;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}</style>
+  </defs>
+  <rect x="1" y="1" width="1198" height="718" rx="24" fill="url(#background)" stroke="#294153" stroke-width="2"/>
+  <path d="M56 1H1144" stroke="url(#accent)" stroke-width="3"/>
+  <circle cx="1104" cy="114" r="80" stroke="#22465A" stroke-width="1"/>
+  <circle cx="1104" cy="114" r="50" stroke="#22465A" stroke-width="1"/>
+  <path d="M1065 131L1086 84H1122L1143 131M1073 114H1135" stroke="#63DCCB" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text class="eyebrow" x="54" y="57">APEXREST FOR CODEX</text>
+  <text class="heading" x="54" y="115">Build and change Oracle APEX.</text>
+  <text class="body" x="54" y="154">Native skills. One runtime. Real Oracle execution.</text>
+  <rect x="54" y="194" width="167" height="30" rx="15" fill="#173B42" stroke="#33655F"/>
+  <text x="137.5" y="214" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="700" fill="#96EFDC">CONTROLLED DELIVERY</text>
+
+  <rect x="54" y="260" width="250" height="230" rx="16" fill="#122D42" stroke="#355366"/>
+  <rect x="330" y="260" width="250" height="230" rx="16" fill="#123442" stroke="#3B6B70"/>
+  <rect x="606" y="260" width="250" height="230" rx="16" fill="#122D42" stroke="#355366"/>
+  <rect x="882" y="260" width="264" height="230" rx="16" fill="#122D42" stroke="#355366"/>
+  <path d="M310 371H324" stroke="#70CECD" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M586 371H600" stroke="#70CECD" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M862 371H876" stroke="#70CECD" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <g class="line"><path d="M79 308H117V332H94L84 340V332H79Z"/><path d="M86 316H109M86 324H103"/></g>
+  <text class="caption" x="131" y="319">01 / INTENT</text>
+  <text class="card-title" x="78" y="374">Codex skills</text>
+  <text class="card-body" x="78" y="410">Describe the next change.</text>
+  <text class="card-body" x="78" y="436">Use focused APEX skills.</text>
+  <text class="caption" x="78" y="469">Develop · inspect · deploy · test</text>
+
+  <g class="line"><rect x="355" y="302" width="38" height="38" rx="7"/><path d="M365 315L361 320L365 325M383 315L387 320L383 325M377 312L371 328"/></g>
+  <text class="caption" x="407" y="319">02 / EXECUTION</text>
+  <text class="card-title" x="354" y="374">Shared MCP + CLI</text>
+  <text class="card-body" x="354" y="410">Shared tools, commands</text>
+  <text class="card-body" x="354" y="436">and durable job execution.</text>
+  <text class="caption" x="354" y="469">Consistent policy and results</text>
+
+  <g class="line"><rect x="631" y="302" width="38" height="38" rx="5"/><path d="M638 313L645 320L638 327M651 327H662"/></g>
+  <text class="caption" x="683" y="319">03 / ORACLE TOOLING</text>
+  <text class="card-title" x="630" y="374">Real SQLcl</text>
+  <text class="card-body" x="630" y="410">Compile, export and import</text>
+  <text class="card-body" x="630" y="436">with Oracle's native tools.</text>
+  <text class="caption" x="630" y="469">Live target checks before writes</text>
+
+  <g class="line"><rect x="907" y="302" width="38" height="38" rx="5"/><path d="M907 312H945M916 307H917M923 307H924M915 320H926V332H915ZM933 320H938M933 326H938"/></g>
+  <text class="caption" x="959" y="319">04 / APPLICATION</text>
+  <text class="card-title" x="906" y="374">Oracle APEX</text>
+  <text class="card-body" x="906" y="410">Native pages and components</text>
+  <text class="card-body" x="906" y="436">connected to real data.</text>
+  <text class="caption" x="906" y="469">Verify the delivered behavior</text>
+
+  <path d="M54 535H1146" stroke="#2E4659"/>
+  <circle cx="66" cy="569" r="6" fill="#64DEC9"/>
+  <text x="86" y="576" font-family="Arial,Helvetica,sans-serif" font-size="20" font-weight="700" fill="#F5FAFF">Source first</text>
+  <text class="caption" x="54" y="606">Versioned APEXlang and migrations.</text>
+  <circle cx="442" cy="569" r="6" fill="#64DEC9"/>
+  <text x="462" y="576" font-family="Arial,Helvetica,sans-serif" font-size="20" font-weight="700" fill="#F5FAFF">Less repeated work</text>
+  <text class="caption" x="430" y="606">Batch reads and reuse safe probes.</text>
+  <circle cx="818" cy="569" r="6" fill="#64DEC9"/>
+  <text x="838" y="576" font-family="Arial,Helvetica,sans-serif" font-size="20" font-weight="700" fill="#F5FAFF">Evidence included</text>
+  <text class="caption" x="806" y="606">Plans, backups, journals and checks.</text>
+  <rect x="54" y="642" width="1092" height="38" rx="9" fill="#102936"/>
+  <text x="600" y="666" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="15" fill="#BFE5DE">Clean APEX default: local migration history and coordination. No required APEXREST control tables.</text>
+</svg>

@@ -68,7 +68,7 @@ test('streamed atomic writes preserve the old file on failure and hash all bytes
   );
   assert.equal(await readFile(file, 'utf8'), 'original');
   assert.deepEqual(await readdir(ctx.root), before);
-  const chunks = [Buffer.alloc(65537, 0), Buffer.from('Україна'), Buffer.alloc(131073, 255)];
+  const chunks = [Buffer.alloc(65537, 0), Buffer.from('café'), Buffer.alloc(131073, 255)];
   await atomicWrite(
     file,
     (async function* () {
@@ -82,7 +82,11 @@ test('streamed atomic writes preserve the old file on failure and hash all bytes
 test('contained path rejects traversal, absolute escapes and symlink escapes', async () => {
   const { ctx } = await fixture();
   await assert.rejects(contained(ctx.root, '../escape'), rejectCode('PATH_ESCAPE'));
-  await symlink('/private/tmp', path.join(ctx.root, 'escape'));
+  const outside = path.dirname(ctx.root);
+  await assert.rejects(contained(ctx.root, outside), rejectCode('PATH_ESCAPE'));
+  // Use an existing target on every runner. Windows junctions do not require
+  // developer mode or the privilege needed to create symbolic links.
+  await symlink(outside, path.join(ctx.root, 'escape'), process.platform === 'win32' ? 'junction' : 'dir');
   await assert.rejects(contained(ctx.root, 'escape/file'), rejectCode('SYMLINK_ESCAPE'));
   await assert.rejects(inventory(ctx.root), rejectCode('SYMLINK_NOT_ALLOWED'));
 });
@@ -98,7 +102,7 @@ test('sources are copied without overwriting human edits', async () => {
 test('SQLcl tokens reject newline, substitution and quote injection', () => {
   for (const input of ['foo\nconnect attacker', 'name" -force', '&secret', 'x\rhost bad'])
     assert.throws(() => sqlclToken(input), rejectCode('INVALID_SQLCL_TOKEN'));
-  assert.equal(sqlclToken('a path/Україна'), '"a path/Україна"');
+  assert.equal(sqlclToken('a path/café'), '"a path/café"');
   assert.equal(sqlLiteral("O'Reilly"), "'O''Reilly'");
 });
 for (const [name, stdout, code, expected] of [
