@@ -551,9 +551,9 @@ var require_yauzl = __commonJS({
     exports.Entry = Entry;
     exports.LocalFileHeader = LocalFileHeader;
     exports.RandomAccessReader = RandomAccessReader;
-    function openPromise(path8, options2) {
+    function openPromise(path9, options2) {
       return new Promise((resolve, reject) => {
-        open3(path8, { ...options2, lazyEntries: true }, function(err, zipfile) {
+        open3(path9, { ...options2, lazyEntries: true }, function(err, zipfile) {
           if (err) return reject(err);
           resolve(zipfile);
         });
@@ -583,7 +583,7 @@ var require_yauzl = __commonJS({
         });
       });
     }
-    function open3(path8, options2, callback) {
+    function open3(path9, options2, callback) {
       if (typeof options2 === "function") {
         callback = options2;
         options2 = null;
@@ -595,7 +595,7 @@ var require_yauzl = __commonJS({
       if (options2.validateEntrySizes == null) options2.validateEntrySizes = true;
       if (options2.strictFileNames == null) options2.strictFileNames = false;
       if (callback == null) callback = defaultCallback;
-      fs2.open(path8, "r", function(err, fd) {
+      fs2.open(path9, "r", function(err, fd) {
         if (err) return callback(err);
         fromFd(fd, options2, function(err2, zipfile) {
           if (err2) fs2.close(fd, defaultCallback);
@@ -1382,157 +1382,9 @@ var require_yauzl = __commonJS({
   }
 });
 
-// plugins/metadata.json
-var metadata_default = {
-  name: "apexrest-apex",
-  version: "0.1.0-beta.1",
-  description: "Develop, deploy and test Oracle APEX applications with Codex.",
-  author: { name: "APEXREST", url: "https://apex.rest" },
-  license: "Apache-2.0",
-  interface: {
-    displayName: "APEXREST for Codex",
-    shortDescription: "Oracle APEX development workflows",
-    longDescription: "Independent APEXREST tooling for controlled Oracle APEX development, deployment and testing.",
-    developerName: "APEXREST",
-    websiteURL: "https://apex.rest",
-    composerIcon: "./assets/apexrest-icon.svg",
-    logo: "./assets/apexrest-logo.svg",
-    logoDark: "./assets/apexrest-logo.svg",
-    category: "Productivity",
-    capabilities: ["Read", "Write"],
-    defaultPrompt: [
-      "Check my APEXREST setup and show the next required action.",
-      "Validate this APEXlang application and explain the diagnostics."
-    ]
-  }
-};
-
-// packages/core/src/version.ts
-var VERSION = metadata_default.version;
-
-// packages/core/src/result.ts
-import { randomUUID } from "node:crypto";
-var Fault = class extends Error {
-  constructor(code, message, exitCode = 1, status = "failed") {
-    super(message);
-    this.code = code;
-    this.exitCode = exitCode;
-    this.status = status;
-  }
-  code;
-  exitCode;
-  status;
-};
-function redact(value) {
-  return value.replace(
-    /("(?:password|passwd|pwd|token|secret|authorization|cookie|set-cookie|wallet_location)"\s*:\s*)"(?:[^"\\]|\\.)*"/gi,
-    '$1"[REDACTED]"'
-  ).replace(/(https?:\/\/)[^\s/@]+:[^\s/@]+@/gi, "$1[REDACTED]@").replace(
-    /((?:password|passwd|pwd|token|secret|authorization|cookie|set-cookie|wallet_location)\s*[:=]\s*)([^\r\n,}]+)/gi,
-    "$1[REDACTED]"
-  ).replace(/\bBearer\s+[\w.\-+/=]+/gi, "Bearer [REDACTED]");
-}
-function sanitized(value) {
-  if (typeof value === "string") return redact(value);
-  if (Array.isArray(value)) return value.map(sanitized);
-  if (value && typeof value === "object")
-    return Object.fromEntries(
-      Object.entries(value).map(([key, item]) => [
-        key,
-        /^(?:password|passwd|pwd|token|secret|authorization|cookie|set-cookie|wallet_location)$/i.test(key) ? "[REDACTED]" : sanitized(item)
-      ])
-    );
-  return value;
-}
-function success(operation, data, summary = "Operation completed.") {
-  return {
-    schemaVersion: 1,
-    ok: true,
-    operation,
-    status: "succeeded",
-    runId: randomUUID(),
-    summary,
-    diagnostics: [],
-    artifacts: [],
-    nextActions: [],
-    data: sanitized(data),
-    exitCode: 0
-  };
-}
-function failure(operation, error62) {
-  const e = error62 instanceof Fault ? error62 : new Fault("INTERNAL_ERROR", error62 instanceof Error ? error62.message : "Unknown failure");
-  return {
-    schemaVersion: 1,
-    ok: false,
-    operation,
-    status: e.status,
-    runId: randomUUID(),
-    summary: redact(e.message),
-    diagnostics: [{ severity: "error", code: e.code, message: redact(e.message) }],
-    artifacts: [],
-    nextActions: [],
-    exitCode: e.exitCode
-  };
-}
-
-// packages/core/src/process.ts
-import { spawn } from "node:child_process";
-async function runProcess(r) {
-  if (r.signal?.aborted)
-    return { code: null, stdout: "", stderr: "", timedOut: false, cancelled: true, truncated: false };
-  return new Promise((resolve, reject) => {
-    const child = spawn(r.executable, r.args, {
-      cwd: r.cwd,
-      env: r.env ?? process.env,
-      shell: false,
-      stdio: "pipe",
-      windowsHide: true
-    });
-    let stdout = "", stderr = "", bytes = 0, timedOut = false, cancelled = false, truncated = false;
-    const max = r.maxBytes ?? 1024 * 1024;
-    const stop = () => {
-      child.kill("SIGTERM");
-      const hard = setTimeout(() => child.kill("SIGKILL"), 1500);
-      hard.unref();
-    };
-    const collect = (isError) => (data) => {
-      const room = Math.max(0, max - bytes);
-      bytes += data.length;
-      const s3 = data.subarray(0, room).toString();
-      if (isError) stderr += s3;
-      else stdout += s3;
-      if (bytes > max) {
-        truncated = true;
-        stop();
-      }
-    };
-    child.stdout.on("data", collect(false));
-    child.stderr.on("data", collect(true));
-    child.stdin.on("error", () => {
-    });
-    const timer = setTimeout(() => {
-      timedOut = true;
-      stop();
-    }, r.timeoutMs ?? 3e4);
-    const abort = () => {
-      cancelled = true;
-      stop();
-    };
-    r.signal?.addEventListener("abort", abort, { once: true });
-    if (r.signal?.aborted) abort();
-    child.on("error", (e) => {
-      clearTimeout(timer);
-      r.signal?.removeEventListener("abort", abort);
-      reject(new Fault("DEPENDENCY_MISSING", e.message, 3, "dependency_missing"));
-    });
-    child.on("close", (code) => {
-      clearTimeout(timer);
-      r.signal?.removeEventListener("abort", abort);
-      resolve({ code, stdout: redact(stdout), stderr: redact(stderr), timedOut, cancelled, truncated });
-    });
-    child.stdin.end(r.input ?? "");
-  });
-}
+// packages/installer/src/toolchain.ts
+import path8 from "node:path";
+import { cp as cp3, mkdir as mkdir5, mkdtemp as mkdtemp2, rename as rename3, chmod, statfs, realpath as realpath4 } from "node:fs/promises";
 
 // node_modules/zod/v4/classic/external.js
 var external_exports = {};
@@ -1764,7 +1616,7 @@ __export(external_exports, {
   string: () => string2,
   stringFormat: () => stringFormat,
   stringbool: () => stringbool,
-  success: () => success2,
+  success: () => success,
   superRefine: () => superRefine,
   symbol: () => symbol,
   templateLiteral: () => templateLiteral,
@@ -2349,10 +2201,10 @@ function mergeDefs(...defs) {
 function cloneDef(schema) {
   return mergeDefs(schema._zod.def);
 }
-function getElementAtPath(obj, path8) {
-  if (!path8)
+function getElementAtPath(obj, path9) {
+  if (!path9)
     return obj;
-  return path8.reduce((acc, key) => acc?.[key], obj);
+  return path9.reduce((acc, key) => acc?.[key], obj);
 }
 function promiseAllObject(promisesObj) {
   const keys = Object.keys(promisesObj);
@@ -2692,11 +2544,11 @@ function explicitlyAborted(x, startIndex = 0) {
   }
   return false;
 }
-function prefixIssues(path8, issues) {
+function prefixIssues(path9, issues) {
   return issues.map((iss) => {
     var _a3;
     (_a3 = iss).path ?? (_a3.path = []);
-    iss.path.unshift(path8);
+    iss.path.unshift(path9);
     return iss;
   });
 }
@@ -3150,16 +3002,16 @@ function flattenError(error62, mapper = (issue2) => issue2.message) {
 }
 function formatError(error62, mapper = (issue2) => issue2.message) {
   const fieldErrors = { _errors: [] };
-  const processError = (error63, path8 = []) => {
+  const processError = (error63, path9 = []) => {
     for (const issue2 of error63.issues) {
       if (issue2.code === "invalid_union" && issue2.errors.length) {
-        issue2.errors.map((issues) => processError({ issues }, [...path8, ...issue2.path]));
+        issue2.errors.map((issues) => processError({ issues }, [...path9, ...issue2.path]));
       } else if (issue2.code === "invalid_key") {
-        processError({ issues: issue2.issues }, [...path8, ...issue2.path]);
+        processError({ issues: issue2.issues }, [...path9, ...issue2.path]);
       } else if (issue2.code === "invalid_element") {
-        processError({ issues: issue2.issues }, [...path8, ...issue2.path]);
+        processError({ issues: issue2.issues }, [...path9, ...issue2.path]);
       } else {
-        const fullpath = [...path8, ...issue2.path];
+        const fullpath = [...path9, ...issue2.path];
         if (fullpath.length === 0) {
           fieldErrors._errors.push(mapper(issue2));
         } else {
@@ -3198,17 +3050,17 @@ function formatError(error62, mapper = (issue2) => issue2.message) {
 }
 function treeifyError(error62, mapper = (issue2) => issue2.message) {
   const result = { errors: [] };
-  const processError = (error63, path8 = []) => {
+  const processError = (error63, path9 = []) => {
     var _a3;
     for (const issue2 of error63.issues) {
       if (issue2.code === "invalid_union" && issue2.errors.length) {
-        issue2.errors.map((issues) => processError({ issues }, [...path8, ...issue2.path]));
+        issue2.errors.map((issues) => processError({ issues }, [...path9, ...issue2.path]));
       } else if (issue2.code === "invalid_key") {
-        processError({ issues: issue2.issues }, [...path8, ...issue2.path]);
+        processError({ issues: issue2.issues }, [...path9, ...issue2.path]);
       } else if (issue2.code === "invalid_element") {
-        processError({ issues: issue2.issues }, [...path8, ...issue2.path]);
+        processError({ issues: issue2.issues }, [...path9, ...issue2.path]);
       } else {
-        const fullpath = [...path8, ...issue2.path];
+        const fullpath = [...path9, ...issue2.path];
         if (fullpath.length === 0) {
           result.errors.push(mapper(issue2));
           continue;
@@ -3247,8 +3099,8 @@ function treeifyError(error62, mapper = (issue2) => issue2.message) {
 }
 function toDotPath(_path) {
   const segs = [];
-  const path8 = _path.map((seg) => typeof seg === "object" ? seg.key : seg);
-  for (const seg of path8) {
+  const path9 = _path.map((seg) => typeof seg === "object" ? seg.key : seg);
+  for (const seg of path9) {
     if (typeof seg === "number")
       segs.push(`[${seg}]`);
     else if (typeof seg === "symbol")
@@ -3317,10 +3169,10 @@ var _safeParse = (_Err) => (schema, value, _ctx) => {
   if (result instanceof Promise) {
     throw new $ZodAsyncError();
   }
-  return result.issues.length ? failure2(_Err, result.issues, ctx) : { success: true, data: result.value };
+  return result.issues.length ? failure(_Err, result.issues, ctx) : { success: true, data: result.value };
 };
 var safeParse = /* @__PURE__ */ _safeParse($ZodRealError);
-function failure2(Err, issues, ctx) {
+function failure(Err, issues, ctx) {
   let error62;
   return {
     success: false,
@@ -3344,7 +3196,7 @@ var _safeParseAsync = (_Err) => async (schema, value, _ctx) => {
   let result = schema._zod.run({ value, issues: [] }, ctx);
   if (result instanceof Promise)
     result = await result;
-  return result.issues.length ? failure2(_Err, result.issues, ctx) : { success: true, data: result.value };
+  return result.issues.length ? failure(_Err, result.issues, ctx) : { success: true, data: result.value };
 };
 var safeParseAsync = /* @__PURE__ */ _safeParseAsync($ZodRealError);
 var COMPILE_INVALID = /* @__PURE__ */ Symbol.for("zod.compile.invalid");
@@ -18605,7 +18457,7 @@ __export(schemas_exports2, {
   string: () => string2,
   stringFormat: () => stringFormat,
   stringbool: () => stringbool,
-  success: () => success2,
+  success: () => success,
   superRefine: () => superRefine,
   symbol: () => symbol,
   templateLiteral: () => templateLiteral,
@@ -19981,7 +19833,7 @@ var ZodSuccess = /* @__PURE__ */ $constructor("ZodSuccess", (inst, def) => {
   inst._zod.processJSONSchema = (ctx, json2, params) => successProcessor(inst, ctx, json2, params);
   inst.unwrap = () => inst._zod.def.innerType;
 });
-function success2(innerType) {
+function success(innerType) {
   return new ZodSuccess({
     type: "success",
     innerType
@@ -20342,13 +20194,13 @@ function resolveRef(ref, ctx) {
   if (!ref.startsWith("#")) {
     throw new Error("External $ref is not supported, only local refs (#/...) are allowed");
   }
-  const path8 = ref.slice(1).split("/").filter(Boolean);
-  if (path8.length === 0) {
+  const path9 = ref.slice(1).split("/").filter(Boolean);
+  if (path9.length === 0) {
     return ctx.rootSchema;
   }
   const defsKey = ctx.version === "draft-2020-12" ? "$defs" : "definitions";
-  if (path8[0] === defsKey) {
-    const key = path8[1] === void 0 ? void 0 : decodeJSONPointerSegment(path8[1]);
+  if (path9[0] === defsKey) {
+    const key = path9[1] === void 0 ? void 0 : decodeJSONPointerSegment(path9[1]);
     if (!key || !ctx.defs[key]) {
       throw new Error(`Reference not found: ${ref}`);
     }
@@ -21215,6 +21067,73 @@ import { createReadStream } from "node:fs";
 import path from "node:path";
 import { hostname as hostname3 } from "node:os";
 import { createHash, randomUUID as randomUUID2 } from "node:crypto";
+
+// packages/core/src/result.ts
+import { randomUUID } from "node:crypto";
+var Fault = class extends Error {
+  constructor(code, message, exitCode = 1, status = "failed") {
+    super(message);
+    this.code = code;
+    this.exitCode = exitCode;
+    this.status = status;
+  }
+  code;
+  exitCode;
+  status;
+};
+function redact(value) {
+  return value.replace(
+    /("(?:password|passwd|pwd|token|secret|authorization|cookie|set-cookie|wallet_location)"\s*:\s*)"(?:[^"\\]|\\.)*"/gi,
+    '$1"[REDACTED]"'
+  ).replace(/(https?:\/\/)[^\s/@]+:[^\s/@]+@/gi, "$1[REDACTED]@").replace(
+    /((?:password|passwd|pwd|token|secret|authorization|cookie|set-cookie|wallet_location)\s*[:=]\s*)([^\r\n,}]+)/gi,
+    "$1[REDACTED]"
+  ).replace(/\bBearer\s+[\w.\-+/=]+/gi, "Bearer [REDACTED]");
+}
+function sanitized(value) {
+  if (typeof value === "string") return redact(value);
+  if (Array.isArray(value)) return value.map(sanitized);
+  if (value && typeof value === "object")
+    return Object.fromEntries(
+      Object.entries(value).map(([key, item]) => [
+        key,
+        /^(?:password|passwd|pwd|token|secret|authorization|cookie|set-cookie|wallet_location)$/i.test(key) ? "[REDACTED]" : sanitized(item)
+      ])
+    );
+  return value;
+}
+function success2(operation, data, summary = "Operation completed.") {
+  return {
+    schemaVersion: 1,
+    ok: true,
+    operation,
+    status: "succeeded",
+    runId: randomUUID(),
+    summary,
+    diagnostics: [],
+    artifacts: [],
+    nextActions: [],
+    data: sanitized(data),
+    exitCode: 0
+  };
+}
+function failure2(operation, error62) {
+  const e = error62 instanceof Fault ? error62 : new Fault("INTERNAL_ERROR", error62 instanceof Error ? error62.message : "Unknown failure");
+  return {
+    schemaVersion: 1,
+    ok: false,
+    operation,
+    status: e.status,
+    runId: randomUUID(),
+    summary: redact(e.message),
+    diagnostics: [{ severity: "error", code: e.code, message: redact(e.message) }],
+    artifacts: [],
+    nextActions: [],
+    exitCode: e.exitCode
+  };
+}
+
+// packages/core/src/fs.ts
 var hash2 = (data) => createHash("sha256").update(data).digest("hex");
 async function hashFile(file2) {
   const digest = createHash("sha256");
@@ -21462,13 +21381,106 @@ async function requireTrust(root) {
 }
 
 // packages/core/src/project.ts
-import path4 from "node:path";
-import { cp as cp2, mkdir as mkdir3 } from "node:fs/promises";
+import path5 from "node:path";
+import { cp as cp2, mkdir as mkdir3, lstat as lstat2, readdir as readdir3, writeFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 
 // packages/core/src/oracle.ts
-import path3 from "node:path";
+import path4 from "node:path";
+import { randomUUID as randomUUID3 } from "node:crypto";
 import { cp, mkdir as mkdir2, mkdtemp, readFile as readFile2, readdir as readdir2, realpath as realpath3, rename as rename2, stat } from "node:fs/promises";
+
+// packages/core/src/connections.ts
+import path3 from "node:path";
+var savedConnectionName = external_exports.string().min(1).max(512).regex(/^[^\x00-\x1f\x7f-\x9f]+$/);
+var connectionSchema = external_exports.strictObject({ kind: external_exports.literal("sqlcl-store"), name: savedConnectionName });
+var storeSchema = external_exports.record(refName, connectionSchema);
+async function connections() {
+  const file2 = path3.join(managedHome(), "connections.json");
+  return await exists(file2) ? parse3(storeSchema, await readJson(file2)) : {};
+}
+async function resolveConnection(name) {
+  const connection = (await connections())[name];
+  if (!connection)
+    throw new Fault(
+      "CONNECTION_REQUIRED",
+      "Configure the requested SQLcl connection reference locally; do not send credentials in chat.",
+      3,
+      "blocked"
+    );
+  return connection;
+}
+async function editConnection(name, value) {
+  parse3(refName, name);
+  return withLock(path3.join(managedHome(), "connections.lock"), async () => {
+    const current = await connections();
+    if (value) current[name] = parse3(connectionSchema, value);
+    else delete current[name];
+    await writeJson(path3.join(managedHome(), "connections.json"), current);
+    return { name, status: value ? "configured" : "removed", credentialsDeleted: false };
+  });
+}
+
+// packages/core/src/process.ts
+import { spawn } from "node:child_process";
+async function runProcess(r) {
+  if (r.signal?.aborted)
+    return { code: null, stdout: "", stderr: "", timedOut: false, cancelled: true, truncated: false };
+  return new Promise((resolve, reject) => {
+    const child = spawn(r.executable, r.args, {
+      cwd: r.cwd,
+      env: r.env ?? process.env,
+      shell: false,
+      stdio: "pipe",
+      windowsHide: true
+    });
+    let stdout = "", stderr = "", bytes = 0, timedOut = false, cancelled = false, truncated = false;
+    const max = r.maxBytes ?? 1024 * 1024;
+    const stop = () => {
+      child.kill("SIGTERM");
+      const hard = setTimeout(() => child.kill("SIGKILL"), 1500);
+      hard.unref();
+    };
+    const collect = (isError) => (data) => {
+      const room = Math.max(0, max - bytes);
+      bytes += data.length;
+      const s3 = data.subarray(0, room).toString();
+      if (isError) stderr += s3;
+      else stdout += s3;
+      if (bytes > max) {
+        truncated = true;
+        stop();
+      }
+    };
+    child.stdout.on("data", collect(false));
+    child.stderr.on("data", collect(true));
+    child.stdin.on("error", () => {
+    });
+    const timer = setTimeout(() => {
+      timedOut = true;
+      stop();
+    }, r.timeoutMs ?? 3e4);
+    const abort = () => {
+      cancelled = true;
+      stop();
+    };
+    r.signal?.addEventListener("abort", abort, { once: true });
+    if (r.signal?.aborted) abort();
+    child.on("error", (e) => {
+      clearTimeout(timer);
+      r.signal?.removeEventListener("abort", abort);
+      reject(new Fault("DEPENDENCY_MISSING", e.message, 3, "dependency_missing"));
+    });
+    child.on("close", (code) => {
+      clearTimeout(timer);
+      r.signal?.removeEventListener("abort", abort);
+      resolve({ code, stdout: redact(stdout), stderr: redact(stderr), timedOut, cancelled, truncated });
+    });
+    child.stdin.end(r.input ?? "");
+  });
+}
+
+// packages/core/src/oracle.ts
 function sqlclToken(value) {
   if (!value || /[\r\n\x00"&]/.test(value))
     throw new Fault(
@@ -21529,17 +21541,21 @@ var OracleAdapter = class {
   capabilityHelp;
   pendingHelp = [];
   async settings() {
-    const file2 = path3.join(managedHome(), "runtime.json");
+    const file2 = path4.join(managedHome(), "runtime.json");
     const state = await exists(file2) ? await readJson(file2) : {};
     return {
       executable: process.env.APEXREST_SQLCL ?? state.sqlcl ?? this.executable,
-      javaHome: process.env.APEXREST_JAVA_HOME ?? (state.java ? path3.dirname(path3.dirname(state.java)) : process.env.JAVA_HOME)
+      javaHome: process.env.APEXREST_JAVA_HOME ?? (state.java ? path4.dirname(path4.dirname(state.java)) : process.env.JAVA_HOME)
     };
   }
   async session(input2, connection, mutation = false, signal, cwd, format = "text") {
     const work = cwd ?? await this.stage();
     const settings = await this.settings();
-    const args = ["-S", "-L", ...connection ? ["-name", parse3(refName, connection.name)] : ["/nolog"]];
+    const args = [
+      "-S",
+      "-L",
+      ...connection ? ["-name", parse3(savedConnectionName, connection.name)] : ["/nolog"]
+    ];
     const env = {
       ...process.env,
       SQLPATH: "",
@@ -21563,20 +21579,20 @@ var OracleAdapter = class {
     return { ...result, output: oracleDiagnostics(result, mutation, format), work };
   }
   async stage() {
-    const root = path3.join(managedHome(), "staging");
+    const root = path4.join(managedHome(), "staging");
     await mkdir2(root, { recursive: true, mode: 448 });
-    return mkdtemp(path3.join(root, "oracle-"));
+    return mkdtemp(path4.join(root, "oracle-"));
   }
   async capabilityKey(settings, version2) {
-    if (!path3.isAbsolute(settings.executable)) return;
+    if (!path4.isAbsolute(settings.executable)) return;
     try {
       const executable = await realpath3(settings.executable);
-      const bin = path3.dirname(executable);
-      if (path3.basename(bin) !== "bin") return;
+      const bin = path4.dirname(executable);
+      if (path4.basename(bin) !== "bin") return;
       const files = {};
       const walk = async (directory) => {
         for (const entry of await readdir2(directory, { withFileTypes: true })) {
-          const file2 = path3.join(directory, entry.name);
+          const file2 = path4.join(directory, entry.name);
           if (entry.isSymbolicLink()) throw new Error("Untracked SQLcl dependency");
           if (entry.isDirectory()) await walk(file2);
           else if (entry.isFile()) {
@@ -21586,7 +21602,7 @@ var OracleAdapter = class {
         }
       };
       await walk(bin);
-      await walk(path3.join(path3.dirname(bin), "lib"));
+      await walk(path4.join(path4.dirname(bin), "lib"));
       return hash2(canonical({ ...settings, executable, version: version2, files }));
     } catch {
       return;
@@ -21656,16 +21672,16 @@ var OracleAdapter = class {
     return { directory, compiler, output: result.output, files: await inventory(directory) };
   }
   async findApplication(root) {
-    if (await exists(path3.join(root, "application.apx"))) return root;
+    if (await exists(path4.join(root, "application.apx"))) return root;
     const found = [];
     for (const entry of await readdir2(root, { withFileTypes: true }))
       if (entry.isDirectory()) {
-        const dir = path3.join(root, entry.name);
-        if (await exists(path3.join(dir, "application.apx"))) found.push(dir);
+        const dir = path4.join(root, entry.name);
+        if (await exists(path4.join(dir, "application.apx"))) found.push(dir);
         else
           for (const sub of await readdir2(dir, { withFileTypes: true }))
-            if (sub.isDirectory() && await exists(path3.join(dir, sub.name, "application.apx")))
-              found.push(path3.join(dir, sub.name));
+            if (sub.isDirectory() && await exists(path4.join(dir, sub.name, "application.apx")))
+              found.push(path4.join(dir, sub.name));
       }
     if (found.length !== 1)
       throw new Fault(
@@ -21684,7 +21700,7 @@ var OracleAdapter = class {
         "Preserve Oracle-generated .apex/apexlang.json before validation.",
         3
       );
-    const stage = await this.stage(), copy = path3.join(stage, "application");
+    const stage = await this.stage(), copy = path4.join(stage, "application");
     await cp(source, copy, { recursive: true });
     const result = await this.session(
       `apex validate -input ${sqlclToken(copy)}`,
@@ -21706,7 +21722,7 @@ var OracleAdapter = class {
     return {
       status: "passed",
       compiler,
-      mmd: JSON.parse(await readFile2(path3.join(source, ".apex/apexlang.json"), "utf8")),
+      mmd: JSON.parse(await readFile2(path4.join(source, ".apex/apexlang.json"), "utf8")),
       sourceDigest: hash2(canonical(before)),
       output: result.output
     };
@@ -21727,7 +21743,31 @@ var OracleAdapter = class {
       throw new Fault("EMPTY_BACKUP", "Oracle export produced no usable files.", 1);
     return { directory, files, digest: hash2(canonical(files)), format, output: result.output };
   }
-  async jsonQuery(sql, connection, bindings = {}) {
+  async savedConnections(signal) {
+    const marker = `APEXREST_CONNECTIONS_${randomUUID3().replaceAll("-", "")}`;
+    const result = await this.session(
+      `prompt ${marker}_BEGIN
+connmgr list -flat
+prompt ${marker}_END`,
+      void 0,
+      false,
+      signal
+    );
+    const lines = result.output.split(/\r?\n/).map((line) => line.trim());
+    const start = lines.indexOf(`${marker}_BEGIN`), end = lines.indexOf(`${marker}_END`);
+    if (start < 0 || end <= start)
+      throw new Fault(
+        "CONNECTION_LIST_UNCONFIRMED",
+        "SQLcl did not return a complete saved connection list.",
+        3
+      );
+    const names = [...new Set(lines.slice(start + 1, end).filter(Boolean))];
+    return {
+      source: "sqlcl-store",
+      connections: names.map((name) => ({ name: parse3(savedConnectionName, name) }))
+    };
+  }
+  async jsonQuery(sql, connection, bindings = {}, signal) {
     const preamble = Object.entries(bindings).map(([key, value]) => {
       if (!/^p_[a-z_]+$/.test(key)) throw new Fault("INVALID_BIND", "Invalid internal bind name.", 2);
       return `variable ${key} ${typeof value === "number" ? "number" : "varchar2(1024)"}
@@ -21739,7 +21779,7 @@ set sqlformat json
 ${sql};`,
       connection,
       false,
-      void 0,
+      signal,
       void 0,
       "json"
     );
@@ -21756,10 +21796,12 @@ ${sql};`,
       throw new Fault("INVALID_ORACLE_JSON", "SQLcl result has no items collection.", 1);
     return resultSets[0].items;
   }
-  async identity(connection) {
+  async identity(connection, signal) {
     const rows = await this.jsonQuery(
       "select sys_context('USERENV','DB_UNIQUE_NAME') db_unique_name, sys_context('USERENV','SERVICE_NAME') service_name, sys_context('USERENV','CURRENT_SCHEMA') parsing_schema from dual",
-      connection
+      connection,
+      {},
+      signal
     );
     if (rows.length !== 1) throw new Fault("IDENTITY_UNCONFIRMED", "Database identity was not confirmed.", 3);
     return rows[0];
@@ -21819,8 +21861,8 @@ ${sql};`,
     return { identity, workspace: workspaces[0], application: applications[0] ?? null };
   }
   async nativeDeployment(ctx, env, source) {
-    const output2 = path3.join(await this.stage(), "deployment.json");
-    const defaults = path3.join(source, "deployments/default.json");
+    const output2 = path4.join(await this.stage(), "deployment.json");
+    const defaults = path4.join(source, "deployments/default.json");
     const native = await exists(defaults) ? JSON.parse(await readFile2(defaults, "utf8")) : {};
     const oldApp = native.app ?? {};
     await writeJson(output2, {
@@ -21863,8 +21905,8 @@ async function installSources(source, root, destination) {
       5,
       "conflict"
     );
-  await mkdir2(path3.dirname(target), { recursive: true });
-  const staging = await mkdtemp(path3.join(path3.dirname(target), ".apexrest-copy-"));
+  await mkdir2(path4.dirname(target), { recursive: true });
+  const staging = await mkdtemp(path4.join(path4.dirname(target), ".apexrest-copy-"));
   await inventory(source);
   await cp(source, staging, { recursive: true });
   await rename2(staging, target);
@@ -21873,14 +21915,27 @@ async function installSources(source, root, destination) {
 
 // packages/core/src/project.ts
 function resourceRoot() {
-  return process.env.APEXREST_RESOURCES ?? path4.resolve(path4.dirname(fileURLToPath(import.meta.url)), "../resources");
+  return process.env.APEXREST_RESOURCES ?? path5.resolve(path5.dirname(fileURLToPath(import.meta.url)), "../resources");
 }
 async function projectInit(directory, template, alias) {
   parse3(refName, alias);
-  const root = path4.resolve(directory);
-  if (await exists(root))
-    throw new Fault("LOCAL_EDITS_CONFLICT", "Project init requires a new directory.", 5, "conflict");
-  await mkdir3(root, { recursive: true, mode: 448 });
+  const root = path5.resolve(directory);
+  const conflict = () => new Fault(
+    "LOCAL_EDITS_CONFLICT",
+    "Project init requires an empty folder or a new directory. Existing files were left unchanged.",
+    5,
+    "conflict"
+  );
+  if (!await exists(root)) await mkdir3(root, { recursive: true, mode: 448 });
+  if (!(await lstat2(root)).isDirectory() || (await readdir3(root)).length !== 0) throw conflict();
+  const createFile = async (file2, content) => {
+    try {
+      await writeFile(file2, content, { flag: "wx", mode: 384 });
+    } catch (error62) {
+      if (error62.code === "EEXIST") throw conflict();
+      throw error62;
+    }
+  };
   const config2 = {
     schemaVersion: 1,
     projectId: alias,
@@ -21902,9 +21957,9 @@ async function projectInit(directory, template, alias) {
     },
     artifacts: { directory: ".apexrest/artifacts", retentionDays: 7 }
   };
-  await writeJson(path4.join(root, "apexrest.json"), config2);
-  await atomicWrite(
-    path4.join(root, ".gitignore"),
+  await createFile(path5.join(root, "apexrest.json"), JSON.stringify(config2, null, 2) + "\n");
+  await createFile(
+    path5.join(root, ".gitignore"),
     ".apexrest/\nnode_modules/\n.env\nplaywright/.auth/\ntest-results/\n"
   );
   for (const dir of [
@@ -21913,23 +21968,24 @@ async function projectInit(directory, template, alias) {
     config2.tests.apiDir,
     config2.tests.e2eDir
   ])
-    await mkdir3(path4.join(root, dir), { recursive: true });
+    await mkdir3(path5.join(root, dir), { recursive: true });
   await cp2(
-    path4.join(resourceRoot(), "toolchains/toolchain.lock.json"),
-    path4.join(root, config2.toolchain.lockFile)
+    path5.join(resourceRoot(), "toolchains/toolchain.lock.json"),
+    path5.join(root, config2.toolchain.lockFile),
+    { force: false, errorOnExist: true }
   );
   if (template !== "existing-app") {
     const generated = await new OracleAdapter().generate(alias, alias);
     await installSources(generated.directory, root, config2.application.sourceDir);
     if (template === "customer-crm") {
-      await cp2(path4.join(resourceRoot(), "templates/customer-crm/project"), root, { recursive: true });
+      await cp2(path5.join(resourceRoot(), "templates/customer-crm/project"), root, { recursive: true });
       await cp2(
-        path4.join(resourceRoot(), "templates/customer-crm/apex-overlay"),
-        path4.join(root, config2.application.sourceDir),
+        path5.join(resourceRoot(), "templates/customer-crm/apex-overlay"),
+        path5.join(root, config2.application.sourceDir),
         { recursive: true }
       );
       const { readFile: readFile4 } = await import("node:fs/promises");
-      const file2 = path4.join(root, config2.application.sourceDir, "shared-components/lists.apx");
+      const file2 = path5.join(root, config2.application.sourceDir, "shared-components/lists.apx");
       const lists = await readFile4(file2, "utf8"), index = lists.lastIndexOf(")");
       if (index < 0 || !lists.includes("list navigation-menu ("))
         throw new Fault("UNSUPPORTED_TEMPLATE", "Starter navigation does not match the reviewed fixture.", 3);
@@ -21982,17 +22038,13 @@ async function projectInspect(ctx) {
   };
 }
 
-// packages/installer/src/toolchain.ts
-import path7 from "node:path";
-import { cp as cp3, mkdir as mkdir5, mkdtemp as mkdtemp2, rename as rename3, chmod, statfs, realpath as realpath4 } from "node:fs/promises";
-
 // packages/installer/src/download.ts
-import path5 from "node:path";
+import path6 from "node:path";
 import { createHash as createHash2 } from "node:crypto";
 async function download(artifact, cache, offline = false, fetcher = fetch) {
   if (!/^[a-f0-9]{64}$/.test(artifact.sha256) || /(?:latest|main)(?:[./?]|$)/.test(artifact.url))
     throw new Fault("UNPINNED_ARTIFACT", "Downloads require an immutable version URL and SHA-256.", 2);
-  const file2 = path5.join(cache, artifact.sha256);
+  const file2 = path6.join(cache, artifact.sha256);
   if (await exists(file2)) {
     if (await hashFile(file2) !== artifact.sha256)
       throw new Fault(
@@ -22077,8 +22129,8 @@ async function download(artifact, cache, offline = false, fetcher = fetch) {
 }
 
 // packages/installer/src/archive.ts
-import path6 from "node:path";
-import { mkdir as mkdir4, lstat as lstat2, symlink, link } from "node:fs/promises";
+import path7 from "node:path";
+import { mkdir as mkdir4, lstat as lstat3, symlink, link } from "node:fs/promises";
 import { createWriteStream } from "node:fs";
 import { pipeline } from "node:stream/promises";
 
@@ -25088,8 +25140,8 @@ async function extractArchive(file2, target, type, allowLinks = false) {
             if (!allowLinks)
               throw new Fault("UNSAFE_ARCHIVE", "Links are not allowed in native packages.", 2);
             if (!entry.linkpath) throw new Fault("UNSAFE_ARCHIVE", "Link has no target.", 2);
-            const linkTarget = entry.type === "Link" ? entry.linkpath : path6.posix.join(path6.posix.dirname(name), entry.linkpath);
-            if (path6.isAbsolute(entry.linkpath))
+            const linkTarget = entry.type === "Link" ? entry.linkpath : path7.posix.join(path7.posix.dirname(name), entry.linkpath);
+            if (path7.isAbsolute(entry.linkpath))
               throw new Fault("UNSAFE_ARCHIVE", "Absolute link target.", 2);
             archivePath(linkTarget);
             links.push({ name, target: linkTarget, hard: entry.type === "Link" });
@@ -25111,10 +25163,10 @@ async function extractArchive(file2, target, type, allowLinks = false) {
     });
     for (const entry of links) {
       const destination = await contained(target, entry.name), source = await contained(target, entry.target);
-      await lstat2(source);
-      await mkdir4(path6.dirname(destination), { recursive: true });
+      await lstat3(source);
+      await mkdir4(path7.dirname(destination), { recursive: true });
       if (entry.hard) await link(source, destination);
-      else await symlink(path6.relative(path6.dirname(destination), source), destination);
+      else await symlink(path7.relative(path7.dirname(destination), source), destination);
     }
     return;
   }
@@ -25139,7 +25191,7 @@ async function extractArchive(file2, target, type, allowLinks = false) {
           const destination = await contained(target, name);
           if (name.endsWith("/")) await mkdir4(destination, { recursive: true, mode: 448 });
           else {
-            await mkdir4(path6.dirname(destination), { recursive: true, mode: 448 });
+            await mkdir4(path7.dirname(destination), { recursive: true, mode: 448 });
             const stream = await new Promise(
               (res, rej) => zip.openReadStream(entry, (e, s3) => e || !s3 ? rej(e) : res(s3))
             );
@@ -25177,7 +25229,7 @@ var lockSchema = external_exports.strictObject({
   provenance: external_exports.record(external_exports.string(), external_exports.unknown())
 });
 async function runtimeState(home = managedHome()) {
-  const file2 = path7.join(home, "runtime.json");
+  const file2 = path8.join(home, "runtime.json");
   return await exists(file2) ? await readJson(file2) : { schemaVersion: 1, components: {} };
 }
 function platformProfile(os2 = process.platform, arch = process.arch) {
@@ -25195,9 +25247,9 @@ function platformProfile(os2 = process.platform, arch = process.arch) {
   return { os: os2, arch, status: os2 === "darwin" ? "locally-tested" : "requires-platform-CI" };
 }
 async function findExecutable(name) {
-  for (const directory of (process.env.PATH ?? "").split(path7.delimiter))
+  for (const directory of (process.env.PATH ?? "").split(path8.delimiter))
     for (const suffix of process.platform === "win32" ? ["", ".exe", ".cmd"] : [""]) {
-      const candidate = path7.join(directory, name + suffix);
+      const candidate = path8.join(directory, name + suffix);
       if (await exists(candidate)) return realpath4(candidate);
     }
   return void 0;
@@ -25210,13 +25262,13 @@ var ToolchainService = class {
     const platform = platformProfile();
     const lock = parse3(
       lockSchema,
-      await readJson(path7.join(resourceRoot(), "toolchains/toolchain.lock.json"))
+      await readJson(path8.join(resourceRoot(), "toolchains/toolchain.lock.json"))
     );
-    const home = path7.resolve(r.home ?? managedHome()), cache = path7.resolve(r.cacheDir ?? path7.join(home, "cache"));
+    const home = path8.resolve(r.home ?? managedHome()), cache = path8.resolve(r.cacheDir ?? path8.join(home, "cache"));
     const artifacts = lock.artifacts.filter((a) => a.os === platform.os && a.arch === platform.arch);
     const steps = await Promise.all(
       artifacts.map(async (artifact) => {
-        const candidate = artifact.id === "node" ? process.execPath : artifact.id === "sqlcl" ? process.env.APEXREST_SQLCL ?? await findExecutable("sql") : process.env.APEXREST_JAVA_HOME ? path7.join(
+        const candidate = artifact.id === "node" ? process.execPath : artifact.id === "sqlcl" ? process.env.APEXREST_SQLCL ?? await findExecutable("sql") : process.env.APEXREST_JAVA_HOME ? path8.join(
           process.env.APEXREST_JAVA_HOME,
           "bin",
           process.platform === "win32" ? "java.exe" : "java"
@@ -25237,12 +25289,12 @@ var ToolchainService = class {
           } catch {
           }
         }
-        const destination = path7.join(home, "toolchains", artifact.id, artifact.version);
+        const destination = path8.join(home, "toolchains", artifact.id, artifact.version);
         return {
           artifact,
           destination,
           reuse,
-          action: reuse ? "reuse" : await exists(path7.join(destination, artifact.executable)) ? "verify" : "download-install",
+          action: reuse ? "reuse" : await exists(path8.join(destination, artifact.executable)) ? "verify" : "download-install",
           consent: artifact.consentRequired && !r.acceptOracleLicense && !reuse ? "required" : "not-required"
         };
       })
@@ -25254,6 +25306,11 @@ var ToolchainService = class {
       platform,
       steps,
       playwright: lock.playwright.version,
+      browser: {
+        action: r.skipBrowser ? "skip" : "install-verify",
+        engine: "chromium",
+        installOsDeps: Boolean(r.installOsDeps && !r.skipBrowser)
+      },
       offline: r.offline ?? false,
       elevation: r.installOsDeps ? "explicitly-requested" : "not-authorized",
       proxy: Boolean(process.env.HTTPS_PROXY || process.env.https_proxy),
@@ -25266,7 +25323,7 @@ var ToolchainService = class {
     if (!r.yes)
       throw new Fault(
         "SETUP_APPROVAL_REQUIRED",
-        "Review setup --dry-run, then pass --yes for technical steps. License and elevation consent are separate.",
+        "Review dependencies install --dry-run, then pass --yes for technical steps. License and elevation consent are separate.",
         4,
         "needs-user-action"
       );
@@ -25274,7 +25331,7 @@ var ToolchainService = class {
     const disk = await statfs(plan.home);
     if (disk.bavail * disk.bsize < 1024 * 1024 * 1024)
       throw new Fault("INSUFFICIENT_DISK", "At least 1 GiB of free local space is required.", 3);
-    return withLock(path7.join(plan.home, "toolchain.lock"), async () => {
+    return withLock(path8.join(plan.home, "toolchain.lock"), async () => {
       const state = await runtimeState(plan.home);
       const actions = [];
       for (const step of plan.steps) {
@@ -25288,13 +25345,13 @@ var ToolchainService = class {
           });
           continue;
         }
-        const executable = step.reuse ?? path7.join(step.destination, artifact.executable);
+        const executable = step.reuse ?? path8.join(step.destination, artifact.executable);
         if (!await exists(executable)) {
           const file2 = await download(artifact, plan.cache, r.offline);
-          await mkdir5(path7.dirname(step.destination), { recursive: true });
+          await mkdir5(path8.dirname(step.destination), { recursive: true });
           const staging = await mkdtemp2(step.destination + ".staging-");
           await extractArchive(file2, staging, artifact.type, artifact.id !== "sqlcl");
-          if (!await exists(path7.join(staging, artifact.executable)))
+          if (!await exists(path8.join(staging, artifact.executable)))
             throw new Fault(
               "ARTIFACT_LAYOUT_MISMATCH",
               "Vendor executable is missing from the locked archive layout.",
@@ -25303,7 +25360,7 @@ var ToolchainService = class {
           await rename3(staging, step.destination);
         }
         if (process.platform !== "win32" && !step.reuse) await chmod(executable, 448);
-        const javaHome = state.java ? path7.dirname(path7.dirname(state.java)) : void 0;
+        const javaHome = state.java ? path8.dirname(path8.dirname(state.java)) : void 0;
         const result = await runProcess({
           executable,
           args: artifact.id === "node" ? ["--version"] : ["-version"],
@@ -25317,30 +25374,30 @@ var ToolchainService = class {
           throw new Fault("TOOLCHAIN_PROBE_FAILED", `${artifact.id} did not report its locked version.`, 3);
         state[artifact.id] = executable;
         state.components[artifact.id] = "verified";
-        await writeJson(path7.join(plan.home, "runtime.json"), state);
+        await writeJson(path8.join(plan.home, "runtime.json"), state);
       }
       if (!r.skipBrowser && state.node) {
-        const browserHome = path7.join(plan.home, "playwright", plan.playwright), browserCache = path7.join(plan.home, "browsers");
+        const browserHome = path8.join(plan.home, "playwright", plan.playwright), browserCache = path8.join(plan.home, "browsers");
         await mkdir5(browserHome, { recursive: true });
         await cp3(
-          path7.join(resourceRoot(), "playwright/package.json"),
-          path7.join(browserHome, "package.json")
+          path8.join(resourceRoot(), "playwright/package.json"),
+          path8.join(browserHome, "package.json")
         );
         await cp3(
-          path7.join(resourceRoot(), "playwright/package-lock.json"),
-          path7.join(browserHome, "package-lock.json")
+          path8.join(resourceRoot(), "playwright/package-lock.json"),
+          path8.join(browserHome, "package-lock.json")
         );
-        const npm = path7.resolve(
-          path7.dirname(state.node),
+        const npm = path8.resolve(
+          path8.dirname(state.node),
           process.platform === "win32" ? "node_modules/npm/bin/npm-cli.js" : "../lib/node_modules/npm/bin/npm-cli.js"
         );
         const env = {
           ...process.env,
           PLAYWRIGHT_BROWSERS_PATH: browserCache,
-          npm_config_cache: path7.join(plan.cache, "npm"),
-          PATH: path7.dirname(state.node) + path7.delimiter + (process.env.PATH ?? "")
+          npm_config_cache: path8.join(plan.cache, "npm"),
+          PATH: path8.dirname(state.node) + path8.delimiter + (process.env.PATH ?? "")
         };
-        if (!await exists(path7.join(browserHome, "node_modules/@playwright/test/cli.js"))) {
+        if (!await exists(path8.join(browserHome, "node_modules/@playwright/test/cli.js"))) {
           const installed = await runProcess({
             executable: state.node,
             args: [
@@ -25363,7 +25420,7 @@ var ToolchainService = class {
               "blocked"
             );
         }
-        const cli = path7.join(browserHome, "node_modules/@playwright/test/cli.js");
+        const cli = path8.join(browserHome, "node_modules/@playwright/test/cli.js");
         if (!r.offline) {
           const installed = await runProcess({
             executable: state.node,
@@ -25396,10 +25453,12 @@ var ToolchainService = class {
         }
         state.playwright = cli;
       } else {
-        state.components.playwright = "not-installed";
-        actions.push({ code: "PLAYWRIGHT_SETUP_REQUIRED" });
+        if (!state.playwright) {
+          state.components.playwright = "not-installed";
+          actions.push({ code: "PLAYWRIGHT_SETUP_REQUIRED" });
+        }
       }
-      await writeJson(path7.join(plan.home, "runtime.json"), state);
+      await writeJson(path8.join(plan.home, "runtime.json"), state);
       return {
         schemaVersion: 1,
         status: actions.length ? "needs-user-action" : "toolchain-verified",
@@ -25415,11 +25474,11 @@ export {
   __require,
   __commonJS,
   __toESM,
-  VERSION,
   Fault,
   redact,
-  success,
-  failure,
+  sanitized,
+  success2 as success,
+  failure2 as failure,
   runProcess,
   safeParse,
   string2 as string,
@@ -25459,6 +25518,10 @@ export {
   environment,
   policy,
   requireTrust,
+  savedConnectionName,
+  connections,
+  resolveConnection,
+  editConnection,
   sqlclToken,
   sqlLiteral,
   OracleAdapter,
@@ -25466,6 +25529,8 @@ export {
   resourceRoot,
   projectInit,
   projectInspect,
+  lockSchema,
   runtimeState,
+  platformProfile,
   ToolchainService
 };

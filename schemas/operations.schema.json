@@ -26,24 +26,7 @@
         "minLength": 1,
         "maxLength": 4096
       },
-      "from": {
-        "type": "string"
-      },
       "home": {
-        "type": "string"
-      },
-      "codexHome": {
-        "type": "string"
-      },
-      "scope": {
-        "default": "user",
-        "type": "string",
-        "enum": [
-          "user",
-          "project"
-        ]
-      },
-      "version": {
         "type": "string"
       },
       "yes": {
@@ -77,13 +60,29 @@
         "default": false,
         "type": "boolean"
       },
+      "from": {
+        "type": "string"
+      },
+      "codexHome": {
+        "type": "string"
+      },
+      "scope": {
+        "default": "user",
+        "type": "string",
+        "enum": [
+          "user",
+          "project"
+        ]
+      },
+      "version": {
+        "type": "string"
+      },
       "nativeOnly": {
         "default": false,
         "type": "boolean"
       }
     },
     "required": [
-      "scope",
       "yes",
       "nonInteractive",
       "offline",
@@ -91,7 +90,80 @@
       "acceptOracleLicense",
       "skipBrowser",
       "installOsDeps",
+      "scope",
       "nativeOnly"
+    ],
+    "additionalProperties": false
+  },
+  "dependencies.install": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "properties": {
+      "home": {
+        "type": "string"
+      },
+      "yes": {
+        "default": false,
+        "type": "boolean"
+      },
+      "nonInteractive": {
+        "default": false,
+        "type": "boolean"
+      },
+      "offline": {
+        "default": false,
+        "type": "boolean"
+      },
+      "cacheDir": {
+        "type": "string"
+      },
+      "dryRun": {
+        "default": false,
+        "type": "boolean"
+      },
+      "acceptOracleLicense": {
+        "default": false,
+        "type": "boolean"
+      },
+      "skipBrowser": {
+        "default": false,
+        "type": "boolean"
+      },
+      "installOsDeps": {
+        "default": false,
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "yes",
+      "nonInteractive",
+      "offline",
+      "dryRun",
+      "acceptOracleLicense",
+      "skipBrowser",
+      "installOsDeps"
+    ],
+    "additionalProperties": false
+  },
+  "dependencies.uninstall": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "properties": {
+      "home": {
+        "type": "string"
+      },
+      "dryRun": {
+        "default": false,
+        "type": "boolean"
+      },
+      "yes": {
+        "default": false,
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "dryRun",
+      "yes"
     ],
     "additionalProperties": false
   },
@@ -119,24 +191,7 @@
         "minLength": 1,
         "maxLength": 4096
       },
-      "from": {
-        "type": "string"
-      },
       "home": {
-        "type": "string"
-      },
-      "codexHome": {
-        "type": "string"
-      },
-      "scope": {
-        "default": "user",
-        "type": "string",
-        "enum": [
-          "user",
-          "project"
-        ]
-      },
-      "version": {
         "type": "string"
       },
       "yes": {
@@ -170,13 +225,29 @@
         "default": false,
         "type": "boolean"
       },
+      "from": {
+        "type": "string"
+      },
+      "codexHome": {
+        "type": "string"
+      },
+      "scope": {
+        "default": "user",
+        "type": "string",
+        "enum": [
+          "user",
+          "project"
+        ]
+      },
+      "version": {
+        "type": "string"
+      },
       "nativeOnly": {
         "default": false,
         "type": "boolean"
       }
     },
     "required": [
-      "scope",
       "yes",
       "nonInteractive",
       "offline",
@@ -184,6 +255,7 @@
       "acceptOracleLicense",
       "skipBrowser",
       "installOsDeps",
+      "scope",
       "nativeOnly"
     ],
     "additionalProperties": false
@@ -197,10 +269,41 @@
         "minLength": 1,
         "maxLength": 4096
       },
-      "from": {
+      "home": {
         "type": "string"
       },
-      "home": {
+      "yes": {
+        "default": false,
+        "type": "boolean"
+      },
+      "nonInteractive": {
+        "default": false,
+        "type": "boolean"
+      },
+      "offline": {
+        "default": false,
+        "type": "boolean"
+      },
+      "cacheDir": {
+        "type": "string"
+      },
+      "dryRun": {
+        "default": false,
+        "type": "boolean"
+      },
+      "acceptOracleLicense": {
+        "default": false,
+        "type": "boolean"
+      },
+      "skipBrowser": {
+        "default": false,
+        "type": "boolean"
+      },
+      "installOsDeps": {
+        "default": false,
+        "type": "boolean"
+      },
+      "from": {
         "type": "string"
       },
       "codexHome": {
@@ -218,45 +321,12 @@
         "type": "string",
         "minLength": 1
       },
-      "yes": {
-        "default": false,
-        "type": "boolean"
-      },
-      "nonInteractive": {
-        "default": false,
-        "type": "boolean"
-      },
-      "offline": {
-        "default": false,
-        "type": "boolean"
-      },
-      "cacheDir": {
-        "type": "string"
-      },
-      "dryRun": {
-        "default": false,
-        "type": "boolean"
-      },
-      "acceptOracleLicense": {
-        "default": false,
-        "type": "boolean"
-      },
-      "skipBrowser": {
-        "default": false,
-        "type": "boolean"
-      },
-      "installOsDeps": {
-        "default": false,
-        "type": "boolean"
-      },
       "nativeOnly": {
         "default": false,
         "type": "boolean"
       }
     },
     "required": [
-      "scope",
-      "version",
       "yes",
       "nonInteractive",
       "offline",
@@ -264,6 +334,8 @@
       "acceptOracleLicense",
       "skipBrowser",
       "installOsDeps",
+      "scope",
+      "version",
       "nativeOnly"
     ],
     "additionalProperties": false
@@ -375,7 +447,9 @@
       },
       "sqlclName": {
         "type": "string",
-        "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,100}$"
+        "minLength": 1,
+        "maxLength": 512,
+        "pattern": "^[^\\x00-\\x1f\\x7f-\\x9f]+$"
       }
     },
     "required": [
@@ -392,8 +466,15 @@
         "type": "string",
         "minLength": 1,
         "maxLength": 4096
+      },
+      "saved": {
+        "default": false,
+        "type": "boolean"
       }
     },
+    "required": [
+      "saved"
+    ],
     "additionalProperties": false
   },
   "connection.test": {
@@ -407,11 +488,18 @@
       },
       "name": {
         "type": "string",
-        "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,100}$"
+        "minLength": 1,
+        "maxLength": 512,
+        "pattern": "^[^\\x00-\\x1f\\x7f-\\x9f]+$"
+      },
+      "saved": {
+        "default": false,
+        "type": "boolean"
       }
     },
     "required": [
-      "name"
+      "name",
+      "saved"
     ],
     "additionalProperties": false
   },
@@ -445,10 +533,38 @@
       },
       "version": {
         "type": "string"
+      },
+      "kind": {
+        "type": "string",
+        "enum": [
+          "grammar",
+          "template",
+          "contract",
+          "guide"
+        ]
+      },
+      "family": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 200
+      },
+      "offset": {
+        "default": 0,
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 10000
+      },
+      "limit": {
+        "default": 8,
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 8
       }
     },
     "required": [
-      "query"
+      "query",
+      "offset",
+      "limit"
     ],
     "additionalProperties": false
   },

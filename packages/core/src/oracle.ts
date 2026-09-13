@@ -1,8 +1,10 @@
 import path from 'node:path';
+import { randomUUID } from 'node:crypto';
 import { cp, mkdir, mkdtemp, readFile, readdir, realpath, rename, stat } from 'node:fs/promises';
 import { managedHome, parse, refName } from './config.ts';
 import type { Environment, ProjectContext } from './config.ts';
 import type { Connection } from './connections.ts';
+import { savedConnectionName } from './connections.ts';
 import { canonical, contained, exists, hash, inventory, readJson, writeJson } from './fs.ts';
 import { Fault } from './result.ts';
 import { runProcess } from './process.ts';
@@ -106,7 +108,11 @@ export class OracleAdapter {
   ) {
     const work = cwd ?? (await this.stage());
     const settings = await this.settings();
-    const args = ['-S', '-L', ...(connection ? ['-name', parse(refName, connection.name)] : ['/nolog'])];
+    const args = [
+      '-S',
+      '-L',
+      ...(connection ? ['-name', parse(savedConnectionName, connection.name)] : ['/nolog']),
+    ];
     const env: NodeJS.ProcessEnv = {
       ...process.env,
       SQLPATH: '',
@@ -309,7 +315,35 @@ export class OracleAdapter {
       throw new Fault('EMPTY_BACKUP', 'Oracle export produced no usable files.', 1);
     return { directory, files, digest: hash(canonical(files)), format, output: result.output };
   }
-  async jsonQuery(sql: string, connection: Connection, bindings: Record<string, string | number> = {}) {
+  async savedConnections(signal?: AbortSignal) {
+    const marker = `APEXREST_CONNECTIONS_${randomUUID().replaceAll('-', '')}`;
+    const result = await this.session(
+      `prompt ${marker}_BEGIN\nconnmgr list -flat\nprompt ${marker}_END`,
+      undefined,
+      false,
+      signal,
+    );
+    const lines = result.output.split(/\r?\n/).map((line) => line.trim());
+    const start = lines.indexOf(`${marker}_BEGIN`),
+      end = lines.indexOf(`${marker}_END`);
+    if (start < 0 || end <= start)
+      throw new Fault(
+        'CONNECTION_LIST_UNCONFIRMED',
+        'SQLcl did not return a complete saved connection list.',
+        3,
+      );
+    const names = [...new Set(lines.slice(start + 1, end).filter(Boolean))];
+    return {
+      source: 'sqlcl-store',
+      connections: names.map((name) => ({ name: parse(savedConnectionName, name) })),
+    };
+  }
+  async jsonQuery(
+    sql: string,
+    connection: Connection,
+    bindings: Record<string, string | number> = {},
+    signal?: AbortSignal,
+  ) {
     const preamble = Object.entries(bindings)
       .map(([key, value]) => {
         if (!/^p_[a-z_]+$/.test(key)) throw new Fault('INVALID_BIND', 'Invalid internal bind name.', 2);
@@ -320,7 +354,7 @@ export class OracleAdapter {
       `${preamble}\nset sqlformat json\n${sql};`,
       connection,
       false,
-      undefined,
+      signal,
       undefined,
       'json',
     );
@@ -338,10 +372,12 @@ export class OracleAdapter {
       throw new Fault('INVALID_ORACLE_JSON', 'SQLcl result has no items collection.', 1);
     return resultSets[0]!.items!;
   }
-  async identity(connection: Connection) {
+  async identity(connection: Connection, signal?: AbortSignal) {
     const rows = await this.jsonQuery(
       "select sys_context('USERENV','DB_UNIQUE_NAME') db_unique_name, sys_context('USERENV','SERVICE_NAME') service_name, sys_context('USERENV','CURRENT_SCHEMA') parsing_schema from dual",
       connection,
+      {},
+      signal,
     );
     if (rows.length !== 1) throw new Fault('IDENTITY_UNCONFIRMED', 'Database identity was not confirmed.', 3);
     return rows[0]!;

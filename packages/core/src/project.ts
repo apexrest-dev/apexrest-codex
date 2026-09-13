@@ -1,7 +1,7 @@
 import path from 'node:path';
-import { cp, mkdir } from 'node:fs/promises';
+import { cp, mkdir, lstat, readdir, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
-import { contained, exists, inventory, writeJson, atomicWrite } from './fs.ts';
+import { contained, exists, inventory, atomicWrite } from './fs.ts';
 import { loadProject, parse, refName } from './config.ts';
 import type { ProjectContext, ProjectConfig } from './config.ts';
 import { Fault } from './result.ts';
@@ -19,9 +19,23 @@ export async function projectInit(
 ) {
   parse(refName, alias);
   const root = path.resolve(directory);
-  if (await exists(root))
-    throw new Fault('LOCAL_EDITS_CONFLICT', 'Project init requires a new directory.', 5, 'conflict');
-  await mkdir(root, { recursive: true, mode: 0o700 });
+  const conflict = () =>
+    new Fault(
+      'LOCAL_EDITS_CONFLICT',
+      'Project init requires an empty folder or a new directory. Existing files were left unchanged.',
+      5,
+      'conflict',
+    );
+  if (!(await exists(root))) await mkdir(root, { recursive: true, mode: 0o700 });
+  if (!(await lstat(root)).isDirectory() || (await readdir(root)).length !== 0) throw conflict();
+  const createFile = async (file: string, content: string) => {
+    try {
+      await writeFile(file, content, { flag: 'wx', mode: 0o600 });
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code === 'EEXIST') throw conflict();
+      throw error;
+    }
+  };
   const config: ProjectConfig = {
     schemaVersion: 1,
     projectId: alias,
@@ -43,8 +57,8 @@ export async function projectInit(
     },
     artifacts: { directory: '.apexrest/artifacts', retentionDays: 7 },
   };
-  await writeJson(path.join(root, 'apexrest.json'), config);
-  await atomicWrite(
+  await createFile(path.join(root, 'apexrest.json'), JSON.stringify(config, null, 2) + '\n');
+  await createFile(
     path.join(root, '.gitignore'),
     '.apexrest/\nnode_modules/\n.env\nplaywright/.auth/\ntest-results/\n',
   );
@@ -58,6 +72,7 @@ export async function projectInit(
   await cp(
     path.join(resourceRoot(), 'toolchains/toolchain.lock.json'),
     path.join(root, config.toolchain.lockFile),
+    { force: false, errorOnExist: true },
   );
   if (template !== 'existing-app') {
     const generated = await new OracleAdapter().generate(alias, alias);

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "asOf": "2026-09-12",
+  "asOf": "2026-09-13",
   "release": "0.1.0-beta.1",
   "overall": "partial-local-beta",
   "statusSemantics": {
@@ -18,7 +18,10 @@
       "evidence": [
         "tests/packaging/packages.test.mjs",
         "docs/evidence/local-checks.json",
-        "docs/evidence/apexlang-codex.json"
+        "docs/evidence/apexlang-codex.json",
+        "plugins/apexrest-apex/skills/apexrest-install-dependencies/SKILL.md",
+        "docs/evidence/dependency-command-native.json",
+        "docs/evidence/plugin-menu-native.json"
       ],
       "blocker": null
     },
@@ -31,7 +34,8 @@
         "scripts/native-smoke.mjs",
         "docs/evidence/native-codex-compat.json",
         "docs/evidence/native-repository.json",
-        "docs/evidence/apexlang-codex.json"
+        "docs/evidence/apexlang-codex.json",
+        "docs/evidence/plugin-menu-installed.json"
       ],
       "blocker": "Verified only on Codex 0.154.0 macOS arm64; portable MCP not discovered."
     },
@@ -56,7 +60,16 @@
       "evidence": [
         "packages/installer/src/toolchain.ts",
         "scripts/setup-smoke.mjs",
-        "docs/evidence/setup-local.json"
+        "docs/evidence/setup-local.json",
+        "tests/contracts/dependencies.test.mjs",
+        "docs/evidence/dependency-command-local.json",
+        "packages/installer/src/package-source.ts",
+        "tests/contracts/setup-source.test.mjs",
+        "tests/installers/native-source.test.ts",
+        "docs/evidence/setup-source-local.json",
+        "packages/installer/src/registration.ts",
+        "scripts/verify-setup-registration.mjs",
+        "docs/evidence/setup-registration-local.json"
       ],
       "blocker": "macOS client path exercised; Linux/Windows/WSL2 not executed. Project-only Codex scope is blocked."
     },
@@ -68,7 +81,11 @@
       "evidence": [
         "packages/core/src/fs.ts",
         "tests/unit/deployment.test.ts",
-        "docs/evidence/native-codex-compat.json"
+        "docs/evidence/native-codex-compat.json",
+        "packages/installer/src/registration.ts",
+        "tests/installers/native-source.test.ts",
+        "scripts/verify-setup-registration.mjs",
+        "docs/evidence/setup-registration-local.json"
       ],
       "blocker": "Same-host dead lock recovery and repeated offline setup tested; bootstrap interruption/upgrade matrix on all OSes remains incomplete."
     },
@@ -93,7 +110,19 @@
       "evidence": [
         "packages/installer/src/native.ts",
         "docs/evidence/native-codex-compat.json",
-        "docs/evidence/setup-local.json"
+        "docs/evidence/setup-local.json",
+        "tests/installers/installer.test.ts",
+        "tests/contracts/dependencies.test.mjs",
+        "packages/installer/src/package-source.ts",
+        "tests/contracts/setup-source.test.mjs",
+        "tests/installers/native-source.test.ts",
+        "docs/evidence/setup-source-local.json",
+        "packages/installer/src/registration.ts",
+        "scripts/verify-setup-registration.mjs",
+        "docs/evidence/setup-registration-local.json",
+        "packages/installer/src/uninstall-tools.ts",
+        "tests/installers/uninstall-tools.test.ts",
+        "docs/evidence/tui-focused-local.json"
       ],
       "blocker": "Unrelated Codex setting and reused runtimes checked; foreign plugin and every upgrade/failure path require additional fixture coverage."
     },
@@ -282,7 +311,29 @@
         "tests/contracts/mcp.test.mjs",
         "packages/core/src/service.ts",
         "docs/evidence/local-checks.json",
-        "docs/evidence/optimization-local.json"
+        "docs/evidence/optimization-local.json",
+        "packages/cli/src/tui.ts",
+        "tests/unit/tui.test.ts",
+        "tests/contracts/tui.test.mjs",
+        "scripts/verify-tui.py",
+        "docs/evidence/tui-local.json",
+        "packages/cli/src/tui-catalog.ts",
+        "packages/cli/src/tui-view.ts",
+        "packages/installer/src/package-source.ts",
+        "tests/contracts/setup-source.test.mjs",
+        "tests/installers/native-source.test.ts",
+        "docs/evidence/setup-source-local.json",
+        "packages/installer/src/registration.ts",
+        "scripts/verify-setup-registration.mjs",
+        "docs/evidence/setup-registration-local.json",
+        "docs/evidence/tui-simplified-local.json",
+        "tests/unit/saved-connections.test.ts",
+        "docs/evidence/tui-focused-local.json",
+        "docs/evidence/tui-direct-run-local.json",
+        "docs/evidence/tui-apexlang-dashboard-local.json",
+        "packages/cli/src/tui-apexlang.ts",
+        "packages/cli/src/tui-home.ts",
+        "tests/unit/tui-apexlang.test.ts"
       ],
       "blocker": null
     },
@@ -294,7 +345,14 @@
       "evidence": [
         "packages/installer/src/native.ts",
         "packages/installer/src/setup.ts",
-        "docs/evidence/native-codex-compat.json"
+        "docs/evidence/native-codex-compat.json",
+        "packages/installer/src/registration.ts",
+        "tests/installers/native-source.test.ts",
+        "scripts/verify-setup-registration.mjs",
+        "docs/evidence/setup-registration-local.json",
+        "packages/installer/src/uninstall-tools.ts",
+        "tests/installers/uninstall-tools.test.ts",
+        "docs/evidence/tui-focused-local.json"
       ],
       "blocker": "Product uninstall checked in clean profile; full cross-version/platform update/rollback coverage incomplete."
     },
@@ -333,7 +391,17 @@
         "README.md",
         "README.uk.md",
         "scripts/check-docs.mjs",
-        "docs/evidence/documentation-bilingual.json"
+        "docs/evidence/documentation-bilingual.json",
+        "docs/evidence/dependency-command-local.json",
+        "docs/evidence/plugin-menu-local.json",
+        "docs/tui.md",
+        "docs/tui.uk.md",
+        "docs/evidence/tui-local.json",
+        "tests/unit/saved-connections.test.ts",
+        "docs/evidence/tui-focused-local.json",
+        "docs/evidence/tui-direct-run-local.json",
+        "docs/evidence/installation-documentation-local.json",
+        "docs/evidence/tui-apexlang-dashboard-local.json"
       ],
       "blocker": null
     },

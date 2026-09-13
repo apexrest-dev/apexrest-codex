@@ -18,11 +18,14 @@ test('Codex package declares native skills, local MCP and exclusive product rout
   assert.deepEqual(marketplace.plugins[0].policy.products, ['codex']);
   await assert.rejects(readFile('dist/portable/plugins/apexrest-apex/plugin.json'), { code: 'ENOENT' });
 });
-test('Codex package is self-contained, same version, eight bounded skills and no author paths', async () => {
+test('Codex package is self-contained, same version, ten bounded skills and no author paths', async () => {
   for (const profile of ['codex-compat']) {
     const root = `dist/${profile}/plugins/apexrest-apex`;
     const list = await files(root);
-    assert.equal(list.filter((f) => /^skills\/[^/]+\/SKILL.md$/.test(f)).length, 8);
+    const skills = list.filter((f) => /^skills\/[^/]+\/SKILL.md$/.test(f));
+    assert.equal(skills.length, 10);
+    for (const skill of skills)
+      assert.ok(list.includes(skill.replace('SKILL.md', 'agents/openai.yaml')), skill);
     const manifest = JSON.parse(await readFile(root + '/' + '.codex-plugin/plugin.json'));
     assert.equal(manifest.version, pkg.version);
     assert.ok(list.includes('resources/templates/blank-app/application/.apex/apexlang.json'));
@@ -40,6 +43,18 @@ test('Codex package is self-contained, same version, eight bounded skills and no
     );
     assert.equal(r.status, 0, r.stdout + r.stderr);
   }
+});
+test('All functions menu covers the operation catalog within the native plugin prompt limits', async () => {
+  const root = 'dist/codex-compat/plugins/apexrest-apex';
+  const menu = await readFile(root + '/skills/apexrest-menu/SKILL.md', 'utf8');
+  const operations = JSON.parse(await readFile(root + '/resources/schemas/operations.schema.json', 'utf8'));
+  const indexed = new Set([...menu.matchAll(/`([a-z]+(?:\.[a-z-]+)?)`/g)].map((match) => match[1]));
+  for (const operation of Object.keys(operations)) assert.ok(indexed.has(operation), operation);
+  const manifest = JSON.parse(await readFile(root + '/.codex-plugin/plugin.json', 'utf8'));
+  const prompts = manifest.interface.defaultPrompt;
+  assert.ok(prompts.length > 0 && prompts.length <= 3);
+  assert.ok(prompts.every((prompt) => prompt.length <= 128));
+  assert.ok(prompts.some((prompt) => prompt.includes('$apexrest-menu')));
 });
 test('ZIP generation is deterministic and includes dotfiles, licenses and native metadata', async () => {
   const first = await zipTree('dist/codex-compat', zipSync),

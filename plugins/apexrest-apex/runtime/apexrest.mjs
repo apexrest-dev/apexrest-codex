@@ -4,12 +4,13 @@ import {
   dispatch,
   executeJob,
   schemas
-} from "./chunk-RYA4VYZP.mjs";
+} from "./chunk-FCJMAAZV.mjs";
+import "./chunk-4ACPFYCB.mjs";
 import {
   Fault,
   failure,
   loadProject
-} from "./chunk-36MM2V54.mjs";
+} from "./chunk-FRWXKL3F.mjs";
 
 // packages/cli/src/main.ts
 var argv = process.argv.slice(2);
@@ -36,9 +37,11 @@ function help() {
   const key = selected.op;
   const lines = [
     "APEXREST for Codex \u2014 independent Oracle APEX developer tools",
-    "Usage: apexrest <command> [options]",
+    "Usage: apexrest [command] [options]",
+    "Run apexrest in a terminal to manage tools, plugins and saved SQLcl connections.",
+    "  tui [--project PATH]   Open the terminal UI explicitly",
     "",
-    ...Object.keys(schemas).filter((x) => !["docs.read", "metadata.read", "test.run"].includes(x)).map((x) => "  " + x.replace(".", " ")),
+    ...Object.keys(schemas).filter((x) => x !== "test.run").map((x) => "  " + x.replace(".", " ")),
     "  test unit|sql|api|e2e|all [--env NAME]",
     "  mcp",
     "",
@@ -55,16 +58,42 @@ function help() {
       ),
       ...(positional[key] ?? []).map((p) => "  <" + p + ">")
     );
+  if (key === "dependencies.install")
+    lines.push(
+      "",
+      "Install managed Node.js, Java, SQLcl, Playwright and Chromium without registering the plugin.",
+      "Preview: apexrest dependencies install --dry-run",
+      "Install: apexrest dependencies install --yes",
+      "--accept-oracle-license records separate consent to the Oracle terms shown in the preview.",
+      "--skip-browser omits Playwright/Chromium; --install-os-deps explicitly enables browser OS packages.",
+      "--offline uses cached downloads; --home and --cache-dir select managed storage."
+    );
+  if (key === "dependencies.uninstall")
+    lines.push(
+      "",
+      "Preview: apexrest dependencies uninstall --dry-run",
+      "Remove managed tools: apexrest dependencies uninstall --yes",
+      "Preserves external runtimes, projects, saved connections and cache.",
+      "Node.js required by the APEXREST launcher or plugin is retained."
+    );
+  if (key === "connection.list" || key === "connection.test")
+    lines.push("", "--saved uses the SQLcl connection store directly, without an APEXREST reference.");
   console.log(lines.join("\n"));
 }
 try {
-  if (!argv.length || argv.includes("--help") || argv.includes("-h")) help();
+  if (argv.includes("--help") || argv.includes("-h")) help();
+  else if (argv[0] === "tui" || !argv.length && process.stdin.isTTY && process.stdout.isTTY && process.env.TERM !== "dumb") {
+    if (argv.length > 1 && (argv.length !== 3 || argv[1] !== "--project" || !argv[2] || argv[2].startsWith("--")))
+      throw new Fault("INVALID_INPUT", "Usage: apexrest tui [--project PATH]", 2);
+    const { runTui } = await import("./chunk-TCODHGCR.mjs");
+    await runTui(argv[2] ? { project: argv[2] } : {});
+  } else if (!argv.length) help();
   else if (argv[0] === "--job-worker") {
     if (argv.length !== 3) throw new Fault("INVALID_INPUT", "Invalid internal job request.", 2);
     await executeJob(await loadProject(argv[1]), argv[2], dispatch);
   } else if (argv[0] === "mcp") {
     if (argv.length !== 1) throw new Fault("INVALID_INPUT", "mcp accepts no arguments.", 2);
-    const { startMcp } = await import("./chunk-IKK6H4XT.mjs");
+    const { startMcp } = await import("./chunk-CR5VXC7Z.mjs");
     await startMcp();
   } else {
     const selectedOp = argv[0] === "--version" ? { op: "version", start: 1 } : selected;
@@ -82,7 +111,8 @@ try {
       "installOsDeps",
       "nativeOnly",
       "keepRuntime",
-      "headed"
+      "headed",
+      "saved"
     ]);
     const numbers = /* @__PURE__ */ new Set(["appId", "offset", "limit"]);
     let index = 0;

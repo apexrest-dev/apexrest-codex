@@ -1,0 +1,4 @@
+interface:
+  display_name: "APEX applications"
+  short_description: "Build, edit, export and validate APEX applications"
+  default_prompt: "Use $apexrest-apexlang. Help me build or update an Oracle APEX application with APEXlang."

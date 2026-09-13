@@ -31,6 +31,17 @@ These are placeholders, not a working target. Use the actual database unique nam
 
 The generated `schemas/project.schema.json` is the exact public schema. Unknown fields are rejected. Source, test, migration, package, artifact and toolchain paths must remain inside the project.
 
+## List and test saved SQLcl connections
+
+Checking database access requires no project or APEXREST alias. Open **List saved SQLcl connections** or **Test saved SQLcl connection** in the [TUI](tui.md), choose a saved name and press Enter. Typing filters the list; Ctrl+R reloads it.
+
+```sh
+apexrest connection list --saved --json
+apexrest connection test 'Development connection' --saved --json
+```
+
+These commands read the SQLcl store directly and test the exact saved name with a read-only identity query. If the store is empty or credentials are missing, configure them in SQLcl. You can then register references for a project environment as described below. CLI commands without `--saved` use those references.
+
 ## Save connection references
 
 Create named connections interactively in SQLcl's local connection store. Then register their names:

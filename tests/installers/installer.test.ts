@@ -9,7 +9,7 @@ import { download } from '../../packages/installer/src/download.ts';
 import type { Artifact } from '../../packages/installer/src/download.ts';
 import { hash, exists } from '../../packages/core/src/fs.ts';
 import { extractArchive, archivePath } from '../../packages/installer/src/archive.ts';
-import { platformProfile } from '../../packages/installer/src/toolchain.ts';
+import { platformProfile, ToolchainService, runtimeState } from '../../packages/installer/src/toolchain.ts';
 const bytes = Buffer.from('verified download fixture');
 const artifact: Artifact = {
   id: 'node',
@@ -25,6 +25,37 @@ const artifact: Artifact = {
   consentRequired: false,
 };
 const temporary = () => mkdtemp(path.join(tmpdir(), 'apexrest-install-'));
+test('Oracle-only repeat preserves an already installed browser (local plan fixture)', async (t) => {
+  const home = await temporary();
+  t.after(() => rm(home, { recursive: true, force: true }));
+  const playwright = path.join(home, 'playwright/cli.js');
+  await writeFile(
+    path.join(home, 'runtime.json'),
+    JSON.stringify({
+      schemaVersion: 1,
+      playwright,
+      browser: 'fixture-browser-version',
+      components: { playwright: 'verified' },
+    }),
+  );
+  const service = new ToolchainService();
+  t.mock.method(service, 'plan', async () => ({
+    home,
+    steps: [
+      {
+        artifact: { id: 'node', version: process.versions.node },
+        reuse: process.execPath,
+        consent: 'not-required',
+      },
+    ],
+  }));
+  const result = await service.apply({ home, yes: true, offline: true, skipBrowser: true });
+  assert.equal(result.status, 'toolchain-verified');
+  const state = await runtimeState(home);
+  assert.equal(state.components.playwright, 'verified');
+  assert.equal(state.playwright, playwright);
+  assert.equal(state.browser, 'fixture-browser-version');
+});
 test('verified download caches; repeat and offline install do not fetch', async () => {
   const cache = await temporary();
   let calls = 0;

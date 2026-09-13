@@ -1,0 +1,37 @@
+import { createRequire as __createRequire } from 'node:module'; const require = __createRequire(import.meta.url);
+
+// plugins/metadata.json
+var metadata_default = {
+  name: "apexrest-apex",
+  version: "0.1.0-beta.1",
+  description: "Develop, deploy and test Oracle APEX applications with Codex.",
+  author: {
+    name: "APEXREST",
+    url: "https://apex.rest"
+  },
+  license: "Apache-2.0",
+  interface: {
+    displayName: "APEXREST for Codex",
+    shortDescription: "Oracle APEX development workflows",
+    longDescription: "Independent APEXREST tooling for controlled Oracle APEX development, deployment and testing.",
+    developerName: "APEXREST",
+    websiteURL: "https://apex.rest",
+    composerIcon: "./assets/apexrest-icon.svg",
+    logo: "./assets/apexrest-logo.svg",
+    logoDark: "./assets/apexrest-logo.svg",
+    category: "Productivity",
+    capabilities: ["Read", "Write"],
+    defaultPrompt: [
+      "Use $apexrest-menu to show all APEXREST functions.",
+      "Use $apexrest-install-dependencies to install Java, SQLcl and the other client dependencies.",
+      "Use $apexrest-setup to check my toolchain and local connection setup."
+    ]
+  }
+};
+
+// packages/core/src/version.ts
+var VERSION = metadata_default.version;
+
+export {
+  VERSION
+};

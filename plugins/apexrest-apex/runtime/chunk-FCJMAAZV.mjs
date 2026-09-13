@@ -1,11 +1,15 @@
 import { createRequire as __createRequire } from 'node:module'; const require = __createRequire(import.meta.url);
 import {
+  VERSION
+} from "./chunk-4ACPFYCB.mjs";
+import {
   Fault,
   OracleAdapter,
-  VERSION,
   atomicWrite,
   canonical,
+  connections,
   contained,
+  editConnection,
   environment,
   exists,
   external_exports,
@@ -25,15 +29,17 @@ import {
   refName,
   relativePath,
   requireTrust,
+  resolveConnection,
   resourceRoot,
   runProcess,
   runtimeState,
+  savedConnectionName,
   sqlLiteral,
   sqlclToken,
   success,
   withLock,
   writeJson
-} from "./chunk-36MM2V54.mjs";
+} from "./chunk-FRWXKL3F.mjs";
 
 // packages/core/src/metadata.ts
 var metadataRequest = external_exports.strictObject({
@@ -82,13 +88,8 @@ async function metadataRead(adapter, env2, connection, value) {
 var project = external_exports.string().min(1).max(4096).optional();
 var env = refName;
 var base = { project };
-var setup = {
-  ...base,
-  from: external_exports.string().optional(),
+var dependencies = {
   home: external_exports.string().optional(),
-  codexHome: external_exports.string().optional(),
-  scope: external_exports.enum(["user", "project"]).default("user"),
-  version: external_exports.string().optional(),
   yes: external_exports.boolean().default(false),
   nonInteractive: external_exports.boolean().default(false),
   offline: external_exports.boolean().default(false),
@@ -96,13 +97,27 @@ var setup = {
   dryRun: external_exports.boolean().default(false),
   acceptOracleLicense: external_exports.boolean().default(false),
   skipBrowser: external_exports.boolean().default(false),
-  installOsDeps: external_exports.boolean().default(false),
+  installOsDeps: external_exports.boolean().default(false)
+};
+var setup = {
+  ...base,
+  ...dependencies,
+  from: external_exports.string().optional(),
+  codexHome: external_exports.string().optional(),
+  scope: external_exports.enum(["user", "project"]).default("user"),
+  version: external_exports.string().optional(),
   nativeOnly: external_exports.boolean().default(false)
 };
 var schemas = {
   version: external_exports.strictObject({}),
   doctor: external_exports.strictObject(base),
   setup: external_exports.strictObject(setup),
+  "dependencies.install": external_exports.strictObject(dependencies),
+  "dependencies.uninstall": external_exports.strictObject({
+    home: external_exports.string().optional(),
+    dryRun: external_exports.boolean().default(false),
+    yes: external_exports.boolean().default(false)
+  }),
   "plugin.validate": external_exports.strictObject({ ...base, from: external_exports.string().optional() }),
   "plugin.install": external_exports.strictObject(setup),
   "plugin.update": external_exports.strictObject({ ...setup, version: external_exports.string().min(1) }),
@@ -119,9 +134,13 @@ var schemas = {
   }),
   "project.adopt": external_exports.strictObject({ ...base, env, appId: external_exports.number().int().positive() }),
   "project.inspect": external_exports.strictObject(base),
-  "connection.add": external_exports.strictObject({ ...base, name: refName, sqlclName: refName }),
-  "connection.list": external_exports.strictObject(base),
-  "connection.test": external_exports.strictObject({ ...base, name: refName }),
+  "connection.add": external_exports.strictObject({ ...base, name: refName, sqlclName: savedConnectionName }),
+  "connection.list": external_exports.strictObject({ ...base, saved: external_exports.boolean().default(false) }),
+  "connection.test": external_exports.strictObject({
+    ...base,
+    name: savedConnectionName,
+    saved: external_exports.boolean().default(false)
+  }),
   "connection.remove": external_exports.strictObject({ ...base, name: refName }),
   "docs.search": external_exports.strictObject({
     query: external_exports.string().min(1).max(256),
@@ -379,7 +398,7 @@ async function executeJob(ctx, id, execute) {
 }
 
 // packages/core/src/service.ts
-import path9 from "node:path";
+import path8 from "node:path";
 
 // packages/core/src/doctor.ts
 import path2 from "node:path";
@@ -645,43 +664,13 @@ async function referenceSync(version, dryRun) {
   };
 }
 
-// packages/core/src/connections.ts
-import path4 from "node:path";
-var connectionSchema = external_exports.strictObject({ kind: external_exports.literal("sqlcl-store"), name: refName });
-var storeSchema = external_exports.record(refName, connectionSchema);
-async function connections() {
-  const file = path4.join(managedHome(), "connections.json");
-  return await exists(file) ? parse(storeSchema, await readJson(file)) : {};
-}
-async function resolveConnection(name) {
-  const connection = (await connections())[name];
-  if (!connection)
-    throw new Fault(
-      "CONNECTION_REQUIRED",
-      "Configure the requested SQLcl connection reference locally; do not send credentials in chat.",
-      3,
-      "blocked"
-    );
-  return connection;
-}
-async function editConnection(name, value) {
-  parse(refName, name);
-  return withLock(path4.join(managedHome(), "connections.lock"), async () => {
-    const current = await connections();
-    if (value) current[name] = parse(connectionSchema, value);
-    else delete current[name];
-    await writeJson(path4.join(managedHome(), "connections.json"), current);
-    return { name, status: value ? "configured" : "removed", credentialsDeleted: false };
-  });
-}
-
 // packages/core/src/deploy.ts
-import path6 from "node:path";
+import path5 from "node:path";
 import { readFile as readFile2, mkdir, cp, open } from "node:fs/promises";
 import { randomUUID as randomUUID2, verify } from "node:crypto";
 
 // packages/core/src/deployment-control.ts
-import path5 from "node:path";
+import path4 from "node:path";
 import { hostname } from "node:os";
 import { rm } from "node:fs/promises";
 function coordination(env2) {
@@ -716,10 +705,10 @@ var LocalDeploymentControl = class {
   directory;
   constructor(env2) {
     const key = hash(canonical({ ...env2.databaseIdentity, schema: env2.parsingSchema }));
-    this.directory = path5.join(managedHome(), "deployment-control", key);
+    this.directory = path4.join(managedHome(), "deployment-control", key);
   }
   file(name) {
-    return path5.join(this.directory, name);
+    return path4.join(this.directory, name);
   }
   async history() {
     const file = this.file("history.json");
@@ -950,7 +939,7 @@ async function sourceInventory(ctx) {
     "playwright.config.ts",
     "playwright.config.mjs"
   ])
-    if (await exists(path6.join(ctx.root, relative)))
+    if (await exists(path5.join(ctx.root, relative)))
       files[relative] = hash(await readFile2(await contained(ctx.root, relative)));
   return Object.fromEntries(Object.entries(files).sort());
 }
@@ -1015,7 +1004,7 @@ var DeploymentService = class {
       const sql = await readFile2(await contained(ctx.root, file), "utf8");
       risks.push(...migrationRisk(sql).map((r) => `${r}:${file}`));
       if (migration) {
-        const version = path6.basename(file);
+        const version = path5.basename(file);
         if (!/^\d{4,}__[A-Za-z0-9_-]+\.sql$/.test(version))
           throw new Fault(
             "INVALID_MIGRATION_NAME",
@@ -1096,7 +1085,7 @@ var DeploymentService = class {
         if (!kind) continue;
         if (!file.endsWith(".sql"))
           throw new Fault("UNSUPPORTED_DB_SOURCE", "Database sources must be SQL files.", 5);
-        const previous = history.get(path6.basename(file));
+        const previous = history.get(path5.basename(file));
         if (kind === "migration" && previous && (previous.checksum !== sha256 || previous.status !== "succeeded"))
           throw new Fault("MIGRATION_HISTORY_CONFLICT", "Migration requires reconciliation.", 5);
         if (kind !== "migration" || !previous) expected.push({ kind, file, sha256 });
@@ -1174,7 +1163,7 @@ end;
       throw new Fault("COMPILER_DRIFT", "SQLcl version changed after plan.", 5);
     if (signal?.aborted)
       throw new Fault("CANCELLED", "Deployment cancelled before lease acquisition.", 6, "cancelled");
-    const runId = randomUUID2(), runs = path6.join(ctx.root, ".apexrest/deployments"), runDir = path6.join(runs, runId);
+    const runId = randomUUID2(), runs = path5.join(ctx.root, ".apexrest/deployments"), runDir = path5.join(runs, runId);
     await mkdir(runDir, { recursive: true, mode: 448 });
     let state = "planned", writeStarted = false;
     const controller = new AbortController();
@@ -1193,16 +1182,16 @@ end;
         at: (/* @__PURE__ */ new Date()).toISOString(),
         details
       };
-      const journal = await open(path6.join(runDir, "journal.jsonl"), "a", 384);
+      const journal = await open(path5.join(runDir, "journal.jsonl"), "a", 384);
       try {
         await journal.writeFile(JSON.stringify(event) + "\n");
         await journal.sync();
       } finally {
         await journal.close();
       }
-      await writeJson(path6.join(runDir, "state.json"), event);
+      await writeJson(path5.join(runDir, "state.json"), event);
     };
-    await writeJson(path6.join(runDir, "plan.json"), plan);
+    await writeJson(path5.join(runDir, "plan.json"), plan);
     await record("approved");
     await this.lease(env2, deployConnection, runId, true);
     let renewing = false, leaseLost = false;
@@ -1221,13 +1210,13 @@ end;
       await record("backing_up");
       if (plan.backupRequired) {
         const backup = await this.oracle.exportApplication(env2, readConnection, "SQL");
-        const backupId = randomUUID2(), directory = path6.join(ctx.root, ".apexrest/backups", backupId);
+        const backupId = randomUUID2(), directory = path5.join(ctx.root, ".apexrest/backups", backupId);
         await mkdir(directory, { recursive: true, mode: 448 });
-        await cp(backup.directory, path6.join(directory, "application"), { recursive: true });
-        const files = await inventory(path6.join(directory, "application"));
+        await cp(backup.directory, path5.join(directory, "application"), { recursive: true });
+        const files = await inventory(path5.join(directory, "application"));
         if (!Object.keys(files).length || hash(canonical(files)) !== backup.digest)
           throw new Fault("BACKUP_INVALID", "Backup copy failed checksum verification.", 1);
-        await writeJson(path6.join(directory, "backup.json"), {
+        await writeJson(path5.join(directory, "backup.json"), {
           schemaVersion: 1,
           backupId,
           targetDigest: plan.targetDigest,
@@ -1240,11 +1229,11 @@ end;
       await this.checkLocal(ctx, plan);
       if ((await this.fingerprint(env2, readConnection)).fingerprint !== plan.fingerprint)
         throw new Fault("TARGET_DRIFT", "Target changed during backup.", 5);
-      const snapshot = path6.join(runDir, "snapshot");
+      const snapshot = path5.join(runDir, "snapshot");
       await mkdir(snapshot);
       for (const [file, sha] of Object.entries(plan.sources)) {
         const source = await contained(ctx.root, file), destination = await contained(snapshot, file);
-        await mkdir(path6.dirname(destination), { recursive: true });
+        await mkdir(path5.dirname(destination), { recursive: true });
         await cp(source, destination);
         if (hash(await readFile2(destination)) !== sha)
           throw new Fault("SOURCE_DRIFT", "Source changed while freezing deployment.", 5);
@@ -1270,12 +1259,12 @@ commit;`,
           );
         await this.lease(env2, deployConnection, runId, false);
         const file = await contained(snapshot, operation.file);
-        const version = sqlLiteral(path6.basename(file));
+        const version = sqlLiteral(path5.basename(file));
         if (operation.kind === "migration") {
           if (coordination(env2).backend === "local")
             await new LocalDeploymentControl(env2).migration(
               runId,
-              path6.basename(file),
+              path5.basename(file),
               operation.sha256,
               "started"
             );
@@ -1299,7 +1288,7 @@ prompt APEXREST_SCRIPT_COMPLETE`,
           if (coordination(env2).backend === "local")
             await new LocalDeploymentControl(env2).migration(
               runId,
-              path6.basename(file),
+              path5.basename(file),
               operation.sha256,
               "succeeded"
             );
@@ -1323,7 +1312,7 @@ commit;`,
         );
         if (hash(canonical(await inventory(backupRoot))) !== plan.restore.checksum)
           throw new Fault("BACKUP_INVALID", "Restore source changed after approval.", 5);
-        const frozen = path6.join(runDir, "restore");
+        const frozen = path5.join(runDir, "restore");
         await cp(backupRoot, frozen, { recursive: true });
         const files = await inventory(frozen);
         if (hash(canonical(files)) !== plan.restore.checksum)
@@ -1342,7 +1331,7 @@ commit;`,
  apex_application_install.set_application_id(${env2.applicationId});
 end;
 /
-@${sqlclToken(path6.join(frozen, main[0]))}`,
+@${sqlclToken(path5.join(frozen, main[0]))}`,
           deployConnection,
           true,
           controller.signal
@@ -1352,7 +1341,7 @@ end;
           ctx,
           env2,
           deployConnection,
-          path6.join(snapshot, ctx.config.application.sourceDir),
+          path5.join(snapshot, ctx.config.application.sourceDir),
           controller.signal
         );
       await record("verifying");
@@ -1406,9 +1395,9 @@ commit;`,
   async reconcile(ctx, runId) {
     parse(external_exports.uuid(), runId);
     const directory = await contained(ctx.root, ".apexrest/deployments/" + runId);
-    const plan = parse(deployPlanSchema, await readJson(path6.join(directory, "plan.json"))), env2 = environment(ctx, plan.environment);
+    const plan = parse(deployPlanSchema, await readJson(path5.join(directory, "plan.json"))), env2 = environment(ctx, plan.environment);
     const current = await this.fingerprint(env2, await resolveConnection(env2.readConnectionRef));
-    const state = await readJson(path6.join(directory, "state.json"));
+    const state = await readJson(path5.join(directory, "state.json"));
     return {
       runId,
       state,
@@ -1425,8 +1414,8 @@ commit;`,
   async restorePlan(ctx, backupId) {
     parse(external_exports.uuid(), backupId);
     const directory = await contained(ctx.root, ".apexrest/backups/" + backupId);
-    const backup = await readJson(path6.join(directory, "backup.json"));
-    const files = await inventory(path6.join(directory, "application"));
+    const backup = await readJson(path5.join(directory, "backup.json"));
+    const files = await inventory(path5.join(directory, "application"));
     if (hash(canonical(files)) !== backup.digest)
       throw new Fault("BACKUP_INVALID", "Backup digest does not match.", 5);
     const plan = await this.plan(ctx, backup.environment);
@@ -1441,13 +1430,13 @@ commit;`,
 };
 
 // packages/core/src/testing.ts
-import path8 from "node:path";
+import path7 from "node:path";
 import { spawn as spawn2 } from "node:child_process";
 import { mkdir as mkdir2, readFile as readFile4, cp as cp2, chmod } from "node:fs/promises";
 import { randomUUID as randomUUID4 } from "node:crypto";
 
 // packages/core/src/artifacts.ts
-import path7 from "node:path";
+import path6 from "node:path";
 import { randomUUID as randomUUID3 } from "node:crypto";
 import { readFile as readFile3, readdir, rm as rm2 } from "node:fs/promises";
 var ArtifactService = class {
@@ -1458,8 +1447,8 @@ var ArtifactService = class {
   async save(content, kind) {
     const id = randomUUID3(), directory = await contained(this.ctx.root, this.ctx.config.artifacts.directory);
     const sanitized = redact(content);
-    await atomicWrite(path7.join(directory, id + ".txt"), sanitized);
-    await writeJson(path7.join(directory, id + ".json"), {
+    await atomicWrite(path6.join(directory, id + ".txt"), sanitized);
+    await writeJson(path6.join(directory, id + ".json"), {
       id,
       kind,
       sha256: hash(sanitized),
@@ -1500,10 +1489,10 @@ var ArtifactService = class {
     if (!await exists(directory)) return { removed };
     for (const file of await readdir(directory))
       if (/^[a-f0-9-]{36}\.json$/.test(file)) {
-        const metadata = await readJson(path7.join(directory, file));
+        const metadata = await readJson(path6.join(directory, file));
         if (Date.parse(metadata.expiresAt) < Date.now()) {
-          await rm2(path7.join(directory, file));
-          await rm2(path7.join(directory, file.replace(".json", ".txt")), { force: true });
+          await rm2(path6.join(directory, file));
+          await rm2(path6.join(directory, file.replace(".json", ".txt")), { force: true });
           removed++;
         }
       }
@@ -1584,7 +1573,7 @@ var TestService = class {
             "--experimental-strip-types",
             "--test",
             "--test-reporter=junit",
-            ...tests.map((f) => path8.join(dir, f))
+            ...tests.map((f) => path7.join(dir, f))
           ],
           cwd: ctx.root,
           ...signal ? { signal } : {},
@@ -1647,11 +1636,11 @@ end;
           skipped: 0,
           diagnostic: "Run apexrest setup to install pinned Playwright and Chromium."
         };
-      const runId = randomUUID4(), runnerRoot = path8.resolve(state.playwright, "../../../.."), run = path8.join(runnerRoot, "runs", runId);
+      const runId = randomUUID4(), runnerRoot = path7.resolve(state.playwright, "../../../.."), run = path7.join(runnerRoot, "runs", runId);
       await mkdir2(run, { recursive: true, mode: 448 });
-      await cp2(dir, path8.join(run, "tests"), { recursive: true });
-      await cp2(path8.join(resourceRoot(), "testkit"), path8.join(run, "testkit"), { recursive: true });
-      const auth = path8.join(ctx.root, ".apexrest/auth", envName, "state.json"), authMeta = auth + ".meta.json";
+      await cp2(dir, path7.join(run, "tests"), { recursive: true });
+      await cp2(path7.join(resourceRoot(), "testkit"), path7.join(run, "testkit"), { recursive: true });
+      const auth = path7.join(ctx.root, ".apexrest/auth", envName, "state.json"), authMeta = auth + ".meta.json";
       if (suite === "e2e" && (!await exists(auth) || !await exists(authMeta) || Date.parse((await readJson(authMeta)).expiresAt) < Date.now()))
         return {
           suite,
@@ -1662,8 +1651,8 @@ end;
           diagnostic: "Authenticated browser state is missing or expired. Run test auth interactively."
         };
       await atomicWrite(
-        path8.join(run, "playwright.config.mjs"),
-        `export default ${JSON.stringify({ testDir: "./tests", forbidOnly: true, retries: 0, timeout: 3e4, workers: 1, reporter: [["json", { outputFile: path8.join(run, "report.json") }]], use: { baseURL: env2.baseUrl, browserName: "chromium", serviceWorkers: "block", trace: "off", screenshot: "off", video: "off", ...suite === "e2e" ? { storageState: auth } : {} } })};
+        path7.join(run, "playwright.config.mjs"),
+        `export default ${JSON.stringify({ testDir: "./tests", forbidOnly: true, retries: 0, timeout: 3e4, workers: 1, reporter: [["json", { outputFile: path7.join(run, "report.json") }]], use: { baseURL: env2.baseUrl, browserName: "chromium", serviceWorkers: "block", trace: "off", screenshot: "off", video: "off", ...suite === "e2e" ? { storageState: auth } : {} } })};
 `
       );
       const result = await runProcess({
@@ -1672,20 +1661,20 @@ end;
           state.playwright,
           "test",
           "--config",
-          path8.join(run, "playwright.config.mjs"),
+          path7.join(run, "playwright.config.mjs"),
           ...headed ? ["--headed"] : []
         ],
         cwd: run,
         env: {
           ...process.env,
-          PLAYWRIGHT_BROWSERS_PATH: path8.join(managedHome(), "browsers"),
+          PLAYWRIGHT_BROWSERS_PATH: path7.join(managedHome(), "browsers"),
           APEXREST_ALLOWED_ORIGINS: JSON.stringify([new URL(env2.baseUrl).origin, ...env2.allowedOrigins]),
           APEXREST_EXPECTED_MARKER: env2.expectedMarker ?? ""
         },
         timeoutMs: 3e5,
         ...signal ? { signal } : {}
       });
-      const reportFile = path8.join(run, "report.json");
+      const reportFile = path7.join(run, "report.json");
       if (!await exists(reportFile))
         return {
           suite,
@@ -1732,7 +1721,7 @@ end;
       required: ctx.config.tests.requiredSuites,
       createdAt: (/* @__PURE__ */ new Date()).toISOString()
     };
-    await writeJson(path8.join(ctx.root, ".apexrest/test-runs", runId + ".json"), report);
+    await writeJson(path7.join(ctx.root, ".apexrest/test-runs", runId + ".json"), report);
     return { ok, data: report };
   }
   async auth(ctx, name) {
@@ -1745,10 +1734,10 @@ end;
         "Run test auth in a local interactive terminal. Do not send passwords to Codex.",
         4
       );
-    const destination = path8.join(ctx.root, ".apexrest/auth", name, "state.json");
-    await mkdir2(path8.dirname(destination), { recursive: true, mode: 448 });
-    const helper = path8.join(path8.resolve(state.playwright, "../../../.."), "auth.mjs");
-    await cp2(path8.join(resourceRoot(), "playwright/auth.mjs"), helper);
+    const destination = path7.join(ctx.root, ".apexrest/auth", name, "state.json");
+    await mkdir2(path7.dirname(destination), { recursive: true, mode: 448 });
+    const helper = path7.join(path7.resolve(state.playwright, "../../../.."), "auth.mjs");
+    await cp2(path7.join(resourceRoot(), "playwright/auth.mjs"), helper);
     const code = await new Promise((resolve, reject) => {
       const child = spawn2(
         state.node,
@@ -1760,7 +1749,7 @@ end;
         ],
         {
           cwd: ctx.root,
-          env: { ...process.env, PLAYWRIGHT_BROWSERS_PATH: path8.join(managedHome(), "browsers") },
+          env: { ...process.env, PLAYWRIGHT_BROWSERS_PATH: path7.join(managedHome(), "browsers") },
           stdio: ["inherit", "ignore", "inherit"]
         }
       );
@@ -1834,20 +1823,30 @@ async function dispatch(operation, input = {}, signal) {
       case "doctor":
         data = await doctor();
         break;
+      case "dependencies.install": {
+        const { ToolchainService } = await import("./chunk-KN2F4FEP.mjs");
+        data = await new ToolchainService().apply(parsed);
+        break;
+      }
+      case "dependencies.uninstall": {
+        const { uninstallTools } = await import("./chunk-2VVMWNM7.mjs");
+        data = await uninstallTools(parsed);
+        break;
+      }
       case "setup":
       case "plugin.install":
       case "plugin.update": {
-        const { setup: setup2 } = await import("./chunk-DDHXSNGK.mjs");
+        const { setup: setup2 } = await import("./chunk-QIQZIDR7.mjs");
         data = await setup2(parsed);
         break;
       }
       case "plugin.validate": {
-        const { validateNative } = await import("./chunk-DDHXSNGK.mjs");
+        const { validateNative } = await import("./chunk-QIQZIDR7.mjs");
         data = await validateNative(text("from"));
         break;
       }
       case "plugin.uninstall": {
-        const { uninstallNative } = await import("./chunk-DDHXSNGK.mjs");
+        const { uninstallNative } = await import("./chunk-QIQZIDR7.mjs");
         data = await uninstallNative(text("home") ?? managedHome(), Boolean(parsed.keepRuntime));
         break;
       }
@@ -1855,7 +1854,7 @@ async function dispatch(operation, input = {}, signal) {
         data = await projectInit(
           text("directory"),
           text("template"),
-          text("alias") ?? path9.basename(text("directory")).toLowerCase().replace(/[^a-z0-9-]/g, "-")
+          text("alias") ?? path8.basename(path8.resolve(text("directory"))).toLowerCase().replace(/[^a-z0-9-]/g, "-")
         );
         break;
       case "connection.add":
@@ -1865,10 +1864,14 @@ async function dispatch(operation, input = {}, signal) {
         data = await editConnection(text("name"));
         break;
       case "connection.list":
-        data = await connections();
+        data = parsed.saved ? await oracle.savedConnections(signal) : await connections();
         break;
       case "connection.test":
-        data = await oracle.identity(await resolveConnection(text("name")));
+        data = await oracle.identity(
+          parsed.saved ? { kind: "sqlcl-store", name: text("name") } : await resolveConnection(text("name")),
+          signal
+        );
+        if (parsed.saved) data = { name: text("name"), ...data };
         break;
       case "docs.search":
         data = await referenceSearch(text("query"), text("version"), schemas["docs.search"].parse(parsed));

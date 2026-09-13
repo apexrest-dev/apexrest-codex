@@ -38,6 +38,16 @@ export async function dispatch(operation: string, input: Record<string, unknown>
       case 'doctor':
         data = await doctor();
         break;
+      case 'dependencies.install': {
+        const { ToolchainService } = await import('../../installer/src/toolchain.ts');
+        data = await new ToolchainService().apply(parsed);
+        break;
+      }
+      case 'dependencies.uninstall': {
+        const { uninstallTools } = await import('../../installer/src/uninstall-tools.ts');
+        data = await uninstallTools(parsed);
+        break;
+      }
       case 'setup':
       case 'plugin.install':
       case 'plugin.update': {
@@ -61,7 +71,7 @@ export async function dispatch(operation: string, input: Record<string, unknown>
           text('template') as 'blank-app' | 'customer-crm' | 'existing-app',
           text('alias') ??
             path
-              .basename(text('directory'))
+              .basename(path.resolve(text('directory')))
               .toLowerCase()
               .replace(/[^a-z0-9-]/g, '-'),
         );
@@ -73,10 +83,14 @@ export async function dispatch(operation: string, input: Record<string, unknown>
         data = await editConnection(text('name'));
         break;
       case 'connection.list':
-        data = await connections();
+        data = parsed.saved ? await oracle.savedConnections(signal) : await connections();
         break;
       case 'connection.test':
-        data = await oracle.identity(await resolveConnection(text('name')));
+        data = await oracle.identity(
+          parsed.saved ? { kind: 'sqlcl-store', name: text('name') } : await resolveConnection(text('name')),
+          signal,
+        );
+        if (parsed.saved) data = { name: text('name'), ...(data as Record<string, unknown>) };
         break;
       case 'docs.search':
         data = await referenceSearch(text('query'), text('version'), schemas['docs.search'].parse(parsed));

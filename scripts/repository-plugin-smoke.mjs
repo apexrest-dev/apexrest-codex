@@ -59,9 +59,34 @@ try {
   evidence.tools = tools;
   evidence.checks.push('14-native-mcp-tools-connected');
   const skills = await rpc.call('skills/list', { cwds: [project], forceReload: true });
-  for (const name of ['setup', 'project', 'apexlang', 'database', 'deploy', 'test', 'debug', 'review'])
-    assert.ok(JSON.stringify(skills).includes(`apexrest-${name}`), `Missing skill: ${name}`);
-  evidence.checks.push('eight-native-skills-discovered');
+  const nativeSkills = skills.data.flatMap((entry) => entry.skills);
+  const menu = [];
+  for (const name of [
+    'menu',
+    'setup',
+    'install-dependencies',
+    'project',
+    'apexlang',
+    'database',
+    'deploy',
+    'test',
+    'debug',
+    'review',
+  ]) {
+    const skill = nativeSkills.find((item) => item.name === `apexrest-apex:apexrest-${name}`);
+    assert.ok(skill?.enabled, `Missing or disabled skill: ${name}`);
+    assert.ok(skill.interface?.displayName, `Missing menu label: ${name}`);
+    assert.ok(skill.interface?.shortDescription, `Missing menu description: ${name}`);
+    assert.ok(skill.interface?.defaultPrompt?.includes(`$apexrest-${name}`), `Missing menu prompt: ${name}`);
+    menu.push({
+      name: skill.name,
+      displayName: skill.interface.displayName,
+      shortDescription: skill.interface.shortDescription,
+      defaultPrompt: skill.interface.defaultPrompt,
+    });
+  }
+  evidence.menu = menu;
+  evidence.checks.push('ten-native-skills-with-menu-metadata-discovered');
   const call = async (tool, args) => {
     const result = await rpc.call('mcpServer/tool/call', {
       threadId: thread.thread.id,

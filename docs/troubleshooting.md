@@ -4,6 +4,24 @@ English | [Українська](troubleshooting.uk.md)
 
 Start with `apexrest doctor --json`, then use the reported capability or error code. A detected executable, a validated compiler, native Codex discovery and a working database connection are separate states.
 
+## The apexrest command is missing or the menu is outdated
+
+**Install plugin** and managed setup create the launcher in the managed `bin` directory; installing tools alone and direct `codex plugin add` do not. Follow [PATH setup](getting-started.md#use-the-cli), or open the bundled runtime from a checkout:
+
+```sh
+node plugins/apexrest-apex/runtime/apexrest.mjs
+```
+
+If a local checkout still shows category menus or **Preview only**, rebuild it with `npm run plugin:sync` and reopen the TUI. Make sure you are invoking that checkout. The current menu has six actions; Enter on **Review** executes installation/removal. Other workflows use explicit CLI commands and the Codex plugin.
+
+If managed plugin files were removed, their launcher no longer has runtime code to start. Use the checkout command to install the plugin again. Before removal, **Keep plugin files** lets you retain a working launcher.
+
+## Saved connections are missing or fail their test
+
+The TUI reads the local SQLcl store. `connection add` creates only an APEXREST reference and does not add a connection to SQLcl. Save the connection in SQLcl, then press Ctrl+R in the picker. From the CLI, use `connection list --saved` to read that same store.
+
+Check `APEXREST_SQLCL`, `APEXREST_JAVA_HOME` and `APEXREST_HOME` if tools were installed elsewhere. Select the exact saved name, including case and spaces. Repair missing or expired credentials in SQLcl; successful TUI startup does not establish database connectivity.
+
 ## The plugin is installed but tools are missing
 
 Start a new Codex task after registration or update. Check native plugin listing and enablement in the same Codex profile. The tested Codex 0.154.0 host requires the compatibility package: the portable manifest passed schema validation and discovery but did not expose MCP tools on that host.

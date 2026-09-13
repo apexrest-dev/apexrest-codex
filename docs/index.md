@@ -8,16 +8,17 @@ APEXREST is a native Codex plugin for Oracle APEX development, controlled import
 
 ## Start here
 
-| Goal                                               | Guide                                             |
-| -------------------------------------------------- | ------------------------------------------------- |
-| Install the repository plugin and connect a target | [Getting started](getting-started.md)             |
-| Understand the product and examples                | [README](../README.md)                            |
-| Bring an existing application into source control  | [Existing applications](existing-app.md)          |
-| Configure environments, runtime paths and policy   | [Configuration](configuration.md)                 |
-| Learn the plan, import and recovery model          | [Deployment safety](deployment-safety.md)         |
-| Deploy without service tables                      | [Clean APEX deployment](clean-apex-deployment.md) |
-| Select and run the checks appropriate to a change  | [Testing](testing.md)                             |
-| Resolve setup, compiler or runtime failures        | [Troubleshooting](troubleshooting.md)             |
+| Goal                                                      | Guide                                             |
+| --------------------------------------------------------- | ------------------------------------------------- |
+| Install the repository plugin and connect a target        | [Getting started](getting-started.md)             |
+| Install/remove tools and test connections in the terminal | [Terminal interface](tui.md)                      |
+| Understand the product and examples                       | [README](../README.md)                            |
+| Bring an existing application into source control         | [Existing applications](existing-app.md)          |
+| Configure environments, runtime paths and policy          | [Configuration](configuration.md)                 |
+| Learn the plan, import and recovery model                 | [Deployment safety](deployment-safety.md)         |
+| Deploy without service tables                             | [Clean APEX deployment](clean-apex-deployment.md) |
+| Select and run the checks appropriate to a change         | [Testing](testing.md)                             |
+| Resolve setup, compiler or runtime failures               | [Troubleshooting](troubleshooting.md)             |
 
 ## Understand and extend
 

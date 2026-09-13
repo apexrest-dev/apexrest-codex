@@ -29,10 +29,12 @@ function help() {
   const key = selected.op as Operation;
   const lines = [
     'APEXREST for Codex — independent Oracle APEX developer tools',
-    'Usage: apexrest <command> [options]',
+    'Usage: apexrest [command] [options]',
+    'Run apexrest in a terminal to manage tools, plugins and saved SQLcl connections.',
+    '  tui [--project PATH]   Open the terminal UI explicitly',
     '',
     ...Object.keys(schemas)
-      .filter((x) => !['docs.read', 'metadata.read', 'test.run'].includes(x))
+      .filter((x) => x !== 'test.run')
       .map((x) => '  ' + x.replace('.', ' ')),
     '  test unit|sql|api|e2e|all [--env NAME]',
     '  mcp',
@@ -50,10 +52,42 @@ function help() {
       ),
       ...(positional[key] ?? []).map((p) => '  <' + p + '>'),
     );
+  if (key === 'dependencies.install')
+    lines.push(
+      '',
+      'Install managed Node.js, Java, SQLcl, Playwright and Chromium without registering the plugin.',
+      'Preview: apexrest dependencies install --dry-run',
+      'Install: apexrest dependencies install --yes',
+      '--accept-oracle-license records separate consent to the Oracle terms shown in the preview.',
+      '--skip-browser omits Playwright/Chromium; --install-os-deps explicitly enables browser OS packages.',
+      '--offline uses cached downloads; --home and --cache-dir select managed storage.',
+    );
+  if (key === 'dependencies.uninstall')
+    lines.push(
+      '',
+      'Preview: apexrest dependencies uninstall --dry-run',
+      'Remove managed tools: apexrest dependencies uninstall --yes',
+      'Preserves external runtimes, projects, saved connections and cache.',
+      'Node.js required by the APEXREST launcher or plugin is retained.',
+    );
+  if (key === 'connection.list' || key === 'connection.test')
+    lines.push('', '--saved uses the SQLcl connection store directly, without an APEXREST reference.');
   console.log(lines.join('\n'));
 }
 try {
-  if (!argv.length || argv.includes('--help') || argv.includes('-h')) help();
+  if (argv.includes('--help') || argv.includes('-h')) help();
+  else if (
+    argv[0] === 'tui' ||
+    (!argv.length && process.stdin.isTTY && process.stdout.isTTY && process.env.TERM !== 'dumb')
+  ) {
+    if (
+      argv.length > 1 &&
+      (argv.length !== 3 || argv[1] !== '--project' || !argv[2] || argv[2].startsWith('--'))
+    )
+      throw new Fault('INVALID_INPUT', 'Usage: apexrest tui [--project PATH]', 2);
+    const { runTui } = await import('./tui.ts');
+    await runTui(argv[2] ? { project: argv[2] } : {});
+  } else if (!argv.length) help();
   else if (argv[0] === '--job-worker') {
     if (argv.length !== 3) throw new Fault('INVALID_INPUT', 'Invalid internal job request.', 2);
     await executeJob(await loadProject(argv[1]!), argv[2]!, dispatch);
@@ -78,6 +112,7 @@ try {
       'nativeOnly',
       'keepRuntime',
       'headed',
+      'saved',
     ]);
     const numbers = new Set(['appId', 'offset', 'limit']);
     let index = 0;

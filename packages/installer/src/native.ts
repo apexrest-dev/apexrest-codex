@@ -9,9 +9,11 @@ import {
   withLock,
   writeJson,
   atomicWrite,
+  contained,
 } from '../../core/src/fs.ts';
-import { runProcess } from '../../core/src/process.ts';
 import { Fault } from '../../core/src/result.ts';
+import { nativeMarketplace, resolveNativePlugin } from './package-source.ts';
+import { checkCodex, codexInvoke, inspectRegistration, listMarketplaces } from './registration.ts';
 export interface NativeInstallRequest {
   source: string;
   home: string;
@@ -19,56 +21,83 @@ export interface NativeInstallRequest {
   codex?: string;
   node?: string;
   dryRun?: boolean;
+  expectedRegistration?: string;
 }
 export async function installNative(r: NativeInstallRequest) {
-  const source = await realpath(r.source);
+  const source = await resolveNativePlugin(r.source);
+  const payload = Object.fromEntries(
+    Object.entries(await inventory(source)).map(([file, digest]) => [
+      'plugins/apexrest-apex/' + file,
+      digest,
+    ]),
+  );
+  payload['.agents/plugins/marketplace.json'] = hash(JSON.stringify(nativeMarketplace, null, 2) + '\n');
+  const copyDigest = hash(canonical(payload));
+  const sourceMcpFile = (await exists(path.join(source, 'plugin.json'))) ? 'mcp.json' : '.mcp.json';
+  const sourceMcp = (await readJson(path.join(source, sourceMcpFile))) as {
+    mcpServers: Record<string, { command: string; args: string[]; env?: Record<string, string> }>;
+  };
+  const sourceServer = sourceMcp.mcpServers.apexrest;
+  if (!sourceServer) throw new Fault('INVALID_PACKAGE', 'Native package has no apexrest MCP server.', 2);
+  // A managed CLI can install itself again without embedding its previous home in
+  // the package identity. Only the fields this installer owns are normalized.
+  sourceServer.command = 'node';
+  sourceServer.args = ['runtime/mcp.mjs'];
+  delete sourceServer.env;
+  payload['plugins/apexrest-apex/' + sourceMcpFile] = hash(JSON.stringify(sourceMcp, null, 2) + '\n');
+  const digest = hash(canonical(payload));
   if (!r.dryRun) {
     await mkdir(r.home, { recursive: true, mode: 0o700 });
     await mkdir(r.codexHome, { recursive: true, mode: 0o700 });
   }
   const home = (await exists(r.home)) ? await realpath(r.home) : path.resolve(r.home);
   const codexHome = (await exists(r.codexHome)) ? await realpath(r.codexHome) : path.resolve(r.codexHome);
-  const digest = hash(canonical(await inventory(source)));
-  const destination = path.join(home, 'native', digest);
   const node = r.node ?? process.execPath;
-  if (r.dryRun) return { state: 'planned', sourceDigest: digest, destination, node, codexHome };
+  // Runtime bindings are part of the installation identity, so switching Node never
+  // rewrites a plugin that is still registered from the previous installation.
+  const destination = path.join(home, 'native', hash(canonical({ sourceDigest: digest, node, home })));
+  const invoke = codexInvoke(codexHome, (await exists(home)) ? home : process.cwd(), r.codex);
+  if (!(await exists(codexHome))) await checkCodex(codexHome, r.codex);
+  const inspect = async () =>
+    inspectRegistration(
+      (await exists(codexHome)) ? await listMarketplaces(invoke) : [],
+      home,
+      codexHome,
+      destination,
+    );
+  const registration = await inspect();
+  if (r.expectedRegistration && r.expectedRegistration !== registration.fingerprint)
+    throw new Fault(
+      'MARKETPLACE_CHANGED',
+      'The Codex registration changed after setup preflight. Review setup again.',
+      5,
+      'conflict',
+    );
+  if (r.dryRun)
+    return {
+      state: 'planned',
+      source,
+      scope: 'apexrest-plugin-only',
+      sourceDigest: digest,
+      destination,
+      node,
+      codexHome,
+      registration,
+    };
   return withLock(path.join(home, 'install.lock'), async () => {
     await mkdir(codexHome, { recursive: true, mode: 0o700 });
-    const invoke = async (args: string[]) => {
-      const result = await runProcess({
-        executable: r.codex ?? 'codex',
-        args,
-        cwd: home,
-        env: { ...process.env, CODEX_HOME: codexHome },
-        timeoutMs: 60000,
-      });
-      if (result.code !== 0 || result.timedOut)
-        throw new Fault('CODEX_REGISTRATION_FAILED', result.stderr || result.stdout, 3, 'blocked');
-      return JSON.parse(result.stdout) as unknown;
-    };
-    const markets = (await invoke(['plugin', 'marketplace', 'list', '--json'])) as {
-      marketplaces: { name: string; root: string }[];
-    };
-    const existing = markets.marketplaces.find((m) => m.name === 'apexrest');
-    const stateFile = path.join(home, 'installation.json');
-    const previous = (await exists(stateFile))
-      ? ((await readJson(stateFile)) as { destination: string })
-      : undefined;
-    if (existing && existing.root !== previous?.destination && existing.root !== destination)
-      throw new Fault(
-        'MARKETPLACE_OWNERSHIP_CONFLICT',
-        'An apexrest marketplace from another installation exists. It was left unchanged.',
-        5,
-      );
     const config = path.join(codexHome, 'config.toml');
-    if (await exists(config))
-      await cp(config, path.join(home, 'config-before-install-' + Date.now() + '.toml'));
+    const stamp = Date.now();
+    const configBackup = path.join(home, 'config-before-install-' + stamp + '.toml');
+    if (await exists(config)) await cp(config, configBackup);
     if (!(await exists(destination))) {
       const staging = destination + '.staging';
       await rm(staging, { recursive: true, force: true });
       await mkdir(staging, { recursive: true, mode: 0o700 });
-      await cp(source, staging, { recursive: true });
-      if (hash(canonical(await inventory(staging))) !== digest)
+      await mkdir(path.join(staging, 'plugins'), { recursive: true });
+      await cp(source, path.join(staging, 'plugins/apexrest-apex'), { recursive: true });
+      await writeJson(path.join(staging, '.agents/plugins/marketplace.json'), nativeMarketplace);
+      if (hash(canonical(await inventory(staging))) !== copyDigest)
         throw new Fault('PACKAGE_COPY_INVALID', 'Native package copy changed.', 5);
       await rename(staging, destination);
     }
@@ -84,9 +113,112 @@ export async function installNative(r: NativeInstallRequest) {
     server.args = [path.join(root, 'runtime/mcp.mjs')];
     server.env = { APEXREST_HOME: home };
     await writeJson(mcpPath, mcp);
-    const marketplace = await invoke(['plugin', 'marketplace', 'add', destination, '--json']);
-    const installed = await invoke(['plugin', 'add', 'apexrest-apex@apexrest', '--json']);
-    const listing = await invoke(['plugin', 'list', '--marketplace', 'apexrest', '--json']);
+    const current = await inspect();
+    if (current.fingerprint !== registration.fingerprint)
+      throw new Fault(
+        'MARKETPLACE_CHANGED',
+        'The Codex registration changed during setup. Nothing was re-registered; review setup again.',
+        5,
+        'conflict',
+      );
+    const transition = path.join(home, 'registration-before-install-' + stamp + '.json');
+    const previousListing = registration.previousRoot
+      ? await invoke(['plugin', 'list', '--marketplace', 'apexrest', '--json'])
+      : undefined;
+    const previousPlugin = (
+      previousListing as { installed?: { pluginId: string; enabled: boolean }[] } | undefined
+    )?.installed?.find((plugin) => plugin.pluginId === 'apexrest-apex@apexrest');
+    const record = { registration, destination, codexHome, configBackup, previousListing };
+    await writeJson(transition, { status: 'prepared', ...record });
+    let marketplace: unknown, installed: unknown, listing: unknown;
+    const replacing = registration.previousRoot && registration.previousRoot !== destination;
+    try {
+      if (replacing) await invoke(['plugin', 'marketplace', 'remove', 'apexrest', '--json']);
+      marketplace = await invoke(['plugin', 'marketplace', 'add', destination, '--json']);
+      installed = await invoke(['plugin', 'add', 'apexrest-apex@apexrest', '--json']);
+      const cached = (installed as { installedPath?: string }).installedPath;
+      if (
+        !cached ||
+        canonical(await inventory(await contained(codexHome, cached))) !== canonical(await inventory(root))
+      )
+        throw new Fault('NATIVE_CACHE_MISMATCH', 'Codex did not install the reviewed plugin files.', 5);
+      listing = await invoke(['plugin', 'list', '--marketplace', 'apexrest', '--json']);
+      if (
+        !(listing as { installed?: { pluginId: string; enabled: boolean }[] }).installed?.some(
+          (plugin) => plugin.pluginId === 'apexrest-apex@apexrest' && plugin.enabled,
+        )
+      )
+        throw new Fault(
+          'NATIVE_PLUGIN_NOT_ENABLED',
+          'Codex did not enable the installed APEXREST plugin.',
+          3,
+        );
+      const after = await listMarketplaces(invoke);
+      if (
+        after.find((m) => m.name === 'apexrest')?.root !== destination ||
+        canonical(after.filter((m) => m.name !== 'apexrest')) !==
+          canonical(registration.markets.filter((m) => m.name !== 'apexrest'))
+      )
+        throw new Fault(
+          'MARKETPLACE_CHANGED',
+          'Codex registration verification failed. Inspect the saved registration record before retrying.',
+          5,
+          'conflict',
+        );
+      await writeJson(transition, { status: 'registered', ...record });
+    } catch (error) {
+      let recovery = 'needs-review';
+      let unknown = error instanceof Fault && error.status === 'outcome_unknown';
+      if (replacing && !(error instanceof Fault && error.status === 'outcome_unknown')) {
+        try {
+          const after = await listMarketplaces(invoke);
+          const selected = after.find((m) => m.name === 'apexrest');
+          if (
+            canonical(after.filter((m) => m.name !== 'apexrest')) !==
+              canonical(registration.markets.filter((m) => m.name !== 'apexrest')) ||
+            (await inspectRegistration(registration.markets, home, codexHome, destination)).fingerprint !==
+              registration.fingerprint
+          )
+            throw new Error('The prior registration or source changed externally.');
+          if (selected && selected.root !== destination && selected.root !== registration.previousRoot)
+            throw new Error('Registration changed externally.');
+          if (selected?.root === destination)
+            await invoke(['plugin', 'marketplace', 'remove', 'apexrest', '--json']);
+          if (selected?.root !== registration.previousRoot)
+            await invoke(['plugin', 'marketplace', 'add', registration.previousRoot!, '--json']);
+          if (previousPlugin?.enabled) {
+            const restored = (await invoke(['plugin', 'add', 'apexrest-apex@apexrest', '--json'])) as {
+              installedPath?: string;
+            };
+            const previousRoot = await resolveNativePlugin(registration.previousRoot!);
+            if (
+              !restored.installedPath ||
+              canonical(await inventory(await contained(codexHome, restored.installedPath))) !==
+                canonical(await inventory(previousRoot))
+            )
+              throw new Error('The previous cached plugin could not be verified.');
+          }
+          if (
+            (await listMarketplaces(invoke)).find((m) => m.name === 'apexrest')?.root !==
+            registration.previousRoot
+          )
+            throw new Error('The previous marketplace could not be verified.');
+          recovery = previousPlugin?.enabled
+            ? 'previous-registration-restored'
+            : 'previous-marketplace-restored; plugin-state-needs-review';
+        } catch (recoveryError) {
+          unknown ||= recoveryError instanceof Fault && recoveryError.status === 'outcome_unknown';
+          recovery = unknown ? 'outcome-unknown' : 'needs-review';
+        }
+      } else if (error instanceof Fault && error.status === 'outcome_unknown') recovery = 'outcome-unknown';
+      await writeJson(transition, { status: 'failed', recovery, ...record });
+      throw new Fault(
+        error instanceof Fault ? error.code : 'CODEX_REGISTRATION_FAILED',
+        `${error instanceof Error ? error.message : 'Registration failed.'} Recovery: ${recovery}. Record: ${transition}`,
+        unknown ? 6 : error instanceof Fault ? error.exitCode : 3,
+        unknown ? 'outcome_unknown' : error instanceof Fault ? error.status : 'blocked',
+      );
+    }
     const state = {
       schemaVersion: 1,
       state: 'registered',
@@ -98,6 +230,7 @@ export async function installNative(r: NativeInstallRequest) {
       marketplace,
       installed,
       listing,
+      registration: { ...registration, transition },
       actions: ['CODEX_RELOAD_REQUIRED', 'NATIVE_HOST_VERIFICATION_REQUIRED'],
     };
     await writeJson(path.join(home, 'installation.json'), state);
@@ -118,6 +251,7 @@ export async function installNative(r: NativeInstallRequest) {
       );
       await chmod(launcher, 0o700);
     }
+    await writeJson(transition, { status: 'completed', ...record });
     return state;
   });
 }

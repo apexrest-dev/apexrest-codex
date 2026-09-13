@@ -1,16 +1,12 @@
 import { z } from 'zod';
 import { metadataRequest } from './metadata.ts';
 import { refName, relativePath } from './config.ts';
+import { savedConnectionName } from './connections.ts';
 const project = z.string().min(1).max(4096).optional(),
   env = refName;
 const base = { project };
-const setup = {
-  ...base,
-  from: z.string().optional(),
+const dependencies = {
   home: z.string().optional(),
-  codexHome: z.string().optional(),
-  scope: z.enum(['user', 'project']).default('user'),
-  version: z.string().optional(),
   yes: z.boolean().default(false),
   nonInteractive: z.boolean().default(false),
   offline: z.boolean().default(false),
@@ -19,12 +15,26 @@ const setup = {
   acceptOracleLicense: z.boolean().default(false),
   skipBrowser: z.boolean().default(false),
   installOsDeps: z.boolean().default(false),
+};
+const setup = {
+  ...base,
+  ...dependencies,
+  from: z.string().optional(),
+  codexHome: z.string().optional(),
+  scope: z.enum(['user', 'project']).default('user'),
+  version: z.string().optional(),
   nativeOnly: z.boolean().default(false),
 };
 export const schemas = {
   version: z.strictObject({}),
   doctor: z.strictObject(base),
   setup: z.strictObject(setup),
+  'dependencies.install': z.strictObject(dependencies),
+  'dependencies.uninstall': z.strictObject({
+    home: z.string().optional(),
+    dryRun: z.boolean().default(false),
+    yes: z.boolean().default(false),
+  }),
   'plugin.validate': z.strictObject({ ...base, from: z.string().optional() }),
   'plugin.install': z.strictObject(setup),
   'plugin.update': z.strictObject({ ...setup, version: z.string().min(1) }),
@@ -41,9 +51,13 @@ export const schemas = {
   }),
   'project.adopt': z.strictObject({ ...base, env, appId: z.number().int().positive() }),
   'project.inspect': z.strictObject(base),
-  'connection.add': z.strictObject({ ...base, name: refName, sqlclName: refName }),
-  'connection.list': z.strictObject(base),
-  'connection.test': z.strictObject({ ...base, name: refName }),
+  'connection.add': z.strictObject({ ...base, name: refName, sqlclName: savedConnectionName }),
+  'connection.list': z.strictObject({ ...base, saved: z.boolean().default(false) }),
+  'connection.test': z.strictObject({
+    ...base,
+    name: savedConnectionName,
+    saved: z.boolean().default(false),
+  }),
   'connection.remove': z.strictObject({ ...base, name: refName }),
   'docs.search': z.strictObject({
     query: z.string().min(1).max(256),

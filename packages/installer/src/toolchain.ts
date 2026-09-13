@@ -146,6 +146,11 @@ export class ToolchainService {
       platform,
       steps,
       playwright: lock.playwright.version,
+      browser: {
+        action: r.skipBrowser ? 'skip' : 'install-verify',
+        engine: 'chromium',
+        installOsDeps: Boolean(r.installOsDeps && !r.skipBrowser),
+      },
       offline: r.offline ?? false,
       elevation: r.installOsDeps ? 'explicitly-requested' : 'not-authorized',
       proxy: Boolean(process.env.HTTPS_PROXY || process.env.https_proxy),
@@ -158,7 +163,7 @@ export class ToolchainService {
     if (!r.yes)
       throw new Fault(
         'SETUP_APPROVAL_REQUIRED',
-        'Review setup --dry-run, then pass --yes for technical steps. License and elevation consent are separate.',
+        'Review dependencies install --dry-run, then pass --yes for technical steps. License and elevation consent are separate.',
         4,
         'needs-user-action',
       );
@@ -296,8 +301,10 @@ export class ToolchainService {
         }
         state.playwright = cli;
       } else {
-        state.components.playwright = 'not-installed';
-        actions.push({ code: 'PLAYWRIGHT_SETUP_REQUIRED' });
+        if (!state.playwright) {
+          state.components.playwright = 'not-installed';
+          actions.push({ code: 'PLAYWRIGHT_SETUP_REQUIRED' });
+        }
       }
       await writeJson(path.join(plan.home, 'runtime.json'), state);
       return {

@@ -2,53 +2,17 @@ import { VERSION } from '../../core/src/version.ts';
 import path from 'node:path';
 import { homedir } from 'node:os';
 import { readFile, rm } from 'node:fs/promises';
-import { Ajv2020 } from 'ajv/dist/2020.js';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
-import { exists, inventory, readJson, writeJson, contained } from '../../core/src/fs.ts';
+import { exists, readJson, writeJson, contained } from '../../core/src/fs.ts';
 import { managedHome, requireTrust } from '../../core/src/config.ts';
-import { resourceRoot } from '../../core/src/project.ts';
 import { Fault } from '../../core/src/result.ts';
 import { runProcess } from '../../core/src/process.ts';
 import { installNative, installationState } from './native.ts';
+import { resolveNativePlugin, validateNative } from './package-source.ts';
+export { validateNative } from './package-source.ts';
 import { ToolchainService, runtimeState } from './toolchain.ts';
 import type { SetupRequest } from './toolchain.ts';
-export async function validateNative(source?: string) {
-  const root = path.resolve(source ?? path.join(resourceRoot(), '..'));
-  await inventory(root);
-  const portable = await exists(path.join(root, 'plugin.json'));
-  const manifest = (await readJson(
-    path.join(root, portable ? 'plugin.json' : '.codex-plugin/plugin.json'),
-  )) as { name: string; version: string; mcpServers?: string };
-  if (
-    manifest.name !== 'apexrest-apex' ||
-    !/^\d+\.\d+\.\d+(?:-[\w.-]+)?(?:\+[\w.-]+)?$/.test(manifest.version)
-  )
-    throw new Fault('INVALID_PACKAGE', 'Invalid plugin identity or version.', 2);
-  const mcp = (await readJson(path.join(root, portable ? 'mcp.json' : '.mcp.json'))) as {
-    mcpServers: Record<string, { command: string; args: string[] }>;
-  };
-  if (!mcp.mcpServers.apexrest || Object.keys(mcp.mcpServers).length !== 1)
-    throw new Fault('INVALID_PACKAGE', 'Package must expose exactly its own MCP server.', 2);
-  if (portable) {
-    const ajv = new Ajv2020({ strict: false });
-    for (const [file, value] of [
-      ['plugin', manifest],
-      ['mcp', mcp],
-    ] as const)
-      if (
-        !ajv.validate(
-          (await readJson(path.join(resourceRoot(), `schemas/vendor/${file}.schema.json`))) as object,
-          value,
-        )
-      )
-        throw new Fault('MANIFEST_SCHEMA_INVALID', ajv.errorsText(), 2);
-  } else if (manifest.mcpServers !== './.mcp.json')
-    throw new Fault('MANIFEST_SCHEMA_INVALID', 'Compatibility manifest must use the companion .mcp.json.', 2);
-  for (const file of ['runtime/mcp.mjs', 'runtime/apexrest.mjs', 'skills/apexrest-setup/SKILL.md'])
-    if (!(await exists(path.join(root, file)))) throw new Fault('INCOMPLETE_PACKAGE', `Missing ${file}`, 2);
-  return { status: 'valid', profile: portable ? 'portable' : 'codex-compat', version: manifest.version };
-}
 export async function setup(input: Record<string, unknown>) {
   const text = (key: string) => input[key] as string | undefined;
   const home = path.resolve(
@@ -66,8 +30,8 @@ export async function setup(input: Record<string, unknown>) {
       'blocked',
     );
   }
-  const source = path.resolve(text('from') ?? path.join(resourceRoot(), '../../..'));
-  const validation = await validateNative(path.join(source, 'plugins/apexrest-apex'));
+  const source = await resolveNativePlugin(text('from'));
+  const validation = await validateNative(source);
   if (text('version') && text('version') !== validation.version)
     throw new Fault(
       'VERSION_MISMATCH',
@@ -88,12 +52,22 @@ export async function setup(input: Record<string, unknown>) {
     skipBrowser: Boolean(input.skipBrowser),
     installOsDeps: Boolean(input.installOsDeps),
   };
+  const existingRuntime = await runtimeState(home);
+  const nativePlan = await installNative({
+    source,
+    home,
+    codexHome,
+    dryRun: true,
+    node: existingRuntime.node ?? process.execPath,
+  });
   if (input.dryRun)
     return {
       status: 'planned',
       package: validation,
-      toolchain: await new ToolchainService().plan(request),
-      native: await installNative({ source, home, codexHome, dryRun: true }),
+      toolchain: input.nativeOnly
+        ? { status: 'not-requested', components: {} }
+        : await new ToolchainService().plan(request),
+      native: nativePlan,
     };
   if (!input.yes)
     throw new Fault(
@@ -106,7 +80,13 @@ export async function setup(input: Record<string, unknown>) {
     ? { status: 'not-requested', components: {} }
     : await new ToolchainService().apply(request);
   const runtime = await runtimeState(home);
-  const native = await installNative({ source, home, codexHome, node: runtime.node ?? process.execPath });
+  const native = await installNative({
+    source,
+    home,
+    codexHome,
+    node: runtime.node ?? process.execPath,
+    expectedRegistration: nativePlan.registration.fingerprint,
+  });
   if (!('root' in native)) throw new Fault('INSTALL_NOT_COMPLETED', 'Native install remained a plan.', 3);
   const mcp = JSON.parse(
     await readFile(
