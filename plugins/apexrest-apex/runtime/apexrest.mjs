@@ -4,13 +4,13 @@ import {
   dispatch,
   executeJob,
   schemas
-} from "./chunk-FCJMAAZV.mjs";
+} from "./chunk-WCTSQOSE.mjs";
 import "./chunk-4ACPFYCB.mjs";
 import {
   Fault,
   failure,
   loadProject
-} from "./chunk-FRWXKL3F.mjs";
+} from "./chunk-FAC6KCSL.mjs";
 
 // packages/cli/src/main.ts
 var argv = process.argv.slice(2);
@@ -78,6 +78,16 @@ function help() {
     );
   if (key === "connection.list" || key === "connection.test")
     lines.push("", "--saved uses the SQLcl connection store directly, without an APEXREST reference.");
+  if (key === "sqlcl.configure" || key === "sqlcl.status")
+    lines.push(
+      "",
+      "Select the Oracle backend for CLI and APEXREST MCP operations; existing sessions keep their mode.",
+      "apexrest sqlcl configure --mode cli|mcp --json",
+      "cli: SQLcl subprocess (default). mcp: official SQLcl stdio server (sql -mcp).",
+      "--mcp-restrict-level 4|1: 4 is the default; 1 explicitly permits scripts but blocks host commands.",
+      "Saved in APEXREST_HOME/sqlcl.json. No connection, download or Codex registration is changed.",
+      "SQLcl MCP can write its own database audit log on connected operations. No silent CLI fallback."
+    );
   console.log(lines.join("\n"));
 }
 try {
@@ -85,7 +95,7 @@ try {
   else if (argv[0] === "tui" || !argv.length && process.stdin.isTTY && process.stdout.isTTY && process.env.TERM !== "dumb") {
     if (argv.length > 1 && (argv.length !== 3 || argv[1] !== "--project" || !argv[2] || argv[2].startsWith("--")))
       throw new Fault("INVALID_INPUT", "Usage: apexrest tui [--project PATH]", 2);
-    const { runTui } = await import("./chunk-TCODHGCR.mjs");
+    const { runTui } = await import("./chunk-42MMO3E2.mjs");
     await runTui(argv[2] ? { project: argv[2] } : {});
   } else if (!argv.length) help();
   else if (argv[0] === "--job-worker") {
@@ -93,7 +103,7 @@ try {
     await executeJob(await loadProject(argv[1]), argv[2], dispatch);
   } else if (argv[0] === "mcp") {
     if (argv.length !== 1) throw new Fault("INVALID_INPUT", "mcp accepts no arguments.", 2);
-    const { startMcp } = await import("./chunk-CR5VXC7Z.mjs");
+    const { startMcp } = await import("./chunk-WTNYLSQC.mjs");
     await startMcp();
   } else {
     const selectedOp = argv[0] === "--version" ? { op: "version", start: 1 } : selected;

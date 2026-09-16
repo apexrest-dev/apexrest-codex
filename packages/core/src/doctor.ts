@@ -1,6 +1,7 @@
 import path from 'node:path';
 import { runProcess } from './process.ts';
 import { runtimeState } from '../../installer/src/toolchain.ts';
+import { sqlclConfig } from './sqlcl-config.ts';
 export async function doctor() {
   const state = await runtimeState();
   const java = process.env.APEXREST_JAVA_HOME
@@ -42,6 +43,7 @@ export async function doctor() {
       baseline: process.versions.node.split('.')[0] === '24',
     },
     managedComponents: state.components,
+    sqlcl: await sqlclConfig(),
     probes,
     database: 'not-configured',
     nativeHost: 'requires-host-verification',

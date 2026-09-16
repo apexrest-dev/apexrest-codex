@@ -10,7 +10,7 @@ Opening this menu is navigation. Show the following choices in the conversation 
 | Menu entry | Functions | Workflow |
 | --- | --- | --- |
 | Install dependencies | Install or preview Node.js, Java, SQLcl, Playwright and Chromium; Oracle tools only; offline/cache options | [Install dependencies](../apexrest-install-dependencies/SKILL.md) |
-| Setup and connections | Diagnose tools; add, list, test or remove local connection references; inspect plugin version and installation | [Setup](../apexrest-setup/SKILL.md) |
+| Setup and connections | Diagnose tools; select SQLcl CLI or official SQLcl MCP; add, list, test or remove local connection references; inspect plugin version and installation | [Setup](../apexrest-setup/SKILL.md) |
 | Projects | Create a project, adopt an identified application, inspect source and environment configuration | [Projects](../apexrest-project/SKILL.md) |
 | APEX applications | Generate, edit, export, validate or compare APEXlang; pages, forms, reports, grids, charts and shared components; search/read pinned Oracle references | [APEXlang](../apexrest-apexlang/SKILL.md) |
 | Database and PL/SQL | Read allowlisted metadata, design migrations and PL/SQL, plan database changes | [Database](../apexrest-database/SKILL.md) |
@@ -29,6 +29,7 @@ The following entries cover the shared operation catalog. Dots below correspond 
 | --- | --- |
 | Setup and maintenance | `version`, `doctor`, `setup`, `plugin.validate`, `plugin.install`, `plugin.update`, `plugin.uninstall`, `connection.add`, `connection.list`, `connection.test`, `connection.remove` |
 | Dependencies | `dependencies.install`, `dependencies.uninstall` |
+| SQLcl backend | `sqlcl.status`, `sqlcl.configure` |
 | Projects | `project.init`, `project.adopt`, `project.inspect` |
 | APEX and references | `apex.generate`, `apex.export`, `apex.validate`, `apex.diff`, `docs.search`, `docs.read`, `docs.sync` |
 | Database | `metadata.read`, `db.plan` |

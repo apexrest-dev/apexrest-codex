@@ -6,7 +6,7 @@ import {
   runtimeState,
   withLock,
   writeJson
-} from "./chunk-FRWXKL3F.mjs";
+} from "./chunk-FAC6KCSL.mjs";
 
 // packages/installer/src/uninstall-tools.ts
 import path from "node:path";

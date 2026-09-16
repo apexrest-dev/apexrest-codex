@@ -72,6 +72,16 @@ function help() {
     );
   if (key === 'connection.list' || key === 'connection.test')
     lines.push('', '--saved uses the SQLcl connection store directly, without an APEXREST reference.');
+  if (key === 'sqlcl.configure' || key === 'sqlcl.status')
+    lines.push(
+      '',
+      'Select the Oracle backend for CLI and APEXREST MCP operations; existing sessions keep their mode.',
+      'apexrest sqlcl configure --mode cli|mcp --json',
+      'cli: SQLcl subprocess (default). mcp: official SQLcl stdio server (sql -mcp).',
+      '--mcp-restrict-level 4|1: 4 is the default; 1 explicitly permits scripts but blocks host commands.',
+      'Saved in APEXREST_HOME/sqlcl.json. No connection, download or Codex registration is changed.',
+      'SQLcl MCP can write its own database audit log on connected operations. No silent CLI fallback.',
+    );
   console.log(lines.join('\n'));
 }
 try {

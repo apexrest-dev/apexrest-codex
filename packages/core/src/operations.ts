@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { metadataRequest } from './metadata.ts';
 import { refName, relativePath } from './config.ts';
 import { savedConnectionName } from './connections.ts';
+import { sqlclMode, sqlclRestriction } from './sqlcl-config.ts';
 const project = z.string().min(1).max(4096).optional(),
   env = refName;
 const base = { project };
@@ -28,6 +29,8 @@ const setup = {
 export const schemas = {
   version: z.strictObject({}),
   doctor: z.strictObject(base),
+  'sqlcl.status': z.strictObject({}),
+  'sqlcl.configure': z.strictObject({ mode: sqlclMode, mcpRestrictLevel: sqlclRestriction.optional() }),
   setup: z.strictObject(setup),
   'dependencies.install': z.strictObject(dependencies),
   'dependencies.uninstall': z.strictObject({

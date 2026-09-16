@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "asOf": "2026-09-13",
+  "asOf": "2026-09-16",
   "release": "0.1.0-beta.1",
   "overall": "partial-local-beta",
   "statusSemantics": {
@@ -333,7 +333,13 @@
         "docs/evidence/tui-apexlang-dashboard-local.json",
         "packages/cli/src/tui-apexlang.ts",
         "packages/cli/src/tui-home.ts",
-        "tests/unit/tui-apexlang.test.ts"
+        "tests/unit/tui-apexlang.test.ts",
+        "packages/core/src/sqlcl-config.ts",
+        "packages/core/src/sqlcl-mcp.ts",
+        "tests/unit/sqlcl-transport.test.ts",
+        "scripts/verify-sqlcl-transports.mjs",
+        "docs/evidence/sqlcl-transport-local.json",
+        "docs/evidence/sqlcl-transport-oracle-local.json"
       ],
       "blocker": null
     },

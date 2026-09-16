@@ -9,6 +9,8 @@ import { canonical, contained, exists, hash, inventory, readJson, writeJson } fr
 import { Fault } from './result.ts';
 import { runProcess } from './process.ts';
 import type { ProcessRequest, ProcessResult } from './process.ts';
+import { sqlclConfig, type SqlclConfig } from './sqlcl-config.ts';
+import { runSqlclMcp, type SqlclMcpRequest } from './sqlcl-mcp.ts';
 export type Runner = (request: ProcessRequest) => Promise<ProcessResult>;
 export function sqlclToken(value: string) {
   if (!value || /[\r\n\x00"&]/.test(value))
@@ -82,16 +84,21 @@ export function oracleDiagnostics(r: ProcessResult, mutation = false, format: 't
   return output;
 }
 export class OracleAdapter {
+  private selectedTransport: Promise<SqlclConfig> | undefined;
   private capabilityHelp: { key: string; help: string } | undefined;
   private pendingHelp: { key: string; signal: AbortSignal | undefined; result: Promise<string> }[] = [];
   constructor(
     private runner: Runner = runProcess,
     private executable = process.env.APEXREST_SQLCL ?? 'sql',
+    private mcpRunner: (request: SqlclMcpRequest) => Promise<ProcessResult> = runSqlclMcp,
   ) {}
   async settings() {
     const file = path.join(managedHome(), 'runtime.json');
     const state = (await exists(file)) ? ((await readJson(file)) as { sqlcl?: string; java?: string }) : {};
+    // Pin the transport for this operation, including plan/apply preflight and writes.
+    const transport = await (this.selectedTransport ??= sqlclConfig());
     return {
+      ...transport,
       executable: process.env.APEXREST_SQLCL ?? state.sqlcl ?? this.executable,
       javaHome:
         process.env.APEXREST_JAVA_HOME ??
@@ -108,6 +115,7 @@ export class OracleAdapter {
   ) {
     const work = cwd ?? (await this.stage());
     const settings = await this.settings();
+    if (mutation) await this.requireMutationSupport();
     const args = [
       '-S',
       '-L',
@@ -124,19 +132,54 @@ export class OracleAdapter {
     delete env.JAVA_TOOL_OPTIONS;
     delete env._JAVA_OPTIONS;
     delete env.JDK_JAVA_OPTIONS;
-    const result = await this.runner({
+    const preamble =
+      'set define off\nset echo off\nset feedback off\n' +
+      (settings.mode === 'mcp' && settings.mcpRestrictLevel === '4'
+        ? ''
+        : 'whenever oserror exit failure rollback\nwhenever sqlerror exit failure rollback\n');
+    const marker = `APEXREST_COMPLETE_${randomUUID().replaceAll('-', '')}`;
+    const request: ProcessRequest = {
       executable: settings.executable,
       args,
       cwd: work,
       env,
-      input:
-        'set define off\nset echo off\nset feedback off\nwhenever oserror exit failure rollback\nwhenever sqlerror exit failure rollback\n' +
-        input +
-        '\nexit\n',
+      input: preamble + input + '\nexit\n',
       timeoutMs: 180000,
       ...(signal ? { signal } : {}),
-    });
-    return { ...result, output: oracleDiagnostics(result, mutation, format), work };
+    };
+    const result =
+      settings.mode === 'mcp'
+        ? await this.mcpRunner({
+            ...request,
+            // Let SQLcl apply its MCP default. In 26.1, explicit -R 4
+            // also suppresses connmgr output, unlike the default MCP profile.
+            args: settings.mcpRestrictLevel === '4' ? ['-mcp'] : ['-R', '1', '-mcp'],
+            // CLI's final EXIT commits on success. Preserve that transaction
+            // boundary before acknowledging a write over a persistent MCP session.
+            input: preamble + input + (mutation ? '\ncommit;\n' : '\n') + `prompt ${marker}\n`,
+            mutation,
+            ...(connection ? { connectionName: parse(savedConnectionName, connection.name) } : {}),
+          })
+        : await this.runner(request);
+    const output = oracleDiagnostics(result, mutation, format);
+    if (settings.mode === 'mcp' && !output.split(/\r?\n/).some((line) => line.trim() === marker))
+      throw new Fault(
+        'SQLCL_MCP_INCOMPLETE',
+        'SQLcl MCP did not confirm the complete command batch.',
+        6,
+        mutation ? 'outcome_unknown' : 'failed',
+      );
+    return { ...result, output: settings.mode === 'mcp' ? output.replace(marker, '').trim() : output, work };
+  }
+  async requireMutationSupport() {
+    const settings = await this.settings();
+    if (settings.mode === 'mcp' && settings.mcpRestrictLevel !== '1')
+      throw new Fault(
+        'SQLCL_MCP_RESTRICTED',
+        'SQLcl MCP restrict level 4 cannot provide fail-stop scripts for writes. Explicitly select MCP restrict level 1 in SQLcl settings for authorized deployment/scripts.',
+        3,
+        'blocked',
+      );
   }
   async stage() {
     const root = path.join(managedHome(), 'staging');

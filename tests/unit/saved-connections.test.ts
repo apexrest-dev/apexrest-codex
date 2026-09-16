@@ -15,7 +15,13 @@ const result = (stdout: string, changes: Partial<ProcessResult> = {}): ProcessRe
 });
 function adapter(runner: Runner) {
   const oracle = new OracleAdapter(runner);
-  oracle.settings = async () => ({ executable: '/fixture/sql', javaHome: '/fixture/java' });
+  oracle.settings = async () => ({
+    executable: '/fixture/sql',
+    javaHome: '/fixture/java',
+    schemaVersion: 1,
+    mode: 'cli',
+    mcpRestrictLevel: '4',
+  });
   oracle.stage = async () => '/tmp';
   return oracle;
 }

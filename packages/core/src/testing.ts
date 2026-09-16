@@ -144,6 +144,7 @@ export class TestService {
       if (!envName) throw new Fault('ENVIRONMENT_REQUIRED', 'Remote test suites require --env.', 2);
       const env = await this.authorize(ctx, envName);
       if (suite === 'sql') {
+        await this.oracle.requireMutationSupport();
         const connection = await resolveConnection(env.deployConnectionRef);
         await this.oracle.verifyTarget(env, connection);
         const framework = await this.oracle.jsonQuery(

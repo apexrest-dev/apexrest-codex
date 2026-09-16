@@ -52,7 +52,13 @@ async function adapter(runner: Runner, identifiable = true) {
   }
   const oracle = new OracleAdapter(runner);
   oracle.stage = async () => root;
-  oracle.settings = async () => ({ executable, javaHome: '/fixture/java' });
+  oracle.settings = async () => ({
+    executable,
+    javaHome: '/fixture/java',
+    schemaVersion: 1,
+    mode: 'cli',
+    mcpRestrictLevel: '4',
+  });
   return { oracle, executable, library };
 }
 

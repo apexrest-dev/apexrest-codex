@@ -14,7 +14,9 @@ cd apexrest-codex
 node plugins/apexrest-apex/runtime/apexrest.mjs
 ```
 
-If you already have a checkout, run the last command from it. The APEXREST logo appears with six actions: **Install tools**, **Uninstall tools**, **Install plugin**, **Uninstall plugin**, **List saved SQLcl connections** and **Test saved SQLcl connection**.
+If you already have a checkout, run the last command from it. The APEXREST logo appears with seven actions: **Install tools**, **Uninstall tools**, **Install plugin**, **Uninstall plugin**, **List saved SQLcl connections** and **Test saved SQLcl connection**.
+
+**SQLcl mode: CLI / MCP** saves the Oracle execution backend: SQLcl CLI or the official SQLcl MCP server (`sql -mcp`). This separate TUI action does not change plugin registration. See [SQLcl modes](../../docs/tui.md#sqlcl-mode-cli-or-mcp).
 
 The home screen also includes a table of APEXlang types from the bundled Oracle reference. Tab switches between actions and the catalogue; type a name or group to search. Browsing needs no database connection.
 
@@ -64,7 +66,7 @@ codex plugin add apexrest-apex@apexrest
 codex plugin list --json
 ```
 
-This route does not create an `apexrest` shell command. In a new Codex task, send `Use $apexrest-menu` for all workflows or use `$apexrest-install-dependencies` for dependencies. The conversational skill menu and explicit CLI retain their additional options; the six TUI actions are described above. The [plugin installation guide](../../docs/getting-started.md#install-the-plugin) covers verification and navigation.
+This route does not create an `apexrest` shell command. In a new Codex task, send `Use $apexrest-menu` for all workflows or use `$apexrest-install-dependencies` for dependencies. The conversational skill menu and explicit CLI retain their additional options; the seven TUI actions are described above. The [plugin installation guide](../../docs/getting-started.md#install-the-plugin) covers verification and navigation.
 
 ## Uninstall
 

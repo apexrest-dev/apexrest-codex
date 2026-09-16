@@ -44,6 +44,7 @@ async function prepared(backup = false, backend: 'local' | 'database' = 'local')
     plan.digest = planDigest(plan);
   }
   const fake = {
+    async requireMutationSupport() {},
     async verifyTarget() {
       calls.push('identity');
       return { application: app };

@@ -7,6 +7,7 @@ import {
   OracleAdapter,
   atomicWrite,
   canonical,
+  configureSqlcl,
   connections,
   contained,
   editConnection,
@@ -35,11 +36,14 @@ import {
   runtimeState,
   savedConnectionName,
   sqlLiteral,
+  sqlclConfig,
+  sqlclMode,
+  sqlclRestriction,
   sqlclToken,
   success,
   withLock,
   writeJson
-} from "./chunk-FRWXKL3F.mjs";
+} from "./chunk-FAC6KCSL.mjs";
 
 // packages/core/src/metadata.ts
 var metadataRequest = external_exports.strictObject({
@@ -111,6 +115,8 @@ var setup = {
 var schemas = {
   version: external_exports.strictObject({}),
   doctor: external_exports.strictObject(base),
+  "sqlcl.status": external_exports.strictObject({}),
+  "sqlcl.configure": external_exports.strictObject({ mode: sqlclMode, mcpRestrictLevel: sqlclRestriction.optional() }),
   setup: external_exports.strictObject(setup),
   "dependencies.install": external_exports.strictObject(dependencies),
   "dependencies.uninstall": external_exports.strictObject({
@@ -441,6 +447,7 @@ async function doctor() {
       baseline: process.versions.node.split(".")[0] === "24"
     },
     managedComponents: state.components,
+    sqlcl: await sqlclConfig(),
     probes,
     database: "not-configured",
     nativeHost: "requires-host-verification",
@@ -1147,6 +1154,7 @@ end;
       throw new Fault("CANCELLED", "Deployment cancelled before execution.", 6, "cancelled");
     const { plan, env: env2 } = await this.checkLocal(ctx, value);
     await authorizePlan(ctx, plan, env2);
+    await this.oracle.requireMutationSupport();
     const readConnection = await resolveConnection(env2.readConnectionRef), deployConnection = await resolveConnection(env2.deployConnectionRef);
     const [deployTargetCheck, fingerprintCheck, capabilityCheck] = await Promise.allSettled([
       this.oracle.verifyTarget(env2, deployConnection),
@@ -1591,6 +1599,7 @@ var TestService = class {
       if (!envName) throw new Fault("ENVIRONMENT_REQUIRED", "Remote test suites require --env.", 2);
       const env2 = await this.authorize(ctx, envName);
       if (suite === "sql") {
+        await this.oracle.requireMutationSupport();
         const connection = await resolveConnection(env2.deployConnectionRef);
         await this.oracle.verifyTarget(env2, connection);
         const framework = await this.oracle.jsonQuery(
@@ -1823,30 +1832,39 @@ async function dispatch(operation, input = {}, signal) {
       case "doctor":
         data = await doctor();
         break;
+      case "sqlcl.status":
+        data = await sqlclConfig();
+        break;
+      case "sqlcl.configure":
+        data = await configureSqlcl(
+          text("mode"),
+          parsed.mcpRestrictLevel
+        );
+        break;
       case "dependencies.install": {
-        const { ToolchainService } = await import("./chunk-KN2F4FEP.mjs");
+        const { ToolchainService } = await import("./chunk-BVQRB2TE.mjs");
         data = await new ToolchainService().apply(parsed);
         break;
       }
       case "dependencies.uninstall": {
-        const { uninstallTools } = await import("./chunk-2VVMWNM7.mjs");
+        const { uninstallTools } = await import("./chunk-YOEIDETK.mjs");
         data = await uninstallTools(parsed);
         break;
       }
       case "setup":
       case "plugin.install":
       case "plugin.update": {
-        const { setup: setup2 } = await import("./chunk-QIQZIDR7.mjs");
+        const { setup: setup2 } = await import("./chunk-WTHOYKJA.mjs");
         data = await setup2(parsed);
         break;
       }
       case "plugin.validate": {
-        const { validateNative } = await import("./chunk-QIQZIDR7.mjs");
+        const { validateNative } = await import("./chunk-WTHOYKJA.mjs");
         data = await validateNative(text("from"));
         break;
       }
       case "plugin.uninstall": {
-        const { uninstallNative } = await import("./chunk-QIQZIDR7.mjs");
+        const { uninstallNative } = await import("./chunk-WTHOYKJA.mjs");
         data = await uninstallNative(text("home") ?? managedHome(), Boolean(parsed.keepRuntime));
         break;
       }

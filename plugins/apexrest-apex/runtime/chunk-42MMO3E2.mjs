@@ -2,15 +2,16 @@ import { createRequire as __createRequire } from 'node:module'; const require = 
 import {
   dispatch,
   schemas
-} from "./chunk-FCJMAAZV.mjs";
+} from "./chunk-WCTSQOSE.mjs";
 import "./chunk-4ACPFYCB.mjs";
 import {
   Fault,
   external_exports,
   failure,
   resourceRoot,
-  sanitized
-} from "./chunk-FRWXKL3F.mjs";
+  sanitized,
+  sqlclConfig
+} from "./chunk-FAC6KCSL.mjs";
 
 // packages/cli/src/tui.ts
 import { emitKeypressEvents } from "node:readline";
@@ -46,6 +47,11 @@ var descriptions = {
     "Test saved SQLcl connection",
     "Choose a saved connection and read its database identity.",
     "Test connection"
+  ],
+  "sqlcl.configure": [
+    "SQLcl mode: CLI / MCP",
+    "Choose SQLcl CLI or the official SQLcl MCP server for Oracle operations.",
+    "Save SQLcl mode"
   ]
 };
 var commands = Object.keys(descriptions).map((operation) => ({
@@ -56,6 +62,8 @@ var commands = Object.keys(descriptions).map((operation) => ({
   action: descriptions[operation][2]
 }));
 var labels = {
+  mode: "SQLcl execution mode",
+  mcpRestrictLevel: "MCP restrict level",
   home: "Managed tools directory",
   offline: "Use cached downloads only",
   cacheDir: "Download cache directory",
@@ -67,6 +75,8 @@ var labels = {
   keepRuntime: "Keep plugin files"
 };
 var hints = {
+  mode: "CLI runs SQLcl directly. MCP uses the official sql -mcp server. Applies to new operations.",
+  mcpRestrictLevel: "4: Oracle default restrictions. 1: allow scripts, block host commands. Applies only to MCP.",
   home: "Optional directory for managed APEXREST tools and installation records.",
   acceptOracleLicense: "Enable only after accepting the Oracle terms linked on the review screen.",
   installOsDeps: "Explicit permission for browser operating-system package installation.",
@@ -90,9 +100,11 @@ var visibleFields = {
   "plugin.install": ["from", "home", "codexHome"],
   "plugin.uninstall": ["keepRuntime", "home"],
   "connection.list": [],
-  "connection.test": []
+  "connection.test": [],
+  "sqlcl.configure": ["mode", "mcpRestrictLevel"]
 };
 var advancedFields = /* @__PURE__ */ new Set([
+  "mcpRestrictLevel",
   "home",
   "cacheDir",
   "codexHome",
@@ -361,6 +373,14 @@ function setupPreview(payload, toolsOnly = false) {
 function resultLines(result) {
   const data = sanitized(result.data), payload = record(data);
   const lines = result.summary === "Operation completed." ? [] : [{ text: result.summary }, { text: "" }];
+  if (result.ok && ["sqlcl.configure", "sqlcl.status"].includes(result.operation))
+    return [
+      { text: `SQLcl mode: ${String(payload.mode).toUpperCase()}`, tone: "accent" },
+      {
+        text: payload.mode === "mcp" ? `Official SQLcl MCP server \xB7 restrict level ${payload.mcpRestrictLevel}` : "SQLcl command-line process"
+      },
+      { text: "New Oracle operations use this mode. Active operations keep their selected mode." }
+    ];
   for (const diagnostic of result.diagnostics) {
     if (diagnostic.message !== result.summary)
       lines.push({ text: diagnostic.message, tone: diagnostic.severity === "error" ? "error" : "plain" });
@@ -514,6 +534,7 @@ function homeFrame(state) {
   const { width, height, color, focus } = state;
   const styled = (text, tone = "plain", size = width) => paint(clip(text, size), tone, color);
   const header = brand(color, width < 62 || height < 28);
+  if (height >= 18) header.push(styled(` SQLcl: ${state.sqlclMode ?? "Loading\u2026"}`, "muted"));
   if (height >= 18) header.push("");
   header.push(
     styled(
@@ -620,7 +641,8 @@ async function runTui({
   input = process.stdin,
   output = process.stdout,
   execute = dispatch,
-  loadCatalogue = loadApexlangCatalogue
+  loadCatalogue = loadApexlangCatalogue,
+  loadSqlcl = sqlclConfig
 } = {}) {
   if (!input.isTTY || !output.isTTY || process.env.TERM === "dumb")
     throw new Fault(
@@ -634,6 +656,7 @@ async function runTui({
   let catalogue;
   let catalogueQuery = "", catalogueSelected = 0, catalogueError = false, catalogueLoading = false;
   let command = commands[0];
+  let sqlcl, sqlclError = false, sqlclRevision = 0;
   let fields = [], values = {}, parsed = {};
   let error = "", editing = "", cursor = 0, result, editField;
   let advanced = false, details = false;
@@ -713,7 +736,8 @@ async function runTui({
           catalogue,
           catalogueError,
           catalogueQuery,
-          catalogueSelected
+          catalogueSelected,
+          sqlclMode: sqlclError ? "Configuration unavailable" : sqlcl?.mode.toUpperCase()
         }).join("\r\n")
       );
       return;
@@ -823,6 +847,19 @@ async function runTui({
               tone: "muted"
             }
           );
+        if (command.operation === "sqlcl.configure")
+          body.push(
+            { text: "" },
+            {
+              text: "Saved for new Oracle operations in this APEXREST home. Current operations keep their mode."
+            },
+            ...parsed.mode === "mcp" ? [
+              {
+                text: "Oracle MCP may write DBTOOLS$MCP_LOG during connected operations.",
+                tone: "muted"
+              }
+            ] : []
+          );
         body.push({ text: "" }, { text: `> [ ${command.action} ]`, tone: "selected" });
       }
       footer = width >= 64 ? " Enter Run   Esc Edit   D Details   \u2191\u2193 Scroll" : " Enter Run  Esc Edit  D Details  \u2191\u2193 Scroll";
@@ -892,11 +929,44 @@ async function runTui({
     advanced = false;
     details = false;
     screen = "form";
+    if (command.operation === "sqlcl.configure") {
+      void loadSqlclSettings(true).catch(crash);
+      return;
+    }
     if (command.operation.startsWith("connection.")) {
       void loadConnections().catch(crash);
       return;
     }
     if (!fields.some((field) => !field.advanced)) review();
+  }
+  async function loadSqlclSettings(edit = false) {
+    const revision = ++sqlclRevision;
+    if (edit) {
+      screen = "running";
+      started = Date.now();
+      controller = new AbortController();
+      render();
+    }
+    try {
+      const loaded = await loadSqlcl();
+      if (revision !== sqlclRevision) return;
+      sqlcl = loaded;
+      sqlclError = false;
+      if (edit) {
+        values = { mode: sqlcl.mode, mcpRestrictLevel: sqlcl.mcpRestrictLevel };
+        drafts.set(command.operation, values);
+        screen = "form";
+      }
+    } catch (error2) {
+      if (revision !== sqlclRevision) return;
+      sqlclError = true;
+      if (edit) {
+        result = failure("sqlcl.status", error2);
+        screen = "result";
+      }
+    }
+    if (edit && closeAfterRun) close();
+    else renderSafe();
   }
   function nextField() {
     error = "";
@@ -944,6 +1014,11 @@ async function runTui({
     render();
     try {
       result = await execute(command.operation, parsed, controller.signal);
+      if (result.ok && command.operation === "sqlcl.configure") {
+        sqlclRevision++;
+        sqlcl = result.data;
+        sqlclError = false;
+      }
     } catch (e) {
       result = failure(command.operation, e);
     }
@@ -1159,6 +1234,7 @@ async function runTui({
     }, 250);
     render();
     void reloadCatalogue().catch(crash);
+    void loadSqlclSettings().catch(crash);
     await done;
   } finally {
     if (timer) clearInterval(timer);

@@ -17,6 +17,36 @@
     },
     "additionalProperties": false
   },
+  "sqlcl.status": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "properties": {},
+    "additionalProperties": false
+  },
+  "sqlcl.configure": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "properties": {
+      "mode": {
+        "type": "string",
+        "enum": [
+          "cli",
+          "mcp"
+        ]
+      },
+      "mcpRestrictLevel": {
+        "type": "string",
+        "enum": [
+          "1",
+          "4"
+        ]
+      }
+    },
+    "required": [
+      "mode"
+    ],
+    "additionalProperties": false
+  },
   "setup": {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",

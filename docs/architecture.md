@@ -2,7 +2,9 @@
 
 English | [Українська](architecture.uk.md)
 
-APEXREST uses one policy-aware core for the CLI and the native Codex MCP server. Eight skills guide the workflow; fourteen MCP tools expose bounded operations. Both interfaces validate inputs against the same strict Zod schemas before execution.
+APEXREST uses one policy-aware core for the CLI and the native Codex MCP server. Ten skills guide the workflow; fourteen MCP tools expose bounded operations. Both interfaces validate inputs against the same strict Zod schemas before execution.
+
+Oracle operations use the persisted SQLcl CLI/MCP backend. MCP here means the official SQLcl stdio server, distinct from the Codex-facing APEXREST MCP API. See [backend selection](tui.md#sqlcl-mode-cli-or-mcp).
 
 ![APEXREST architecture from Codex through source, deployment planning, Oracle and verification.](assets/overview.svg)
 

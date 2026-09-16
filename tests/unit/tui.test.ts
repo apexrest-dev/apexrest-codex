@@ -36,7 +36,14 @@ function session(
     transcript += chunk.toString();
   });
   const beforeSignals = process.listenerCount('SIGINT');
-  const done = runTui({ input, output, project: '/tmp/my project', execute, loadCatalogue });
+  const done = runTui({
+    input,
+    output,
+    project: '/tmp/my project',
+    execute,
+    loadCatalogue,
+    loadSqlcl: async () => ({ schemaVersion: 1, mode: 'cli', mcpRestrictLevel: '4' }),
+  });
   const key = (name: string, ctrl = false) => input.emit('keypress', undefined, { name, ctrl });
   const screen = () => stripVTControlCharacters(transcript.split('\x1b[2J').at(-1) ?? '');
   const select = (label: string) => {
@@ -81,7 +88,7 @@ const fieldLabel = (operation: Operation, name: string) => {
   return field.label;
 };
 
-test('home exposes exactly the six requested actions and no unsupported fields', (t) => {
+test('home exposes the requested actions and SQLcl mode selection and no unsupported fields', (t) => {
   assert.deepEqual(
     commands.map((item) => item.operation),
     [
@@ -91,6 +98,7 @@ test('home exposes exactly the six requested actions and no unsupported fields',
       'plugin.uninstall',
       'connection.list',
       'connection.test',
+      'sqlcl.configure',
     ],
   );
   const s = session(t);
@@ -125,6 +133,34 @@ test('home exposes exactly the six requested actions and no unsupported fields',
     commandPreview('plugin.install', { from: "a'b $(touch unsafe)" }),
     /'a'\\''b \$\(touch unsafe\)'/,
   );
+});
+
+test('SQLcl mode is editable, cancellation does not save, and Enter persists the selected backend', async (t) => {
+  const calls: { op: string; input: Record<string, unknown> }[] = [];
+  const s = session(t, async (op, input = {}) => {
+    calls.push({ op, input });
+    return success(op, { schemaVersion: 1, ...input });
+  });
+  await setImmediate();
+  assert.match(s.screen(), /SQLcl: CLI/);
+  s.type('sqlcl configure');
+  s.key('return');
+  await setImmediate();
+  s.select('SQLcl execution mode');
+  s.key('return');
+  s.key('down');
+  s.key('return');
+  s.key('r', true);
+  assert.match(s.screen(), /DBTOOLS\$MCP_LOG/);
+  assert.equal(calls.length, 0);
+  s.key('escape');
+  s.key('r', true);
+  s.key('return');
+  await setImmediate();
+  assert.deepEqual(calls, [{ op: 'sqlcl.configure', input: { mode: 'mcp', mcpRestrictLevel: '4' } }]);
+  assert.match(s.screen(), /SQLcl mode: MCP/);
+  s.key('escape');
+  assert.match(s.screen(), /SQLcl: MCP/);
 });
 
 test('home catalogue filters and scrolls independently without dispatching actions', async (t) => {

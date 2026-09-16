@@ -31,7 +31,9 @@ node plugins/apexrest-apex/runtime/apexrest.mjs
 
 If you already have a checkout, enter it and run only the last command. After making your own source changes, refresh the bundled package with `npm run plugin:sync`.
 
-The home screen shows the APEXREST logo and six actions:
+The home screen shows the APEXREST logo and seven actions:
+
+**SQLcl mode: CLI / MCP** saves the Oracle execution backend: SQLcl CLI or the official SQLcl MCP server (`sql -mcp`). This separate TUI action does not change plugin registration. See [SQLcl modes](tui.md#sqlcl-mode-cli-or-mcp).
 
 | Action                       | Purpose                                                                         |
 | ---------------------------- | ------------------------------------------------------------------------------- |
@@ -41,6 +43,7 @@ The home screen shows the APEXREST logo and six actions:
 | Uninstall plugin             | Remove the managed plugin registration and files.                               |
 | List saved SQLcl connections | Show names directly from SQLcl's connection store.                              |
 | Test saved SQLcl connection  | Choose a saved connection and check database access.                            |
+| SQLcl mode: CLI / MCP | Choose SQLcl CLI or official SQLcl MCP for new Oracle operations. |
 
 The APEXlang dashboard on the home screen lists bundled item and component types in a searchable table. Tab switches between actions and the catalogue; type a name or group to filter. Browsing requires no installed tools or database connection. See the [terminal guide](tui.md#apexlang-dashboard).
 
@@ -190,7 +193,7 @@ For a page or dashboard, reconcile relevant read-only source queries and inspect
 
 ## Use the CLI
 
-Run `apexrest` or `apexrest tui` for the APEXREST logo and six actions: tool/plugin installation and removal, plus saved SQLcl connection listing/testing. Categories and other workflows are absent from the TUI. See [the terminal guide](tui.md) for controls, direct execution and verification scope. CLI `connection list --saved` and `connection test NAME --saved` access the SQLcl store directly; without `--saved`, existing APEXREST reference behavior is preserved. Explicit commands retain their scripting behavior.
+Run `apexrest` or `apexrest tui` for the APEXREST logo and seven actions: tool/plugin installation and removal, plus saved SQLcl connection listing/testing. Categories and other workflows are absent from the TUI. See [the terminal guide](tui.md) for controls, direct execution and verification scope. CLI `connection list --saved` and `connection test NAME --saved` access the SQLcl store directly; without `--saved`, existing APEXREST reference behavior is preserved. Explicit commands retain their scripting behavior.
 
 Direct installation with `codex plugin add` exposes the plugin to Codex but does not create the managed `apexrest` launcher. A reviewed source checkout can run its checked-in CLI directly with Node 24:
 

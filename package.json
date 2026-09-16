@@ -1,7 +1,24 @@
 {
   "name": "@apexrest/codex",
   "version": "0.1.0-beta.1",
-  "private": true,
+  "files": [
+    "dist/runtime/",
+    "dist/resources/",
+    "dist/codex-compat/",
+    "README.md",
+    "README.uk.md",
+    "LICENSE",
+    "NOTICE"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "tag": "beta",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apexrest-dev/apexrest-codex.git"
+  },
   "description": "Native Codex plugin for Oracle APEX development, deployment and testing",
   "license": "Apache-2.0",
   "type": "module",
@@ -15,6 +32,7 @@
     "apexrest": "dist/runtime/apexrest.mjs"
   },
   "scripts": {
+    "prepack": "npm run build",
     "build": "node scripts/build-plugin.mjs",
     "typecheck": "tsc --noEmit -p tsconfig.base.json",
     "lint": "node scripts/lint.mjs",

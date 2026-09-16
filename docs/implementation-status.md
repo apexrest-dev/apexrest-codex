@@ -2,23 +2,37 @@
 
 English | [Українська](implementation-status.uk.md)
 
+## SQLcl CLI / official SQLcl MCP — 2026-09-16
+
+The seventh TUI action, **SQLcl mode: CLI / MCP**, saves the backend in private `sqlcl.json` under `APEXREST_HOME`. The home screen shows the mode; new operations use it through the shared Oracle adapter, while active operations retain their selection. `sqlcl status` and `sqlcl configure` expose the same setting. CLI remains the default. MCP starts Oracle's `sql -mcp`, discovers tools, uses exact saved names and executes synchronous batches with completion acknowledgement. There is no automatic fallback or retry of a submitted write. MCP writes require explicitly selected restriction level 1 so fail-stop scripts are available; target identity, authorization, backup, drift and unknown-outcome safeguards remain in place. Setup and menu skills explain this distinction from the Codex-facing APEXREST MCP.
+
+[Local checks](evidence/sqlcl-transport-local.json) cover regression tests, real macOS pseudo-terminal selection/cancellation/persistence and the rebuilt repository bundle. [Real Oracle checks](evidence/sqlcl-transport-oracle-local.json) cover SQLcl 26.1.2.132.1334: CLI, MCP default level 4 and MCP level 1 list the same 21 saved connections and compile the blank application offline. The report publishes only the count. Protocol failures and write barriers use explicit fixtures. [An isolated native Codex check](evidence/sqlcl-transport-native-local.json) also passed installation, discovery of ten skills and fourteen tools, and exact reference/doctor/project calls on macOS. No database connection/import, connected transaction semantics, MCP audit writes or Windows terminal behavior were verified by this change. The user's installed bundle and saved backend were not changed.
+
+## Skill review — 2026-09-16
+
+Review of all ten repository skills found no confirmed actionable defects in the reviewed instructions and local contracts. [Review evidence](evidence/skill-review-local.json) records four reference tests, three selected packaging checks, 18 resolved skill links and equality of all ten source/bundled `SKILL.md` entrypoints. Real offline SQLcl 26.1.2.132.1334 compilation passed for blank, customer-crm and filtered-components, preserving MMD. These checks do not certify full bundle freshness, connected SQL execution, imports, native UI, browser behavior or complete agent authoring tasks. Skill instructions were not changed.
+
+## npm package preparation
+
+The `@apexrest/codex@0.1.0-beta.1` manifest now permits public npm publication with the `beta` tag and an explicit registry. A prepack build and file allowlist include the CLI, resources, native plugin and license notices. The archive was built and installed into a temporary npm prefix; version output and bundled documentation search passed. Native setup preview is blocked by an existing invalid local Codex marketplace registration. These checks provide no new Oracle or native-host evidence. Publication has not occurred: npm returned `ENEEDAUTH`; ownership of the `@apexrest` scope is unverified. The separate GitHub publisher remains disabled.
+
 The original build specification remains unchanged. This is working code and an installable beta, not a stable-qualified product. [acceptance.json](acceptance.json) separates implementation, verification, evidence and blockers for every A01–A28 criterion.
 
 ## APEXlang TUI dashboard
 
-The home screen now includes a table of 99 types in 9 groups derived from the bundled Oracle `26.1@b0afa3b` catalogue, including 23 page items. Tab switches between the six existing actions and the catalogue, with name/group search, scrolling and document counts. The layout adapts to terminal size. Catalogue loading failures leave actions usable; Ctrl+R retries the local file. The catalogue represents reference coverage, not complete compiler certification.
+The home screen now includes a table of 99 types in 9 groups derived from the bundled Oracle `26.1@b0afa3b` catalogue, including 23 page items. Tab switches between the seven actions and the catalogue, with name/group search, scrolling and document counts. The layout adapts to terminal size. Catalogue loading failures leave actions usable; Ctrl+R retries the local file. The catalogue represents reference coverage, not complete compiler certification.
 
 [Local evidence](evidence/tui-apexlang-dashboard-local.json) separates unit checks and actual Linux pseudo-terminal execution from SQLcl fixtures. Native Codex registration and Oracle compilation were not exercised by this revision; macOS/Windows terminal verification remains open.
 
 ## Installation documentation
 
-The README, getting-started guide, site installation page and related guides match the current TUI: six actions, direct execution after Enter, separate license consent, Bash/PowerShell launchers, SQLcl listing/testing without an alias, and the order for removing tools and the plugin. Direct Codex CLI registration remains a documented alternative. Examples and links are synchronized in English and Ukrainian.
+The README, getting-started guide, site installation page and related guides match the current TUI: seven actions, direct execution after Enter, separate license consent, Bash/PowerShell launchers, SQLcl listing/testing without an alias, and the order for removing tools and the plugin. Direct Codex CLI registration remains a documented alternative. Examples and links are synchronized in English and Ukrainian.
 
 [Documentation verification](evidence/installation-documentation-local.json) records local documentation, command-schema and generated-site checks only. This revision does not install/remove tools, change Codex registration or add Oracle/native-host evidence.
 
 ## Terminal interface
 
-Bare `apexrest` and explicit `apexrest tui` show the APEXREST logo and exactly six direct actions: install/uninstall tools, install/uninstall the plugin, and list/test saved SQLcl connections. Category menus and all other TUI workflows are removed; explicit CLI commands remain available. Plugin installation fixes `nativeOnly=true` and omits tool options. Preview only and Approve changes toggles are removed: Enter on review executes with `dryRun=false` and `yes=true`, while separate license and system-package consent default to off; results offer optional JSON and cancellation preserves the actual outcome.
+Bare `apexrest` and explicit `apexrest tui` show the APEXREST logo and seven direct actions: install/uninstall tools, install/uninstall the plugin, list/test saved SQLcl connections, and SQLcl CLI/MCP selection. Category menus and all other TUI workflows are removed; explicit CLI commands remain available. Plugin installation fixes `nativeOnly=true` and omits tool options. Preview only and Approve changes toggles are removed: Enter on review executes with `dryRun=false` and `yes=true`, while separate license and system-package consent default to off; results offer optional JSON and cancellation preserves the actual outcome.
 
 Connections are loaded directly from SQLcl using `connmgr list -flat`, with search, selection and refresh. Enter tests the exact saved name with a read-only identity query, without requiring an APEXREST alias. CLI `connection list/test --saved` selects this behavior; existing reference-based defaults remain available. Managed tool removal has confirmation through Enter, ownership checks and installation locks; the CLI retains `--dry-run`. It preserves external runtimes, projects, credentials, cache and Node.js needed by the launcher or plugin.
 

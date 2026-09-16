@@ -16,6 +16,7 @@ import { TestService } from './testing.ts';
 import { ArtifactService } from './artifacts.ts';
 import { JobService } from './jobs.ts';
 import { sandboxAction } from './sandbox.ts';
+import { configureSqlcl, sqlclConfig, type SqlclConfig } from './sqlcl-config.ts';
 export async function dispatch(operation: string, input: Record<string, unknown> = {}, signal?: AbortSignal) {
   try {
     if (signal?.aborted)
@@ -37,6 +38,15 @@ export async function dispatch(operation: string, input: Record<string, unknown>
         break;
       case 'doctor':
         data = await doctor();
+        break;
+      case 'sqlcl.status':
+        data = await sqlclConfig();
+        break;
+      case 'sqlcl.configure':
+        data = await configureSqlcl(
+          text('mode') as SqlclConfig['mode'],
+          parsed.mcpRestrictLevel as SqlclConfig['mcpRestrictLevel'] | undefined,
+        );
         break;
       case 'dependencies.install': {
         const { ToolchainService } = await import('../../installer/src/toolchain.ts');

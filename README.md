@@ -57,7 +57,9 @@ To install Java, SQLcl and the other client tools, choose **Install dependencies
 
 **Install plugin** creates the managed launcher; direct registration with `codex plugin add` alone does not put `apexrest` on PATH. Saved connections come directly from the SQLcl store; listing and testing them requires no APEXREST alias.
 
-Run `apexrest` in an interactive terminal for the APEXREST logo and six direct actions: install/uninstall tools, install/uninstall the plugin, and list/test saved SQLcl connections. Use arrow keys or type to search. In the connection picker, Enter tests the selected name and Ctrl+R refreshes. Other workflows remain explicit CLI commands. Explicit commands and `--json` retain their scripting behavior; piped input prints help.
+Run `apexrest` in an interactive terminal for the APEXREST logo and seven direct actions: install/uninstall tools, install/uninstall the plugin, and list/test saved SQLcl connections. Use arrow keys or type to search. In the connection picker, Enter tests the selected name and Ctrl+R refreshes. Other workflows remain explicit CLI commands. Explicit commands and `--json` retain their scripting behavior; piped input prints help.
+
+**SQLcl mode: CLI / MCP** saves the Oracle execution backend: SQLcl CLI or the official SQLcl MCP server (`sql -mcp`). This separate TUI action does not change plugin registration. See [SQLcl modes](docs/tui.md#sqlcl-mode-cli-or-mcp).
 
 The home screen also includes an APEXlang table: 99 types in 9 groups from the bundled Oracle reference, including 23 page items. Tab switches between actions and the catalogue; type a name or group to search and use arrows to browse. The catalogue works locally without a database connection.
 

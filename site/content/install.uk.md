@@ -14,7 +14,9 @@ cd apexrest-codex
 node plugins/apexrest-apex/runtime/apexrest.mjs
 ```
 
-Якщо копія репозиторію вже є, виконайте останню команду в ній. Логотип APEXREST відкривається разом із шістьма діями: **Install tools**, **Uninstall tools**, **Install plugin**, **Uninstall plugin**, **List saved SQLcl connections** і **Test saved SQLcl connection**.
+Якщо копія репозиторію вже є, виконайте останню команду в ній. Логотип APEXREST відкривається разом із сімома діями: **Install tools**, **Uninstall tools**, **Install plugin**, **Uninstall plugin**, **List saved SQLcl connections** і **Test saved SQLcl connection**.
+
+Вибір **SQLcl mode: CLI / MCP** зберігає спосіб виконання Oracle-команд: SQLcl CLI або офіційний SQLcl MCP (`sql -mcp`). Це окрема дія TUI; вона не змінює реєстрацію плагіна. Див. [режими SQLcl](../../docs/tui.uk.md#режим-sqlcl-cli-або-mcp).
 
 На головному екрані також є таблиця типів APEXlang із комплектного довідника Oracle. Tab перемикає дії й каталог; вводьте назву або групу для пошуку. Для перегляду з’єднання з базою не потрібне.
 
@@ -64,7 +66,7 @@ codex plugin add apexrest-apex@apexrest
 codex plugin list --json
 ```
 
-Цей спосіб не створює команду `apexrest` в оболонці. У новій задачі Codex надішліть `Use $apexrest-menu` для всіх робочих дій або скористайтеся `$apexrest-install-dependencies` для залежностей. Меню навички в розмові та явний CLI зберігають свої додаткові параметри; шість дій TUI описано вище. [Посібник встановлення плагіна](../../docs/getting-started.uk.md#встановлення-плагіна) містить перевірки й навігацію.
+Цей спосіб не створює команду `apexrest` в оболонці. У новій задачі Codex надішліть `Use $apexrest-menu` для всіх робочих дій або скористайтеся `$apexrest-install-dependencies` для залежностей. Меню навички в розмові та явний CLI зберігають свої додаткові параметри; сім дій TUI описано вище. [Посібник встановлення плагіна](../../docs/getting-started.uk.md#встановлення-плагіна) містить перевірки й навігацію.
 
 ## Видалення
 

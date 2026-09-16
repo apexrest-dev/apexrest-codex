@@ -5,6 +5,7 @@ import { failure, Fault, sanitized, type Result } from '../../core/src/result.ts
 import { commands, commandPreview, fieldsFor, parseFields, type Command, type Field } from './tui-catalog.ts';
 import { filterApexlang, loadApexlangCatalogue, type ApexlangCatalogue } from './tui-apexlang.ts';
 import { homeFrame } from './tui-home.ts';
+import { sqlclConfig, type SqlclConfig } from '../../core/src/sqlcl-config.ts';
 import {
   clip,
   paint,
@@ -35,6 +36,7 @@ interface TuiOptions {
   output?: TerminalOutput;
   execute?: typeof dispatch;
   loadCatalogue?: typeof loadApexlangCatalogue;
+  loadSqlcl?: typeof sqlclConfig;
 }
 type FormRow = { kind: 'field'; field: Field } | { kind: 'advanced' } | { kind: 'review' };
 export async function runTui({
@@ -43,6 +45,7 @@ export async function runTui({
   output = process.stdout,
   execute = dispatch,
   loadCatalogue = loadApexlangCatalogue,
+  loadSqlcl = sqlclConfig,
 }: TuiOptions = {}): Promise<void> {
   if (!input.isTTY || !output.isTTY || process.env.TERM === 'dumb')
     throw new Fault(
@@ -64,6 +67,9 @@ export async function runTui({
     catalogueError = false,
     catalogueLoading = false;
   let command: Command = commands[0]!;
+  let sqlcl: SqlclConfig | undefined,
+    sqlclError = false,
+    sqlclRevision = 0;
   let fields: Field[] = [],
     values: Record<string, string> = {},
     parsed: Record<string, unknown> = {};
@@ -169,6 +175,7 @@ export async function runTui({
             catalogueError,
             catalogueQuery,
             catalogueSelected,
+            sqlclMode: sqlclError ? 'Configuration unavailable' : sqlcl?.mode.toUpperCase(),
           }).join('\r\n'),
       );
       return;
@@ -291,6 +298,21 @@ export async function runTui({
               tone: 'muted',
             },
           );
+        if (command.operation === 'sqlcl.configure')
+          body.push(
+            { text: '' },
+            {
+              text: 'Saved for new Oracle operations in this APEXREST home. Current operations keep their mode.',
+            },
+            ...(parsed.mode === 'mcp'
+              ? [
+                  {
+                    text: 'Oracle MCP may write DBTOOLS$MCP_LOG during connected operations.',
+                    tone: 'muted' as const,
+                  },
+                ]
+              : []),
+          );
         body.push({ text: '' }, { text: `> [ ${command.action} ]`, tone: 'selected' });
       }
       footer =
@@ -387,11 +409,44 @@ export async function runTui({
     advanced = false;
     details = false;
     screen = 'form';
+    if (command.operation === 'sqlcl.configure') {
+      void loadSqlclSettings(true).catch(crash);
+      return;
+    }
     if (command.operation.startsWith('connection.')) {
       void loadConnections().catch(crash);
       return;
     }
     if (!fields.some((field) => !field.advanced)) review();
+  }
+  async function loadSqlclSettings(edit = false) {
+    const revision = ++sqlclRevision;
+    if (edit) {
+      screen = 'running';
+      started = Date.now();
+      controller = new AbortController();
+      render();
+    }
+    try {
+      const loaded = await loadSqlcl();
+      if (revision !== sqlclRevision) return;
+      sqlcl = loaded;
+      sqlclError = false;
+      if (edit) {
+        values = { mode: sqlcl.mode, mcpRestrictLevel: sqlcl.mcpRestrictLevel };
+        drafts.set(command.operation, values);
+        screen = 'form';
+      }
+    } catch (error) {
+      if (revision !== sqlclRevision) return;
+      sqlclError = true;
+      if (edit) {
+        result = failure('sqlcl.status', error);
+        screen = 'result';
+      }
+    }
+    if (edit && closeAfterRun) close();
+    else renderSafe();
   }
   function nextField() {
     error = '';
@@ -442,6 +497,11 @@ export async function runTui({
     render();
     try {
       result = await execute(command.operation, parsed, controller.signal);
+      if (result.ok && command.operation === 'sqlcl.configure') {
+        sqlclRevision++;
+        sqlcl = result.data as SqlclConfig;
+        sqlclError = false;
+      }
     } catch (e) {
       result = failure(command.operation, e);
     }
@@ -663,6 +723,7 @@ export async function runTui({
     }, 250);
     render();
     void reloadCatalogue().catch(crash);
+    void loadSqlclSettings().catch(crash);
     await done;
   } finally {
     if (timer) clearInterval(timer);

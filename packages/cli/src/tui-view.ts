@@ -270,6 +270,17 @@ export function resultLines(result: Result): Line[] {
     payload = record(data);
   const lines: Line[] =
     result.summary === 'Operation completed.' ? [] : [{ text: result.summary }, { text: '' }];
+  if (result.ok && ['sqlcl.configure', 'sqlcl.status'].includes(result.operation))
+    return [
+      { text: `SQLcl mode: ${String(payload.mode).toUpperCase()}`, tone: 'accent' },
+      {
+        text:
+          payload.mode === 'mcp'
+            ? `Official SQLcl MCP server · restrict level ${payload.mcpRestrictLevel}`
+            : 'SQLcl command-line process',
+      },
+      { text: 'New Oracle operations use this mode. Active operations keep their selected mode.' },
+    ];
   for (const diagnostic of result.diagnostics) {
     if (diagnostic.message !== result.summary)
       lines.push({ text: diagnostic.message, tone: diagnostic.severity === 'error' ? 'error' : 'plain' });

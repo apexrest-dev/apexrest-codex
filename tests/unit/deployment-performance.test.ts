@@ -40,6 +40,7 @@ async function prepared() {
     deploy: { kind: 'sqlcl-store', name: 'deploy' },
   });
   const oracle = {
+    async requireMutationSupport() {},
     async validate() {
       return { compiler: { version: plan.compiler } };
     },
@@ -115,6 +116,25 @@ test('a failed plan waits for its other read-only preflight to finish', { timeou
   releaseCompiler.resolve();
   await assert.rejects(pending, { code: 'IDENTITY_MISMATCH' });
   assert.equal(compilerFinished, true);
+});
+
+test('restricted MCP deployment stops before target reads or coordination writes', async () => {
+  const { ctx, plan, oracle, service } = await prepared();
+  let reads = 0;
+  let writes = 0;
+  oracle.requireMutationSupport = async () => {
+    throw new Fault('SQLCL_MCP_RESTRICTED', 'Fixture restricted MCP.', 3, 'blocked');
+  };
+  oracle.verifyTarget = async () => {
+    reads++;
+    return { application: null };
+  };
+  service.lease = async () => {
+    writes++;
+  };
+  await assert.rejects(service.apply(ctx, plan), { code: 'SQLCL_MCP_RESTRICTED', status: 'blocked' });
+  assert.equal(reads, 0);
+  assert.equal(writes, 0);
 });
 
 for (const fault of ['IDENTITY_MISMATCH', 'TARGET_DRIFT', 'COMPILER_DRIFT'] as const) {

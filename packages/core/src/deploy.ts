@@ -409,6 +409,7 @@ export class DeploymentService {
       throw new Fault('CANCELLED', 'Deployment cancelled before execution.', 6, 'cancelled');
     const { plan, env } = await this.checkLocal(ctx, value);
     await authorizePlan(ctx, plan, env);
+    await this.oracle.requireMutationSupport();
     const readConnection = await resolveConnection(env.readConnectionRef),
       deployConnection = await resolveConnection(env.deployConnectionRef);
     const [deployTargetCheck, fingerprintCheck, capabilityCheck] = await Promise.allSettled([

@@ -65,6 +65,10 @@ class Terminal:
                 raise AssertionError(f'TUI exited early: {self.data[-2500:]!r}')
 
     def screen(self):
+        # Async catalogue/settings loads may redraw after expect() matched a
+        # label. Drain the complete frame, including split UTF-8 characters.
+        while select.select([self.master], [], [], 0.03)[0]:
+            self.data += os.read(self.master, 65536)
         frame = self.data.split(b'\x1b[2J')[-1].decode()
         # ONLCR may turn the application's CRLF into CR CR LF in the PTY stream.
         return re.sub(r'\x1b\[[0-?]*[ -/]*[@-~]', '', frame).replace('\r', '')
@@ -143,7 +147,7 @@ else:
     terminal = Terminal(directory)
     try:
         terminal.expect('What would you like to do?')
-        actions = ['Install tools', 'Uninstall tools', 'Install plugin', 'Uninstall plugin', 'List saved SQLcl connections', 'Test saved SQLcl connection']
+        actions = ['Install tools', 'Uninstall tools', 'Install plugin', 'Uninstall plugin', 'List saved SQLcl connections', 'Test saved SQLcl connection', 'SQLcl mode: CLI / MCP']
         terminal.expect(actions[-1])
         terminal.expect('Bundled Oracle refs')
         assert all(label in terminal.screen() for label in actions)
@@ -152,7 +156,7 @@ else:
         terminal.capture('home-80x24')
         assert 'Checkbox' in terminal.screen()
         assert 'Item / component' in terminal.screen()
-        checks.append('bare invocation opens the logo, six direct actions and the bundled APEXlang table')
+        checks.append('bare invocation opens the logo, seven direct actions and the bundled APEXlang table')
         terminal.key('\tpage items select')
         assert all(name in terminal.screen() for name in ['Select list', 'Select many', 'Select one'])
         assert 'Checkbox' not in terminal.screen()
@@ -235,6 +239,25 @@ else:
         terminal.send('\x12')
         terminal.expect('2 saved connections')
         checks.append('fixture SQLcl names are searchable; Enter tests the selected saved name; results return to the picker and refresh')
+        terminal.menu()
+        terminal.send('sqlcl configure\r')
+        terminal.expect('SQLcl execution mode')
+        terminal.select('SQLcl execution mode')
+        terminal.key('\r')
+        terminal.key('\x1b[B\r')
+        terminal.key('\x12')
+        assert 'DBTOOLS$MCP_LOG' in terminal.screen()
+        assert not (managed / 'sqlcl.json').exists()
+        terminal.key('\x1b')
+        assert not (managed / 'sqlcl.json').exists()
+        terminal.key('\x12')
+        terminal.send('\r')
+        terminal.expect('SQLcl mode: MCP')
+        assert json.loads((managed / 'sqlcl.json').read_text()) == {'schemaVersion': 1, 'mode': 'mcp', 'mcpRestrictLevel': '4'}
+        terminal.capture('sqlcl-mode-saved-80x24')
+        terminal.menu()
+        assert 'SQLcl: MCP' in terminal.screen()
+        checks.append('SQLcl mode review cancellation does not write; Enter persists MCP and updates the home screen without connecting')
         terminal.close()
         checks.append('Ctrl+C restores terminal input, cursor and normal screen')
     finally:
@@ -243,6 +266,8 @@ else:
     terminal = Terminal(directory, ['tui'])
     try:
         terminal.expect('What would you like to do?')
+        terminal.expect('SQLcl: MCP')
+        checks.append('a new TUI process reads the persisted SQLcl MCP mode')
         terminal.resize(20, 5)
         terminal.expect('Resize terminal')
         terminal.resize(50, 14)

@@ -8,7 +8,8 @@ type SupportedOperation =
   | 'plugin.install'
   | 'plugin.uninstall'
   | 'connection.list'
-  | 'connection.test';
+  | 'connection.test'
+  | 'sqlcl.configure';
 const descriptions: Record<SupportedOperation, [string, string, string]> = {
   'dependencies.install': [
     'Install tools',
@@ -40,6 +41,11 @@ const descriptions: Record<SupportedOperation, [string, string, string]> = {
     'Choose a saved connection and read its database identity.',
     'Test connection',
   ],
+  'sqlcl.configure': [
+    'SQLcl mode: CLI / MCP',
+    'Choose SQLcl CLI or the official SQLcl MCP server for Oracle operations.',
+    'Save SQLcl mode',
+  ],
 };
 export const commands = (Object.keys(descriptions) as SupportedOperation[]).map((operation) => ({
   operation,
@@ -60,6 +66,8 @@ export interface Field {
   advanced: boolean;
 }
 const labels: Record<string, string> = {
+  mode: 'SQLcl execution mode',
+  mcpRestrictLevel: 'MCP restrict level',
   home: 'Managed tools directory',
   offline: 'Use cached downloads only',
   cacheDir: 'Download cache directory',
@@ -71,6 +79,9 @@ const labels: Record<string, string> = {
   keepRuntime: 'Keep plugin files',
 };
 const hints: Record<string, string> = {
+  mode: 'CLI runs SQLcl directly. MCP uses the official sql -mcp server. Applies to new operations.',
+  mcpRestrictLevel:
+    '4: Oracle default restrictions. 1: allow scripts, block host commands. Applies only to MCP.',
   home: 'Optional directory for managed APEXREST tools and installation records.',
   acceptOracleLicense: 'Enable only after accepting the Oracle terms linked on the review screen.',
   installOsDeps: 'Explicit permission for browser operating-system package installation.',
@@ -95,8 +106,10 @@ const visibleFields: Record<SupportedOperation, string[]> = {
   'plugin.uninstall': ['keepRuntime', 'home'],
   'connection.list': [],
   'connection.test': [],
+  'sqlcl.configure': ['mode', 'mcpRestrictLevel'],
 };
 const advancedFields = new Set([
+  'mcpRestrictLevel',
   'home',
   'cacheDir',
   'codexHome',
