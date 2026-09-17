@@ -11,6 +11,7 @@ APEXREST is a native Codex plugin for Oracle APEX development, controlled import
 | Goal                                                      | Guide                                             |
 | --------------------------------------------------------- | ------------------------------------------------- |
 | Install the repository plugin and connect a target        | [Getting started](getting-started.md)             |
+| Run a reviewed agent task and understand the panel | [Full agent workflow with screenshots](agent-workflow.md) |
 | Install/remove tools and test connections in the terminal | [Terminal interface](tui.md)                      |
 | Understand the product and examples                       | [README](../README.md)                            |
 | Bring an existing application into source control         | [Existing applications](existing-app.md)          |

@@ -85,6 +85,7 @@ The conversational menu routes to every workflow below. Each workflow also has i
 
 | Menu entry               | Functions                                                                    |
 | ------------------------ | ---------------------------------------------------------------------------- |
+| Reviewed development team | Fixed developer, manager code review, independent QA and final manager review |
 | Install dependencies     | Java, SQLcl, Node.js, Playwright and Chromium; preview and offline options   |
 | Setup and connections    | Toolchain diagnostics, local connection references and plugin maintenance    |
 | Projects                 | Create, adopt and inspect projects                                           |
@@ -94,6 +95,8 @@ The conversational menu routes to every workflow below. Each workflow also has i
 | Tests and browser checks | Configured suites, browser authentication, reports and in-app verification   |
 | Diagnostics and jobs     | Troubleshoot failures, inspect/cancel jobs and read artifacts                |
 | Review changes           | Source preservation, deployment risk, security and release evidence          |
+
+Open `$apexrest-panel` for the live development panel, or `$apexrest-team` to start the reviewed workflow directly. The [complete agent guide](agent-workflow.md) explains settings, roles, communication, repair loops and delivery with actual screenshots.
 
 The All functions entry includes the complete CLI operation index. Unsupported sandbox provisioning is explicitly marked unavailable. Opening the menu does not execute its actions. Codex supports up to three plugin-level starter prompts; the full menu and per-skill entries provide access to every workflow. Start a new Codex task after updating the plugin to load the new menu metadata.
 

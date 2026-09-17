@@ -451,9 +451,12 @@
         "docs/evidence/team-local-checks.json",
         "docs/evidence/team-native-local.json",
         "docs/evidence/team-native-discovery.json",
-        "docs/codex-integration.md"
+        "docs/codex-integration.md",
+        "docs/agent-workflow.md",
+        "docs/agent-workflow.uk.md",
+        "docs/evidence/agent-workflow-documentation.json"
       ],
-      "blocker": "Actual local coding fixture and isolated native discovery only. Oracle team tasks, Windows recovery and desktop UI rendering remain unverified; low-level operations outside a team have no team approval."
+      "blocker": "Actual local coding fixture and isolated native discovery only. Oracle team tasks and Windows recovery remain unverified; actual in-app browser panel evidence is tracked in A30. Low-level operations outside a team have no team approval."
     },
     {
       "id": "A30",
@@ -466,7 +469,10 @@
         "tests/unit/panel.test.ts",
         "docs/evidence/panel-local-checks.json",
         "docs/evidence/panel-native-discovery.json",
-        "docs/evidence/panel-team-native.json"
+        "docs/evidence/panel-team-native.json",
+        "docs/agent-workflow.md",
+        "docs/agent-workflow.uk.md",
+        "docs/evidence/agent-workflow-documentation.json"
       ],
       "blocker": "Embedded MCP UI renderer, Windows console and connected Oracle deployment observation remain unverified. Desktop evidence is the actual Codex in-app browser."
     }

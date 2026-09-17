@@ -2,6 +2,10 @@
 
 English | [Українська](implementation-status.uk.md)
 
+## Illustrated agent workflow — 2026-09-17
+
+The [complete workflow guide](agent-workflow.md) now documents setup, fixed Pokémon roles, native session communication, mandatory review/QA gates, repair limits, input/source binding, panel settings and authorized APEX delivery in English and Ukrainian. Four actual installed-panel screenshots and a paired accessible SVG explain the process. [Capture and verification metadata](evidence/agent-workflow-documentation.json) records their scope and hashes. Screenshots show a real completed local Codex team and a separate `not_configured` panel test job; they do not claim an Oracle import or new runtime verification.
+
 ## Development panel and named agents — 2026-09-17
 
 The Codex-only development panel is implemented in the in-app browser and CLI TUI. It shares one actual snapshot of settings, targets, agent tools/models, reviews, QA, messages, Git changes and durable APEX jobs/imports. Three new MCP operations and the panel skill bring the bundle to twelve skills and twenty-one tools. Pokémon names and local sprites identify the manager, up to three developers and QA without changing role authority. See [panel behavior and limits](panel.md), [panel checks](evidence/panel-local-checks.json) and [native discovery](evidence/panel-native-discovery.json).

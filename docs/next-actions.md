@@ -2,13 +2,15 @@
 
 English | [Українська](next-actions.uk.md)
 
+The [illustrated agent guide](agent-workflow.md) is complete in both languages, with four actual panel captures and a workflow diagram. Refresh these images when the UI or workflow changes; retain their isolated-coding-fixture captions. Connected Oracle team execution, embedded MCP rendering and Windows verification remain separate open checks.
+
 The [mandatory team](team.md) and [development panel](panel.md) are implemented. Extend verification to authorized APEX application tasks, artifact-writing QA suites, Windows console/process recovery and embedded MCP UI rendering. In-app browser rendering and native App Server sessions are separate evidence from a custom desktop sidebar or parent-child session attachment. The [source audit](codex-integration.md) records the actual extension points. Refresh the installed bundle through the CLI after source changes; a new Codex task is needed to load updated skills/tools.
 
 SQLcl CLI / official MCP selection is implemented and checked locally, including the macOS pseudo-terminal and real offline SQLcl. Next verify authorized connected queries, exports, imports, transaction boundaries and unknown-outcome reconciliation in both modes on an identified development/test target. Review Oracle MCP audit behavior and verify Windows. These connected/native checks remain open; see [implementation and evidence](implementation-status.md#sqlcl-cli--official-sqlcl-mcp--2026-09-16).
 
 The [2026-09-16 skill review](evidence/skill-review-local.json) found no confirmed instruction defects. The next skill-quality check remains a fixed set of complete authoring tasks followed by authorized connected SQL/import and browser verification; passing local retrieval, packaging and offline compiler checks does not close those gaps.
 
-The user authorized npm publication. The beta archive is prepared and its CLI installation was checked. Complete npm login with an account authorized for `@apexrest`, verify scope access, publish the reviewed archive with public access and the `beta` tag, then verify registry metadata and installation from the registry. Publication is currently blocked by `ENEEDAUTH`. Separately repair the existing invalid local Codex marketplace registration before repeating native setup verification.
+The user authorized npm publication. The beta archive is prepared and its CLI installation was checked. Complete npm login with an account authorized for `@apexrest`, verify scope access, publish the reviewed archive with public access and the `beta` tag, then verify registry metadata and installation from the registry. Publication is currently blocked by `ENEEDAUTH`. The stale local Codex marketplace registration was repaired for the verified panel bundle, as recorded below.
 
 The [APEXlang TUI dashboard](tui.md#apexlang-dashboard) is implemented and locally verified: bundled catalogue, search, scrolling, focus switching and adaptive table. Next verify macOS/Windows terminals. Documented type counts do not establish support for every compiler variant; retain separate actual Oracle evidence for that. See the [local report](evidence/tui-apexlang-dashboard-local.json).
 

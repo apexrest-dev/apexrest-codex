@@ -2,6 +2,8 @@
 
 English | [Українська](panel.uk.md)
 
+For a complete walkthrough with actual screenshots, see [Agent workflow: from task to reviewed result](agent-workflow.md).
+
 Open `$apexrest-panel` in Codex desktop for a live workspace view in the in-app browser. The skill calls `apexrest_panel_open` with the absolute application project directory and opens the returned private local URL. Use the application project, not the plugin source or its installed cache. A folder without `apexrest.json` can be inspected but cannot start development work.
 
 In Codex CLI:

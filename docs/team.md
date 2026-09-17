@@ -2,6 +2,8 @@
 
 English | [Українська](team.uk.md)
 
+For a complete walkthrough with actual screenshots, see [Agent workflow: from task to reviewed result](agent-workflow.md).
+
 The primary implementation entry is `$apexrest-team`. Its runtime creates one project manager, one to three developers and one independent QA agent as separate Codex App Server sessions. Developers work sequentially in the same project. The manager defines assignments; the controller creates the roles and enforces their order.
 
 ## Required sequence
