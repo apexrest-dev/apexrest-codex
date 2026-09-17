@@ -1,0 +1,162 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import path from 'node:path';
+import { randomUUID } from 'node:crypto';
+import { rm } from 'node:fs/promises';
+import { fixture } from '../fixtures/project.ts';
+import { writeJson } from '../../packages/core/src/fs.ts';
+import { startWork, waitForTeam, teamProgressCursor } from '../../packages/core/src/work.ts';
+import { TeamService } from '../../packages/core/src/team.ts';
+import type { TeamRequest, TeamState } from '../../packages/core/src/team-schema.ts';
+
+async function setup(t: import('node:test').TestContext) {
+  const { ctx } = await fixture(),
+    previous = process.env.APEXREST_HOME;
+  process.env.APEXREST_HOME = path.join(ctx.root, '.apexrest', 'managed');
+  await writeJson(path.join(process.env.APEXREST_HOME, 'policy.json'), {
+    schemaVersion: 1,
+    trustedProjects: [ctx.root],
+    grants: [],
+  });
+  t.after(async () => {
+    if (previous === undefined) delete process.env.APEXREST_HOME;
+    else process.env.APEXREST_HOME = previous;
+    await rm(ctx.root, { recursive: true, force: true });
+  });
+  const team = new TeamService(ctx),
+    requestId = randomUUID();
+  const state: TeamState = {
+    id: requestId,
+    status: 'queued',
+    phase: 'queued',
+    revision: 0,
+    updatedAt: new Date().toISOString(),
+    members: [],
+    reviews: [],
+    qa: [],
+    messages: [],
+    result: '',
+    diagnostics: [],
+  };
+  let starts = 0;
+  const fake = {
+    directory: team.directory.bind(team),
+    snapshot: team.snapshot.bind(team),
+    async start(request: TeamRequest, id: string = requestId) {
+      starts++;
+      const directory = await team.directory(id);
+      await writeJson(path.join(directory, 'request.json'), request);
+      await writeJson(path.join(directory, 'state.json'), state);
+      return { teamId: id, status: 'queued', nextAction: 'Wait.' };
+    },
+  };
+  const input = {
+    requestId,
+    task: 'Add a help note.',
+    developers: 1,
+    sandbox: 'workspace-write' as const,
+    timeoutSeconds: 120,
+  };
+  const panel = async () => ({
+    project: ctx.root,
+    url: 'http://127.0.0.1:1234/#session=private-capability',
+    nextAction: 'Open.',
+  });
+  return { ctx, team, state, fake, input, panel, starts: () => starts };
+}
+
+test('chat start creates one team, selects it in the private panel and exact retry reuses it', async (t) => {
+  const f = await setup(t);
+  const first = await startWork(f.ctx, f.input, f.panel, f.fake);
+  const retry = await startWork(f.ctx, f.input, f.panel, f.fake);
+  assert.equal(f.starts(), 1);
+  assert.equal(first.teamId, retry.teamId);
+  const hash = new URLSearchParams(new URL(first.panel.url!).hash.slice(1));
+  assert.equal(hash.get('team'), first.teamId);
+  assert.equal(hash.get('view'), 'team');
+  assert.equal(hash.get('session'), 'private-capability');
+  await assert.rejects(startWork(f.ctx, { ...f.input, task: 'Different task' }, f.panel, f.fake), {
+    code: 'WORK_REQUEST_CONFLICT',
+  });
+});
+
+test('panel failure returns the started team and cannot trigger duplicate implementation', async (t) => {
+  const f = await setup(t),
+    panel = async () => {
+      throw new Error('Display unavailable.');
+    };
+  const result = await startWork(f.ctx, f.input, panel, f.fake);
+  assert.equal(result.panel.status, 'unavailable');
+  assert.equal(result.teamId, f.input.requestId);
+  await startWork(f.ctx, f.input, f.panel, f.fake);
+  assert.equal(f.starts(), 1);
+});
+
+test('reusing a completed chat request checks its approval digest before reporting completion', async (t) => {
+  const f = await setup(t);
+  await startWork(f.ctx, f.input, f.panel, f.fake);
+  await writeJson(path.join(f.ctx.root, '.apexrest/teams', f.state.id, 'state.json'), {
+    ...f.state,
+    status: 'completed',
+    approvedDigest: 'outdated',
+  });
+  const result = await startWork(f.ctx, f.input, f.panel, f.fake);
+  assert.equal(result.status, 'review_stale');
+  assert.equal(f.starts(), 1);
+});
+
+test('wait ignores heartbeat and tool-only changes and returns meaningful progress or a terminal result', async (t) => {
+  const f = await setup(t);
+  // Public snapshots retain only ten messages. Waiting must use a cursor that
+  // stays stable when a long conversation is clipped for transport.
+  f.state.messages = Array.from({ length: 12 }, (_, i) => ({
+    id: String(i),
+    from: 'manager',
+    to: 'qa',
+    text: 'Evidence available.',
+    status: 'delivered',
+  }));
+  const started = await startWork(f.ctx, f.input, f.panel, f.fake);
+  const cursor = teamProgressCursor(f.state);
+  assert.equal(started.cursor, cursor);
+  assert.equal(teamProgressCursor({ ...f.state, updatedAt: new Date(0).toISOString() } as TeamState), cursor);
+  const member = {
+    role: 'manager' as const,
+    status: 'inProgress',
+    threadId: 'm',
+    sessionId: 'm',
+    result: '',
+  };
+  assert.equal(
+    teamProgressCursor({ ...f.state, members: [member] }),
+    teamProgressCursor({
+      ...f.state,
+      members: [
+        {
+          ...member,
+          currentAction: { id: 'new-tool', kind: 'commandExecution', title: 'Check source', startedAt: '' },
+        },
+      ],
+    }),
+  );
+  const timer = setTimeout(() => {
+    void writeJson(path.join(f.ctx.root, '.apexrest/teams', f.state.id, 'state.json'), {
+      ...f.state,
+      status: 'running',
+      phase: 'planning',
+    });
+  }, 100);
+  t.after(() => clearTimeout(timer));
+  const next = await waitForTeam(f.ctx, { id: f.state.id, cursor, waitSeconds: 1 });
+  assert.equal(next.terminal, false);
+  assert.equal(next.team.phase, 'planning');
+  assert.notEqual(next.cursor, cursor);
+  await writeJson(path.join(f.ctx.root, '.apexrest/teams', f.state.id, 'state.json'), {
+    ...f.state,
+    status: 'blocked',
+    diagnostics: ['Missing setup.'],
+  });
+  const result = await waitForTeam(f.ctx, { id: f.state.id, cursor: next.cursor, waitSeconds: 1 });
+  assert.equal(result.terminal, true);
+  assert.equal(result.team.status, 'blocked');
+});

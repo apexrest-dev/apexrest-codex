@@ -1,0 +1,7 @@
+interface:
+  display_name: "APEX work from chat"
+  short_description: "Start a team and panel, return reviewed results"
+  default_prompt: "Use $apexrest-work to complete my Oracle APEX change, open the agent panel and report the reviewed result here."
+
+policy:
+  allow_implicit_invocation: true

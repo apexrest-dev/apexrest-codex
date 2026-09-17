@@ -2,6 +2,8 @@
 
 English | [Українська](team.uk.md)
 
+New implementation requests use [APEX work from chat](chat-workflow.md): Codex starts the team, opens its panel and returns the result in the originating conversation. [Auto routing](chat-workflow.md#auto-models) selects supported models and reasoning for each scheduled turn without a manual selector.
+
 For a complete walkthrough with actual screenshots, see [Agent workflow: from task to reviewed result](agent-workflow.md).
 
 The primary implementation entry is `$apexrest-team`. Its runtime creates one project manager, one to three developers and one independent QA agent as separate Codex App Server sessions. Developers work sequentially in the same project. The manager defines assignments; the controller creates the roles and enforces their order.
@@ -30,7 +32,7 @@ apexrest team message TEAM_ID "Also verify empty results" --project /absolute/pr
 apexrest team cancel TEAM_ID --project /absolute/project --json
 ```
 
-The configured project must already be trusted. The Codex executable and login must work. The default developer sandbox is `workspace-write`; `--sandbox read-only` supports analysis-only work. The default time limit is 900 seconds, configurable from 30 to 3600. No model override is selected: sessions inherit Codex configuration. Background work uses the account's normal Codex capacity.
+The configured project must already be trusted. The Codex executable and login must work. The default developer sandbox is `workspace-write`; `--sandbox read-only` supports analysis-only work. The default time limit is 900 seconds, configurable from 30 to 3600. Models and reasoning use Auto routing as described below; there is no manual model selector. Background work uses the account's normal Codex capacity.
 
 ## Shared evidence and boundaries
 

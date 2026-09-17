@@ -2,6 +2,15 @@
 
 English | [Українська](implementation-status.uk.md)
 
+## Chat workflow and Auto models — 2026-09-17
+
+The [chat workflow](chat-workflow.md) adds `apexrest_work_start`, bounded `apexrest_team_wait` and the implicitly discoverable `apexrest-work` skill. The originating Codex conversation starts the internal team, opens its selected in-app panel and reports the reviewed terminal result. Exact retries reuse the request ID; panel failure preserves monitoring. The host skill handles presentation; this is not a global message interceptor or a callback into closed conversations.
+
+Auto discovers available models, selects supported reasoning on each turn, keeps simple developer work on a fast model and independent review/QA on balanced reasoning, and escalates complex implementation or repeated implementation failures. Missing prerequisites do not escalate. Compact peer context omits repeated raw tool transcripts; full evidence stays available. The panel and TUI expose reasons, token breakdowns and the whole-task time limit. No manual model selector or monetary-spend claim is introduced.
+
+[Native execution evidence](evidence/team-auto-native.json) records a real isolated Codex task: Sol/medium manager and QA, Luna/low developer, both manager approvals, independent QA and three harness tests. The exact MCP start and wait calls succeeded; an identical start reused the same team. A separate in-app browser observation confirmed automatic team selection, routing reasons, counters and completion. [Native discovery](evidence/chat-auto-discovery-native.json) and [local checks](evidence/chat-auto-local.json) record their own source scopes. Token savings are not benchmarked. Windows, embedded MCP UI rendering, automatic recovery after a closed host turn and missing-model behavior against live alternative accounts remain unverified.
+
+
 ## Illustrated agent workflow — 2026-09-17
 
 The [complete workflow guide](agent-workflow.md) now documents setup, fixed Pokémon roles, native session communication, mandatory review/QA gates, repair limits, input/source binding, panel settings and authorized APEX delivery in English and Ukrainian. Four actual installed-panel screenshots and a paired accessible SVG explain the process. [Capture and verification metadata](evidence/agent-workflow-documentation.json) records their scope and hashes. Screenshots show a real completed local Codex team and a separate `not_configured` panel test job; they do not claim an Oracle import or new runtime verification.

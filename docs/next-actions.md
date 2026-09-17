@@ -2,6 +2,9 @@
 
 English | [Українська](next-actions.uk.md)
 
+[Chat-driven work and Auto models](chat-workflow.md) are implemented. Extend verification to implicit skill choice across fresh desktop and CLI chats, interrupted-host resumption, unavailable catalog variants and task-matched token/latency comparisons. Keep independent reviews mandatory and distinguish cumulative cached input from cost. Current native execution and in-app panel observations are recorded in the implementation status.
+
+
 The [illustrated agent guide](agent-workflow.md) is complete in both languages, with four actual panel captures and a workflow diagram. Refresh these images when the UI or workflow changes; retain their isolated-coding-fixture captions. Connected Oracle team execution, embedded MCP rendering and Windows verification remain separate open checks.
 
 The [mandatory team](team.md) and [development panel](panel.md) are implemented. Extend verification to authorized APEX application tasks, artifact-writing QA suites, Windows console/process recovery and embedded MCP UI rendering. In-app browser rendering and native App Server sessions are separate evidence from a custom desktop sidebar or parent-child session attachment. The [source audit](codex-integration.md) records the actual extension points. Refresh the installed bundle through the CLI after source changes; a new Codex task is needed to load updated skills/tools.

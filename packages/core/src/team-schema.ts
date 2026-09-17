@@ -8,11 +8,28 @@ export const teamStartSchema = z.strictObject({
   timeoutSeconds: z.number().int().min(30).max(3600).default(900),
 });
 export const teamIdSchema = z.strictObject({ project: z.string().optional(), id: z.uuid() });
+export const workStartSchema = teamStartSchema.extend({ requestId: z.uuid() });
+export const teamWaitSchema = teamIdSchema.extend({
+  cursor: z
+    .string()
+    .regex(/^[a-f0-9]{64}$/)
+    .optional(),
+  waitSeconds: z.number().int().min(1).max(30).default(25),
+});
 export const teamMessageSchema = teamIdSchema.extend({ message: z.string().trim().min(1).max(8000) });
+export const planningSchema = z.strictObject({
+  plan: z.string().min(1).max(6000),
+  complexity: z.enum(['simple', 'standard', 'complex']),
+  reason: z.string().min(1).max(600),
+});
 export const reviewSchema = z.strictObject({
   decision: z.enum(['approve', 'revise']),
   summary: z.string().min(1).max(4000),
   findings: z.array(z.string().min(1).max(2000)).max(20),
+});
+// Routing advice is separate from the approval gate; old persisted reviews remain readable.
+export const routedReviewSchema = reviewSchema.extend({
+  revisionCause: z.enum(['none', 'implementation', 'prerequisite']),
 });
 export const qaSchema = z.strictObject({
   decision: z.enum(['pass', 'fail', 'blocked']),
@@ -33,6 +50,21 @@ export type Review = z.infer<typeof reviewSchema>;
 export type QaReport = z.infer<typeof qaSchema>;
 export type TeamRole = 'manager' | 'qa' | 'developer-1' | 'developer-2' | 'developer-3';
 export type TeamPhase = 'queued' | 'planning' | 'development' | 'code_review' | 'qa' | 'final_review';
+export interface ModelSelection {
+  mode: 'auto';
+  tier: 'fast' | 'balanced' | 'strong';
+  model: string;
+  effort: string;
+  reason: string;
+}
+export interface TokenUsage {
+  totalTokens: number;
+  inputTokens?: number;
+  cachedInputTokens?: number;
+  cacheWriteInputTokens?: number;
+  outputTokens?: number;
+  reasoningOutputTokens?: number;
+}
 export interface TeamMember {
   role: TeamRole;
   name?: string;
@@ -49,6 +81,8 @@ export interface TeamMember {
   };
   currentAction?: { id: string; kind: string; title: string; startedAt: string };
   totalTokens?: number;
+  tokenUsage?: TokenUsage;
+  selection?: ModelSelection;
 }
 export interface TeamMessage {
   id: string;
@@ -78,4 +112,11 @@ export interface TeamState {
     at?: string;
   }[];
   approvedDigest?: string;
+  modelPolicy?: {
+    mode: 'auto';
+    complexity: 'simple' | 'standard' | 'complex';
+    reason: string;
+    repairFailures: number;
+  };
+  limits?: { startedAt: string; timeoutSeconds: number };
 }

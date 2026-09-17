@@ -17,6 +17,8 @@ const positional: Record<string, string[]> = {
   'jobs.cancel': ['id'],
   'artifacts.read': ['id'],
   'team.start': ['task'],
+  'work.start': ['task'],
+  'team.wait': ['id'],
   'team.status': ['id'],
   'team.message': ['id', 'message'],
   'team.cancel': ['id'],
@@ -63,7 +65,7 @@ function help() {
       'Pass --action as one JSON object. Supported kinds: preferences, sqlcl, start, message, cancel-team, cancel-job, validate, test, plan.',
       'Example: apexrest panel action --action \'{"kind":"validate"}\' --project PATH --json',
     );
-  if (key === 'team.start')
+  if (key === 'team.start' || key === 'work.start')
     lines.push(
       '',
       'Run separate Codex manager, developer and QA sessions with mandatory reviews.',
@@ -72,7 +74,14 @@ function help() {
       '--timeout-seconds 30..3600 defaults to 900. No interactive approvals are auto-granted.',
       'The configured project must already be trusted and Codex must be logged in.',
       'Returns a team ID immediately. Read team status for the reviewed result.',
+      'Models and reasoning are selected automatically; there is no manual model option.',
     );
+  if (key === 'work.start')
+    lines.push(
+      'Use --request-id UUID for idempotent task creation; exact retries return the same team and its panel.',
+    );
+  if (key === 'team.wait')
+    lines.push('Use --cursor HASH --wait-seconds 25 for bounded waiting without heartbeat polling.');
   if (key === 'dependencies.install')
     lines.push(
       '',
@@ -158,7 +167,7 @@ try {
       'headed',
       'saved',
     ]);
-    const numbers = new Set(['appId', 'offset', 'limit', 'developers', 'timeoutSeconds']);
+    const numbers = new Set(['appId', 'offset', 'limit', 'developers', 'timeoutSeconds', 'waitSeconds']);
     let index = 0;
     for (let i = selectedOp.start; i < argv.length; i++) {
       const token = argv[i]!;

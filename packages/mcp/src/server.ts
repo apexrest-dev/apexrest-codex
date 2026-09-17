@@ -55,6 +55,7 @@ export async function startMcp() {
     (t) =>
       process.env.APEXREST_TEAM_WORKER !== '1' ||
       (!t.operation.startsWith('team.') &&
+        !t.operation.startsWith('work.') &&
         !t.operation.startsWith('panel.') &&
         (process.env.APEXREST_TEAM_ROLE?.startsWith('developer') || t.readOnly)),
   );

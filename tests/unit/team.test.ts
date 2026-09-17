@@ -58,10 +58,13 @@ function protocol(
     peer?: boolean;
     sharedSession?: boolean;
     cancelActive?: () => Promise<void>;
+    prerequisite?: boolean;
+    complexity?: 'simple' | 'standard' | 'complex';
   } = {},
 ) {
   const calls: string[] = [];
   const starts: RpcObject[] = [];
+  const turnRequests: RpcObject[] = [];
   const turns = new Map<string, RpcObject>();
   const roles = new Map<string, string>();
   let reviewerTurns = 0,
@@ -69,6 +72,19 @@ function protocol(
     peersChecked = false;
   const connect: typeof connectCodex = async (_cwd, notify, toolCall) => ({
     async call(method, params = {}) {
+      if (method === 'model/list')
+        return {
+          data: ['gpt-6-astra', 'gpt-5.6-sol', 'gpt-5.6-luna'].map((model) => ({
+            model,
+            inputModalities: ['text'],
+            isDefault: model === 'gpt-6-astra',
+            defaultReasoningEffort: 'high',
+            supportedReasoningEfforts: ['low', 'medium', 'high'].map((reasoningEffort) => ({
+              reasoningEffort,
+            })),
+          })),
+          nextCursor: null,
+        };
       if (method === 'thread/start') {
         const threadId = `thread-${++counter}`;
         const instructions = String(params.developerInstructions);
@@ -91,28 +107,39 @@ function protocol(
       const threadId = String(params.threadId),
         role = roles.get(threadId)!;
       if (method === 'turn/start') {
+        turnRequests.push(params);
         calls.push(role);
         let output = 'Implemented fixture and inspected source.';
         if (role === 'manager') {
           reviewerTurns++;
-          if (params.outputSchema)
+          if (reviewerTurns > 1)
             output = JSON.stringify({
               decision: options.rejectFirst && reviewerTurns === 2 ? 'revise' : 'approve',
               summary: 'Reviewed the actual fixture source.',
               findings: options.rejectFirst && reviewerTurns === 2 ? ['Repair the input check.'] : [],
+              revisionCause: options.prerequisite
+                ? 'prerequisite'
+                : options.rejectFirst && reviewerTurns === 2
+                  ? 'implementation'
+                  : 'none',
             });
-          else output = 'Developer 1: inputs. Developer 2: outputs. QA: validate behavior.';
+          else
+            output = JSON.stringify({
+              plan: 'Developer 1: inputs. Developer 2: outputs. QA: validate behavior.',
+              complexity: options.complexity ?? 'standard',
+              reason: 'Bounded fixture task.',
+            });
         }
         if (role === 'qa') {
           output = options.malformed
             ? 'not a structured QA report'
             : JSON.stringify({
-                decision: options.qaFail ? 'fail' : 'pass',
+                decision: options.prerequisite ? 'blocked' : options.qaFail ? 'fail' : 'pass',
                 summary: 'Independent verification.',
                 checks: [
                   {
                     name: 'fixture verification',
-                    status: options.qaFail ? 'failed' : 'passed',
+                    status: options.prerequisite ? 'not_run' : options.qaFail ? 'failed' : 'passed',
                     evidence: 'Observed fixture result.',
                   },
                 ],
@@ -128,6 +155,18 @@ function protocol(
         turns.set(threadId, turn);
         await options.cancelActive?.();
         notify('turn/started', { threadId, turn: { id: turn.id, status: 'inProgress' } });
+        notify('thread/tokenUsage/updated', {
+          threadId,
+          tokenUsage: {
+            total: {
+              totalTokens: 100,
+              inputTokens: 80,
+              cachedInputTokens: 50,
+              outputTokens: 20,
+              reasoningOutputTokens: 10,
+            },
+          },
+        });
         if (options.peer && role === 'developer' && !peersChecked) {
           peersChecked = true;
           const common = { threadId, turnId: turns.get(threadId)!.id };
@@ -165,7 +204,7 @@ function protocol(
       calls.push('closed');
     },
   });
-  return { connect, calls, starts };
+  return { connect, calls, starts, turnRequests };
 }
 
 test('fixed team always runs developers, manager review, independent QA and final manager review in separate sessions', async (t) => {
@@ -185,7 +224,9 @@ test('fixed team always runs developers, manager review, independent QA and fina
   );
   assert.ok(mock.starts.every((p) => (p.config as RpcObject)['agents.enabled'] === false));
   assert.equal(result.messages[0]?.status, 'delivered');
-  assert.equal(result.observations?.[0]?.kind, 'team_context');
+  assert.ok(result.observations?.some((o) => o.kind === 'team_context'));
+  assert.ok(mock.turnRequests.every((r) => r.model === 'gpt-5.6-sol' && r.effort === 'medium'));
+  assert.ok(result.members.every((m) => m.totalTokens === 100 && m.tokenUsage?.cachedInputTokens === 50));
   assert.equal(result.reviews.length, 2);
   assert.equal(result.qa.length, 1);
   assert.ok(result.reviews.every((r) => r.digest === result.approvedDigest));
@@ -210,6 +251,39 @@ test('manager revision request forces new development and fresh review before QA
     'manager',
     'closed',
   ]);
+});
+
+test('simple developer uses fast/low while both mandatory reviewer roles stay balanced/medium', async (t) => {
+  const { ctx, id } = await prepared(t);
+  const mock = protocol({ complexity: 'simple' });
+  const result = await executeTeam(ctx, id, mock.connect);
+  assert.equal(result.status, 'completed');
+  assert.equal(result.members.find((m) => m.role === 'developer-1')?.selection?.model, 'gpt-5.6-luna');
+  assert.equal(result.members.find((m) => m.role === 'qa')?.selection?.effort, 'medium');
+  assert.deepEqual(
+    result.reviews.map((r) => r.phase),
+    ['code_review', 'final_review'],
+  );
+});
+
+test('two failed implementation cycles escalate subsequent turns without changing sessions or approvals', async (t) => {
+  const { ctx, id } = await prepared(t);
+  const mock = protocol({ qaFail: true });
+  const result = await executeTeam(ctx, id, mock.connect);
+  assert.equal(result.status, 'review_failed');
+  assert.equal(mock.starts.length, 4);
+  assert.ok(mock.turnRequests.some((r) => r.model === 'gpt-6-astra' && r.effort === 'high'));
+  assert.equal(result.reviews.length, 6);
+  assert.ok(mock.starts.every((r) => r.approvalPolicy === 'never'));
+});
+
+test('blocked prerequisites do not escalate model strength or bypass QA', async (t) => {
+  const { ctx, id } = await prepared(t);
+  const mock = protocol({ prerequisite: true });
+  const result = await executeTeam(ctx, id, mock.connect);
+  assert.equal(result.status, 'review_failed');
+  assert.equal(result.modelPolicy?.repairFailures, 0);
+  assert.ok(mock.turnRequests.every((r) => r.model === 'gpt-5.6-sol'));
 });
 
 test('manager approval cannot bypass failed QA; manager reviews each QA report and retries are bounded', async (t) => {

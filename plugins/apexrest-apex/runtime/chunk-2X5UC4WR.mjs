@@ -23,11 +23,24 @@ var teamStartSchema = external_exports.strictObject({
   timeoutSeconds: external_exports.number().int().min(30).max(3600).default(900)
 });
 var teamIdSchema = external_exports.strictObject({ project: external_exports.string().optional(), id: external_exports.uuid() });
+var workStartSchema = teamStartSchema.extend({ requestId: external_exports.uuid() });
+var teamWaitSchema = teamIdSchema.extend({
+  cursor: external_exports.string().regex(/^[a-f0-9]{64}$/).optional(),
+  waitSeconds: external_exports.number().int().min(1).max(30).default(25)
+});
 var teamMessageSchema = teamIdSchema.extend({ message: external_exports.string().trim().min(1).max(8e3) });
+var planningSchema = external_exports.strictObject({
+  plan: external_exports.string().min(1).max(6e3),
+  complexity: external_exports.enum(["simple", "standard", "complex"]),
+  reason: external_exports.string().min(1).max(600)
+});
 var reviewSchema = external_exports.strictObject({
   decision: external_exports.enum(["approve", "revise"]),
   summary: external_exports.string().min(1).max(4e3),
   findings: external_exports.array(external_exports.string().min(1).max(2e3)).max(20)
+});
+var routedReviewSchema = reviewSchema.extend({
+  revisionCause: external_exports.enum(["none", "implementation", "prerequisite"])
 });
 var qaSchema = external_exports.strictObject({
   decision: external_exports.enum(["pass", "fail", "blocked"]),
@@ -80,12 +93,19 @@ var TeamService = class {
     parse(external_exports.uuid(), id);
     return contained(this.ctx.root, ".apexrest/teams/" + id);
   }
-  async start(input) {
+  async start(input, id = randomUUID()) {
     await requireTrust(this.ctx.root);
     if (process.env.APEXREST_TEAM_WORKER === "1")
       throw new Fault("TEAM_RECURSION", "Team workers cannot create another team.", 2);
     const request = parse(teamStartSchema, input);
-    const id = randomUUID(), root = await this.directory(id);
+    const root = await this.directory(id);
+    if (await exists(path2.join(root, "request.json")))
+      throw new Fault(
+        "TEAM_ALREADY_STARTED",
+        "This team request already exists; inspect its status.",
+        5,
+        "conflict"
+      );
     await writeJson(path2.join(root, "request.json"), { ...request, project: this.ctx.root });
     await writeJson(path2.join(root, "state.json"), {
       id,
@@ -210,10 +230,14 @@ var TeamService = class {
 export {
   teamStartSchema,
   teamIdSchema,
+  workStartSchema,
+  teamWaitSchema,
   teamMessageSchema,
-  reviewSchema,
+  planningSchema,
+  routedReviewSchema,
   qaSchema,
   teamSourceDigest,
+  teamActive,
   teamRuntime,
   TeamService
 };

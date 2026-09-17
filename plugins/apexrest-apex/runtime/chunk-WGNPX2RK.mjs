@@ -2,7 +2,8 @@ import { createRequire as __createRequire } from 'node:module'; const require = 
 import {
   dispatch,
   schemas
-} from "./chunk-GL7SR744.mjs";
+} from "./chunk-TRQZWEKW.mjs";
+import "./chunk-5S7CBHIF.mjs";
 import "./chunk-SQLI3IEY.mjs";
 import {
   resourceRoot
@@ -20,9 +21,9 @@ import {
   valueText,
   wrap
 } from "./chunk-GHLJSFSV.mjs";
-import "./chunk-6CWSRFL2.mjs";
-import "./chunk-TXURWVZO.mjs";
-import "./chunk-5Y7F4C4N.mjs";
+import "./chunk-FT4HB4SQ.mjs";
+import "./chunk-2X5UC4WR.mjs";
+import "./chunk-5MUOGWVK.mjs";
 import {
   sqlclConfig
 } from "./chunk-TDSYBJUK.mjs";

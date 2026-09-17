@@ -246,11 +246,7 @@
       "criterion": "An agent cannot authorize production by setting `approved=true` itself",
       "implementation": "implemented",
       "verification": "partial",
-      "evidence": [
-        "packages/core/src/config.ts",
-        "packages/core/src/deploy.ts",
-        "tests/unit/core.test.ts"
-      ],
+      "evidence": ["packages/core/src/config.ts", "packages/core/src/deploy.ts", "tests/unit/core.test.ts"],
       "blocker": "Strict schema and missing production authority rejection tested. Protected-runner signature/approval integration is not configured."
     },
     {
@@ -379,10 +375,7 @@
       "criterion": "Stable release is blocked without required native-host and Oracle integration evidence",
       "implementation": "implemented",
       "verification": "passed",
-      "evidence": [
-        "scripts/check-release-readiness.mjs",
-        "dist/releases/release-readiness.json"
-      ],
+      "evidence": ["scripts/check-release-readiness.mjs", "dist/releases/release-readiness.json"],
       "blocker": null
     },
     {
@@ -433,10 +426,7 @@
       "criterion": "A sandbox labelled supported actually provisions the stack and preserves data during ordinary `down`",
       "implementation": "unsupported",
       "verification": "not_applicable",
-      "evidence": [
-        "packages/core/src/sandbox.ts",
-        "toolchains/compatibility.json"
-      ],
+      "evidence": ["packages/core/src/sandbox.ts", "toolchains/compatibility.json"],
       "blocker": "No supported sandbox claim. Legitimate complete Linux DB/APEX/ORDS/utPLSQL provisioning tuple is not implemented or verified."
     },
     {
@@ -475,6 +465,25 @@
         "docs/evidence/agent-workflow-documentation.json"
       ],
       "blocker": "Embedded MCP UI renderer, Windows console and connected Oracle deployment observation remain unverified. Desktop evidence is the actual Codex in-app browser."
+    },
+    {
+      "id": "A31",
+      "criterion": "Codex chat starts a reviewed team and selected in-app panel, uses automatic supported model routing and returns a digest-checked terminal result through bounded waiting",
+      "implementation": "implemented",
+      "verification": "partial",
+      "evidence": [
+        "docs/chat-workflow.md",
+        "docs/chat-workflow.uk.md",
+        "packages/core/src/work.ts",
+        "packages/core/src/team-models.ts",
+        "plugins/apexrest-apex/skills/apexrest-work/SKILL.md",
+        "tests/unit/work.test.ts",
+        "tests/unit/team-models.test.ts",
+        "docs/evidence/team-auto-native.json",
+        "docs/evidence/chat-auto-discovery-native.json",
+        "docs/evidence/chat-auto-local.json"
+      ],
+      "blocker": "Actual local Codex task and host-opened in-app panel verified separately from implicit skill-selection consistency. Windows, closed-host callback/recovery, alternative live model catalogs and task-matched efficiency benchmarks remain unverified. No global chat interceptor or hard token-spend cap."
     }
   ],
   "amendments": [

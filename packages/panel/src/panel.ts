@@ -69,8 +69,9 @@ const notice = (message: string, error = false) => {
   box.textContent = message;
 };
 
+const launch = new URLSearchParams(location.hash.slice(1));
 let snapshot: PanelSnapshot | undefined,
-  chosenTeam: string | undefined,
+  chosenTeam: string | undefined = launch.get('team') ?? undefined,
   busy = false,
   connected = false,
   initialized = false;
@@ -78,7 +79,7 @@ let bridgeProject: string | undefined,
   bridgeReady = false,
   requestId = 0;
 const embedded = window.parent !== window;
-const token = new URLSearchParams(location.hash.slice(1)).get('session') ?? '';
+const token = launch.get('session') ?? '';
 const pending = new Map<
   number,
   { resolve: (v: unknown) => void; reject: (e: Error) => void; timer: ReturnType<typeof setTimeout> }
@@ -217,6 +218,24 @@ function pipeline(data: PanelSnapshot) {
   if (data.task) box.append(node('p', 'task-summary', data.task));
   head.append(node('h3', '', 'Revision ' + team.revision), badge(team.status));
   box.append(head);
+  if (team.modelPolicy)
+    box.append(
+      node(
+        'p',
+        'subtle',
+        'Auto models · ' + team.modelPolicy.complexity + ' task · ' + team.modelPolicy.reason,
+      ),
+    );
+  if (team.limits)
+    box.append(
+      node(
+        'p',
+        'subtle',
+        'Task time limit: ' +
+          team.limits.timeoutSeconds +
+          ' seconds. Token counts are cumulative, including cached input; they are not a cost estimate.',
+      ),
+    );
   const stages = ['planning', 'development', 'code_review', 'qa', 'final_review'],
     index = stages.indexOf(team.phase);
   const bar = node('div', 'steps');
@@ -267,12 +286,37 @@ function pipeline(data: PanelSnapshot) {
         [
           member.configuration?.reasoningEffort,
           member.configuration?.sandbox,
-          member.totalTokens == null ? '' : member.totalTokens.toLocaleString() + ' tokens',
+          member.totalTokens == null ? '' : member.totalTokens.toLocaleString() + ' cumulative tokens',
         ]
           .filter(Boolean)
           .join(' · '),
       ),
     );
+    if (member.selection)
+      meta.append(node('span', '', 'Auto · ' + member.selection.tier + ' · ' + member.selection.reason));
+    if (member.tokenUsage)
+      meta.append(
+        node(
+          'span',
+          '',
+          [
+            member.tokenUsage.inputTokens == null
+              ? ''
+              : 'Input ' + member.tokenUsage.inputTokens.toLocaleString(),
+            member.tokenUsage.cachedInputTokens == null
+              ? ''
+              : 'Cached input ' + member.tokenUsage.cachedInputTokens.toLocaleString(),
+            member.tokenUsage.outputTokens == null
+              ? ''
+              : 'Output ' + member.tokenUsage.outputTokens.toLocaleString(),
+            member.tokenUsage.reasoningOutputTokens == null
+              ? ''
+              : 'Reasoning output ' + member.tokenUsage.reasoningOutputTokens.toLocaleString(),
+          ]
+            .filter(Boolean)
+            .join(' · '),
+        ),
+      );
     cell.append(meta);
     agents.append(cell);
   }
@@ -694,6 +738,7 @@ $('run-tests').onclick = () => {
   void act({ kind: 'test', suite, ...(env ? { env } : {}) });
 };
 controls();
+if (launch.get('view') === 'team') view('team');
 const mark = document.querySelector('.brand-mark');
 if (mark) {
   const icon = node('img');

@@ -2,6 +2,8 @@
 
 English | [Українська](panel.uk.md)
 
+[APEX work from chat](chat-workflow.md) automatically opens the selected team view; the web task form is optional. Auto routing reasons, cumulative token breakdowns and the task time limit appear on the team cards. Cached input and reasoning output are subsets, not extra tokens or a price estimate.
+
 For a complete walkthrough with actual screenshots, see [Agent workflow: from task to reviewed result](agent-workflow.md).
 
 Open `$apexrest-panel` in Codex desktop for a live workspace view in the in-app browser. The skill calls `apexrest_panel_open` with the absolute application project directory and opens the returned private local URL. Use the application project, not the plugin source or its installed cache. A folder without `apexrest.json` can be inspected but cannot start development work.

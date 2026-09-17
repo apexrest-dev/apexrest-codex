@@ -18,6 +18,8 @@ import { JobService } from './jobs.ts';
 import { sandboxAction } from './sandbox.ts';
 import { configureSqlcl, sqlclConfig, type SqlclConfig } from './sqlcl-config.ts';
 import { TeamService } from './team.ts';
+import { startWork, waitForTeam } from './work.ts';
+import { workStartSchema, teamWaitSchema } from './team-schema.ts';
 import { teamStartSchema } from './team-schema.ts';
 import { PanelService } from './panel.ts';
 import { panelActionSchema } from './panel-schema.ts';
@@ -135,6 +137,12 @@ export async function dispatch(operation: string, input: Record<string, unknown>
       default: {
         const ctx = await loadProject(root);
         switch (operation) {
+          case 'work.start':
+            data = await startWork(ctx, workStartSchema.parse(parsed));
+            break;
+          case 'team.wait':
+            data = await waitForTeam(ctx, teamWaitSchema.parse(parsed), signal);
+            break;
           case 'team.start':
             data = await new TeamService(ctx).start(teamStartSchema.parse(parsed));
             break;

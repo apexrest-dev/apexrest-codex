@@ -5,11 +5,16 @@ import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { setTimeout as delay } from 'node:timers/promises';
 import { sourceDigest, sha256 } from './lib/release.mjs';
+import { randomUUID } from 'node:crypto';
+import { Client } from '@modelcontextprotocol/sdk/client/index.js';
+import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 const root = await realpath(await mkdtemp(path.join(tmpdir(), 'apexrest-native-team-')));
 const project = path.join(root, 'project'),
   home = path.join(root, 'managed');
 const runtime = path.resolve(process.argv[2] ?? 'dist/runtime/apexrest.mjs');
 const reportFile = path.resolve(process.argv[3] ?? 'docs/evidence/team-native-local.json');
+const developers = Number(process.argv[4] ?? 2);
+if (![1, 2, 3].includes(developers)) throw new Error('Expected one to three developers.');
 await mkdir(project);
 await mkdir(home);
 const env = { ...process.env, APEXREST_HOME: home };
@@ -86,22 +91,39 @@ const evidence = {
     'Actual Codex App Server sessions, constrained fixture edit, manager review, independent local QA, final manager review. No Oracle or desktop attachment.',
   status: 'running',
 };
-const started = cli(
-  'team',
-  'start',
-  '--project',
-  project,
-  '--task',
-  task,
-  '--developers',
-  '2',
-  '--timeout-seconds',
-  '600',
+const client = new Client({ name: 'apexrest-chat-work-native-verification', version: '1.0.0' });
+await client.connect(
+  new StdioClientTransport({
+    command: process.execPath,
+    args: [path.join(path.dirname(runtime), 'mcp.mjs')],
+    env,
+    stderr: 'pipe',
+  }),
 );
+const callTool = async (name, args) => {
+  const response = await client.callTool({ name, arguments: { ...args, project } });
+  const result = JSON.parse(response.content[0].text);
+  if (!result.ok) throw new Error(result.summary);
+  return result.data;
+};
+const requestId = randomUUID();
+const startInput = { requestId, task, developers, timeoutSeconds: 600 };
+const started = await callTool('apexrest_work_start', startInput);
+const retry = await callTool('apexrest_work_start', startInput);
+evidence.chatStart = {
+  tool: 'apexrest_work_start',
+  panelReady: started.panel.status === 'ready',
+  retryReusedTeam: retry.teamId === started.teamId,
+};
+await mkdir('.apexrest', { recursive: true });
+await writeFile('.apexrest/auto-native-session.private.json', JSON.stringify({ project, home, ...started }));
 console.log(JSON.stringify({ fixture: project, teamId: started.teamId }));
-let last = '';
+let last = '',
+  cursor = started.cursor;
 for (;;) {
-  const state = cli('team', 'status', started.teamId, '--project', project);
+  const progress = await callTool('apexrest_team_wait', { id: started.teamId, cursor, waitSeconds: 25 });
+  cursor = progress.cursor;
+  const state = progress.team;
   if (`${state.status}:${state.phase}` !== last) {
     last = `${state.status}:${state.phase}`;
     console.log(last);
@@ -122,6 +144,8 @@ for (;;) {
       name: m.name,
       status: m.status,
       configuration: m.configuration,
+      selection: m.selection,
+      tokenUsage: m.tokenUsage,
     }));
     evidence.peerMessages = state.messages
       .filter((m) => m.from !== 'user')
@@ -138,6 +162,15 @@ for (;;) {
     evidence.observedRoleTools = full.observations
       ?.filter((o) => ['team_context', 'team_message'].includes(o.kind))
       .map(({ role, kind }) => ({ role, kind }));
+    evidence.modelPolicy = full.modelPolicy;
+    evidence.modelSelections = full.observations
+      ?.filter((o) => o.kind === 'modelSelection')
+      .map((o) => ({ role: o.role, phase: o.phase, ...JSON.parse(o.detail) }));
+    evidence.autoRouting =
+      full.modelPolicy?.mode === 'auto' &&
+      full.members.every(
+        (m) => m.selection?.mode === 'auto' && m.configuration?.model && m.tokenUsage?.totalTokens > 0,
+      );
     evidence.qa = full.qa.map((q) => ({
       revision: q.revision,
       decision: q.report.decision,
@@ -154,7 +187,10 @@ for (;;) {
     if (
       !evidence.sourceBound ||
       !evidence.preservedConfiguration ||
-      evidence.separateSessions !== 4 ||
+      evidence.separateSessions !== developers + 2 ||
+      !evidence.autoRouting ||
+      !evidence.chatStart.panelReady ||
+      !evidence.chatStart.retryReusedTeam ||
       !state.members.every(
         (m) =>
           evidence.observedRoleTools.some((o) => o.role === m.role && o.kind === 'team_context') &&
@@ -171,6 +207,7 @@ for (;;) {
   }
   await delay(2000);
 }
+await client.close();
 await mkdir(path.dirname(reportFile), { recursive: true });
 await writeFile(reportFile, JSON.stringify(evidence, null, 2) + '\n');
 console.log(JSON.stringify(evidence, null, 2));

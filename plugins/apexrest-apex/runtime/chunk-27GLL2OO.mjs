@@ -26,7 +26,7 @@ import {
 } from "./chunk-5X6KTDSR.mjs";
 import {
   VERSION
-} from "./chunk-5Y7F4C4N.mjs";
+} from "./chunk-5MUOGWVK.mjs";
 import {
   runProcess
 } from "./chunk-TDSYBJUK.mjs";

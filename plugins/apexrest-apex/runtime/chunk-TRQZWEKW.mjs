@@ -1,5 +1,8 @@
 import { createRequire as __createRequire } from 'node:module'; const require = __createRequire(import.meta.url);
 import {
+  openPanel
+} from "./chunk-5S7CBHIF.mjs";
+import {
   runtimeState
 } from "./chunk-SQLI3IEY.mjs";
 import {
@@ -16,16 +19,19 @@ import {
   PanelService,
   panelActionSchema,
   panelReadSchema
-} from "./chunk-6CWSRFL2.mjs";
+} from "./chunk-FT4HB4SQ.mjs";
 import {
   TeamService,
+  teamActive,
   teamIdSchema,
   teamMessageSchema,
-  teamStartSchema
-} from "./chunk-TXURWVZO.mjs";
+  teamStartSchema,
+  teamWaitSchema,
+  workStartSchema
+} from "./chunk-2X5UC4WR.mjs";
 import {
   VERSION
-} from "./chunk-5Y7F4C4N.mjs";
+} from "./chunk-5MUOGWVK.mjs";
 import {
   configureSqlcl,
   connections,
@@ -136,6 +142,8 @@ var schemas = {
   "sqlcl.status": external_exports.strictObject({}),
   "sqlcl.configure": external_exports.strictObject({ mode: sqlclMode, mcpRestrictLevel: sqlclRestriction.optional() }),
   "team.start": teamStartSchema,
+  "work.start": workStartSchema,
+  "team.wait": teamWaitSchema,
   "team.status": teamIdSchema,
   "team.message": teamMessageSchema,
   "team.cancel": teamIdSchema,
@@ -223,6 +231,18 @@ var schemas = {
   "sandbox.down": external_exports.strictObject(base)
 };
 var toolCatalog = [
+  {
+    name: "apexrest_work_start",
+    operation: "work.start",
+    description: "Start reviewed Oracle APEX work from this chat and prepare its private agent panel. Use a fresh UUID requestId per task; exact retries reuse the same team. Open the returned panel URL inside Codex, wait for the team and report in this chat. Auto model routing; no web form required.",
+    readOnly: false
+  },
+  {
+    name: "apexrest_team_wait",
+    operation: "team.wait",
+    description: "Wait up to 30 seconds for meaningful team progress or completion. Reuse the returned cursor to avoid heartbeat polling. Reports terminal state and digest-checked result for delivery in the originating chat.",
+    readOnly: true
+  },
   {
     name: "apexrest_panel_open",
     operation: "panel.open",
@@ -360,7 +380,7 @@ var toolCatalog = [
 ];
 
 // packages/core/src/service.ts
-import path7 from "node:path";
+import path8 from "node:path";
 
 // packages/core/src/doctor.ts
 import path from "node:path";
@@ -1767,6 +1787,84 @@ async function sandboxAction(action) {
   );
 }
 
+// packages/core/src/work.ts
+import path7 from "node:path";
+import { setTimeout as delay } from "node:timers/promises";
+function teamProgressCursor(state) {
+  return hash(
+    canonical({
+      status: state.status,
+      phase: state.phase,
+      revision: state.revision,
+      members: state.members.map((m) => [m.role, m.status]),
+      reviews: state.reviews.length,
+      qa: state.qa.length
+    })
+  );
+}
+async function startWork(ctx, input, panel = openPanel, team = new TeamService(ctx)) {
+  await requireTrust(ctx.root);
+  if (process.env.APEXREST_TEAM_WORKER === "1")
+    throw new Fault("TEAM_RECURSION", "Team workers cannot start another chat workflow.", 2);
+  const { requestId, ...fields } = parse(workStartSchema, input);
+  const request = teamStartSchema.parse({ ...fields, project: ctx.root });
+  const state = await withLock(
+    await contained(ctx.root, ".apexrest/work-" + requestId + ".lock"),
+    async () => {
+      const directory = await team.directory(requestId);
+      if (await exists(path7.join(directory, "request.json"))) {
+        if (canonical(await readJson(path7.join(directory, "request.json"))) !== canonical(request))
+          throw new Fault(
+            "WORK_REQUEST_CONFLICT",
+            "This request ID belongs to a different task. Inspect the original team.",
+            5,
+            "conflict"
+          );
+        if (!await exists(path7.join(directory, "state.json")))
+          throw new Fault(
+            "WORK_START_UNKNOWN",
+            "Task creation is incomplete. Inspect this request ID before any retry.",
+            6,
+            "outcome_unknown"
+          );
+      } else await team.start(request, requestId);
+      return team.snapshot(requestId);
+    }
+  );
+  let display;
+  try {
+    const opened = await panel(ctx.root), url = new URL(opened.url);
+    const fragment = new URLSearchParams(url.hash.slice(1));
+    fragment.set("team", requestId);
+    fragment.set("view", "team");
+    url.hash = fragment.toString();
+    display = { status: "ready", url: url.toString() };
+  } catch (error) {
+    display = {
+      status: "unavailable",
+      message: redact(error instanceof Error ? error.message : String(error)).slice(0, 600)
+    };
+  }
+  return {
+    teamId: requestId,
+    status: state.status,
+    cursor: teamProgressCursor(state),
+    panel: display,
+    nextAction: "Open panel.url in the Codex in-app browser when available. Follow this team with apexrest_team_wait; deliver its terminal result in the originating chat. Reuse requestId only for an exact retry."
+  };
+}
+async function waitForTeam(ctx, input, signal) {
+  const request = parse(teamWaitSchema, input), team = new TeamService(ctx);
+  const deadline = Date.now() + request.waitSeconds * 1e3;
+  let state = await team.status(request.id);
+  while (teamActive.has(state.status) && request.cursor === teamProgressCursor(state) && Date.now() < deadline && !signal?.aborted) {
+    await delay(Math.min(250, Math.max(1, deadline - Date.now())));
+    state = await team.status(request.id);
+  }
+  const result = await team.snapshot(request.id);
+  return { cursor: teamProgressCursor(result), terminal: !teamActive.has(result.status), team: result };
+}
+
 // packages/core/src/service.ts
 import { realpath } from "node:fs/promises";
 async function dispatch(operation, input = {}, signal) {
@@ -1784,8 +1882,8 @@ async function dispatch(operation, input = {}, signal) {
     let data;
     switch (operation) {
       case "panel.open": {
-        const { openPanel } = await import("./chunk-DLGWIJX7.mjs");
-        data = await openPanel(await realpath(root));
+        const { openPanel: openPanel2 } = await import("./chunk-LGJ6WW37.mjs");
+        data = await openPanel2(await realpath(root));
         break;
       }
       case "panel.status":
@@ -1822,17 +1920,17 @@ async function dispatch(operation, input = {}, signal) {
       case "setup":
       case "plugin.install":
       case "plugin.update": {
-        const { setup: setup2 } = await import("./chunk-JBTCTGO7.mjs");
+        const { setup: setup2 } = await import("./chunk-27GLL2OO.mjs");
         data = await setup2(parsed);
         break;
       }
       case "plugin.validate": {
-        const { validateNative } = await import("./chunk-JBTCTGO7.mjs");
+        const { validateNative } = await import("./chunk-27GLL2OO.mjs");
         data = await validateNative(text("from"));
         break;
       }
       case "plugin.uninstall": {
-        const { uninstallNative } = await import("./chunk-JBTCTGO7.mjs");
+        const { uninstallNative } = await import("./chunk-27GLL2OO.mjs");
         data = await uninstallNative(text("home") ?? managedHome(), Boolean(parsed.keepRuntime));
         break;
       }
@@ -1840,7 +1938,7 @@ async function dispatch(operation, input = {}, signal) {
         data = await projectInit(
           text("directory"),
           text("template"),
-          text("alias") ?? path7.basename(path7.resolve(text("directory"))).toLowerCase().replace(/[^a-z0-9-]/g, "-")
+          text("alias") ?? path8.basename(path8.resolve(text("directory"))).toLowerCase().replace(/[^a-z0-9-]/g, "-")
         );
         break;
       case "connection.add":
@@ -1876,6 +1974,12 @@ async function dispatch(operation, input = {}, signal) {
       default: {
         const ctx = await loadProject(root);
         switch (operation) {
+          case "work.start":
+            data = await startWork(ctx, workStartSchema.parse(parsed));
+            break;
+          case "team.wait":
+            data = await waitForTeam(ctx, teamWaitSchema.parse(parsed), signal);
+            break;
           case "team.start":
             data = await new TeamService(ctx).start(teamStartSchema.parse(parsed));
             break;

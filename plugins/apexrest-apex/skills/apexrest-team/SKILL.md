@@ -1,9 +1,11 @@
 ---
 name: apexrest-team
-description: Run Oracle APEX development through a mandatory developer, project-manager code review, independent QA and final manager review. Use as the primary APEXREST implementation entry point, or to inspect, steer or stop a team.
+description: Inspect, steer or stop an Oracle APEX development team, or explicitly run the mandatory developer, manager review, independent QA and final review workflow. New chat-driven implementation requests use apexrest-work.
 ---
 
 # Reviewed development team
+
+For a new implementation request from chat, use [APEX work from chat](../apexrest-work/SKILL.md). It starts the same enforced team, opens its panel inside Codex and returns the result to the originating chat without requiring a web form. The low-level team API below remains available for explicit orchestration.
 
 For an implementation task, call `apexrest_team_start` with the user's absolute configured application `project` and their complete task, constraints and existing authorization. The runtime creates separate Codex sessions for the manager, developer(s) and QA. Do not replace this with optional model-chosen subagents or perform the implementation in the host conversation. Source edits default to a project write sandbox; select `read-only` for analysis-only tasks. Use `developers` for one to three developer sessions; one is the default. The runtime serializes their edits to avoid collisions.
 

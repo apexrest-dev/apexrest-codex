@@ -9,9 +9,9 @@ import {
 } from "./chunk-GHLJSFSV.mjs";
 import {
   PanelService
-} from "./chunk-6CWSRFL2.mjs";
-import "./chunk-TXURWVZO.mjs";
-import "./chunk-5Y7F4C4N.mjs";
+} from "./chunk-FT4HB4SQ.mjs";
+import "./chunk-2X5UC4WR.mjs";
+import "./chunk-5MUOGWVK.mjs";
 import "./chunk-TDSYBJUK.mjs";
 import {
   Fault
@@ -26,6 +26,7 @@ function panelLines(data, tab) {
       `Oracle transport: SQLcl ${data.sqlcl.mode.toUpperCase()} \xB7 restriction ${data.sqlcl.mcpRestrictLevel}`,
       `Trusted: ${data.trusted} \xB7 configured: ${data.configured}`,
       "Future team defaults: " + JSON.stringify(data.preferences),
+      "Model selection: Auto (task complexity and implementation repair results; no manual override).",
       ...JSON.stringify(
         {
           project: data.configuration,
@@ -54,6 +55,11 @@ function panelLines(data, tab) {
     ""
   ];
   if (data.task) lines.push(data.task, "");
+  if (team?.modelPolicy)
+    lines.push("Auto models \xB7 " + team.modelPolicy.complexity + " \xB7 " + team.modelPolicy.reason);
+  if (team?.limits) lines.push("Task time limit: " + team.limits.timeoutSeconds + " seconds");
+  if (team?.members.length)
+    lines.push("Tokens are cumulative, including cached input; not a cost estimate.", "");
   for (const member of team?.members ?? [])
     lines.push(
       `${teamLabel(member.role)} \xB7 ${member.status}`,
@@ -64,6 +70,13 @@ function panelLines(data, tab) {
         member.configuration?.sandbox,
         member.totalTokens == null ? "" : member.totalTokens + " tokens"
       ].filter(Boolean).join(" \xB7 "),
+      member.selection ? "Auto \xB7 " + member.selection.tier + " \xB7 " + member.selection.reason : "",
+      member.tokenUsage ? [
+        member.tokenUsage.inputTokens == null ? "" : "Input " + member.tokenUsage.inputTokens,
+        member.tokenUsage.cachedInputTokens == null ? "" : "Cached input " + member.tokenUsage.cachedInputTokens,
+        member.tokenUsage.outputTokens == null ? "" : "Output " + member.tokenUsage.outputTokens,
+        member.tokenUsage.reasoningOutputTokens == null ? "" : "Reasoning output " + member.tokenUsage.reasoningOutputTokens
+      ].filter(Boolean).join(" \xB7 ") : "",
       ""
     );
   if (tab === 1) {

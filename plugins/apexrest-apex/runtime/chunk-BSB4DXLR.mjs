@@ -1,12 +1,12 @@
 import { createRequire as __createRequire } from 'node:module'; const require = __createRequire(import.meta.url);
 import {
-  panelDocument
-} from "./chunk-GMLJ7LWM.mjs";
-import {
   dispatch,
   schemas,
   toolCatalog
-} from "./chunk-GL7SR744.mjs";
+} from "./chunk-TRQZWEKW.mjs";
+import {
+  panelDocument
+} from "./chunk-5S7CBHIF.mjs";
 import {
   AjvJsonSchemaValidator,
   CallToolRequestSchema,
@@ -40,10 +40,10 @@ import {
 } from "./chunk-5X6KTDSR.mjs";
 import {
   JobService
-} from "./chunk-6CWSRFL2.mjs";
+} from "./chunk-FT4HB4SQ.mjs";
 import {
   VERSION
-} from "./chunk-5Y7F4C4N.mjs";
+} from "./chunk-5MUOGWVK.mjs";
 import {
   Fault,
   external_exports,
@@ -725,7 +725,7 @@ for (const { operation } of toolCatalog) {
 }
 async function startMcp() {
   const exposed = toolCatalog.filter(
-    (t) => process.env.APEXREST_TEAM_WORKER !== "1" || !t.operation.startsWith("team.") && !t.operation.startsWith("panel.") && (process.env.APEXREST_TEAM_ROLE?.startsWith("developer") || t.readOnly)
+    (t) => process.env.APEXREST_TEAM_WORKER !== "1" || !t.operation.startsWith("team.") && !t.operation.startsWith("work.") && !t.operation.startsWith("panel.") && (process.env.APEXREST_TEAM_ROLE?.startsWith("developer") || t.readOnly)
   );
   const server = new Server(
     { name: "apexrest-apex", version: VERSION },

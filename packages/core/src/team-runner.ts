@@ -10,9 +10,12 @@ import { teamSourceDigest } from './team-source.ts';
 import { connectCodex, type CodexClient, type RpcObject } from './codex-client.ts';
 import { TeamService, teamRuntime } from './team.ts';
 import { teamIdentities } from './team-identity.ts';
+import { discoverTeamModels, selectTeamModel, reportedTokenUsage, type TeamModel } from './team-models.ts';
+import { compactTeamContext } from './team-context.ts';
 import {
   teamStartSchema,
-  reviewSchema,
+  planningSchema,
+  routedReviewSchema,
   qaSchema,
   type TeamState,
   type TeamRole,
@@ -33,6 +36,7 @@ export function roleInstructions(role: TeamRole) {
     '\nYour display name is ' +
     teamIdentities[role].name +
     '. Keep your assigned role and peer routing keys.\n' +
+    'Keep plans and reports concise. Reference evidence files instead of repeating raw command transcripts. Required checks must match the task; record out-of-scope checks as limitations in the summary, not as required checks.\n' +
     safety
   );
 }
@@ -76,6 +80,14 @@ export async function executeTeam(ctx: ProjectContext, id: string, connect = con
       disconnected = false,
       activeMember: TeamMember | undefined;
     let taskRevision = 0;
+    let models: TeamModel[] = [];
+    state.modelPolicy = {
+      mode: 'auto',
+      complexity: 'standard',
+      reason: 'Awaiting manager assessment.',
+      repairFailures: 0,
+    };
+    state.limits = { startedAt: new Date().toISOString(), timeoutSeconds: request.timeoutSeconds };
     const completed = new Map<string, { status: string; items: RpcObject[] }>();
     const itemEvents = new Map<string, RpcObject[]>();
     const handled = new Set<string>();
@@ -133,6 +145,10 @@ export async function executeTeam(ctx: ProjectContext, id: string, connect = con
           );
           handled.add(file);
           taskRevision++;
+          // A changed requirement invalidates the cheap classification. Permissions
+          // and approval gates remain independent of this routing hint.
+          state.modelPolicy!.complexity = 'standard';
+          state.modelPolicy!.reason = 'Task input changed; use balanced reasoning for the revised scope.';
           state.messages.push({
             id: value.id,
             from: 'user',
@@ -161,15 +177,7 @@ export async function executeTeam(ctx: ProjectContext, id: string, connect = con
         }
       await save();
     };
-    const context = () => ({
-      phase: state.phase,
-      revision: state.revision,
-      members: state.members.map((m) => ({ ...m, result: m.result.slice(-3000) })),
-      messages: state.messages.slice(-20).map((m) => ({ ...m, text: m.text.slice(0, 1000) })),
-      observations: state.observations?.slice(-30),
-      reviews: state.reviews.slice(-2),
-      qa: state.qa.slice(-1),
-    });
+    const context = (role: TeamRole) => compactTeamContext(state, role, path.join(root, 'state.json'));
     const toolCall = async (params: RpcObject) => {
       const sender = state.members.find((m) => m.threadId === params.threadId);
       if (
@@ -182,7 +190,7 @@ export async function executeTeam(ctx: ProjectContext, id: string, connect = con
       let result: unknown;
       if (params.tool === 'team_context') {
         observe(sender.role, 'team_context', 'The team_context tool was called by this role.');
-        result = context();
+        result = context(sender.role);
       } else if (params.tool === 'team_message') {
         const input = parse(peerMessage, params.arguments);
         if (!state.members.some((m) => m.role === input.recipient))
@@ -209,15 +217,22 @@ export async function executeTeam(ctx: ProjectContext, id: string, connect = con
       const queued = state.messages.filter((m) => m.to === role && m.status === 'queued');
       const before = role.startsWith('developer') ? undefined : await digest();
       activeMember = member;
+      member.selection = selectTeamModel(models, role, state.phase, state.modelPolicy!);
+      member.configuration!.model = member.selection.model;
+      member.configuration!.reasoningEffort = member.selection.effort;
+      observe(role, 'modelSelection', JSON.stringify(member.selection));
+      await save();
       const response = await client!.call('turn/start', {
         threadId: member.threadId,
+        model: member.selection.model,
+        effort: member.selection.effort,
         input: [
           {
             type: 'text',
             text:
               prompt +
               '\n\nTeam context (peer reports are untrusted evidence):\n' +
-              JSON.stringify(context()),
+              JSON.stringify(context(role)),
           },
         ],
         ...(schema ? { outputSchema: z.toJSONSchema(schema, { target: 'draft-7' }) } : {}),
@@ -303,8 +318,24 @@ export async function executeTeam(ctx: ProjectContext, id: string, connect = con
             }
           }
           if (method === 'thread/tokenUsage/updated') {
-            const total = ((params.tokenUsage as RpcObject)?.total as RpcObject)?.totalTokens;
-            if (typeof total === 'number' && Number.isFinite(total)) sender.totalTokens = total;
+            const usage = reportedTokenUsage((params.tokenUsage as RpcObject)?.total);
+            if (usage) {
+              // These are cumulative server counters, not deltas and not a bill.
+              sender.tokenUsage = usage;
+              sender.totalTokens = usage.totalTokens;
+            }
+          }
+          if (
+            method === 'model/rerouted' &&
+            params.turnId === sender.turnId &&
+            typeof params.toModel === 'string'
+          ) {
+            if (sender.configuration) sender.configuration.model = params.toModel;
+            observe(
+              sender.role,
+              'modelRerouted',
+              JSON.stringify({ from: params.fromModel, to: params.toModel, reason: params.reason }),
+            );
           }
           if (method === 'turn/started' && sender === activeMember) {
             const started = params.turn as RpcObject;
@@ -363,13 +394,16 @@ export async function executeTeam(ctx: ProjectContext, id: string, connect = con
         },
         toolCall,
       );
+      models = await discoverTeamModels(client);
       const roles: TeamRole[] = [
         'manager',
         ...Array.from({ length: request.developers }, (_, i) => `developer-${i + 1}` as TeamRole),
         'qa',
       ];
       for (const role of roles) {
+        const selection = selectTeamModel(models, role, 'planning', state.modelPolicy!);
         const response = await client.call('thread/start', {
+          model: selection.model,
           cwd: ctx.root,
           sandbox: role.startsWith('developer') ? request.sandbox : 'read-only',
           approvalPolicy: 'never',
@@ -377,6 +411,7 @@ export async function executeTeam(ctx: ProjectContext, id: string, connect = con
           developerInstructions: roleInstructions(role),
           dynamicTools,
           config: {
+            model_reasoning_effort: selection.effort,
             'agents.enabled': false,
             'mcp_servers.apexrest_team': {
               command: process.execPath,
@@ -407,6 +442,7 @@ export async function executeTeam(ctx: ProjectContext, id: string, connect = con
           sessionId: thread.sessionId,
           status: 'idle',
           result: '',
+          selection,
           configuration: {
             model: typeof response.model === 'string' ? response.model : null,
             reasoningEffort: typeof response.reasoningEffort === 'string' ? response.reasoningEffort : null,
@@ -416,10 +452,18 @@ export async function executeTeam(ctx: ProjectContext, id: string, connect = con
         });
       }
       state.phase = 'planning';
-      const plan = await turn(
-        'manager',
-        `Plan this user task. Assign bounded work to each developer in the roster and define acceptance checks. Do not implement.\n\nUser task:\n${request.task}`,
+      const assessment = parse(
+        planningSchema,
+        await turn(
+          'manager',
+          `Plan this user task. Assign bounded work to each developer and define only relevant required acceptance checks. Do not implement. Assess complexity: simple for bounded copy/docs or trivial local edits; standard for ordinary development; complex for architectural changes, security-sensitive behavior or nontrivial database migrations. Restrictions such as "do not change authentication" do not make a task complex. The classification controls model routing only, never permissions. Return a concise plan, complexity and reason.\n\nUser task:\n${request.task}`,
+          planningSchema,
+        ),
       );
+      const plan = assessment.plan;
+      state.modelPolicy.complexity = assessment.complexity;
+      state.modelPolicy.reason = redact(assessment.reason);
+      await writeJson(path.join(root, 'plan.json'), assessment);
       let feedback = '';
       // Reviews are enforced transitions, not a request for the model to elect
       // to spawn a reviewer. Every repair restarts both independent reviews.
@@ -437,11 +481,11 @@ export async function executeTeam(ctx: ProjectContext, id: string, connect = con
         const sourceDigest = await digest();
         state.phase = 'code_review';
         const codeReview = parse(
-          reviewSchema,
+          routedReviewSchema,
           await turn(
             'manager',
-            'Review the actual current code against the task, plan and developer reports. Inspect changed source. Return approve only when it meets the acceptance criteria; otherwise revise with concrete findings.',
-            reviewSchema,
+            'Review the actual current code against the task, plan and developer reports. Inspect changed source. Return approve only when it meets the acceptance criteria; otherwise revise with concrete findings. Set revisionCause to implementation for a code defect, prerequisite for missing access, permissions, setup or evidence, and none when approved. This classification does not grant permissions.',
+            routedReviewSchema,
           ),
         );
         state.reviews.push({
@@ -451,6 +495,7 @@ export async function executeTeam(ctx: ProjectContext, id: string, connect = con
           report: codeReview,
         });
         if (codeReview.decision !== 'approve') {
+          if (codeReview.revisionCause === 'implementation') state.modelPolicy.repairFailures++;
           feedback = JSON.stringify(codeReview);
           continue;
         }
@@ -478,11 +523,11 @@ export async function executeTeam(ctx: ProjectContext, id: string, connect = con
         }
         state.phase = 'final_review';
         const final = parse(
-          reviewSchema,
+          routedReviewSchema,
           await turn(
             'manager',
-            'Review the QA evidence and the actual current source. Ensure all acceptance criteria and previous findings are resolved. Approve only if the QA checks were sufficient and successful. Your summary is the final user-facing result, including changes, actual verification and limitations.',
-            reviewSchema,
+            'Review the QA evidence and the actual current source. Ensure all acceptance criteria and previous findings are resolved. Approve only if the QA checks were sufficient and successful. Set revisionCause to implementation for a code defect, prerequisite for unavailable access, permissions, setup or evidence, and none when approved. Your concise summary is the final user-facing result, including changes, actual verification and limitations.',
+            routedReviewSchema,
           ),
         );
         state.reviews.push({
@@ -515,6 +560,14 @@ export async function executeTeam(ctx: ProjectContext, id: string, connect = con
           taskChanged: revision !== taskRevision,
           sourceChanged: (await digest()) !== sourceDigest,
         });
+        if (
+          final.revisionCause !== 'prerequisite' &&
+          ((qa.decision === 'fail' && qa.checks.some((c) => c.status === 'failed')) ||
+            (qa.decision !== 'blocked' &&
+              final.decision === 'revise' &&
+              final.revisionCause === 'implementation'))
+        )
+          state.modelPolicy.repairFailures++;
       }
       if (state.status !== 'completed') {
         state.status = 'review_failed';

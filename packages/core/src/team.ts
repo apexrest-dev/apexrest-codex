@@ -18,13 +18,19 @@ export class TeamService {
     parse(z.uuid(), id);
     return contained(this.ctx.root, '.apexrest/teams/' + id);
   }
-  async start(input: TeamRequest) {
+  async start(input: TeamRequest, id: string = randomUUID()) {
     await requireTrust(this.ctx.root);
     if (process.env.APEXREST_TEAM_WORKER === '1')
       throw new Fault('TEAM_RECURSION', 'Team workers cannot create another team.', 2);
     const request = parse(teamStartSchema, input);
-    const id = randomUUID(),
-      root = await this.directory(id);
+    const root = await this.directory(id);
+    if (await exists(path.join(root, 'request.json')))
+      throw new Fault(
+        'TEAM_ALREADY_STARTED',
+        'This team request already exists; inspect its status.',
+        5,
+        'conflict',
+      );
     await writeJson(path.join(root, 'request.json'), { ...request, project: this.ctx.root });
     await writeJson(path.join(root, 'state.json'), {
       id,

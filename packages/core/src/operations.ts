@@ -3,7 +3,13 @@ import { metadataRequest } from './metadata.ts';
 import { refName, relativePath } from './config.ts';
 import { savedConnectionName } from './connections.ts';
 import { sqlclMode, sqlclRestriction } from './sqlcl-config.ts';
-import { teamStartSchema, teamIdSchema, teamMessageSchema } from './team-schema.ts';
+import {
+  teamStartSchema,
+  teamIdSchema,
+  teamMessageSchema,
+  workStartSchema,
+  teamWaitSchema,
+} from './team-schema.ts';
 import { panelReadSchema, panelActionSchema } from './panel-schema.ts';
 const project = z.string().min(1).max(4096).optional(),
   env = refName;
@@ -34,6 +40,8 @@ export const schemas = {
   'sqlcl.status': z.strictObject({}),
   'sqlcl.configure': z.strictObject({ mode: sqlclMode, mcpRestrictLevel: sqlclRestriction.optional() }),
   'team.start': teamStartSchema,
+  'work.start': workStartSchema,
+  'team.wait': teamWaitSchema,
   'team.status': teamIdSchema,
   'team.message': teamMessageSchema,
   'team.cancel': teamIdSchema,
@@ -129,6 +137,20 @@ export const toolCatalog: {
   long?: boolean;
   destructive?: boolean;
 }[] = [
+  {
+    name: 'apexrest_work_start',
+    operation: 'work.start',
+    description:
+      'Start reviewed Oracle APEX work from this chat and prepare its private agent panel. Use a fresh UUID requestId per task; exact retries reuse the same team. Open the returned panel URL inside Codex, wait for the team and report in this chat. Auto model routing; no web form required.',
+    readOnly: false,
+  },
+  {
+    name: 'apexrest_team_wait',
+    operation: 'team.wait',
+    description:
+      'Wait up to 30 seconds for meaningful team progress or completion. Reuse the returned cursor to avoid heartbeat polling. Reports terminal state and digest-checked result for delivery in the originating chat.',
+    readOnly: true,
+  },
   {
     name: 'apexrest_panel_open',
     operation: 'panel.open',

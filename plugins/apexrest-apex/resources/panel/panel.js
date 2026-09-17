@@ -81,8 +81,9 @@
     box.classList.toggle("error", error);
     box.textContent = message;
   };
+  var launch = new URLSearchParams(location.hash.slice(1));
   var snapshot;
-  var chosenTeam;
+  var chosenTeam = launch.get("team") ?? void 0;
   var busy = false;
   var connected = false;
   var initialized = false;
@@ -90,7 +91,7 @@
   var bridgeReady = false;
   var requestId = 0;
   var embedded = window.parent !== window;
-  var token = new URLSearchParams(location.hash.slice(1)).get("session") ?? "";
+  var token = launch.get("session") ?? "";
   var pending = /* @__PURE__ */ new Map();
   function bridge(method, params) {
     const id = ++requestId;
@@ -206,6 +207,22 @@
     if (data.task) box.append(node("p", "task-summary", data.task));
     head.append(node("h3", "", "Revision " + team.revision), badge(team.status));
     box.append(head);
+    if (team.modelPolicy)
+      box.append(
+        node(
+          "p",
+          "subtle",
+          "Auto models \xB7 " + team.modelPolicy.complexity + " task \xB7 " + team.modelPolicy.reason
+        )
+      );
+    if (team.limits)
+      box.append(
+        node(
+          "p",
+          "subtle",
+          "Task time limit: " + team.limits.timeoutSeconds + " seconds. Token counts are cumulative, including cached input; they are not a cost estimate."
+        )
+      );
     const stages = ["planning", "development", "code_review", "qa", "final_review"], index = stages.indexOf(team.phase);
     const bar = node("div", "steps");
     stages.forEach(
@@ -246,10 +263,25 @@
           [
             member.configuration?.reasoningEffort,
             member.configuration?.sandbox,
-            member.totalTokens == null ? "" : member.totalTokens.toLocaleString() + " tokens"
+            member.totalTokens == null ? "" : member.totalTokens.toLocaleString() + " cumulative tokens"
           ].filter(Boolean).join(" \xB7 ")
         )
       );
+      if (member.selection)
+        meta.append(node("span", "", "Auto \xB7 " + member.selection.tier + " \xB7 " + member.selection.reason));
+      if (member.tokenUsage)
+        meta.append(
+          node(
+            "span",
+            "",
+            [
+              member.tokenUsage.inputTokens == null ? "" : "Input " + member.tokenUsage.inputTokens.toLocaleString(),
+              member.tokenUsage.cachedInputTokens == null ? "" : "Cached input " + member.tokenUsage.cachedInputTokens.toLocaleString(),
+              member.tokenUsage.outputTokens == null ? "" : "Output " + member.tokenUsage.outputTokens.toLocaleString(),
+              member.tokenUsage.reasoningOutputTokens == null ? "" : "Reasoning output " + member.tokenUsage.reasoningOutputTokens.toLocaleString()
+            ].filter(Boolean).join(" \xB7 ")
+          )
+        );
       cell.append(meta);
       agents.append(cell);
     }
@@ -651,6 +683,7 @@
     void act({ kind: "test", suite, ...env ? { env } : {} });
   };
   controls();
+  if (launch.get("view") === "team") view("team");
   var mark = document.querySelector(".brand-mark");
   if (mark) {
     const icon = node("img");

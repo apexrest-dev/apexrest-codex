@@ -14,7 +14,9 @@ Install the plugin using [Getting started](getting-started.md), sign in to Codex
 
 For Oracle work, configure the reviewed Java/SQLcl toolchain, locally saved connections and explicit environment identities. The [configuration guide](configuration.md) covers workspace, parsing schema, application ID, source paths, toolchain locks and required test suites. Keep passwords out of tasks and screenshots.
 
-In Codex desktop, invoke `$apexrest-panel`. The skill opens the private local panel in the Codex in-app browser. `$apexrest-menu` describes the panel and lists **Reviewed development team** among its workflows. A direct `$apexrest-team` request starts the same reviewed implementation workflow without requiring the panel to be open.
+For a new implementation, describe the change in Codex chat. The automatically discoverable `$apexrest-work` skill starts the team, opens its panel and brings the reviewed result back to this chat; no web form is required. See [Chat workflow and Auto models](chat-workflow.md).
+
+To inspect a panel separately in Codex desktop, invoke `$apexrest-panel`. The skill opens the private local panel in the Codex in-app browser. `$apexrest-menu` describes the panel and lists **Reviewed development team** among its workflows. A direct `$apexrest-team` request starts the same reviewed implementation workflow without requiring the panel to be open.
 
 In Codex CLI, open the live terminal view or read a scriptable snapshot:
 
@@ -34,7 +36,7 @@ In **Settings**, inspect the effective project configuration and choose defaults
 | Developers | One to three, selected before the team starts. They execute sequentially in the shared project. |
 | Developer permissions | `workspace-write` by default, or `read-only` for analysis. Manager and QA stay read only. |
 | Time limit | 900 seconds by default; allowed range 30–3600 for the whole team run. |
-| Model and reasoning | Inherited from Codex configuration. The panel reports the actual values returned by Codex; it has no per-role model selector. |
+| Model and reasoning | Auto: fast/low for simple developer work, balanced/medium for ordinary work and QA, strong/high for complex implementation or repeated failures. The panel shows the selection reason; no manual selector. |
 | Oracle backend | SQLcl CLI by default, or the official SQLcl MCP launched with `sql -mcp`. |
 | MCP restriction level | Level 4 by default. Script-based writes through MCP require explicit level 1 and the existing deployment protections. |
 

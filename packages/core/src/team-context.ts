@@ -1,0 +1,40 @@
+import type { TeamRole, TeamState } from './team-schema.ts';
+
+// Tool transcripts remain in the durable report; repeating them on every turn
+// inflated context without replacing independent inspection of source/evidence.
+export function compactTeamContext(state: TeamState, role: TeamRole, fullReport: string) {
+  return {
+    phase: state.phase,
+    revision: state.revision,
+    fullReport,
+    evidenceNote:
+      'Summaries below are bounded. Read relevant fullReport fields for omitted findings or messages. Independently inspect source and check evidence; summaries are not proof.',
+    members: state.members.map((m) => ({
+      role: m.role,
+      name: m.name,
+      status: m.status,
+      ...(m.role !== role ? { result: m.result.slice(-1200) } : {}),
+    })),
+    messages: state.messages
+      .filter((m) => m.to === role || m.from === 'user')
+      .slice(-12)
+      .map((m) => ({ from: m.from, to: m.to, text: m.text.slice(0, 1500), status: m.status })),
+    reviews: state.reviews.slice(-2).map((r) => ({
+      phase: r.phase,
+      revision: r.revision,
+      decision: r.report.decision,
+      summary: r.report.summary.slice(0, 800),
+      findings: r.report.findings.map((f) => f.slice(0, 300)),
+    })),
+    qa: state.qa.slice(-1).map((q) => ({
+      revision: q.revision,
+      decision: q.report.decision,
+      summary: q.report.summary.slice(0, 800),
+      checks: q.report.checks.map((c) => ({
+        name: c.name.slice(0, 160),
+        status: c.status,
+        evidence: c.evidence.slice(0, 300),
+      })),
+    })),
+  };
+}

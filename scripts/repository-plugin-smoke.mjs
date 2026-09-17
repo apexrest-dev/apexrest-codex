@@ -5,6 +5,7 @@ import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { codexRpc } from './codex-rpc.mjs';
 import { sourceDigest } from './lib/release.mjs';
+import { setTimeout as delay } from 'node:timers/promises';
 
 // Actual Codex native-host check; never substitutes for Oracle integration.
 // A private, temporary profile leaves the user's plugins and settings intact.
@@ -56,18 +57,25 @@ try {
   // The helper inherits APEXREST_HOME only for this subprocess launch.
   rpc = await codexRpc({ home, cwd: project, env });
   const thread = await rpc.call('thread/start', { cwd: project, ephemeral: true });
-  const servers = await rpc.call('mcpServerStatus/list', { threadId: thread.thread.id });
-  const server = servers.data.find((s) => s.pluginId === 'apexrest-apex@apexrest');
+  let server;
+  const readyBy = Date.now() + 30000;
+  do {
+    const servers = await rpc.call('mcpServerStatus/list', { threadId: thread.thread.id });
+    server = servers.data.find((s) => s.pluginId === 'apexrest-apex@apexrest');
+    if (server && server.runtimeStatus !== 'starting') break;
+    await delay(250);
+  } while (Date.now() < readyBy);
   assert.ok(server, 'Native MCP server missing');
   assert.equal(server.runtimeStatus, 'connected');
   const tools = Object.keys(server.tools).sort();
-  assert.equal(tools.length, 21);
+  assert.equal(tools.length, 23);
   evidence.tools = tools;
-  evidence.checks.push('21-native-mcp-tools-connected');
+  evidence.checks.push('23-native-mcp-tools-connected');
   const skills = await rpc.call('skills/list', { cwds: [project], forceReload: true });
   const nativeSkills = skills.data.flatMap((entry) => entry.skills);
   const menu = [];
   for (const name of [
+    'work',
     'panel',
     'team',
     'menu',
@@ -94,7 +102,7 @@ try {
     });
   }
   evidence.menu = menu;
-  evidence.checks.push('twelve-native-skills-with-menu-metadata-discovered');
+  evidence.checks.push('thirteen-native-skills-with-menu-metadata-discovered');
   const call = async (tool, args) => {
     const result = await rpc.call('mcpServer/tool/call', {
       threadId: thread.thread.id,

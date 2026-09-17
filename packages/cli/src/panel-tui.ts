@@ -11,6 +11,7 @@ export function panelLines(data: PanelSnapshot, tab: number): string[] {
       `Oracle transport: SQLcl ${data.sqlcl.mode.toUpperCase()} · restriction ${data.sqlcl.mcpRestrictLevel}`,
       `Trusted: ${data.trusted} · configured: ${data.configured}`,
       'Future team defaults: ' + JSON.stringify(data.preferences),
+      'Model selection: Auto (task complexity and implementation repair results; no manual override).',
       ...JSON.stringify(
         {
           project: data.configuration,
@@ -41,6 +42,11 @@ export function panelLines(data: PanelSnapshot, tab: number): string[] {
     '',
   ];
   if (data.task) lines.push(data.task, '');
+  if (team?.modelPolicy)
+    lines.push('Auto models · ' + team.modelPolicy.complexity + ' · ' + team.modelPolicy.reason);
+  if (team?.limits) lines.push('Task time limit: ' + team.limits.timeoutSeconds + ' seconds');
+  if (team?.members.length)
+    lines.push('Tokens are cumulative, including cached input; not a cost estimate.', '');
   for (const member of team?.members ?? [])
     lines.push(
       `${teamLabel(member.role)} · ${member.status}`,
@@ -53,6 +59,21 @@ export function panelLines(data: PanelSnapshot, tab: number): string[] {
       ]
         .filter(Boolean)
         .join(' · '),
+      member.selection ? 'Auto · ' + member.selection.tier + ' · ' + member.selection.reason : '',
+      member.tokenUsage
+        ? [
+            member.tokenUsage.inputTokens == null ? '' : 'Input ' + member.tokenUsage.inputTokens,
+            member.tokenUsage.cachedInputTokens == null
+              ? ''
+              : 'Cached input ' + member.tokenUsage.cachedInputTokens,
+            member.tokenUsage.outputTokens == null ? '' : 'Output ' + member.tokenUsage.outputTokens,
+            member.tokenUsage.reasoningOutputTokens == null
+              ? ''
+              : 'Reasoning output ' + member.tokenUsage.reasoningOutputTokens,
+          ]
+            .filter(Boolean)
+            .join(' · ')
+        : '',
       '',
     );
   if (tab === 1) {
