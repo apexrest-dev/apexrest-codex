@@ -16,6 +16,8 @@ APEXREST connects native Codex skills and MCP tools to Oracle SQLcl. Generate AP
 
 > **Beta: `0.1.0-beta.1`.** Real Oracle template compilation and Codex native installation have been exercised in the environments recorded below. Stable release readiness is still blocked by the remaining integration, recovery and platform checks. Independent APEXREST tooling; not an official Oracle or OpenAI product.
 
+Implementation tasks start through `$apexrest-team`: separate developers, mandatory manager code review, independent QA and final manager review. See [team APIs and review gates](docs/team.md) and the [Codex source audit](docs/codex-integration.md).
+
 ## Install with the terminal menu
 
 With Git and Node 24 LTS available, open the bundled TUI from the repository. **Install plugin** also requires a Codex CLI with native plugin support.

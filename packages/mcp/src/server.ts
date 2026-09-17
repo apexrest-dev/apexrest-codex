@@ -41,13 +41,22 @@ for (const { operation } of toolCatalog) {
 }
 
 export async function startMcp() {
+  // Internal team sessions receive the domain tools, never another team launcher.
+  // Reviewer sessions receive only read-only tools; local compiler/test execution
+  // stays subject to Codex's read-only sandbox.
+  const exposed = toolCatalog.filter(
+    (t) =>
+      process.env.APEXREST_TEAM_WORKER !== '1' ||
+      (!t.operation.startsWith('team.') &&
+        (process.env.APEXREST_TEAM_ROLE?.startsWith('developer') || t.readOnly)),
+  );
   const server = new Server({ name: 'apexrest-apex', version: VERSION }, { capabilities: { tools: {} } });
   let catalog: { tools: Tool[] } | undefined;
   server.setRequestHandler(
     ListToolsRequestSchema,
     async () =>
       (catalog ??= {
-        tools: toolCatalog.map((t) => ({
+        tools: exposed.map((t) => ({
           name: t.name,
           description: t.description,
           inputSchema: z.toJSONSchema(mcpSchemas.get(t.operation)!, { target: 'draft-7' }) as {
@@ -71,7 +80,7 @@ export async function startMcp() {
       }),
   );
   server.setRequestHandler(CallToolRequestSchema, async (request, extra) => {
-    const tool = toolCatalog.find((t) => t.name === request.params.name);
+    const tool = exposed.find((t) => t.name === request.params.name);
     let result;
     try {
       if (!tool) throw new Fault('UNKNOWN_TOOL', 'Tool is not in the catalog.', 2);

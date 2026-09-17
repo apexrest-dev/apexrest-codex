@@ -7,6 +7,6 @@ import "./chunk-GN4ETYQT.mjs";
 import "./chunk-UAGGMBMC.mjs";
 import "./chunk-TXURWVZO.mjs";
 import "./chunk-2M4WFEIW.mjs";
-
-// packages/mcp/src/main.ts
-await startMcp();
+export {
+  startMcp
+};

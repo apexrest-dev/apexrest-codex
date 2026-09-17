@@ -4,7 +4,8 @@ import {
   lockSchema,
   platformProfile,
   runtimeState
-} from "./chunk-FAC6KCSL.mjs";
+} from "./chunk-UAGGMBMC.mjs";
+import "./chunk-2M4WFEIW.mjs";
 export {
   ToolchainService,
   lockSchema,

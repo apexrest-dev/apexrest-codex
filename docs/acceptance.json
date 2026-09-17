@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "asOf": "2026-09-16",
+  "asOf": "2026-09-17",
   "release": "0.1.0-beta.1",
   "overall": "partial-local-beta",
   "statusSemantics": {
@@ -438,6 +438,22 @@
         "toolchains/compatibility.json"
       ],
       "blocker": "No supported sandbox claim. Legitimate complete Linux DB/APEX/ORDS/utPLSQL provisioning tuple is not implemented or verified."
+    },
+    {
+      "id": "A29",
+      "criterion": "Codex-only team controller enforces separate developer, manager code review, independent QA and final manager review before completing an implementation task",
+      "implementation": "implemented",
+      "verification": "partial",
+      "evidence": [
+        "packages/core/src/team-runner.ts",
+        "tests/unit/team.test.ts",
+        "tests/contracts/mcp.test.mjs",
+        "docs/evidence/team-local-checks.json",
+        "docs/evidence/team-native-local.json",
+        "docs/evidence/team-native-discovery.json",
+        "docs/codex-integration.md"
+      ],
+      "blocker": "Actual local coding fixture and isolated native discovery only. Oracle team tasks, Windows recovery and desktop UI rendering remain unverified; low-level operations outside a team have no team approval."
     }
   ],
   "amendments": [
@@ -455,6 +471,11 @@
       "date": "2026-09-12",
       "rule": "The plugin targets Codex exclusively; retire experimental portable artifacts and optimize APEXlang authoring for Codex.",
       "source": "docs/adr/001-packaging.md"
+    },
+    {
+      "date": "2026-09-17",
+      "rule": "Mandatory developer, manager code review, independent QA and final manager review are controller behavior. Target only Codex desktop and CLI and use native Codex extension points.",
+      "source": "docs/team.md"
     }
   ]
 }

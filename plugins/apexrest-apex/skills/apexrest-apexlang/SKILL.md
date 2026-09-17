@@ -3,6 +3,9 @@ name: apexrest-apexlang
 description: Create and edit Oracle APEXlang (.apx) in Codex, including pages, forms, reports, grids, charts, items, dynamic actions and shared components; resolve syntax with pinned Oracle references and compiler validation. Excludes Salesforce Apex.
 ---
 
+For an implementation or repair task in the host conversation, use [the mandatory team workflow](../apexrest-team/SKILL.md) before editing. Carry the full task and existing authorization into `apexrest_team_start`. When already assigned as a member of that team, follow the specialist guidance below; never start another team.
+
+
 Use this workflow in Codex. Pass the absolute workspace `project` on project-scoped MCP calls; the server's installation directory is not the project.
 
 ## Reuse first

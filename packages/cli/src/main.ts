@@ -16,6 +16,10 @@ const positional: Record<string, string[]> = {
   'jobs.status': ['id'],
   'jobs.cancel': ['id'],
   'artifacts.read': ['id'],
+  'team.start': ['task'],
+  'team.status': ['id'],
+  'team.message': ['id', 'message'],
+  'team.cancel': ['id'],
 };
 function operationFrom(args: string[]) {
   const first = args[0];
@@ -51,6 +55,16 @@ function help() {
         (k) => '  --' + k.replace(/[A-Z]/g, (c) => '-' + c.toLowerCase()),
       ),
       ...(positional[key] ?? []).map((p) => '  <' + p + '>'),
+    );
+  if (key === 'team.start')
+    lines.push(
+      '',
+      'Run separate Codex manager, developer and QA sessions with mandatory reviews.',
+      '--developers 1..3 defaults to 1; edits are serialized in the project.',
+      '--sandbox read-only|workspace-write defaults to workspace-write for developers.',
+      '--timeout-seconds 30..3600 defaults to 900. No interactive approvals are auto-granted.',
+      'The configured project must already be trusted and Codex must be logged in.',
+      'Returns a team ID immediately. Read team status for the reviewed result.',
     );
   if (key === 'dependencies.install')
     lines.push(
@@ -101,6 +115,10 @@ try {
   else if (argv[0] === '--job-worker') {
     if (argv.length !== 3) throw new Fault('INVALID_INPUT', 'Invalid internal job request.', 2);
     await executeJob(await loadProject(argv[1]!), argv[2]!, dispatch);
+  } else if (argv[0] === '--team-worker') {
+    if (argv.length !== 3) throw new Fault('INVALID_INPUT', 'Invalid internal team request.', 2);
+    const { executeTeam } = await import('../../core/src/team-runner.ts');
+    await executeTeam(await loadProject(argv[1]!), argv[2]!);
   } else if (argv[0] === 'mcp') {
     if (argv.length !== 1) throw new Fault('INVALID_INPUT', 'mcp accepts no arguments.', 2);
     const { startMcp } = await import('../../mcp/src/server.ts');
@@ -124,7 +142,7 @@ try {
       'headed',
       'saved',
     ]);
-    const numbers = new Set(['appId', 'offset', 'limit']);
+    const numbers = new Set(['appId', 'offset', 'limit', 'developers', 'timeoutSeconds']);
     let index = 0;
     for (let i = selectedOp.start; i < argv.length; i++) {
       const token = argv[i]!;

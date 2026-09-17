@@ -5,10 +5,11 @@ description: Show the APEXREST plugin menu and route to all available functions.
 
 # All functions
 
-Opening this menu is navigation. Show the following choices in the conversation and let the user select an action. If the user already supplied a concrete task, route directly to its workflow and continue within that authorization. Do not execute every function, start installation or import an application merely because the menu was opened.
+Opening this menu is navigation. Show the following choices in the conversation and let the user select an action. Route application implementation tasks through [Reviewed development team](../apexrest-team/SKILL.md): manager and QA reviews are enforced by its runtime. Route administrative or reference-only tasks directly to their workflow. Do not execute every function, start installation or import an application merely because the menu was opened.
 
 | Menu entry | Functions | Workflow |
 | --- | --- | --- |
+| Reviewed development team | Fixed developer → manager code review → independent QA → manager QA review; status, messages and cancellation | [Team](../apexrest-team/SKILL.md) |
 | Install dependencies | Install or preview Node.js, Java, SQLcl, Playwright and Chromium; Oracle tools only; offline/cache options | [Install dependencies](../apexrest-install-dependencies/SKILL.md) |
 | Setup and connections | Diagnose tools; select SQLcl CLI or official SQLcl MCP; add, list, test or remove local connection references; inspect plugin version and installation | [Setup](../apexrest-setup/SKILL.md) |
 | Projects | Create a project, adopt an identified application, inspect source and environment configuration | [Projects](../apexrest-project/SKILL.md) |
@@ -30,6 +31,7 @@ The following entries cover the shared operation catalog. Dots below correspond 
 | Setup and maintenance | `version`, `doctor`, `setup`, `plugin.validate`, `plugin.install`, `plugin.update`, `plugin.uninstall`, `connection.add`, `connection.list`, `connection.test`, `connection.remove` |
 | Dependencies | `dependencies.install`, `dependencies.uninstall` |
 | SQLcl backend | `sqlcl.status`, `sqlcl.configure` |
+| Reviewed team | `team.start`, `team.status`, `team.message`, `team.cancel` |
 | Projects | `project.init`, `project.adopt`, `project.inspect` |
 | APEX and references | `apex.generate`, `apex.export`, `apex.validate`, `apex.diff`, `docs.search`, `docs.read`, `docs.sync` |
 | Database | `metadata.read`, `db.plan` |

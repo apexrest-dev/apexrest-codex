@@ -4,13 +4,15 @@ import {
   dispatch,
   executeJob,
   schemas
-} from "./chunk-WCTSQOSE.mjs";
-import "./chunk-4ACPFYCB.mjs";
+} from "./chunk-MJOVR764.mjs";
+import "./chunk-GN4ETYQT.mjs";
+import "./chunk-UAGGMBMC.mjs";
+import "./chunk-TXURWVZO.mjs";
 import {
   Fault,
   failure,
   loadProject
-} from "./chunk-FAC6KCSL.mjs";
+} from "./chunk-2M4WFEIW.mjs";
 
 // packages/cli/src/main.ts
 var argv = process.argv.slice(2);
@@ -23,7 +25,11 @@ var positional = {
   "docs.read": ["id"],
   "jobs.status": ["id"],
   "jobs.cancel": ["id"],
-  "artifacts.read": ["id"]
+  "artifacts.read": ["id"],
+  "team.start": ["task"],
+  "team.status": ["id"],
+  "team.message": ["id", "message"],
+  "team.cancel": ["id"]
 };
 function operationFrom(args) {
   const first = args[0];
@@ -57,6 +63,16 @@ function help() {
         (k) => "  --" + k.replace(/[A-Z]/g, (c) => "-" + c.toLowerCase())
       ),
       ...(positional[key] ?? []).map((p) => "  <" + p + ">")
+    );
+  if (key === "team.start")
+    lines.push(
+      "",
+      "Run separate Codex manager, developer and QA sessions with mandatory reviews.",
+      "--developers 1..3 defaults to 1; edits are serialized in the project.",
+      "--sandbox read-only|workspace-write defaults to workspace-write for developers.",
+      "--timeout-seconds 30..3600 defaults to 900. No interactive approvals are auto-granted.",
+      "The configured project must already be trusted and Codex must be logged in.",
+      "Returns a team ID immediately. Read team status for the reviewed result."
     );
   if (key === "dependencies.install")
     lines.push(
@@ -95,15 +111,19 @@ try {
   else if (argv[0] === "tui" || !argv.length && process.stdin.isTTY && process.stdout.isTTY && process.env.TERM !== "dumb") {
     if (argv.length > 1 && (argv.length !== 3 || argv[1] !== "--project" || !argv[2] || argv[2].startsWith("--")))
       throw new Fault("INVALID_INPUT", "Usage: apexrest tui [--project PATH]", 2);
-    const { runTui } = await import("./chunk-42MMO3E2.mjs");
+    const { runTui } = await import("./chunk-EEPJEYG7.mjs");
     await runTui(argv[2] ? { project: argv[2] } : {});
   } else if (!argv.length) help();
   else if (argv[0] === "--job-worker") {
     if (argv.length !== 3) throw new Fault("INVALID_INPUT", "Invalid internal job request.", 2);
     await executeJob(await loadProject(argv[1]), argv[2], dispatch);
+  } else if (argv[0] === "--team-worker") {
+    if (argv.length !== 3) throw new Fault("INVALID_INPUT", "Invalid internal team request.", 2);
+    const { executeTeam } = await import("./chunk-DX5J2BRE.mjs");
+    await executeTeam(await loadProject(argv[1]), argv[2]);
   } else if (argv[0] === "mcp") {
     if (argv.length !== 1) throw new Fault("INVALID_INPUT", "mcp accepts no arguments.", 2);
-    const { startMcp } = await import("./chunk-WTNYLSQC.mjs");
+    const { startMcp } = await import("./chunk-BR347YRC.mjs");
     await startMcp();
   } else {
     const selectedOp = argv[0] === "--version" ? { op: "version", start: 1 } : selected;
@@ -124,7 +144,7 @@ try {
       "headed",
       "saved"
     ]);
-    const numbers = /* @__PURE__ */ new Set(["appId", "offset", "limit"]);
+    const numbers = /* @__PURE__ */ new Set(["appId", "offset", "limit", "developers", "timeoutSeconds"]);
     let index = 0;
     for (let i = selectedOp.start; i < argv.length; i++) {
       const token = argv[i];

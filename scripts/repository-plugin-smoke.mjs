@@ -9,6 +9,7 @@ import { sourceDigest } from './lib/release.mjs';
 // Actual Codex native-host check; never substitutes for Oracle integration.
 // A private, temporary profile leaves the user's plugins and settings intact.
 const source = process.argv[2] ?? process.cwd();
+const reportFile = process.argv[3] ?? 'docs/evidence/native-repository.json';
 const root = await mkdtemp(path.join(tmpdir(), 'apexrest-repository-native-'));
 const home = path.join(root, 'codex');
 const project = path.join(root, 'project');
@@ -47,6 +48,11 @@ try {
   // and rejects old bundle sources, rather than trusting installation success.
   assert.equal(manifest.sourceDigest, evidence.sourceDigest, 'Installed bundle sources differ from checkout');
   evidence.checks.push('repository-marketplace-registration', 'native-install-without-local-build');
+  await mkdir('.apexrest/check-logs', { recursive: true });
+  await writeFile(
+    '.apexrest/check-logs/native-installed-runtime.txt',
+    path.join(installed.installedPath, 'runtime/apexrest.mjs'),
+  );
   // The helper inherits APEXREST_HOME only for this subprocess launch.
   rpc = await codexRpc({ home, cwd: project, env });
   const thread = await rpc.call('thread/start', { cwd: project, ephemeral: true });
@@ -55,13 +61,14 @@ try {
   assert.ok(server, 'Native MCP server missing');
   assert.equal(server.runtimeStatus, 'connected');
   const tools = Object.keys(server.tools).sort();
-  assert.equal(tools.length, 14);
+  assert.equal(tools.length, 18);
   evidence.tools = tools;
-  evidence.checks.push('14-native-mcp-tools-connected');
+  evidence.checks.push('18-native-mcp-tools-connected');
   const skills = await rpc.call('skills/list', { cwds: [project], forceReload: true });
   const nativeSkills = skills.data.flatMap((entry) => entry.skills);
   const menu = [];
   for (const name of [
+    'team',
     'menu',
     'setup',
     'install-dependencies',
@@ -86,7 +93,7 @@ try {
     });
   }
   evidence.menu = menu;
-  evidence.checks.push('ten-native-skills-with-menu-metadata-discovered');
+  evidence.checks.push('eleven-native-skills-with-menu-metadata-discovered');
   const call = async (tool, args) => {
     const result = await rpc.call('mcpServer/tool/call', {
       threadId: thread.thread.id,
@@ -133,6 +140,6 @@ try {
 } finally {
   rpc?.close();
   await mkdir('docs/evidence', { recursive: true });
-  await writeFile('docs/evidence/native-repository.json', JSON.stringify(evidence, null, 2) + '\n');
+  await writeFile(reportFile, JSON.stringify(evidence, null, 2) + '\n');
   console.log(JSON.stringify(evidence, null, 2));
 }

@@ -8,6 +8,28 @@ import { setTimeout as delay } from 'node:timers/promises';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 const runtime = path.resolve('dist/runtime');
+test('team workers cannot launch teams and reviewers receive only read-only domain tools', async (t) => {
+  for (const role of ['manager', 'qa', 'developer-1']) {
+    const client = new Client({ name: 'team-role-contract', version: '1.0.0' });
+    t.after(() => client.close());
+    await client.connect(
+      new StdioClientTransport({
+        command: process.execPath,
+        args: [path.join(runtime, 'mcp.mjs')],
+        env: { ...process.env, APEXREST_TEAM_WORKER: '1', APEXREST_TEAM_ROLE: role },
+        stderr: 'pipe',
+      }),
+    );
+    const { tools } = await client.listTools();
+    assert.ok(tools.length > 0);
+    assert.ok(tools.every((tool) => !tool.name.startsWith('apexrest_team_')));
+    if (role !== 'developer-1') assert.ok(tools.every((tool) => tool.annotations.readOnlyHint));
+    else assert.ok(tools.some((tool) => tool.name === 'apexrest_apex_validate'));
+    const recursive = await client.callTool({ name: 'apexrest_team_start', arguments: {} });
+    assert.equal(JSON.parse(recursive.content[0].text).diagnostics[0].code, 'UNKNOWN_TOOL');
+    await client.close();
+  }
+});
 test('real stdio MCP initialize/list/call, CLI parity and bounded catalog', async (t) => {
   const client = new Client({ name: 'contract-test', version: '1.0.0' });
   t.after(() => client.close());
@@ -19,7 +41,7 @@ test('real stdio MCP initialize/list/call, CLI parity and bounded catalog', asyn
   const start = performance.now();
   await client.connect(transport);
   const catalog = await client.listTools();
-  assert.equal(catalog.tools.length, 14);
+  assert.equal(catalog.tools.length, 18);
   assert.ok(performance.now() - start < 10000);
   const reference = await client.callTool({
     name: 'apexrest_reference_search',
@@ -68,6 +90,10 @@ test('MCP project tools require an explicit absolute path before dispatch or job
     }),
   );
   const inputs = {
+    apexrest_team_start: { task: 'Inspect the project.' },
+    apexrest_team_status: { id: '12345678-1234-4123-8123-123456789abc' },
+    apexrest_team_message: { id: '12345678-1234-4123-8123-123456789abc', message: 'Check validation.' },
+    apexrest_team_cancel: { id: '12345678-1234-4123-8123-123456789abc' },
     apexrest_project_inspect: {},
     apexrest_metadata_read: { env: 'dev', kind: 'objects', schema: 'FIXTURE' },
     apexrest_apex_generate: { name: 'Fixture', output: 'new-app' },

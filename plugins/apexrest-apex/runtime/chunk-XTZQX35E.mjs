@@ -4,10 +4,10 @@ import {
   dispatch,
   schemas,
   toolCatalog
-} from "./chunk-WCTSQOSE.mjs";
+} from "./chunk-MJOVR764.mjs";
 import {
   VERSION
-} from "./chunk-4ACPFYCB.mjs";
+} from "./chunk-GN4ETYQT.mjs";
 import {
   AjvJsonSchemaValidator,
   CallToolRequestSchema,
@@ -18,7 +18,6 @@ import {
   ElicitResultSchema,
   EmptyResultSchema,
   ErrorCode,
-  Fault,
   InitializeRequestSchema,
   InitializedNotificationSchema,
   LATEST_PROTOCOL_VERSION,
@@ -32,17 +31,20 @@ import {
   SetLevelRequestSchema,
   assertClientRequestTaskCapability,
   assertToolsCallTaskCapability,
-  external_exports,
-  failure,
   getLiteralValue,
   getObjectShape,
-  loadProject,
   mergeCapabilities,
-  parse,
   safeParse,
-  serializeMessage,
+  serializeMessage
+} from "./chunk-UAGGMBMC.mjs";
+import {
+  Fault,
+  external_exports,
+  failure,
+  loadProject,
+  parse,
   success
-} from "./chunk-FAC6KCSL.mjs";
+} from "./chunk-2M4WFEIW.mjs";
 
 // node_modules/@modelcontextprotocol/sdk/dist/esm/experimental/tasks/server.js
 var ExperimentalServerTasks = class {
@@ -714,12 +716,15 @@ for (const { operation } of toolCatalog) {
   );
 }
 async function startMcp() {
+  const exposed = toolCatalog.filter(
+    (t) => process.env.APEXREST_TEAM_WORKER !== "1" || !t.operation.startsWith("team.") && (process.env.APEXREST_TEAM_ROLE?.startsWith("developer") || t.readOnly)
+  );
   const server = new Server({ name: "apexrest-apex", version: VERSION }, { capabilities: { tools: {} } });
   let catalog;
   server.setRequestHandler(
     ListToolsRequestSchema,
     async () => catalog ??= {
-      tools: toolCatalog.map((t) => ({
+      tools: exposed.map((t) => ({
         name: t.name,
         description: t.description,
         inputSchema: external_exports.toJSONSchema(mcpSchemas.get(t.operation), { target: "draft-7" }),
@@ -741,7 +746,7 @@ async function startMcp() {
     }
   );
   server.setRequestHandler(CallToolRequestSchema, async (request, extra) => {
-    const tool = toolCatalog.find((t) => t.name === request.params.name);
+    const tool = exposed.find((t) => t.name === request.params.name);
     let result;
     try {
       if (!tool) throw new Fault("UNKNOWN_TOOL", "Tool is not in the catalog.", 2);

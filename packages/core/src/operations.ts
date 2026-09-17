@@ -3,6 +3,7 @@ import { metadataRequest } from './metadata.ts';
 import { refName, relativePath } from './config.ts';
 import { savedConnectionName } from './connections.ts';
 import { sqlclMode, sqlclRestriction } from './sqlcl-config.ts';
+import { teamStartSchema, teamIdSchema, teamMessageSchema } from './team-schema.ts';
 const project = z.string().min(1).max(4096).optional(),
   env = refName;
 const base = { project };
@@ -31,6 +32,10 @@ export const schemas = {
   doctor: z.strictObject(base),
   'sqlcl.status': z.strictObject({}),
   'sqlcl.configure': z.strictObject({ mode: sqlclMode, mcpRestrictLevel: sqlclRestriction.optional() }),
+  'team.start': teamStartSchema,
+  'team.status': teamIdSchema,
+  'team.message': teamMessageSchema,
+  'team.cancel': teamIdSchema,
   setup: z.strictObject(setup),
   'dependencies.install': z.strictObject(dependencies),
   'dependencies.uninstall': z.strictObject({
@@ -120,6 +125,33 @@ export const toolCatalog: {
   long?: boolean;
   destructive?: boolean;
 }[] = [
+  {
+    name: 'apexrest_team_start',
+    operation: 'team.start',
+    description:
+      'Run a fixed Codex team: developers, mandatory manager code review, independent QA, and mandatory manager QA review. Separate owned sessions share scoped messages. Completion requires every review to pass on unchanged source.',
+    readOnly: false,
+  },
+  {
+    name: 'apexrest_team_status',
+    operation: 'team.status',
+    description:
+      'Read team phase, role sessions, delivery status and enforced review results. Completed means both manager reviews and QA passed for the recorded source digest.',
+    readOnly: true,
+  },
+  {
+    name: 'apexrest_team_message',
+    operation: 'team.message',
+    description:
+      'Send a task update to an active owned team. Task updates invalidate prior review completion. Does not attach to unrelated Codex sessions.',
+    readOnly: false,
+  },
+  {
+    name: 'apexrest_team_cancel',
+    operation: 'team.cancel',
+    description: 'Stop an owned team. Existing source or database changes are not rolled back.',
+    readOnly: false,
+  },
   {
     name: 'apexrest_doctor',
     operation: 'doctor',

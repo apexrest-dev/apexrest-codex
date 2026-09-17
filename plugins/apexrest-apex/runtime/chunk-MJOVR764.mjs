@@ -1,35 +1,15 @@
 import { createRequire as __createRequire } from 'node:module'; const require = __createRequire(import.meta.url);
 import {
   VERSION
-} from "./chunk-4ACPFYCB.mjs";
+} from "./chunk-GN4ETYQT.mjs";
 import {
-  Fault,
   OracleAdapter,
-  atomicWrite,
-  canonical,
   configureSqlcl,
   connections,
-  contained,
   editConnection,
-  environment,
-  exists,
-  external_exports,
-  failure,
-  hash,
-  identifier,
   installSources,
-  inventory,
-  loadProject,
-  managedHome,
-  parse,
-  policy,
   projectInit,
   projectInspect,
-  readJson,
-  redact,
-  refName,
-  relativePath,
-  requireTrust,
   resolveConnection,
   resourceRoot,
   runProcess,
@@ -39,11 +19,39 @@ import {
   sqlclConfig,
   sqlclMode,
   sqlclRestriction,
-  sqlclToken,
+  sqlclToken
+} from "./chunk-UAGGMBMC.mjs";
+import {
+  TeamService,
+  teamIdSchema,
+  teamMessageSchema,
+  teamStartSchema
+} from "./chunk-TXURWVZO.mjs";
+import {
+  Fault,
+  atomicWrite,
+  canonical,
+  contained,
+  environment,
+  exists,
+  external_exports,
+  failure,
+  hash,
+  identifier,
+  inventory,
+  loadProject,
+  managedHome,
+  parse,
+  policy,
+  readJson,
+  redact,
+  refName,
+  relativePath,
+  requireTrust,
   success,
   withLock,
   writeJson
-} from "./chunk-FAC6KCSL.mjs";
+} from "./chunk-2M4WFEIW.mjs";
 
 // packages/core/src/metadata.ts
 var metadataRequest = external_exports.strictObject({
@@ -117,6 +125,10 @@ var schemas = {
   doctor: external_exports.strictObject(base),
   "sqlcl.status": external_exports.strictObject({}),
   "sqlcl.configure": external_exports.strictObject({ mode: sqlclMode, mcpRestrictLevel: sqlclRestriction.optional() }),
+  "team.start": teamStartSchema,
+  "team.status": teamIdSchema,
+  "team.message": teamMessageSchema,
+  "team.cancel": teamIdSchema,
   setup: external_exports.strictObject(setup),
   "dependencies.install": external_exports.strictObject(dependencies),
   "dependencies.uninstall": external_exports.strictObject({
@@ -198,6 +210,30 @@ var schemas = {
   "sandbox.down": external_exports.strictObject(base)
 };
 var toolCatalog = [
+  {
+    name: "apexrest_team_start",
+    operation: "team.start",
+    description: "Run a fixed Codex team: developers, mandatory manager code review, independent QA, and mandatory manager QA review. Separate owned sessions share scoped messages. Completion requires every review to pass on unchanged source.",
+    readOnly: false
+  },
+  {
+    name: "apexrest_team_status",
+    operation: "team.status",
+    description: "Read team phase, role sessions, delivery status and enforced review results. Completed means both manager reviews and QA passed for the recorded source digest.",
+    readOnly: true
+  },
+  {
+    name: "apexrest_team_message",
+    operation: "team.message",
+    description: "Send a task update to an active owned team. Task updates invalidate prior review completion. Does not attach to unrelated Codex sessions.",
+    readOnly: false
+  },
+  {
+    name: "apexrest_team_cancel",
+    operation: "team.cancel",
+    description: "Stop an owned team. Existing source or database changes are not rolled back.",
+    readOnly: false
+  },
   {
     name: "apexrest_doctor",
     operation: "doctor",
@@ -1842,29 +1878,29 @@ async function dispatch(operation, input = {}, signal) {
         );
         break;
       case "dependencies.install": {
-        const { ToolchainService } = await import("./chunk-BVQRB2TE.mjs");
+        const { ToolchainService } = await import("./chunk-T2Z5Z3XI.mjs");
         data = await new ToolchainService().apply(parsed);
         break;
       }
       case "dependencies.uninstall": {
-        const { uninstallTools } = await import("./chunk-YOEIDETK.mjs");
+        const { uninstallTools } = await import("./chunk-X22Q5LNT.mjs");
         data = await uninstallTools(parsed);
         break;
       }
       case "setup":
       case "plugin.install":
       case "plugin.update": {
-        const { setup: setup2 } = await import("./chunk-WTHOYKJA.mjs");
+        const { setup: setup2 } = await import("./chunk-KO66Q3IF.mjs");
         data = await setup2(parsed);
         break;
       }
       case "plugin.validate": {
-        const { validateNative } = await import("./chunk-WTHOYKJA.mjs");
+        const { validateNative } = await import("./chunk-KO66Q3IF.mjs");
         data = await validateNative(text("from"));
         break;
       }
       case "plugin.uninstall": {
-        const { uninstallNative } = await import("./chunk-WTHOYKJA.mjs");
+        const { uninstallNative } = await import("./chunk-KO66Q3IF.mjs");
         data = await uninstallNative(text("home") ?? managedHome(), Boolean(parsed.keepRuntime));
         break;
       }
@@ -1908,6 +1944,18 @@ async function dispatch(operation, input = {}, signal) {
       default: {
         const ctx = await loadProject(root);
         switch (operation) {
+          case "team.start":
+            data = await new TeamService(ctx).start(teamStartSchema.parse(parsed));
+            break;
+          case "team.status":
+            data = await new TeamService(ctx).snapshot(text("id"));
+            break;
+          case "team.message":
+            data = await new TeamService(ctx).message(text("id"), text("message"));
+            break;
+          case "team.cancel":
+            data = await new TeamService(ctx).cancel(text("id"));
+            break;
           case "project.inspect":
             data = await projectInspect(ctx);
             break;

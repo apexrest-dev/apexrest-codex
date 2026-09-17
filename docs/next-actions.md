@@ -2,6 +2,8 @@
 
 English | [Українська](next-actions.uk.md)
 
+The [mandatory team](team.md) is implemented. Extend verification to authorized APEX application tasks, artifact-writing QA suites, Windows process cancellation and interruption/recovery. Probe MCP UI rendering in the actual Codex desktop before implementing a status panel; metadata capability alone is insufficient. The [source audit](codex-integration.md) records why the private agent registry and hosted-app event endpoint cannot be treated as plugin APIs. Build and isolated-profile validation do not refresh the user’s installed plugin automatically. The current profile still references a missing former checkout for its APEXREST marketplace; a read-only plugin listing failed on that stale path. Restore the registration to the canonical repository before refreshing the user installation.
+
 SQLcl CLI / official MCP selection is implemented and checked locally, including the macOS pseudo-terminal and real offline SQLcl. Next verify authorized connected queries, exports, imports, transaction boundaries and unknown-outcome reconciliation in both modes on an identified development/test target. Review Oracle MCP audit behavior and verify Windows. These connected/native checks remain open; see [implementation and evidence](implementation-status.md#sqlcl-cli--official-sqlcl-mcp--2026-09-16).
 
 The [2026-09-16 skill review](evidence/skill-review-local.json) found no confirmed instruction defects. The next skill-quality check remains a fixed set of complete authoring tasks followed by authorized connected SQL/import and browser verification; passing local retrieval, packaging and offline compiler checks does not close those gaps.

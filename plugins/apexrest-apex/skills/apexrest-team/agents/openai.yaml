@@ -1,0 +1,4 @@
+interface:
+  display_name: "Reviewed development team"
+  short_description: "Develop with mandatory manager and QA reviews"
+  default_prompt: "Use $apexrest-team. Complete my Oracle APEX task with developer, manager review and independent QA."

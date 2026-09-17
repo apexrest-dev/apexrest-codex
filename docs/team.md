@@ -1,0 +1,45 @@
+# Mandatory development team
+
+English | [Українська](team.uk.md)
+
+The primary implementation entry is `$apexrest-team`. Its runtime creates one project manager, one to three developers and one independent QA agent as separate Codex App Server sessions. Developers work sequentially in the same project. The manager defines assignments; the controller creates the roles and enforces their order.
+
+## Required sequence
+
+Planning → development → manager code review → independent QA → manager review of QA → completed.
+
+A rejected code review returns to development. After a valid QA report, the manager reviews it even when QA failed. Failed or unavailable QA checks cannot be overridden by a manager approval. Repairs repeat the reviews, with at most three revisions. Malformed reports, unsupported protocol, missing interactive input and changed files during a read-only review block success. Decisions are bound to a digest of project files; later changes make the result `review_stale`.
+
+The digest includes untracked files and configuration, excluding `.git`, `.apexrest`, `node_modules` and `.DS_Store`. Symlinks bind their link text, not external target contents. These exclusions and external dependencies are outside this digest guarantee. A team result is not an external signature or production deployment approval; agents share the user's machine and project.
+
+## APIs and use
+
+| MCP tool | CLI | Purpose |
+| --- | --- | --- |
+| `apexrest_team_start` | `team start` | Start the fixed review workflow; return immediately with a team ID |
+| `apexrest_team_status` | `team status` | Read phase, roles, messages, review decisions and result |
+| `apexrest_team_message` | `team message` | Queue a user correction; invalidate a completion based on earlier input |
+| `apexrest_team_cancel` | `team cancel` | Request interruption; never claim rollback |
+
+```sh
+apexrest team start --project /absolute/project --task "Add the requested APEX page" --developers 2 --json
+apexrest team status TEAM_ID --project /absolute/project --json
+apexrest team message TEAM_ID "Also verify empty results" --project /absolute/project --json
+apexrest team cancel TEAM_ID --project /absolute/project --json
+```
+
+The configured project must already be trusted. The Codex executable and login must work. The default developer sandbox is `workspace-write`; `--sandbox read-only` supports analysis-only work. The default time limit is 900 seconds, configurable from 30 to 3600. No model override is selected: sessions inherit Codex configuration. Background work uses the account's normal Codex capacity.
+
+## Shared evidence and boundaries
+
+Each role receives scoped `team_context` and `team_message` tools. Peer messages reach the next scheduled turn, or steer an active turn. They cannot target an unrelated session or create more agents. Context contains peer reports, actual protocol observations, review decisions and QA reports. Command summaries and message delivery are recorded locally, with redaction and size limits. This is inspectable execution evidence, not a guarantee that every test claim is correct.
+
+Private reports are stored under `.apexrest/teams/<id>/`. Status responses are bounded; `fullReport` points to the complete local report. Queued messages may remain undelivered when their recipient has no further turn. A stale worker heartbeat is `outcome_unknown`; it does not trigger an automatic retry. Only one team holds the project lock. Cancelling stops further work without undoing existing file or database changes.
+
+Manager and QA sessions use read-only sandboxes and read-only APEXREST MCP tools. Checks that require unavailable writes, authentication or additional permissions can block QA; the controller cannot silently waive them. Existing configured third-party tools remain subject to Codex policy; read-only file sandboxing is not a universal remote-service authorization boundary. Authorized APEX imports still need target, backup, plan and deployment grant safeguards.
+
+The plugin owns these ephemeral sessions and reads their native completion events. It does not expose their turns through the desktop task's private subagent registry. See the [Codex source audit](codex-integration.md) for supported extension points and the exact scope of enforcement.
+
+## Verification
+
+Protocol fixtures in `tests/unit/team.test.ts` exercise ordering, rejection, failed QA, invalid output, isolation, source drift, user steering, cancellation and lock contention. They are not native Codex or Oracle evidence. `scripts/verify-team-native.mjs` separately runs actual Codex sessions against an isolated local coding fixture and repeats the tests independently. [The native report](evidence/team-native-local.json) records its observed outcome. Neither fixture establishes Oracle import behavior or desktop panel rendering.

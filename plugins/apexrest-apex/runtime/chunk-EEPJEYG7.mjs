@@ -2,16 +2,19 @@ import { createRequire as __createRequire } from 'node:module'; const require = 
 import {
   dispatch,
   schemas
-} from "./chunk-WCTSQOSE.mjs";
-import "./chunk-4ACPFYCB.mjs";
+} from "./chunk-MJOVR764.mjs";
+import "./chunk-GN4ETYQT.mjs";
+import {
+  resourceRoot,
+  sqlclConfig
+} from "./chunk-UAGGMBMC.mjs";
+import "./chunk-TXURWVZO.mjs";
 import {
   Fault,
   external_exports,
   failure,
-  resourceRoot,
-  sanitized,
-  sqlclConfig
-} from "./chunk-FAC6KCSL.mjs";
+  sanitized
+} from "./chunk-2M4WFEIW.mjs";
 
 // packages/cli/src/tui.ts
 import { emitKeypressEvents } from "node:readline";

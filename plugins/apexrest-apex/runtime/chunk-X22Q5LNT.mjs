@@ -1,12 +1,14 @@
 import { createRequire as __createRequire } from 'node:module'; const require = __createRequire(import.meta.url);
 import {
+  runtimeState
+} from "./chunk-UAGGMBMC.mjs";
+import {
   Fault,
   exists,
   managedHome,
-  runtimeState,
   withLock,
   writeJson
-} from "./chunk-FAC6KCSL.mjs";
+} from "./chunk-2M4WFEIW.mjs";
 
 // packages/installer/src/uninstall-tools.ts
 import path from "node:path";

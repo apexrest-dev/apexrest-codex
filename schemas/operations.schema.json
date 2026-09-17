@@ -47,6 +47,107 @@
     ],
     "additionalProperties": false
   },
+  "team.start": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "properties": {
+      "project": {
+        "type": "string"
+      },
+      "task": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 16000
+      },
+      "developers": {
+        "default": 1,
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 3
+      },
+      "sandbox": {
+        "default": "workspace-write",
+        "type": "string",
+        "enum": [
+          "read-only",
+          "workspace-write"
+        ]
+      },
+      "timeoutSeconds": {
+        "default": 900,
+        "type": "integer",
+        "minimum": 30,
+        "maximum": 3600
+      }
+    },
+    "required": [
+      "task",
+      "developers",
+      "sandbox",
+      "timeoutSeconds"
+    ],
+    "additionalProperties": false
+  },
+  "team.status": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "properties": {
+      "project": {
+        "type": "string"
+      },
+      "id": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+      }
+    },
+    "required": [
+      "id"
+    ],
+    "additionalProperties": false
+  },
+  "team.message": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "properties": {
+      "project": {
+        "type": "string"
+      },
+      "id": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+      },
+      "message": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 8000
+      }
+    },
+    "required": [
+      "id",
+      "message"
+    ],
+    "additionalProperties": false
+  },
+  "team.cancel": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "properties": {
+      "project": {
+        "type": "string"
+      },
+      "id": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+      }
+    },
+    "required": [
+      "id"
+    ],
+    "additionalProperties": false
+  },
   "setup": {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
