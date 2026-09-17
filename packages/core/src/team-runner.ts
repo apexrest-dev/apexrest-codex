@@ -9,6 +9,7 @@ import { Fault, redact } from './result.ts';
 import { teamSourceDigest } from './team-source.ts';
 import { connectCodex, type CodexClient, type RpcObject } from './codex-client.ts';
 import { TeamService, teamRuntime } from './team.ts';
+import { teamIdentities } from './team-identity.ts';
 import {
   teamStartSchema,
   reviewSchema,
@@ -27,7 +28,13 @@ export function roleInstructions(role: TeamRole) {
       : role === 'qa'
         ? 'You are the independent QA agent. Inspect the current implementation and execute relevant checks. You cannot edit source. Report exact tests and evidence; mark unavailable checks not_run. Never infer a test passed from the developer or manager report. Return fail or blocked when the acceptance criteria cannot be verified.'
         : 'You are a developer. Implement the assignment, inspect existing changes, preserve unrelated work, and report changed files plus actual checks. Follow manager and QA findings. You may change source only in the assigned project. Never approve your own work.';
-  return job + '\n' + safety;
+  return (
+    job +
+    '\nYour display name is ' +
+    teamIdentities[role].name +
+    '. Keep your assigned role and peer routing keys.\n' +
+    safety
+  );
 }
 const peerMessage = z.strictObject({
   recipient: z.enum(['manager', 'qa', 'developer-1', 'developer-2', 'developer-3']),
@@ -88,6 +95,7 @@ export async function executeTeam(ctx: ProjectContext, id: string, connect = con
         phase: state.phase,
         kind,
         detail: redact(detail).slice(0, 2000),
+        at: new Date().toISOString(),
       });
       // Bounded summaries of actual protocol events, never model-authored claims.
       state.observations = state.observations.slice(-200);
@@ -233,6 +241,7 @@ export async function executeTeam(ctx: ProjectContext, id: string, connect = con
         const current = completed.get(member.threadId + ':' + member.turnId);
         if (current && current.status !== 'inProgress') {
           member.status = String(current.status);
+          delete member.currentAction;
           activeMember = undefined;
           if (current.status !== 'completed')
             throw new Fault('TEAM_TURN_FAILED', `${role} did not complete the assigned phase.`, 1);
@@ -272,6 +281,31 @@ export async function executeTeam(ctx: ProjectContext, id: string, connect = con
             );
           const sender = state.members.find((m) => m.threadId === params.threadId);
           if (!sender) return;
+          if (method === 'item/started') {
+            const item = params.item as RpcObject;
+            if (
+              ['commandExecution', 'fileChange', 'mcpToolCall', 'dynamicToolCall', 'reasoning'].includes(
+                String(item?.type),
+              )
+            ) {
+              sender.currentAction = {
+                id: String(item.id),
+                kind: String(item.type),
+                title: redact(
+                  String(
+                    item.command ??
+                      item.tool ??
+                      (item.type === 'fileChange' ? 'Editing source' : 'Reasoning'),
+                  ),
+                ).slice(0, 500),
+                startedAt: new Date().toISOString(),
+              };
+            }
+          }
+          if (method === 'thread/tokenUsage/updated') {
+            const total = ((params.tokenUsage as RpcObject)?.total as RpcObject)?.totalTokens;
+            if (typeof total === 'number' && Number.isFinite(total)) sender.totalTokens = total;
+          }
           if (method === 'turn/started' && sender === activeMember) {
             const started = params.turn as RpcObject;
             if (typeof started?.id === 'string') sender.turnId = started.id;
@@ -279,6 +313,7 @@ export async function executeTeam(ctx: ProjectContext, id: string, connect = con
           if (method === 'item/completed') {
             const key = String(params.threadId) + ':' + String(params.turnId);
             const item = params.item as RpcObject;
+            if (sender.currentAction?.id === item?.id) delete sender.currentAction;
             if (item?.type === 'commandExecution')
               observe(
                 sender.role,
@@ -367,10 +402,17 @@ export async function executeTeam(ctx: ProjectContext, id: string, connect = con
           );
         state.members.push({
           role,
+          name: teamIdentities[role].name,
           threadId: thread.id,
           sessionId: thread.sessionId,
           status: 'idle',
           result: '',
+          configuration: {
+            model: typeof response.model === 'string' ? response.model : null,
+            reasoningEffort: typeof response.reasoningEffort === 'string' ? response.reasoningEffort : null,
+            sandbox: role.startsWith('developer') ? request.sandbox : 'read-only',
+            approvalPolicy: 'never',
+          },
         });
       }
       state.phase = 'planning';

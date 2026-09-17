@@ -1,13 +1,12 @@
 import { createRequire as __createRequire } from 'node:module'; const require = __createRequire(import.meta.url);
 import {
-  JobService,
+  panelDocument
+} from "./chunk-GMLJ7LWM.mjs";
+import {
   dispatch,
   schemas,
   toolCatalog
-} from "./chunk-MJOVR764.mjs";
-import {
-  VERSION
-} from "./chunk-GN4ETYQT.mjs";
+} from "./chunk-GL7SR744.mjs";
 import {
   AjvJsonSchemaValidator,
   CallToolRequestSchema,
@@ -21,12 +20,14 @@ import {
   InitializeRequestSchema,
   InitializedNotificationSchema,
   LATEST_PROTOCOL_VERSION,
+  ListResourcesRequestSchema,
   ListRootsResultSchema,
   ListToolsRequestSchema,
   LoggingLevelSchema,
   McpError,
   Protocol,
   ReadBuffer,
+  ReadResourceRequestSchema,
   SUPPORTED_PROTOCOL_VERSIONS,
   SetLevelRequestSchema,
   assertClientRequestTaskCapability,
@@ -36,7 +37,13 @@ import {
   mergeCapabilities,
   safeParse,
   serializeMessage
-} from "./chunk-UAGGMBMC.mjs";
+} from "./chunk-5X6KTDSR.mjs";
+import {
+  JobService
+} from "./chunk-6CWSRFL2.mjs";
+import {
+  VERSION
+} from "./chunk-5Y7F4C4N.mjs";
 import {
   Fault,
   external_exports,
@@ -701,6 +708,7 @@ var StdioServerTransport = class {
 // packages/mcp/src/server.ts
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+var panelUri = "ui://apexrest/development-panel.html";
 var absoluteProject = external_exports.string().min(1).max(4096).refine(
   (value) => path.isAbsolute(value) && (process.platform !== "win32" || /^(?:[A-Za-z]:[\\/]|[\\/]{2}[^\\/]+[\\/][^\\/]+)/.test(value)),
   "Provide the absolute project directory containing apexrest.json; the plugin runs from its installation directory."
@@ -717,9 +725,35 @@ for (const { operation } of toolCatalog) {
 }
 async function startMcp() {
   const exposed = toolCatalog.filter(
-    (t) => process.env.APEXREST_TEAM_WORKER !== "1" || !t.operation.startsWith("team.") && (process.env.APEXREST_TEAM_ROLE?.startsWith("developer") || t.readOnly)
+    (t) => process.env.APEXREST_TEAM_WORKER !== "1" || !t.operation.startsWith("team.") && !t.operation.startsWith("panel.") && (process.env.APEXREST_TEAM_ROLE?.startsWith("developer") || t.readOnly)
   );
-  const server = new Server({ name: "apexrest-apex", version: VERSION }, { capabilities: { tools: {} } });
+  const server = new Server(
+    { name: "apexrest-apex", version: VERSION },
+    { capabilities: { tools: {}, resources: {} } }
+  );
+  server.setRequestHandler(ListResourcesRequestSchema, async () => ({
+    resources: [
+      {
+        uri: panelUri,
+        name: "APEXREST development panel",
+        mimeType: "text/html;profile=mcp-app",
+        description: "Live Codex project settings, agent activity, mandatory reviews and APEX operations."
+      }
+    ]
+  }));
+  server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
+    if (request.params.uri !== panelUri) throw new Error("Unknown resource.");
+    return {
+      contents: [
+        {
+          uri: panelUri,
+          mimeType: "text/html;profile=mcp-app",
+          text: await panelDocument(),
+          _meta: { ui: { prefersBorder: true, csp: { connectDomains: [], resourceDomains: [] } } }
+        }
+      ]
+    };
+  });
   let catalog;
   server.setRequestHandler(
     ListToolsRequestSchema,
@@ -727,6 +761,7 @@ async function startMcp() {
       tools: exposed.map((t) => ({
         name: t.name,
         description: t.description,
+        ...t.operation === "panel.open" ? { _meta: { ui: { resourceUri: panelUri } } } : {},
         inputSchema: external_exports.toJSONSchema(mcpSchemas.get(t.operation), { target: "draft-7" }),
         annotations: {
           readOnlyHint: t.readOnly,
@@ -770,7 +805,11 @@ async function startMcp() {
       );
       text = JSON.stringify(result);
     }
-    return { isError: !result.ok, content: [{ type: "text", text }] };
+    return {
+      isError: !result.ok,
+      content: [{ type: "text", text }],
+      ...tool?.operation.startsWith("panel.") ? { structuredContent: result } : {}
+    };
   });
   await server.connect(new StdioServerTransport());
 }

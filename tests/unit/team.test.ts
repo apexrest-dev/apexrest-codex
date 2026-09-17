@@ -147,7 +147,7 @@ function protocol(
         notify('turn/completed', { threadId, turn: { ...turn, items: [] } });
         return { turn: { id: turn.id, status: 'inProgress' } };
       }
-      if (method === 'turn/steer' || method === 'turn/interrupt') return {};
+      if (method === 'turn/steer' || method === 'turn/interrupt' || method === 'thread/name/set') return {};
       throw new Error('Unexpected fixture call: ' + method);
     },
     async close() {
@@ -175,6 +175,10 @@ test('fixed team always runs developers, manager review, independent QA and fina
   assert.equal(result.status, 'completed');
   assert.deepEqual(mock.calls, ['manager', 'developer', 'developer', 'manager', 'qa', 'manager', 'closed']);
   assert.equal(new Set(result.members.map((m) => m.sessionId)).size, 4);
+  assert.deepEqual(
+    result.members.map((m) => m.name),
+    ['Mewtwo', 'Pikachu', 'Charmander', 'Squirtle'],
+  );
   assert.deepEqual(
     mock.starts.map((p) => p.sandbox),
     ['read-only', 'workspace-write', 'workspace-write', 'read-only'],

@@ -148,6 +148,317 @@
     ],
     "additionalProperties": false
   },
+  "panel.open": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "properties": {
+      "project": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4096
+      }
+    },
+    "additionalProperties": false
+  },
+  "panel.status": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "properties": {
+      "project": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4096
+      },
+      "team": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+      }
+    },
+    "additionalProperties": false
+  },
+  "panel.action": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "properties": {
+      "project": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4096
+      },
+      "action": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "preferences"
+              },
+              "settings": {
+                "type": "object",
+                "properties": {
+                  "developers": {
+                    "default": 1,
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 3
+                  },
+                  "sandbox": {
+                    "default": "workspace-write",
+                    "type": "string",
+                    "enum": [
+                      "read-only",
+                      "workspace-write"
+                    ]
+                  },
+                  "timeoutSeconds": {
+                    "default": 900,
+                    "type": "integer",
+                    "minimum": 30,
+                    "maximum": 3600
+                  }
+                },
+                "required": [
+                  "developers",
+                  "sandbox",
+                  "timeoutSeconds"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "kind",
+              "settings"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "sqlcl"
+              },
+              "settings": {
+                "type": "object",
+                "properties": {
+                  "schemaVersion": {
+                    "type": "number",
+                    "const": 1
+                  },
+                  "mode": {
+                    "type": "string",
+                    "enum": [
+                      "cli",
+                      "mcp"
+                    ]
+                  },
+                  "mcpRestrictLevel": {
+                    "type": "string",
+                    "enum": [
+                      "1",
+                      "4"
+                    ]
+                  }
+                },
+                "required": [
+                  "schemaVersion",
+                  "mode",
+                  "mcpRestrictLevel"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "kind",
+              "settings"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "start"
+              },
+              "request": {
+                "type": "object",
+                "properties": {
+                  "task": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 16000
+                  },
+                  "developers": {
+                    "default": 1,
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 3
+                  },
+                  "sandbox": {
+                    "default": "workspace-write",
+                    "type": "string",
+                    "enum": [
+                      "read-only",
+                      "workspace-write"
+                    ]
+                  },
+                  "timeoutSeconds": {
+                    "default": 900,
+                    "type": "integer",
+                    "minimum": 30,
+                    "maximum": 3600
+                  }
+                },
+                "required": [
+                  "task",
+                  "developers",
+                  "sandbox",
+                  "timeoutSeconds"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "kind",
+              "request"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "message"
+              },
+              "id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "message": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 8000
+              }
+            },
+            "required": [
+              "kind",
+              "id",
+              "message"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "cancel-team"
+              },
+              "id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              }
+            },
+            "required": [
+              "kind",
+              "id"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "cancel-job"
+              },
+              "id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              }
+            },
+            "required": [
+              "kind",
+              "id"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "validate"
+              }
+            },
+            "required": [
+              "kind"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "test"
+              },
+              "suite": {
+                "type": "string",
+                "enum": [
+                  "unit",
+                  "sql",
+                  "api",
+                  "e2e",
+                  "all"
+                ]
+              },
+              "env": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+              }
+            },
+            "required": [
+              "kind",
+              "suite"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "plan"
+              },
+              "env": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+              }
+            },
+            "required": [
+              "kind",
+              "env"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      }
+    },
+    "required": [
+      "action"
+    ],
+    "additionalProperties": false
+  },
   "setup": {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",

@@ -40,6 +40,7 @@ const config = {
   artifacts: { directory: '.apexrest/artifacts', retentionDays: 7 },
 };
 await writeFile(path.join(project, 'apexrest.json'), JSON.stringify(config));
+await writeFile(path.join(project, '.gitignore'), '.apexrest/\n');
 await mkdir(path.join(project, 'src'));
 await writeFile(path.join(project, 'src/add.mjs'), 'export const add = (a, b) => a - b;\n');
 const tests = `import test from 'node:test';
@@ -53,7 +54,7 @@ await writeFile(path.join(project, 'add.test.mjs'), tests);
 // Give independent reviewers an inspectable, genuine pre-change baseline.
 for (const args of [
   ['init', '--quiet'],
-  ['add', 'apexrest.json', 'src/add.mjs', 'add.test.mjs'],
+  ['add', '.gitignore', 'apexrest.json', 'src/add.mjs', 'add.test.mjs'],
   [
     '-c',
     'user.name=APEXREST fixture',
@@ -75,7 +76,7 @@ await writeFile(
   JSON.stringify({ schemaVersion: 1, trustedProjects: [project], grants: [] }),
 );
 const task =
-  'In this isolated local fixture, fix src/add.mjs so add(a,b) returns the sum of finite numeric arguments and throws TypeError for invalid input. Do not change add.test.mjs or any configuration. QA must independently run node --test add.test.mjs. Every role should call team_context and send at least one relevant message to a peer using team_message. Keep the plan and reports concise. Do not install, download, connect to a database, publish or touch files outside this project. This verifies Codex orchestration, not Oracle. Answer in English.';
+  'In this isolated local fixture, fix src/add.mjs so add(a,b) returns the sum of finite numeric arguments and throws TypeError for invalid input. Do not change add.test.mjs or any configuration. The ignored .apexrest directory is generated controller state, not pre-existing application source; its continuous updates are expected and are outside code acceptance. QA must independently run node --test add.test.mjs. Every role should call team_context and send at least one relevant message to a peer using team_message. Keep the plan and reports concise. Do not install, download, connect to a database, publish or touch files outside this project. This verifies Codex orchestration, not Oracle. Answer in English.';
 const evidence = {
   timestamp: new Date().toISOString(),
   sourceDigest: await sourceDigest(),
@@ -116,7 +117,12 @@ for (;;) {
     evidence.teamStatus = state.status;
     evidence.phases = state.reviews.map((r) => r.phase);
     evidence.separateSessions = new Set(state.members.map((m) => m.sessionId)).size;
-    evidence.roles = state.members.map((m) => ({ role: m.role, status: m.status }));
+    evidence.roles = state.members.map((m) => ({
+      role: m.role,
+      name: m.name,
+      status: m.status,
+      configuration: m.configuration,
+    }));
     evidence.peerMessages = state.messages
       .filter((m) => m.from !== 'user')
       .map((m) => ({ from: m.from, to: m.to, status: m.status }));

@@ -2,9 +2,15 @@
 
 English | [Українська](implementation-status.uk.md)
 
+## Development panel and named agents — 2026-09-17
+
+The Codex-only development panel is implemented in the in-app browser and CLI TUI. It shares one actual snapshot of settings, targets, agent tools/models, reviews, QA, messages, Git changes and durable APEX jobs/imports. Three new MCP operations and the panel skill bring the bundle to twelve skills and twenty-one tools. Pokémon names and local sprites identify the manager, up to three developers and QA without changing role authority. See [panel behavior and limits](panel.md), [panel checks](evidence/panel-local-checks.json) and [native discovery](evidence/panel-native-discovery.json).
+
+The actual desktop route is the Codex in-app browser. The MCP UI resource is also advertised and contract-checked; embedded MCP rendering remains unverified. Ephemeral Codex sessions do not support metadata renaming: names belong to the plugin roster and instructions. No Oracle operation or deployment was performed for panel verification. Earlier evidence below describes its own source revision, not the later panel build.
+
 ## Mandatory Codex team and source audit — 2026-09-17
 
-The primary implementation entry now runs separate Codex App Server sessions for manager, one to three developers and independent QA. A deterministic controller requires manager code review, QA and manager review of QA before `completed`; failed checks, malformed output, source drift and later user corrections cannot be silently approved. Four project-scoped MCP/CLI operations start, inspect, message and cancel the team. The bundle has eleven skills and eighteen MCP tools. See [workflow and limits](team.md) and the [upstream source audit](codex-integration.md).
+The primary implementation entry now runs separate Codex App Server sessions for manager, one to three developers and independent QA. A deterministic controller requires manager code review, QA and manager review of QA before `completed`; failed checks, malformed output, source drift and later user corrections cannot be silently approved. Four project-scoped MCP/CLI operations start, inspect, message and cancel the team. The initial team build contained eleven skills and eighteen MCP tools; the panel build above expands this catalog. See [workflow and limits](team.md) and the [upstream source audit](codex-integration.md).
 
 [Native execution](evidence/team-native-local.json) uses real Codex inference on an isolated local coding fixture, with actual peer messages and independent tests. [Native discovery](evidence/team-native-discovery.json) checks the built plugin in an isolated profile. [Local regression checks](evidence/team-local-checks.json) distinguish protocol fixtures from native execution. This does not verify Oracle imports, desktop attachment or panel rendering. The source audit confirms a private internal agent registry, public App Server orchestration, fixed CLI status items and a hosted-app-only MCP event subscription. The product remains exclusively for Codex desktop and CLI.
 

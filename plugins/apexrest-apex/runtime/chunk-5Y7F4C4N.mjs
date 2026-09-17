@@ -3,7 +3,7 @@ import { createRequire as __createRequire } from 'node:module'; const require = 
 // plugins/metadata.json
 var metadata_default = {
   name: "apexrest-apex",
-  version: "0.1.0-beta.1",
+  version: "0.1.0-beta.1+codex.20260917142816",
   description: "Develop, deploy and test Oracle APEX applications with Codex.",
   author: {
     name: "APEXREST",
@@ -23,7 +23,7 @@ var metadata_default = {
     capabilities: ["Read", "Write"],
     defaultPrompt: [
       "Use $apexrest-team. Complete my Oracle APEX task with developer, manager review and independent QA.",
-      "Use $apexrest-install-dependencies to install Java, SQLcl and the other client dependencies.",
+      "Use $apexrest-panel to open project settings, agent activity, reviews and APEX operations inside Codex.",
       "Use $apexrest-menu to show all functions, setup and connection diagnostics."
     ]
   }

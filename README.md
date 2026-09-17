@@ -18,6 +18,9 @@ APEXREST connects native Codex skills and MCP tools to Oracle SQLcl. Generate AP
 
 Implementation tasks start through `$apexrest-team`: separate developers, mandatory manager code review, independent QA and final manager review. See [team APIs and review gates](docs/team.md) and the [Codex source audit](docs/codex-integration.md).
 
+
+Open `$apexrest-panel` for live project settings, Pokémon agent activity, mandatory reviews, QA and APEX operations inside Codex. The console view is `apexrest panel tui`. See the [development panel](docs/panel.md).
+
 ## Install with the terminal menu
 
 With Git and Node 24 LTS available, open the bundled TUI from the repository. **Install plugin** also requires a Codex CLI with native plugin support.

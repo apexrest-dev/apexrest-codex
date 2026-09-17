@@ -36,6 +36,7 @@ function help() {
     'Usage: apexrest [command] [options]',
     'Run apexrest in a terminal to manage tools, plugins and saved SQLcl connections.',
     '  tui [--project PATH]   Open the terminal UI explicitly',
+    '  panel tui [--project PATH]   Live development panel inside Codex CLI',
     '',
     ...Object.keys(schemas)
       .filter((x) => x !== 'test.run')
@@ -55,6 +56,12 @@ function help() {
         (k) => '  --' + k.replace(/[A-Z]/g, (c) => '-' + c.toLowerCase()),
       ),
       ...(positional[key] ?? []).map((p) => '  <' + p + '>'),
+    );
+  if (key === 'panel.action')
+    lines.push(
+      '',
+      'Pass --action as one JSON object. Supported kinds: preferences, sqlcl, start, message, cancel-team, cancel-job, validate, test, plan.',
+      'Example: apexrest panel action --action \'{"kind":"validate"}\' --project PATH --json',
     );
   if (key === 'team.start')
     lines.push(
@@ -112,7 +119,16 @@ try {
     const { runTui } = await import('./tui.ts');
     await runTui(argv[2] ? { project: argv[2] } : {});
   } else if (!argv.length) help();
-  else if (argv[0] === '--job-worker') {
+  else if (argv[0] === 'panel' && argv[1] === 'tui') {
+    if (argv.length !== 2 && (argv.length !== 4 || argv[2] !== '--project' || !argv[3]))
+      throw new Fault('INVALID_INPUT', 'Usage: apexrest panel tui [--project PATH]', 2);
+    const { runPanelTui } = await import('./panel-tui.ts');
+    await runPanelTui(argv[3] ?? process.cwd());
+  } else if (argv[0] === '--panel-worker') {
+    if (argv.length !== 2 || !argv[1]) throw new Fault('INVALID_INPUT', 'Invalid panel worker request.', 2);
+    const { servePanel } = await import('../../core/src/panel-server.ts');
+    await servePanel(argv[1]);
+  } else if (argv[0] === '--job-worker') {
     if (argv.length !== 3) throw new Fault('INVALID_INPUT', 'Invalid internal job request.', 2);
     await executeJob(await loadProject(argv[1]!), argv[2]!, dispatch);
   } else if (argv[0] === '--team-worker') {
@@ -156,7 +172,12 @@ try {
           const value = argv[++i];
           if (!value || value.startsWith('--'))
             throw new Fault('INVALID_INPUT', `Missing value for ${token}`, 2);
-          input[name] = numbers.has(name) ? Number(value) : value;
+          input[name] =
+            name === 'action' && selectedOp.op === 'panel.action'
+              ? JSON.parse(value)
+              : numbers.has(name)
+                ? Number(value)
+                : value;
         }
       } else {
         const field = positional[selectedOp.op]?.[index++];

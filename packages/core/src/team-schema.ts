@@ -35,11 +35,20 @@ export type TeamRole = 'manager' | 'qa' | 'developer-1' | 'developer-2' | 'devel
 export type TeamPhase = 'queued' | 'planning' | 'development' | 'code_review' | 'qa' | 'final_review';
 export interface TeamMember {
   role: TeamRole;
+  name?: string;
   threadId: string;
   sessionId: string;
   turnId?: string;
   status: string;
   result: string;
+  configuration?: {
+    model: string | null;
+    reasoningEffort: string | null;
+    sandbox: string;
+    approvalPolicy: string;
+  };
+  currentAction?: { id: string; kind: string; title: string; startedAt: string };
+  totalTokens?: number;
 }
 export interface TeamMessage {
   id: string;
@@ -66,6 +75,7 @@ export interface TeamState {
     phase: TeamPhase;
     kind: string;
     detail: string;
+    at?: string;
   }[];
   approvedDigest?: string;
 }

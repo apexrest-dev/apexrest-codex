@@ -26,6 +26,19 @@ for (const folder of Object.keys(lock.packages).filter((p) => p.includes('node_m
 for (const folder of ['toolchains', 'schemas', 'templates'])
   await cp(folder, `dist/resources/${folder}`, { recursive: true });
 await cp('resources', 'dist/resources', { recursive: true });
+await mkdir('dist/resources/panel', { recursive: true });
+for (const file of ['index.html', 'panel.css'])
+  await cp('packages/panel/src/' + file, 'dist/resources/panel/' + file);
+await cp('packages/panel/assets', 'dist/resources/panel/assets', { recursive: true });
+await build({
+  entryPoints: ['packages/panel/src/panel.ts'],
+  outfile: 'dist/resources/panel/panel.js',
+  bundle: true,
+  platform: 'browser',
+  format: 'iife',
+  target: 'es2022',
+  loader: { '.png': 'dataurl', '.svg': 'dataurl' },
+});
 await build({
   entryPoints: ['packages/testkit/src/apex.ts'],
   outfile: 'dist/resources/testkit/apex.mjs',

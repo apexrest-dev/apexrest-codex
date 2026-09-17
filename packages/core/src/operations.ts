@@ -4,6 +4,7 @@ import { refName, relativePath } from './config.ts';
 import { savedConnectionName } from './connections.ts';
 import { sqlclMode, sqlclRestriction } from './sqlcl-config.ts';
 import { teamStartSchema, teamIdSchema, teamMessageSchema } from './team-schema.ts';
+import { panelReadSchema, panelActionSchema } from './panel-schema.ts';
 const project = z.string().min(1).max(4096).optional(),
   env = refName;
 const base = { project };
@@ -36,6 +37,9 @@ export const schemas = {
   'team.status': teamIdSchema,
   'team.message': teamMessageSchema,
   'team.cancel': teamIdSchema,
+  'panel.open': panelReadSchema.omit({ team: true }),
+  'panel.status': panelReadSchema,
+  'panel.action': panelActionSchema,
   setup: z.strictObject(setup),
   'dependencies.install': z.strictObject(dependencies),
   'dependencies.uninstall': z.strictObject({
@@ -125,6 +129,28 @@ export const toolCatalog: {
   long?: boolean;
   destructive?: boolean;
 }[] = [
+  {
+    name: 'apexrest_panel_open',
+    operation: 'panel.open',
+    description:
+      'Open the APEXREST development panel in Codex. Returns a local Codex browser URL and optional native MCP UI. Shows project settings, agent steps, reviews and APEX operation status.',
+    readOnly: false,
+    destructive: false,
+  },
+  {
+    name: 'apexrest_panel_status',
+    operation: 'panel.status',
+    description:
+      'Read the current panel snapshot: configuration, live agent steps, messages, reviews, QA, changes and deployment jobs. No database connection is made.',
+    readOnly: true,
+  },
+  {
+    name: 'apexrest_panel_action',
+    operation: 'panel.action',
+    description:
+      'Perform an explicit panel action: save future-team or SQLcl preferences, start/steer/stop a reviewed team, validate source, run checks or prepare a deployment plan. Existing trust and authorization apply; this does not bypass deployment approval.',
+    readOnly: false,
+  },
   {
     name: 'apexrest_team_start',
     operation: 'team.start',

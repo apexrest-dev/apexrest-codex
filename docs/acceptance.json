@@ -454,6 +454,21 @@
         "docs/codex-integration.md"
       ],
       "blocker": "Actual local coding fixture and isolated native discovery only. Oracle team tasks, Windows recovery and desktop UI rendering remain unverified; low-level operations outside a team have no team approval."
+    },
+    {
+      "id": "A30",
+      "criterion": "Codex desktop and CLI development panel shows effective settings, live named agents, mandatory reviews, QA and actual APEX operation status",
+      "implementation": "implemented",
+      "verification": "partial",
+      "evidence": [
+        "docs/panel.md",
+        "packages/core/src/panel.ts",
+        "tests/unit/panel.test.ts",
+        "docs/evidence/panel-local-checks.json",
+        "docs/evidence/panel-native-discovery.json",
+        "docs/evidence/panel-team-native.json"
+      ],
+      "blocker": "Embedded MCP UI renderer, Windows console and connected Oracle deployment observation remain unverified. Desktop evidence is the actual Codex in-app browser."
     }
   ],
   "amendments": [

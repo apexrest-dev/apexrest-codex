@@ -19,6 +19,9 @@ import { sandboxAction } from './sandbox.ts';
 import { configureSqlcl, sqlclConfig, type SqlclConfig } from './sqlcl-config.ts';
 import { TeamService } from './team.ts';
 import { teamStartSchema } from './team-schema.ts';
+import { PanelService } from './panel.ts';
+import { panelActionSchema } from './panel-schema.ts';
+import { realpath } from 'node:fs/promises';
 export async function dispatch(operation: string, input: Record<string, unknown> = {}, signal?: AbortSignal) {
   try {
     if (signal?.aborted)
@@ -35,6 +38,17 @@ export async function dispatch(operation: string, input: Record<string, unknown>
       deployment = new DeploymentService(oracle, (ctx, env) => tests.all(ctx, env));
     let data: unknown;
     switch (operation) {
+      case 'panel.open': {
+        const { openPanel } = await import('./panel-server.ts');
+        data = await openPanel(await realpath(root));
+        break;
+      }
+      case 'panel.status':
+        data = await new PanelService(root).snapshot(parsed.team as string | undefined);
+        break;
+      case 'panel.action':
+        data = await new PanelService(root).act(panelActionSchema.parse(parsed).action);
+        break;
       case 'version':
         data = { version: VERSION, node: process.version };
         break;

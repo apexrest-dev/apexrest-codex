@@ -43,3 +43,5 @@ The plugin owns these ephemeral sessions and reads their native completion event
 ## Verification
 
 Protocol fixtures in `tests/unit/team.test.ts` exercise ordering, rejection, failed QA, invalid output, isolation, source drift, user steering, cancellation and lock contention. They are not native Codex or Oracle evidence. `scripts/verify-team-native.mjs` separately runs actual Codex sessions against an isolated local coding fixture and repeats the tests independently. [The native report](evidence/team-native-local.json) records its observed outcome. Neither fixture establishes Oracle import behavior or desktop panel rendering.
+
+Agent display names are fixed: Mewtwo (manager), Pikachu/Charmander/Bulbasaur (developers), and Squirtle (QA). The [panel](panel.md) displays their local avatars, actual configuration and current activity. Stable role keys retain review and routing authority; temporary Codex sessions cannot be renamed through metadata.

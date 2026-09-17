@@ -61,13 +61,14 @@ try {
   assert.ok(server, 'Native MCP server missing');
   assert.equal(server.runtimeStatus, 'connected');
   const tools = Object.keys(server.tools).sort();
-  assert.equal(tools.length, 18);
+  assert.equal(tools.length, 21);
   evidence.tools = tools;
-  evidence.checks.push('18-native-mcp-tools-connected');
+  evidence.checks.push('21-native-mcp-tools-connected');
   const skills = await rpc.call('skills/list', { cwds: [project], forceReload: true });
   const nativeSkills = skills.data.flatMap((entry) => entry.skills);
   const menu = [];
   for (const name of [
+    'panel',
     'team',
     'menu',
     'setup',
@@ -93,7 +94,7 @@ try {
     });
   }
   evidence.menu = menu;
-  evidence.checks.push('eleven-native-skills-with-menu-metadata-discovered');
+  evidence.checks.push('twelve-native-skills-with-menu-metadata-discovered');
   const call = async (tool, args) => {
     const result = await rpc.call('mcpServer/tool/call', {
       threadId: thread.thread.id,
@@ -129,6 +130,10 @@ try {
   assert.equal(initialized.status, 0, initialized.stderr + initialized.stdout);
   await call('apexrest_project_inspect', { project: workflow });
   evidence.checks.push('explicit-project-inspection-outside-plugin-cache');
+  const panel = await call('apexrest_panel_status', { project: workflow });
+  assert.equal(panel.data.configured, true);
+  assert.ok(Array.isArray(panel.data.permissions.activeGrants));
+  evidence.checks.push('development-panel-status-through-native-host');
   evidence.status = 'passed';
 } catch (error) {
   evidence.status = 'failed';

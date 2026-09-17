@@ -1,7 +1,12 @@
 import { VERSION } from '../../core/src/version.ts';
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
+import {
+  CallToolRequestSchema,
+  ListToolsRequestSchema,
+  ListResourcesRequestSchema,
+  ReadResourceRequestSchema,
+} from '@modelcontextprotocol/sdk/types.js';
 import type { Tool } from '@modelcontextprotocol/sdk/types.js';
 import { z } from 'zod';
 import path from 'node:path';
@@ -12,6 +17,8 @@ import type { Operation } from '../../core/src/operations.ts';
 import { failure, success, Fault } from '../../core/src/result.ts';
 import { parse, loadProject } from '../../core/src/config.ts';
 import { JobService } from '../../core/src/jobs.ts';
+import { panelDocument } from '../../core/src/panel-server.ts';
+const panelUri = 'ui://apexrest/development-panel.html';
 
 const absoluteProject = z
   .string()
@@ -48,9 +55,36 @@ export async function startMcp() {
     (t) =>
       process.env.APEXREST_TEAM_WORKER !== '1' ||
       (!t.operation.startsWith('team.') &&
+        !t.operation.startsWith('panel.') &&
         (process.env.APEXREST_TEAM_ROLE?.startsWith('developer') || t.readOnly)),
   );
-  const server = new Server({ name: 'apexrest-apex', version: VERSION }, { capabilities: { tools: {} } });
+  const server = new Server(
+    { name: 'apexrest-apex', version: VERSION },
+    { capabilities: { tools: {}, resources: {} } },
+  );
+  server.setRequestHandler(ListResourcesRequestSchema, async () => ({
+    resources: [
+      {
+        uri: panelUri,
+        name: 'APEXREST development panel',
+        mimeType: 'text/html;profile=mcp-app',
+        description: 'Live Codex project settings, agent activity, mandatory reviews and APEX operations.',
+      },
+    ],
+  }));
+  server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
+    if (request.params.uri !== panelUri) throw new Error('Unknown resource.');
+    return {
+      contents: [
+        {
+          uri: panelUri,
+          mimeType: 'text/html;profile=mcp-app',
+          text: await panelDocument(),
+          _meta: { ui: { prefersBorder: true, csp: { connectDomains: [], resourceDomains: [] } } },
+        },
+      ],
+    };
+  });
   let catalog: { tools: Tool[] } | undefined;
   server.setRequestHandler(
     ListToolsRequestSchema,
@@ -59,6 +93,7 @@ export async function startMcp() {
         tools: exposed.map((t) => ({
           name: t.name,
           description: t.description,
+          ...(t.operation === 'panel.open' ? { _meta: { ui: { resourceUri: panelUri } } } : {}),
           inputSchema: z.toJSONSchema(mcpSchemas.get(t.operation)!, { target: 'draft-7' }) as {
             type: 'object';
           },
@@ -106,7 +141,11 @@ export async function startMcp() {
       );
       text = JSON.stringify(result);
     }
-    return { isError: !result.ok, content: [{ type: 'text', text }] };
+    return {
+      isError: !result.ok,
+      content: [{ type: 'text', text }],
+      ...(tool?.operation.startsWith('panel.') ? { structuredContent: result } : {}),
+    };
   });
   await server.connect(new StdioServerTransport());
 }

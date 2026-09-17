@@ -43,3 +43,7 @@ The following entries cover the shared operation catalog. Dots below correspond 
 `mcp` starts the server transport, not an application action. Sandbox commands currently return unsupported capability diagnostics; do not present them as working Oracle provisioning. `docs.sync` uses the runtime's pinned-reference behavior, not arbitrary downloads. Plugin maintenance uses the existing installation's documented ownership checks; never uninstall a plugin or switch its marketplace merely to display this menu.
 
 Menu selection does not supply missing target identity, accept Oracle licenses or authorize production. Preserve explicit user scope, named local connection references, source files, backup/drift/coordination checks and unknown-outcome safeguards. Never request passwords in chat. Keep local fixtures, native discovery, Oracle results and in-app browser observations distinct.
+
+## Development panel
+
+Use `$apexrest-panel` to open the native Codex workspace view. `panel.open` returns the local desktop URL; `panel.status` reads the effective configuration and live work; `panel.action` starts or steers a reviewed team, saves future defaults or queues supported checks. `apexrest panel tui --project PATH` opens the terminal view.

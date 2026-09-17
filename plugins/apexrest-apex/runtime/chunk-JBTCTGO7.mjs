@@ -1,11 +1,11 @@
 import { createRequire as __createRequire } from 'node:module'; const require = __createRequire(import.meta.url);
 import {
-  VERSION
-} from "./chunk-GN4ETYQT.mjs";
+  ToolchainService,
+  runtimeState
+} from "./chunk-SQLI3IEY.mjs";
 import {
   Client,
   StdioClientTransport,
-  ToolchainService,
   require_applicator,
   require_codegen,
   require_compile,
@@ -22,10 +22,14 @@ import {
   require_validate,
   require_validation,
   require_validation_error,
-  resourceRoot,
-  runProcess,
-  runtimeState
-} from "./chunk-UAGGMBMC.mjs";
+  resourceRoot
+} from "./chunk-5X6KTDSR.mjs";
+import {
+  VERSION
+} from "./chunk-5Y7F4C4N.mjs";
+import {
+  runProcess
+} from "./chunk-TDSYBJUK.mjs";
 import {
   Fault,
   __commonJS,

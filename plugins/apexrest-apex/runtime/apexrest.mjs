@@ -2,12 +2,16 @@
 import { createRequire as __createRequire } from 'node:module'; const require = __createRequire(import.meta.url);
 import {
   dispatch,
-  executeJob,
   schemas
-} from "./chunk-MJOVR764.mjs";
-import "./chunk-GN4ETYQT.mjs";
-import "./chunk-UAGGMBMC.mjs";
+} from "./chunk-GL7SR744.mjs";
+import "./chunk-SQLI3IEY.mjs";
+import "./chunk-5X6KTDSR.mjs";
+import {
+  executeJob
+} from "./chunk-6CWSRFL2.mjs";
 import "./chunk-TXURWVZO.mjs";
+import "./chunk-5Y7F4C4N.mjs";
+import "./chunk-TDSYBJUK.mjs";
 import {
   Fault,
   failure,
@@ -46,6 +50,7 @@ function help() {
     "Usage: apexrest [command] [options]",
     "Run apexrest in a terminal to manage tools, plugins and saved SQLcl connections.",
     "  tui [--project PATH]   Open the terminal UI explicitly",
+    "  panel tui [--project PATH]   Live development panel inside Codex CLI",
     "",
     ...Object.keys(schemas).filter((x) => x !== "test.run").map((x) => "  " + x.replace(".", " ")),
     "  test unit|sql|api|e2e|all [--env NAME]",
@@ -63,6 +68,12 @@ function help() {
         (k) => "  --" + k.replace(/[A-Z]/g, (c) => "-" + c.toLowerCase())
       ),
       ...(positional[key] ?? []).map((p) => "  <" + p + ">")
+    );
+  if (key === "panel.action")
+    lines.push(
+      "",
+      "Pass --action as one JSON object. Supported kinds: preferences, sqlcl, start, message, cancel-team, cancel-job, validate, test, plan.",
+      `Example: apexrest panel action --action '{"kind":"validate"}' --project PATH --json`
     );
   if (key === "team.start")
     lines.push(
@@ -111,19 +122,28 @@ try {
   else if (argv[0] === "tui" || !argv.length && process.stdin.isTTY && process.stdout.isTTY && process.env.TERM !== "dumb") {
     if (argv.length > 1 && (argv.length !== 3 || argv[1] !== "--project" || !argv[2] || argv[2].startsWith("--")))
       throw new Fault("INVALID_INPUT", "Usage: apexrest tui [--project PATH]", 2);
-    const { runTui } = await import("./chunk-EEPJEYG7.mjs");
+    const { runTui } = await import("./chunk-MEHOAFIN.mjs");
     await runTui(argv[2] ? { project: argv[2] } : {});
   } else if (!argv.length) help();
-  else if (argv[0] === "--job-worker") {
+  else if (argv[0] === "panel" && argv[1] === "tui") {
+    if (argv.length !== 2 && (argv.length !== 4 || argv[2] !== "--project" || !argv[3]))
+      throw new Fault("INVALID_INPUT", "Usage: apexrest panel tui [--project PATH]", 2);
+    const { runPanelTui } = await import("./chunk-FBMW5T7P.mjs");
+    await runPanelTui(argv[3] ?? process.cwd());
+  } else if (argv[0] === "--panel-worker") {
+    if (argv.length !== 2 || !argv[1]) throw new Fault("INVALID_INPUT", "Invalid panel worker request.", 2);
+    const { servePanel } = await import("./chunk-DLGWIJX7.mjs");
+    await servePanel(argv[1]);
+  } else if (argv[0] === "--job-worker") {
     if (argv.length !== 3) throw new Fault("INVALID_INPUT", "Invalid internal job request.", 2);
     await executeJob(await loadProject(argv[1]), argv[2], dispatch);
   } else if (argv[0] === "--team-worker") {
     if (argv.length !== 3) throw new Fault("INVALID_INPUT", "Invalid internal team request.", 2);
-    const { executeTeam } = await import("./chunk-DX5J2BRE.mjs");
+    const { executeTeam } = await import("./chunk-OU3VIBGI.mjs");
     await executeTeam(await loadProject(argv[1]), argv[2]);
   } else if (argv[0] === "mcp") {
     if (argv.length !== 1) throw new Fault("INVALID_INPUT", "mcp accepts no arguments.", 2);
-    const { startMcp } = await import("./chunk-BR347YRC.mjs");
+    const { startMcp } = await import("./chunk-7XFE54AV.mjs");
     await startMcp();
   } else {
     const selectedOp = argv[0] === "--version" ? { op: "version", start: 1 } : selected;
@@ -158,7 +178,7 @@ try {
           const value = argv[++i];
           if (!value || value.startsWith("--"))
             throw new Fault("INVALID_INPUT", `Missing value for ${token}`, 2);
-          input[name] = numbers.has(name) ? Number(value) : value;
+          input[name] = name === "action" && selectedOp.op === "panel.action" ? JSON.parse(value) : numbers.has(name) ? Number(value) : value;
         }
       } else {
         const field = positional[selectedOp.op]?.[index++];

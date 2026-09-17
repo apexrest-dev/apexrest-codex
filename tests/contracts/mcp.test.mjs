@@ -22,7 +22,7 @@ test('team workers cannot launch teams and reviewers receive only read-only doma
     );
     const { tools } = await client.listTools();
     assert.ok(tools.length > 0);
-    assert.ok(tools.every((tool) => !tool.name.startsWith('apexrest_team_')));
+    assert.ok(tools.every((tool) => !/^apexrest_(team|panel)_/.test(tool.name)));
     if (role !== 'developer-1') assert.ok(tools.every((tool) => tool.annotations.readOnlyHint));
     else assert.ok(tools.some((tool) => tool.name === 'apexrest_apex_validate'));
     const recursive = await client.callTool({ name: 'apexrest_team_start', arguments: {} });
@@ -41,7 +41,14 @@ test('real stdio MCP initialize/list/call, CLI parity and bounded catalog', asyn
   const start = performance.now();
   await client.connect(transport);
   const catalog = await client.listTools();
-  assert.equal(catalog.tools.length, 18);
+  assert.equal(catalog.tools.length, 21);
+  const panelTool = catalog.tools.find((tool) => tool.name === 'apexrest_panel_open');
+  assert.equal(panelTool._meta.ui.resourceUri, 'ui://apexrest/development-panel.html');
+  const resources = await client.listResources();
+  assert.equal(resources.resources[0].mimeType, 'text/html;profile=mcp-app');
+  const ui = await client.readResource({ uri: panelTool._meta.ui.resourceUri });
+  assert.match(ui.contents[0].text, /data:image\/png;base64/);
+  assert.ok(!ui.contents[0].text.includes('src="/panel.js"'));
   assert.ok(performance.now() - start < 10000);
   const reference = await client.callTool({
     name: 'apexrest_reference_search',
@@ -90,6 +97,9 @@ test('MCP project tools require an explicit absolute path before dispatch or job
     }),
   );
   const inputs = {
+    apexrest_panel_open: {},
+    apexrest_panel_status: {},
+    apexrest_panel_action: { action: { kind: 'validate' } },
     apexrest_team_start: { task: 'Inspect the project.' },
     apexrest_team_status: { id: '12345678-1234-4123-8123-123456789abc' },
     apexrest_team_message: { id: '12345678-1234-4123-8123-123456789abc', message: 'Check validation.' },

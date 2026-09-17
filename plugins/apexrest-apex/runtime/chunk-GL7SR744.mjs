@@ -1,32 +1,42 @@
 import { createRequire as __createRequire } from 'node:module'; const require = __createRequire(import.meta.url);
 import {
-  VERSION
-} from "./chunk-GN4ETYQT.mjs";
+  runtimeState
+} from "./chunk-SQLI3IEY.mjs";
 import {
   OracleAdapter,
-  configureSqlcl,
-  connections,
-  editConnection,
   installSources,
   projectInit,
   projectInspect,
-  resolveConnection,
   resourceRoot,
-  runProcess,
-  runtimeState,
-  savedConnectionName,
   sqlLiteral,
-  sqlclConfig,
-  sqlclMode,
-  sqlclRestriction,
   sqlclToken
-} from "./chunk-UAGGMBMC.mjs";
+} from "./chunk-5X6KTDSR.mjs";
+import {
+  JobService,
+  PanelService,
+  panelActionSchema,
+  panelReadSchema
+} from "./chunk-6CWSRFL2.mjs";
 import {
   TeamService,
   teamIdSchema,
   teamMessageSchema,
   teamStartSchema
 } from "./chunk-TXURWVZO.mjs";
+import {
+  VERSION
+} from "./chunk-5Y7F4C4N.mjs";
+import {
+  configureSqlcl,
+  connections,
+  editConnection,
+  resolveConnection,
+  runProcess,
+  savedConnectionName,
+  sqlclConfig,
+  sqlclMode,
+  sqlclRestriction
+} from "./chunk-TDSYBJUK.mjs";
 import {
   Fault,
   atomicWrite,
@@ -129,6 +139,9 @@ var schemas = {
   "team.status": teamIdSchema,
   "team.message": teamMessageSchema,
   "team.cancel": teamIdSchema,
+  "panel.open": panelReadSchema.omit({ team: true }),
+  "panel.status": panelReadSchema,
+  "panel.action": panelActionSchema,
   setup: external_exports.strictObject(setup),
   "dependencies.install": external_exports.strictObject(dependencies),
   "dependencies.uninstall": external_exports.strictObject({
@@ -210,6 +223,25 @@ var schemas = {
   "sandbox.down": external_exports.strictObject(base)
 };
 var toolCatalog = [
+  {
+    name: "apexrest_panel_open",
+    operation: "panel.open",
+    description: "Open the APEXREST development panel in Codex. Returns a local Codex browser URL and optional native MCP UI. Shows project settings, agent steps, reviews and APEX operation status.",
+    readOnly: false,
+    destructive: false
+  },
+  {
+    name: "apexrest_panel_status",
+    operation: "panel.status",
+    description: "Read the current panel snapshot: configuration, live agent steps, messages, reviews, QA, changes and deployment jobs. No database connection is made.",
+    readOnly: true
+  },
+  {
+    name: "apexrest_panel_action",
+    operation: "panel.action",
+    description: "Perform an explicit panel action: save future-team or SQLcl preferences, start/steer/stop a reviewed team, validate source, run checks or prepare a deployment plan. Existing trust and authorization apply; this does not bypass deployment approval.",
+    readOnly: false
+  },
   {
     name: "apexrest_team_start",
     operation: "team.start",
@@ -327,126 +359,14 @@ var toolCatalog = [
   }
 ];
 
-// packages/core/src/jobs.ts
-import path from "node:path";
-import { spawn } from "node:child_process";
-import { randomUUID } from "node:crypto";
-var JobService = class {
-  constructor(ctx) {
-    this.ctx = ctx;
-  }
-  ctx;
-  async start(operation, input, runtime) {
-    await requireTrust(this.ctx.root);
-    if (!["apex.generate", "apex.export", "apex.validate", "deploy.plan", "deploy.apply", "test.run"].includes(
-      operation
-    ))
-      throw new Fault("INVALID_JOB_OPERATION", "Operation cannot run as a background job.", 2);
-    const id = randomUUID(), root = await contained(this.ctx.root, ".apexrest/jobs/" + id);
-    await writeJson(path.join(root, "request.json"), {
-      id,
-      operation,
-      input: { ...input, project: this.ctx.root }
-    });
-    await writeJson(path.join(root, "state.json"), {
-      id,
-      status: "queued",
-      operation,
-      updatedAt: (/* @__PURE__ */ new Date()).toISOString()
-    });
-    const worker = spawn(process.execPath, [runtime, "--job-worker", this.ctx.root, id], {
-      cwd: this.ctx.root,
-      env: process.env,
-      detached: true,
-      stdio: "ignore",
-      windowsHide: true
-    });
-    await new Promise((resolve, reject) => {
-      worker.once("spawn", resolve);
-      worker.once("error", reject);
-    });
-    worker.unref();
-    return {
-      jobId: id,
-      status: "queued",
-      nextAction: "Poll job status; cancellation does not imply database rollback."
-    };
-  }
-  async status(id) {
-    parse(external_exports.uuid(), id);
-    const root = await contained(this.ctx.root, ".apexrest/jobs/" + id);
-    const state = await readJson(path.join(root, "state.json"));
-    if (["queued", "running"].includes(state.status) && Date.parse(state.updatedAt) + 6e4 < Date.now())
-      return {
-        ...state,
-        status: "outcome_unknown",
-        nextAction: "Worker heartbeat expired. Reconcile target before retrying."
-      };
-    return state;
-  }
-  async cancel(id) {
-    await requireTrust(this.ctx.root);
-    parse(external_exports.uuid(), id);
-    const state = await this.status(id);
-    if (!["queued", "running"].includes(state.status)) return state;
-    await writeJson(await contained(this.ctx.root, ".apexrest/jobs/" + id + "/cancel.json"), {
-      requestedAt: (/* @__PURE__ */ new Date()).toISOString()
-    });
-    return { jobId: id, status: "cancellation_requested", rollbackConfirmed: false };
-  }
-};
-async function executeJob(ctx, id, execute) {
-  await requireTrust(ctx.root);
-  parse(external_exports.uuid(), id);
-  const root = await contained(ctx.root, ".apexrest/jobs/" + id);
-  const request = await readJson(path.join(root, "request.json"));
-  const controller = new AbortController();
-  let done = false;
-  const pulse = async () => {
-    if (done) return;
-    if (await exists(path.join(root, "cancel.json"))) controller.abort();
-    if (!done)
-      await writeJson(path.join(root, "state.json"), {
-        id,
-        operation: request.operation,
-        status: "running",
-        updatedAt: (/* @__PURE__ */ new Date()).toISOString()
-      });
-  };
-  await pulse();
-  let pending = Promise.resolve();
-  const timer = setInterval(() => {
-    pending = pending.then(pulse).catch(() => {
-      controller.abort();
-    });
-  }, 2e3), timeout = setTimeout(() => controller.abort(), 9e5);
-  try {
-    const result = await execute(request.operation, request.input, controller.signal);
-    done = true;
-    clearInterval(timer);
-    clearTimeout(timeout);
-    await pending;
-    await writeJson(path.join(root, "state.json"), {
-      id,
-      status: "completed",
-      result,
-      updatedAt: (/* @__PURE__ */ new Date()).toISOString()
-    });
-  } finally {
-    done = true;
-    clearInterval(timer);
-    clearTimeout(timeout);
-  }
-}
-
 // packages/core/src/service.ts
-import path8 from "node:path";
+import path7 from "node:path";
 
 // packages/core/src/doctor.ts
-import path2 from "node:path";
+import path from "node:path";
 async function doctor() {
   const state = await runtimeState();
-  const java = process.env.APEXREST_JAVA_HOME ? path2.join(process.env.APEXREST_JAVA_HOME, "bin", process.platform === "win32" ? "java.exe" : "java") : state.java ?? "java";
+  const java = process.env.APEXREST_JAVA_HOME ? path.join(process.env.APEXREST_JAVA_HOME, "bin", process.platform === "win32" ? "java.exe" : "java") : state.java ?? "java";
   const probes = await Promise.all(
     [
       ["codex", ["--version"]],
@@ -461,7 +381,7 @@ async function doctor() {
           timeoutMs: 1e4,
           env: {
             ...process.env,
-            JAVA_HOME: path2.isAbsolute(java) ? path2.dirname(path2.dirname(java)) : process.env.JAVA_HOME
+            JAVA_HOME: path.isAbsolute(java) ? path.dirname(path.dirname(java)) : process.env.JAVA_HOME
           }
         });
         return {
@@ -492,7 +412,7 @@ async function doctor() {
 }
 
 // packages/core/src/references.ts
-import path3 from "node:path";
+import path2 from "node:path";
 import { stat, readFile } from "node:fs/promises";
 
 // packages/core/src/reference-index.ts
@@ -543,7 +463,7 @@ function indexReferences(upstream, file, digest) {
   const postings = () => pendingPostings ??= (async () => {
     if (file) {
       try {
-        const prebuilt = await readJson(path3.join(path3.dirname(file), "search.json"));
+        const prebuilt = await readJson(path2.join(path2.dirname(file), "search.json"));
         if (prebuilt && prebuilt.schemaVersion === 1 && prebuilt.indexSha256 === digest && prebuilt.postings && Object.values(prebuilt.postings).every(
           (list) => Array.isArray(list) && list.every(
             (n) => Number.isInteger(n) && Number(n) >= 0 && Number(n) < upstream.length
@@ -566,7 +486,7 @@ function indexReferences(upstream, file, digest) {
 }
 var cached;
 async function referenceIndex() {
-  const file = path3.join(resourceRoot(), "references/index.json");
+  const file = path2.join(resourceRoot(), "references/index.json");
   let info;
   try {
     info = await stat(file, { bigint: true });
@@ -695,7 +615,7 @@ async function referenceSync(version, dryRun) {
       "Requested version is not in this reviewed release snapshot. Install a reviewed release containing it.",
       3
     );
-  const destination = path3.join(managedHome(), "references", version + ".json");
+  const destination = path2.join(managedHome(), "references", version + ".json");
   const before = await exists(destination) ? hash(canonical(await readJson(destination))) : null, after = hash(canonical(entries));
   if (!dryRun && before !== after) await writeJson(destination, entries);
   return {
@@ -708,12 +628,12 @@ async function referenceSync(version, dryRun) {
 }
 
 // packages/core/src/deploy.ts
-import path5 from "node:path";
+import path4 from "node:path";
 import { readFile as readFile2, mkdir, cp, open } from "node:fs/promises";
-import { randomUUID as randomUUID2, verify } from "node:crypto";
+import { randomUUID, verify } from "node:crypto";
 
 // packages/core/src/deployment-control.ts
-import path4 from "node:path";
+import path3 from "node:path";
 import { hostname } from "node:os";
 import { rm } from "node:fs/promises";
 function coordination(env2) {
@@ -748,10 +668,10 @@ var LocalDeploymentControl = class {
   directory;
   constructor(env2) {
     const key = hash(canonical({ ...env2.databaseIdentity, schema: env2.parsingSchema }));
-    this.directory = path4.join(managedHome(), "deployment-control", key);
+    this.directory = path3.join(managedHome(), "deployment-control", key);
   }
   file(name) {
-    return path4.join(this.directory, name);
+    return path3.join(this.directory, name);
   }
   async history() {
     const file = this.file("history.json");
@@ -982,7 +902,7 @@ async function sourceInventory(ctx) {
     "playwright.config.ts",
     "playwright.config.mjs"
   ])
-    if (await exists(path5.join(ctx.root, relative)))
+    if (await exists(path4.join(ctx.root, relative)))
       files[relative] = hash(await readFile2(await contained(ctx.root, relative)));
   return Object.fromEntries(Object.entries(files).sort());
 }
@@ -1047,7 +967,7 @@ var DeploymentService = class {
       const sql = await readFile2(await contained(ctx.root, file), "utf8");
       risks.push(...migrationRisk(sql).map((r) => `${r}:${file}`));
       if (migration) {
-        const version = path5.basename(file);
+        const version = path4.basename(file);
         if (!/^\d{4,}__[A-Za-z0-9_-]+\.sql$/.test(version))
           throw new Fault(
             "INVALID_MIGRATION_NAME",
@@ -1076,7 +996,7 @@ var DeploymentService = class {
     operations.push({ kind: "import" }, { kind: "verify" }, { kind: "test" });
     const plan = {
       schemaVersion: 1,
-      id: randomUUID2(),
+      id: randomUUID(),
       projectId: ctx.config.projectId,
       projectRoot: ctx.root,
       environment: name,
@@ -1128,7 +1048,7 @@ var DeploymentService = class {
         if (!kind) continue;
         if (!file.endsWith(".sql"))
           throw new Fault("UNSUPPORTED_DB_SOURCE", "Database sources must be SQL files.", 5);
-        const previous = history.get(path5.basename(file));
+        const previous = history.get(path4.basename(file));
         if (kind === "migration" && previous && (previous.checksum !== sha256 || previous.status !== "succeeded"))
           throw new Fault("MIGRATION_HISTORY_CONFLICT", "Migration requires reconciliation.", 5);
         if (kind !== "migration" || !previous) expected.push({ kind, file, sha256 });
@@ -1207,7 +1127,7 @@ end;
       throw new Fault("COMPILER_DRIFT", "SQLcl version changed after plan.", 5);
     if (signal?.aborted)
       throw new Fault("CANCELLED", "Deployment cancelled before lease acquisition.", 6, "cancelled");
-    const runId = randomUUID2(), runs = path5.join(ctx.root, ".apexrest/deployments"), runDir = path5.join(runs, runId);
+    const runId = randomUUID(), runs = path4.join(ctx.root, ".apexrest/deployments"), runDir = path4.join(runs, runId);
     await mkdir(runDir, { recursive: true, mode: 448 });
     let state = "planned", writeStarted = false;
     const controller = new AbortController();
@@ -1226,16 +1146,16 @@ end;
         at: (/* @__PURE__ */ new Date()).toISOString(),
         details
       };
-      const journal = await open(path5.join(runDir, "journal.jsonl"), "a", 384);
+      const journal = await open(path4.join(runDir, "journal.jsonl"), "a", 384);
       try {
         await journal.writeFile(JSON.stringify(event) + "\n");
         await journal.sync();
       } finally {
         await journal.close();
       }
-      await writeJson(path5.join(runDir, "state.json"), event);
+      await writeJson(path4.join(runDir, "state.json"), event);
     };
-    await writeJson(path5.join(runDir, "plan.json"), plan);
+    await writeJson(path4.join(runDir, "plan.json"), plan);
     await record("approved");
     await this.lease(env2, deployConnection, runId, true);
     let renewing = false, leaseLost = false;
@@ -1254,13 +1174,13 @@ end;
       await record("backing_up");
       if (plan.backupRequired) {
         const backup = await this.oracle.exportApplication(env2, readConnection, "SQL");
-        const backupId = randomUUID2(), directory = path5.join(ctx.root, ".apexrest/backups", backupId);
+        const backupId = randomUUID(), directory = path4.join(ctx.root, ".apexrest/backups", backupId);
         await mkdir(directory, { recursive: true, mode: 448 });
-        await cp(backup.directory, path5.join(directory, "application"), { recursive: true });
-        const files = await inventory(path5.join(directory, "application"));
+        await cp(backup.directory, path4.join(directory, "application"), { recursive: true });
+        const files = await inventory(path4.join(directory, "application"));
         if (!Object.keys(files).length || hash(canonical(files)) !== backup.digest)
           throw new Fault("BACKUP_INVALID", "Backup copy failed checksum verification.", 1);
-        await writeJson(path5.join(directory, "backup.json"), {
+        await writeJson(path4.join(directory, "backup.json"), {
           schemaVersion: 1,
           backupId,
           targetDigest: plan.targetDigest,
@@ -1273,11 +1193,11 @@ end;
       await this.checkLocal(ctx, plan);
       if ((await this.fingerprint(env2, readConnection)).fingerprint !== plan.fingerprint)
         throw new Fault("TARGET_DRIFT", "Target changed during backup.", 5);
-      const snapshot = path5.join(runDir, "snapshot");
+      const snapshot = path4.join(runDir, "snapshot");
       await mkdir(snapshot);
       for (const [file, sha] of Object.entries(plan.sources)) {
         const source = await contained(ctx.root, file), destination = await contained(snapshot, file);
-        await mkdir(path5.dirname(destination), { recursive: true });
+        await mkdir(path4.dirname(destination), { recursive: true });
         await cp(source, destination);
         if (hash(await readFile2(destination)) !== sha)
           throw new Fault("SOURCE_DRIFT", "Source changed while freezing deployment.", 5);
@@ -1303,12 +1223,12 @@ commit;`,
           );
         await this.lease(env2, deployConnection, runId, false);
         const file = await contained(snapshot, operation.file);
-        const version = sqlLiteral(path5.basename(file));
+        const version = sqlLiteral(path4.basename(file));
         if (operation.kind === "migration") {
           if (coordination(env2).backend === "local")
             await new LocalDeploymentControl(env2).migration(
               runId,
-              path5.basename(file),
+              path4.basename(file),
               operation.sha256,
               "started"
             );
@@ -1332,7 +1252,7 @@ prompt APEXREST_SCRIPT_COMPLETE`,
           if (coordination(env2).backend === "local")
             await new LocalDeploymentControl(env2).migration(
               runId,
-              path5.basename(file),
+              path4.basename(file),
               operation.sha256,
               "succeeded"
             );
@@ -1356,7 +1276,7 @@ commit;`,
         );
         if (hash(canonical(await inventory(backupRoot))) !== plan.restore.checksum)
           throw new Fault("BACKUP_INVALID", "Restore source changed after approval.", 5);
-        const frozen = path5.join(runDir, "restore");
+        const frozen = path4.join(runDir, "restore");
         await cp(backupRoot, frozen, { recursive: true });
         const files = await inventory(frozen);
         if (hash(canonical(files)) !== plan.restore.checksum)
@@ -1375,7 +1295,7 @@ commit;`,
  apex_application_install.set_application_id(${env2.applicationId});
 end;
 /
-@${sqlclToken(path5.join(frozen, main[0]))}`,
+@${sqlclToken(path4.join(frozen, main[0]))}`,
           deployConnection,
           true,
           controller.signal
@@ -1385,7 +1305,7 @@ end;
           ctx,
           env2,
           deployConnection,
-          path5.join(snapshot, ctx.config.application.sourceDir),
+          path4.join(snapshot, ctx.config.application.sourceDir),
           controller.signal
         );
       await record("verifying");
@@ -1439,9 +1359,9 @@ commit;`,
   async reconcile(ctx, runId) {
     parse(external_exports.uuid(), runId);
     const directory = await contained(ctx.root, ".apexrest/deployments/" + runId);
-    const plan = parse(deployPlanSchema, await readJson(path5.join(directory, "plan.json"))), env2 = environment(ctx, plan.environment);
+    const plan = parse(deployPlanSchema, await readJson(path4.join(directory, "plan.json"))), env2 = environment(ctx, plan.environment);
     const current = await this.fingerprint(env2, await resolveConnection(env2.readConnectionRef));
-    const state = await readJson(path5.join(directory, "state.json"));
+    const state = await readJson(path4.join(directory, "state.json"));
     return {
       runId,
       state,
@@ -1458,8 +1378,8 @@ commit;`,
   async restorePlan(ctx, backupId) {
     parse(external_exports.uuid(), backupId);
     const directory = await contained(ctx.root, ".apexrest/backups/" + backupId);
-    const backup = await readJson(path5.join(directory, "backup.json"));
-    const files = await inventory(path5.join(directory, "application"));
+    const backup = await readJson(path4.join(directory, "backup.json"));
+    const files = await inventory(path4.join(directory, "application"));
     if (hash(canonical(files)) !== backup.digest)
       throw new Fault("BACKUP_INVALID", "Backup digest does not match.", 5);
     const plan = await this.plan(ctx, backup.environment);
@@ -1474,14 +1394,14 @@ commit;`,
 };
 
 // packages/core/src/testing.ts
-import path7 from "node:path";
-import { spawn as spawn2 } from "node:child_process";
+import path6 from "node:path";
+import { spawn } from "node:child_process";
 import { mkdir as mkdir2, readFile as readFile4, cp as cp2, chmod } from "node:fs/promises";
-import { randomUUID as randomUUID4 } from "node:crypto";
+import { randomUUID as randomUUID3 } from "node:crypto";
 
 // packages/core/src/artifacts.ts
-import path6 from "node:path";
-import { randomUUID as randomUUID3 } from "node:crypto";
+import path5 from "node:path";
+import { randomUUID as randomUUID2 } from "node:crypto";
 import { readFile as readFile3, readdir, rm as rm2 } from "node:fs/promises";
 var ArtifactService = class {
   constructor(ctx) {
@@ -1489,10 +1409,10 @@ var ArtifactService = class {
   }
   ctx;
   async save(content, kind) {
-    const id = randomUUID3(), directory = await contained(this.ctx.root, this.ctx.config.artifacts.directory);
+    const id = randomUUID2(), directory = await contained(this.ctx.root, this.ctx.config.artifacts.directory);
     const sanitized = redact(content);
-    await atomicWrite(path6.join(directory, id + ".txt"), sanitized);
-    await writeJson(path6.join(directory, id + ".json"), {
+    await atomicWrite(path5.join(directory, id + ".txt"), sanitized);
+    await writeJson(path5.join(directory, id + ".json"), {
       id,
       kind,
       sha256: hash(sanitized),
@@ -1533,10 +1453,10 @@ var ArtifactService = class {
     if (!await exists(directory)) return { removed };
     for (const file of await readdir(directory))
       if (/^[a-f0-9-]{36}\.json$/.test(file)) {
-        const metadata = await readJson(path6.join(directory, file));
+        const metadata = await readJson(path5.join(directory, file));
         if (Date.parse(metadata.expiresAt) < Date.now()) {
-          await rm2(path6.join(directory, file));
-          await rm2(path6.join(directory, file.replace(".json", ".txt")), { force: true });
+          await rm2(path5.join(directory, file));
+          await rm2(path5.join(directory, file.replace(".json", ".txt")), { force: true });
           removed++;
         }
       }
@@ -1617,7 +1537,7 @@ var TestService = class {
             "--experimental-strip-types",
             "--test",
             "--test-reporter=junit",
-            ...tests.map((f) => path7.join(dir, f))
+            ...tests.map((f) => path6.join(dir, f))
           ],
           cwd: ctx.root,
           ...signal ? { signal } : {},
@@ -1681,11 +1601,11 @@ end;
           skipped: 0,
           diagnostic: "Run apexrest setup to install pinned Playwright and Chromium."
         };
-      const runId = randomUUID4(), runnerRoot = path7.resolve(state.playwright, "../../../.."), run = path7.join(runnerRoot, "runs", runId);
+      const runId = randomUUID3(), runnerRoot = path6.resolve(state.playwright, "../../../.."), run = path6.join(runnerRoot, "runs", runId);
       await mkdir2(run, { recursive: true, mode: 448 });
-      await cp2(dir, path7.join(run, "tests"), { recursive: true });
-      await cp2(path7.join(resourceRoot(), "testkit"), path7.join(run, "testkit"), { recursive: true });
-      const auth = path7.join(ctx.root, ".apexrest/auth", envName, "state.json"), authMeta = auth + ".meta.json";
+      await cp2(dir, path6.join(run, "tests"), { recursive: true });
+      await cp2(path6.join(resourceRoot(), "testkit"), path6.join(run, "testkit"), { recursive: true });
+      const auth = path6.join(ctx.root, ".apexrest/auth", envName, "state.json"), authMeta = auth + ".meta.json";
       if (suite === "e2e" && (!await exists(auth) || !await exists(authMeta) || Date.parse((await readJson(authMeta)).expiresAt) < Date.now()))
         return {
           suite,
@@ -1696,8 +1616,8 @@ end;
           diagnostic: "Authenticated browser state is missing or expired. Run test auth interactively."
         };
       await atomicWrite(
-        path7.join(run, "playwright.config.mjs"),
-        `export default ${JSON.stringify({ testDir: "./tests", forbidOnly: true, retries: 0, timeout: 3e4, workers: 1, reporter: [["json", { outputFile: path7.join(run, "report.json") }]], use: { baseURL: env2.baseUrl, browserName: "chromium", serviceWorkers: "block", trace: "off", screenshot: "off", video: "off", ...suite === "e2e" ? { storageState: auth } : {} } })};
+        path6.join(run, "playwright.config.mjs"),
+        `export default ${JSON.stringify({ testDir: "./tests", forbidOnly: true, retries: 0, timeout: 3e4, workers: 1, reporter: [["json", { outputFile: path6.join(run, "report.json") }]], use: { baseURL: env2.baseUrl, browserName: "chromium", serviceWorkers: "block", trace: "off", screenshot: "off", video: "off", ...suite === "e2e" ? { storageState: auth } : {} } })};
 `
       );
       const result = await runProcess({
@@ -1706,20 +1626,20 @@ end;
           state.playwright,
           "test",
           "--config",
-          path7.join(run, "playwright.config.mjs"),
+          path6.join(run, "playwright.config.mjs"),
           ...headed ? ["--headed"] : []
         ],
         cwd: run,
         env: {
           ...process.env,
-          PLAYWRIGHT_BROWSERS_PATH: path7.join(managedHome(), "browsers"),
+          PLAYWRIGHT_BROWSERS_PATH: path6.join(managedHome(), "browsers"),
           APEXREST_ALLOWED_ORIGINS: JSON.stringify([new URL(env2.baseUrl).origin, ...env2.allowedOrigins]),
           APEXREST_EXPECTED_MARKER: env2.expectedMarker ?? ""
         },
         timeoutMs: 3e5,
         ...signal ? { signal } : {}
       });
-      const reportFile = path7.join(run, "report.json");
+      const reportFile = path6.join(run, "report.json");
       if (!await exists(reportFile))
         return {
           suite,
@@ -1757,7 +1677,7 @@ end;
     const results = [];
     for (const suite of ["unit", "sql", "api", "e2e"])
       results.push(await this.run(ctx, suite, name, signal));
-    const runId = randomUUID4(), ok = qualityGate(results, ctx.config.tests.requiredSuites);
+    const runId = randomUUID3(), ok = qualityGate(results, ctx.config.tests.requiredSuites);
     const report = {
       runId,
       ok,
@@ -1766,7 +1686,7 @@ end;
       required: ctx.config.tests.requiredSuites,
       createdAt: (/* @__PURE__ */ new Date()).toISOString()
     };
-    await writeJson(path7.join(ctx.root, ".apexrest/test-runs", runId + ".json"), report);
+    await writeJson(path6.join(ctx.root, ".apexrest/test-runs", runId + ".json"), report);
     return { ok, data: report };
   }
   async auth(ctx, name) {
@@ -1779,12 +1699,12 @@ end;
         "Run test auth in a local interactive terminal. Do not send passwords to Codex.",
         4
       );
-    const destination = path7.join(ctx.root, ".apexrest/auth", name, "state.json");
-    await mkdir2(path7.dirname(destination), { recursive: true, mode: 448 });
-    const helper = path7.join(path7.resolve(state.playwright, "../../../.."), "auth.mjs");
-    await cp2(path7.join(resourceRoot(), "playwright/auth.mjs"), helper);
+    const destination = path6.join(ctx.root, ".apexrest/auth", name, "state.json");
+    await mkdir2(path6.dirname(destination), { recursive: true, mode: 448 });
+    const helper = path6.join(path6.resolve(state.playwright, "../../../.."), "auth.mjs");
+    await cp2(path6.join(resourceRoot(), "playwright/auth.mjs"), helper);
     const code = await new Promise((resolve, reject) => {
-      const child = spawn2(
+      const child = spawn(
         state.node,
         [
           helper,
@@ -1794,7 +1714,7 @@ end;
         ],
         {
           cwd: ctx.root,
-          env: { ...process.env, PLAYWRIGHT_BROWSERS_PATH: path7.join(managedHome(), "browsers") },
+          env: { ...process.env, PLAYWRIGHT_BROWSERS_PATH: path6.join(managedHome(), "browsers") },
           stdio: ["inherit", "ignore", "inherit"]
         }
       );
@@ -1848,6 +1768,7 @@ async function sandboxAction(action) {
 }
 
 // packages/core/src/service.ts
+import { realpath } from "node:fs/promises";
 async function dispatch(operation, input = {}, signal) {
   try {
     if (signal?.aborted)
@@ -1862,6 +1783,17 @@ async function dispatch(operation, input = {}, signal) {
     const oracle = new OracleAdapter(), tests = new TestService(oracle), deployment = new DeploymentService(oracle, (ctx, env2) => tests.all(ctx, env2));
     let data;
     switch (operation) {
+      case "panel.open": {
+        const { openPanel } = await import("./chunk-DLGWIJX7.mjs");
+        data = await openPanel(await realpath(root));
+        break;
+      }
+      case "panel.status":
+        data = await new PanelService(root).snapshot(parsed.team);
+        break;
+      case "panel.action":
+        data = await new PanelService(root).act(panelActionSchema.parse(parsed).action);
+        break;
       case "version":
         data = { version: VERSION, node: process.version };
         break;
@@ -1878,29 +1810,29 @@ async function dispatch(operation, input = {}, signal) {
         );
         break;
       case "dependencies.install": {
-        const { ToolchainService } = await import("./chunk-T2Z5Z3XI.mjs");
+        const { ToolchainService } = await import("./chunk-PTZDLJVI.mjs");
         data = await new ToolchainService().apply(parsed);
         break;
       }
       case "dependencies.uninstall": {
-        const { uninstallTools } = await import("./chunk-X22Q5LNT.mjs");
+        const { uninstallTools } = await import("./chunk-WNKZ2HRB.mjs");
         data = await uninstallTools(parsed);
         break;
       }
       case "setup":
       case "plugin.install":
       case "plugin.update": {
-        const { setup: setup2 } = await import("./chunk-KO66Q3IF.mjs");
+        const { setup: setup2 } = await import("./chunk-JBTCTGO7.mjs");
         data = await setup2(parsed);
         break;
       }
       case "plugin.validate": {
-        const { validateNative } = await import("./chunk-KO66Q3IF.mjs");
+        const { validateNative } = await import("./chunk-JBTCTGO7.mjs");
         data = await validateNative(text("from"));
         break;
       }
       case "plugin.uninstall": {
-        const { uninstallNative } = await import("./chunk-KO66Q3IF.mjs");
+        const { uninstallNative } = await import("./chunk-JBTCTGO7.mjs");
         data = await uninstallNative(text("home") ?? managedHome(), Boolean(parsed.keepRuntime));
         break;
       }
@@ -1908,7 +1840,7 @@ async function dispatch(operation, input = {}, signal) {
         data = await projectInit(
           text("directory"),
           text("template"),
-          text("alias") ?? path8.basename(path8.resolve(text("directory"))).toLowerCase().replace(/[^a-z0-9-]/g, "-")
+          text("alias") ?? path7.basename(path7.resolve(text("directory"))).toLowerCase().replace(/[^a-z0-9-]/g, "-")
         );
         break;
       case "connection.add":
@@ -2111,7 +2043,5 @@ async function dispatch(operation, input = {}, signal) {
 export {
   schemas,
   toolCatalog,
-  JobService,
-  executeJob,
   dispatch
 };

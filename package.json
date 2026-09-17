@@ -1,6 +1,6 @@
 {
   "name": "@apexrest/codex",
-  "version": "0.1.0-beta.1",
+  "version": "0.1.0-beta.1+codex.20260917142816",
   "files": [
     "dist/runtime/",
     "dist/resources/",
