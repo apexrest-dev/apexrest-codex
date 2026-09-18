@@ -2,6 +2,8 @@
 
 English | [Українська](chat-workflow.uk.md)
 
+Choose execution mode (`team` or `single`) and verification browser (`codex` or `external`) in project settings. See [mode settings](work-modes.md). Independent review/QA descriptions below apply to team mode; screenshots from September 17 show the earlier panel.
+
 Describe an Oracle APEX change in the current Codex chat. The implicitly discoverable [APEX work from chat skill](../plugins/apexrest-apex/skills/apexrest-work/SKILL.md) starts a reviewed team, opens its live panel in the Codex in-app browser and returns the terminal result to the same chat. The user does not need to create a task in the web interface. The panel remains available for inspection and optional steering.
 
 ## Chat lifecycle
@@ -10,7 +12,7 @@ Describe an Oracle APEX change in the current Codex chat. The implicitly discove
 2. `apexrest_work_start` creates the internal team and prepares a private panel URL that selects this team and its Agent team view. A fresh UUID `requestId` identifies each task. Retrying exactly the same request reuses the team; reusing the UUID with different inputs is rejected.
 3. The host opens that URL with Codex's in-app browser tool. Codex CLI can show the panel in an interactive terminal, or report progress in the current conversation when no additional terminal surface is available. No external browser or new user-owned chat is required.
 4. `apexrest_team_wait` waits up to 30 seconds for a meaningful change or terminal state. Its cursor ignores heartbeat/token-only updates. The host keeps the request active, relays meaningful progress and passes user corrections to the existing team.
-5. The same chat receives the actual terminal result: changes, two manager reviews, independent QA evidence and limitations. Only `completed` with a current source digest counts as reviewed completion. A successful team is not a deployment authorization.
+5. The same chat receives the actual terminal result: changes, the single agent’s verification or the team’s two manager reviews and independent QA, plus limitations. Only `completed` with a current source digest counts as reviewed completion. A successful team is not a deployment authorization.
 
 A panel failure preserves the team ID and monitoring path. Do not start a replacement because display failed. An interrupted host turn can recover using the existing team ID. The plugin has no global chat interceptor or callback into arbitrary desktop conversations: native skill discovery selects the workflow, and the originating host turn opens the panel and reports the result. Installing or updating the plugin requires a new Codex task to refresh its cached skill/tool catalog.
 
@@ -18,7 +20,7 @@ Standalone reference questions, setup and connection diagnostics use individual 
 
 ## Auto models
 
-Auto is the only model-selection mode. It discovers the account's current models and supported reasoning levels through Codex App Server `model/list`. It supplies the model and supported effort on each `turn/start`, retaining the same separate role sessions. The manager's existing planning turn supplies a structured complexity assessment, so classification adds no model call. Negative scope restrictions alone do not imply complex work.
+Auto is the only model-selection mode. It discovers the account's current models and supported reasoning levels through Codex App Server `model/list`. It supplies the model and supported effort on each `turn/start`, retaining the same separate role sessions. The manager's planning turn, or the single agent's own planning turn, supplies a structured complexity assessment, so classification adds no model call. Negative scope restrictions alone do not imply complex work.
 
 | Work | Preferred selection |
 | --- | --- |

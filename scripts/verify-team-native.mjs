@@ -14,6 +14,11 @@ const project = path.join(root, 'project'),
 const runtime = path.resolve(process.argv[2] ?? 'dist/runtime/apexrest.mjs');
 const reportFile = path.resolve(process.argv[3] ?? 'docs/evidence/team-native-local.json');
 const developers = Number(process.argv[4] ?? 2);
+const executionMode = process.argv[5] ?? 'team';
+const browserMode = process.argv[6] ?? 'codex';
+const single = executionMode === 'single';
+if (!['team', 'single'].includes(executionMode) || !['codex', 'external'].includes(browserMode))
+  throw new Error('Invalid work mode.');
 if (![1, 2, 3].includes(developers)) throw new Error('Expected one to three developers.');
 await mkdir(project);
 await mkdir(home);
@@ -80,15 +85,25 @@ await writeFile(
   path.join(home, 'policy.json'),
   JSON.stringify({ schemaVersion: 1, trustedProjects: [project], grants: [] }),
 );
-const task =
+let task =
   'In this isolated local fixture, fix src/add.mjs so add(a,b) returns the sum of finite numeric arguments and throws TypeError for invalid input. Do not change add.test.mjs or any configuration. The ignored .apexrest directory is generated controller state, not pre-existing application source; its continuous updates are expected and are outside code acceptance. QA must independently run node --test add.test.mjs. Every role should call team_context and send at least one relevant message to a peer using team_message. Keep the plan and reports concise. Do not install, download, connect to a database, publish or touch files outside this project. This verifies Codex orchestration, not Oracle. Answer in English.';
+if (single)
+  task = task
+    .replace('QA must independently run', 'You must run')
+    .replace(
+      'Every role should call team_context and send at least one relevant message to a peer using team_message.',
+      'Call team_context. You are the only agent; implement and verify in your one session.',
+    );
 const evidence = {
+  executionMode,
+  browserMode,
   timestamp: new Date().toISOString(),
   sourceDigest: await sourceDigest(),
   platform: process.platform,
   runtime: 'built-package',
-  scope:
-    'Actual Codex App Server sessions, constrained fixture edit, manager review, independent local QA, final manager review. No Oracle or desktop attachment.',
+  scope: single
+    ? 'Actual single Codex session, constrained fixture edit and self-verification. No independent agent review, Oracle or SSO.'
+    : 'Actual Codex team sessions, constrained fixture edit, manager review, independent local QA and final manager review. No Oracle or SSO.',
   status: 'running',
 };
 const client = new Client({ name: 'apexrest-chat-work-native-verification', version: '1.0.0' });
@@ -107,7 +122,10 @@ const callTool = async (name, args) => {
   return result.data;
 };
 const requestId = randomUUID();
-const startInput = { requestId, task, developers, timeoutSeconds: 600 };
+await callTool('apexrest_panel_action', {
+  action: { kind: 'preferences', settings: { executionMode, browserMode, developers, timeoutSeconds: 600 } },
+});
+const startInput = { requestId, task };
 const started = await callTool('apexrest_work_start', startInput);
 const retry = await callTool('apexrest_work_start', startInput);
 evidence.chatStart = {
@@ -116,7 +134,10 @@ evidence.chatStart = {
   retryReusedTeam: retry.teamId === started.teamId,
 };
 await mkdir('.apexrest', { recursive: true });
-await writeFile('.apexrest/auto-native-session.private.json', JSON.stringify({ project, home, ...started }));
+await writeFile(
+  '.apexrest/' + executionMode + '-native-session.private.json',
+  JSON.stringify({ project, home, ...started }),
+);
 console.log(JSON.stringify({ fixture: project, teamId: started.teamId }));
 let last = '',
   cursor = started.cursor;
@@ -176,25 +197,32 @@ for (;;) {
       decision: q.report.decision,
       checks: q.report.checks,
     }));
-    evidence.sourceBound =
-      !!state.approvedDigest &&
-      state.reviews.filter((r) => r.revision === state.revision).length === 2 &&
-      state.reviews
-        .filter((r) => r.revision === state.revision)
-        .every((r) => r.digest === state.approvedDigest);
+    evidence.verification = full.verification;
+    evidence.sourceBound = single
+      ? !!state.completedDigest &&
+        full.verification?.at(-1)?.digest === state.completedDigest &&
+        state.reviews.length === 0 &&
+        state.qa.length === 0
+      : !!state.approvedDigest &&
+        state.reviews.filter((r) => r.revision === state.revision).length === 2 &&
+        state.reviews
+          .filter((r) => r.revision === state.revision)
+          .every((r) => r.digest === state.approvedDigest);
     evidence.preservedConfiguration =
       (await readFile(path.join(project, 'apexrest.json'), 'utf8')) === JSON.stringify(config);
     if (
       !evidence.sourceBound ||
       !evidence.preservedConfiguration ||
-      evidence.separateSessions !== developers + 2 ||
+      evidence.separateSessions !== (single ? 1 : developers + 2) ||
+      state.executionMode !== executionMode ||
+      state.browserMode !== browserMode ||
       !evidence.autoRouting ||
       !evidence.chatStart.panelReady ||
       !evidence.chatStart.retryReusedTeam ||
       !state.members.every(
         (m) =>
           evidence.observedRoleTools.some((o) => o.role === m.role && o.kind === 'team_context') &&
-          evidence.observedRoleTools.some((o) => o.role === m.role && o.kind === 'team_message'),
+          (single || evidence.observedRoleTools.some((o) => o.role === m.role && o.kind === 'team_message')),
       )
     )
       evidence.status = 'blocked';

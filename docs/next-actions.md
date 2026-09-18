@@ -2,6 +2,8 @@
 
 English | [Українська](next-actions.uk.md)
 
+[Execution and browser modes](work-modes.md) are implemented and checked locally. Start a new Codex chat to pick up the updated installed plugin's tools and instructions. The next separate check is an authorized APEX application with actual Google/SSO login in the selected browser and available controls for it. URL opening does not prove authentication or tests; automated Playwright keeps separate state. Native Windows/Linux, embedded MCP UI and a new Codex in-app browser observation remain unverified.
+
 [Chat-driven work and Auto models](chat-workflow.md) are implemented. Extend verification to implicit skill choice across fresh desktop and CLI chats, interrupted-host resumption, unavailable catalog variants and task-matched token/latency comparisons. Keep independent reviews mandatory and distinguish cumulative cached input from cost. Current native execution and in-app panel observations are recorded in the implementation status.
 
 

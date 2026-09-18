@@ -53,6 +53,7 @@ function protocol(
     rejectFirst?: boolean;
     qaFail?: boolean;
     malformed?: boolean;
+    failedTurn?: boolean;
     sourceEdit?: () => Promise<void>;
     taskUpdate?: () => Promise<void>;
     peer?: boolean;
@@ -90,11 +91,13 @@ function protocol(
         const instructions = String(params.developerInstructions);
         roles.set(
           threadId,
-          instructions.includes('single project manager')
-            ? 'manager'
-            : instructions.includes('independent QA')
-              ? 'qa'
-              : 'developer',
+          instructions.includes('only implementation agent')
+            ? 'single'
+            : instructions.includes('single project manager')
+              ? 'manager'
+              : instructions.includes('independent QA')
+                ? 'qa'
+                : 'developer',
         );
         starts.push(params);
         return {
@@ -130,7 +133,20 @@ function protocol(
               reason: 'Bounded fixture task.',
             });
         }
-        if (role === 'qa') {
+        if (
+          role === 'single' &&
+          (params.outputSchema as { properties?: { plan?: unknown } } | undefined)?.properties?.plan
+        )
+          output = JSON.stringify({
+            plan: 'Implement and verify the fixture.',
+            complexity: options.complexity ?? 'standard',
+            reason: 'Bounded local change.',
+          });
+        if (
+          role === 'qa' ||
+          (role === 'single' &&
+            (params.outputSchema as { properties?: { checks?: unknown } } | undefined)?.properties?.checks)
+        ) {
           output = options.malformed
             ? 'not a structured QA report'
             : JSON.stringify({
@@ -145,11 +161,15 @@ function protocol(
                 ],
               });
           await options.sourceEdit?.();
+          if (role === 'single') await options.taskUpdate?.();
         }
         if (role === 'manager' && reviewerTurns === 3) await options.taskUpdate?.();
         const turn = {
           id: 'turn-' + ++counter,
-          status: 'completed',
+          status: options.failedTurn ? 'failed' : 'completed',
+          ...(options.failedTurn
+            ? { error: { message: 'Fixture protocol error password=never-show-this' } }
+            : {}),
           items: [{ type: 'agentMessage', phase: 'final_answer', text: output }],
         };
         turns.set(threadId, turn);
@@ -383,4 +403,125 @@ test('active cancellation stops the workflow without accepting an approval', asy
   assert.equal(state.status, 'cancelled');
   assert.equal(state.approvedDigest, undefined);
   assert.deepEqual(mock.calls, ['manager', 'closed']);
+});
+
+async function preparedSingle(t: import('node:test').TestContext) {
+  const f = await prepared(t);
+  await writeJson(path.join(f.root, 'request.json'), {
+    task: 'Implement a fixture change.',
+    executionMode: 'single',
+    browserMode: 'external',
+    developers: 3,
+    timeoutSeconds: 30,
+  });
+  return f;
+}
+
+test('single mode creates exactly one session for planning, implementation and verification with full activity', async (t) => {
+  const { ctx, id } = await preparedSingle(t);
+  const mock = protocol();
+  const result = await executeTeam(ctx, id, mock.connect);
+  assert.equal(result.status, 'completed');
+  assert.equal(mock.starts.length, 1);
+  assert.deepEqual(mock.calls, ['single', 'single', 'single', 'closed']);
+  assert.equal(result.members.length, 1);
+  assert.equal(result.members[0]?.tokenUsage?.totalTokens, 100);
+  assert.equal(result.executionMode, 'single');
+  assert.equal(result.browserMode, 'external');
+  assert.equal(result.reviews.length, 0);
+  assert.equal(result.qa.length, 0);
+  assert.equal(result.verification?.[0]?.digest, result.completedDigest);
+  assert.equal(result.approvedDigest, undefined);
+  assert.ok(result.observations?.length);
+  assert.match(
+    String(mock.starts[0]?.developerInstructions),
+    /Interactive APEX verification browser: external/,
+  );
+  assert.deepEqual(
+    (mock.starts[0]?.dynamicTools as { name: string }[]).map((t) => t.name),
+    ['team_context'],
+  );
+  assert.equal((mock.starts[0]?.config as RpcObject)['agents.enabled'], false);
+  await writeFile(path.join(ctx.root, 'new-source.txt'), 'changed');
+  assert.equal((await new TeamService(ctx).snapshot(id)).status, 'result_stale');
+});
+
+test('single verification failures cannot complete and repairs keep the same session', async (t) => {
+  const { ctx, id } = await preparedSingle(t);
+  const mock = protocol({ qaFail: true });
+  const result = await executeTeam(ctx, id, mock.connect);
+  assert.equal(result.status, 'verification_failed');
+  assert.equal(result.revision, 3);
+  assert.equal(mock.starts.length, 1);
+  assert.equal(result.completedDigest, undefined);
+});
+
+test('single mode reports unavailable checks without pretending an independent QA pass', async (t) => {
+  const { ctx, id } = await preparedSingle(t);
+  const result = await executeTeam(ctx, id, protocol({ prerequisite: true }).connect);
+  assert.equal(result.status, 'blocked');
+  assert.equal(result.verification?.[0]?.report.checks[0]?.status, 'not_run');
+  assert.equal(result.completedDigest, undefined);
+});
+
+test('single mode includes late user steering in a fresh revision and delivers it to the sole agent', async (t) => {
+  const { ctx, id } = await preparedSingle(t);
+  let sent = false;
+  const mock = protocol({
+    taskUpdate: async () => {
+      if (!sent) {
+        sent = true;
+        await new TeamService(ctx).message(id, 'Also check empty input.');
+      }
+    },
+  });
+  const result = await executeTeam(ctx, id, mock.connect);
+  assert.equal(result.status, 'completed');
+  assert.equal(result.revision, 2);
+  assert.equal(result.messages[0]?.to, 'developer-1');
+  assert.equal(result.messages[0]?.status, 'delivered');
+  assert.equal(mock.starts.length, 1);
+});
+
+test('single mode refuses source drift during verification and honours active cancellation', async (t) => {
+  const { ctx, id } = await preparedSingle(t);
+  let revision = 0;
+  const result = await executeTeam(
+    ctx,
+    id,
+    protocol({ sourceEdit: () => writeFile(path.join(ctx.root, 'drift.txt'), String(++revision)) }).connect,
+  );
+  assert.equal(result.status, 'verification_failed');
+  assert.equal(result.completedDigest, undefined);
+});
+
+test('single active cancellation prevents completion', async (t) => {
+  const { ctx, id } = await preparedSingle(t);
+  const result = await executeTeam(
+    ctx,
+    id,
+    protocol({
+      cancelActive: async () => {
+        await new TeamService(ctx).cancel(id);
+      },
+    }).connect,
+  );
+  assert.equal(result.status, 'cancelled');
+  assert.equal(result.completedDigest, undefined);
+});
+
+test('single malformed verification blocks completion', async (t) => {
+  const { ctx, id } = await preparedSingle(t);
+  const result = await executeTeam(ctx, id, protocol({ malformed: true }).connect);
+  assert.equal(result.status, 'blocked');
+  assert.equal(result.completedDigest, undefined);
+});
+
+test('native turn failures retain a redacted diagnostic for the dashboard', async (t) => {
+  const { ctx, id } = await preparedSingle(t);
+  const result = await executeTeam(ctx, id, protocol({ failedTurn: true }).connect);
+  assert.equal(result.status, 'blocked');
+  assert.match(result.diagnostics.join(' '), /Fixture protocol error/);
+  assert.ok(!JSON.stringify(result.diagnostics).includes('never-show-this'));
+  assert.ok(result.observations?.some((o) => o.kind === 'turnError'));
 });

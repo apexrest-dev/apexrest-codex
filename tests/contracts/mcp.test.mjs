@@ -23,7 +23,10 @@ test('team workers cannot launch teams and reviewers receive only read-only doma
     const { tools } = await client.listTools();
     assert.ok(tools.length > 0);
     assert.ok(tools.every((tool) => !/^apexrest_(team|panel|work)_/.test(tool.name)));
-    if (role !== 'developer-1') assert.ok(tools.every((tool) => tool.annotations.readOnlyHint));
+    if (role !== 'developer-1')
+      assert.ok(
+        tools.every((tool) => tool.annotations.readOnlyHint || tool.name === 'apexrest_browser_open'),
+      );
     else assert.ok(tools.some((tool) => tool.name === 'apexrest_apex_validate'));
     const recursive = await client.callTool({ name: 'apexrest_team_start', arguments: {} });
     assert.equal(JSON.parse(recursive.content[0].text).diagnostics[0].code, 'UNKNOWN_TOOL');
@@ -41,7 +44,7 @@ test('real stdio MCP initialize/list/call, CLI parity and bounded catalog', asyn
   const start = performance.now();
   await client.connect(transport);
   const catalog = await client.listTools();
-  assert.equal(catalog.tools.length, 23);
+  assert.equal(catalog.tools.length, 24);
   const panelTool = catalog.tools.find((tool) => tool.name === 'apexrest_panel_open');
   assert.equal(panelTool._meta.ui.resourceUri, 'ui://apexrest/development-panel.html');
   const resources = await client.listResources();
@@ -97,6 +100,7 @@ test('MCP project tools require an explicit absolute path before dispatch or job
     }),
   );
   const inputs = {
+    apexrest_browser_open: { env: 'dev' },
     apexrest_work_start: { task: 'Inspect the project.', requestId: '12345678-1234-4123-8123-123456789abc' },
     apexrest_team_wait: { id: '12345678-1234-4123-8123-123456789abc' },
     apexrest_panel_open: {},

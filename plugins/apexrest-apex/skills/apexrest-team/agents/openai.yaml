@@ -1,4 +1,4 @@
 interface:
-  display_name: "Reviewed development team"
-  short_description: "Develop with mandatory manager and QA reviews"
-  default_prompt: "Use $apexrest-team. Complete my Oracle APEX task with developer, manager review and independent QA."
+  display_name: "Development agents"
+  short_description: "Run a single agent or a team with mandatory reviews"
+  default_prompt: "Use $apexrest-team. Complete my Oracle APEX task using my saved execution mode."

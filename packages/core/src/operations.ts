@@ -116,6 +116,7 @@ export const schemas = {
   }),
   'test.report': z.strictObject({ ...base, run: z.uuid() }),
   'test.auth': z.strictObject({ ...base, env }),
+  'browser.open': z.strictObject({ ...base, env }),
   'jobs.status': z.strictObject({ ...base, id: z.uuid() }),
   'jobs.cancel': z.strictObject({ ...base, id: z.uuid() }),
   'artifacts.read': z.strictObject({
@@ -138,10 +139,18 @@ export const toolCatalog: {
   destructive?: boolean;
 }[] = [
   {
+    name: 'apexrest_browser_open',
+    operation: 'browser.open',
+    description:
+      'Open the explicit APEX environment in the configured verification browser: return a Codex in-app handoff or launch the system browser for interactive SSO. Does not verify the page, copy credentials or run automated suites.',
+    readOnly: false,
+    destructive: false,
+  },
+  {
     name: 'apexrest_work_start',
     operation: 'work.start',
     description:
-      'Start reviewed Oracle APEX work from this chat and prepare its private agent panel. Use a fresh UUID requestId per task; exact retries reuse the same team. Open the returned panel URL inside Codex, wait for the team and report in this chat. Auto model routing; no web form required.',
+      'Start Oracle APEX work using saved single-agent or team preferences from this chat and prepare its private agent panel. Use a fresh UUID requestId per task; exact retries reuse the same team. Open the returned panel URL inside Codex, wait for the team and report in this chat. Auto model routing; no web form required.',
     readOnly: false,
   },
   {
@@ -170,21 +179,21 @@ export const toolCatalog: {
     name: 'apexrest_panel_action',
     operation: 'panel.action',
     description:
-      'Perform an explicit panel action: save future-team or SQLcl preferences, start/steer/stop a reviewed team, validate source, run checks or prepare a deployment plan. Existing trust and authorization apply; this does not bypass deployment approval.',
+      'Perform an explicit panel action: save execution/browser or SQLcl preferences, start/steer/stop a run, validate source, run checks or prepare a deployment plan. Existing trust and authorization apply; this does not bypass deployment approval.',
     readOnly: false,
   },
   {
     name: 'apexrest_team_start',
     operation: 'team.start',
     description:
-      'Run a fixed Codex team: developers, mandatory manager code review, independent QA, and mandatory manager QA review. Separate owned sessions share scoped messages. Completion requires every review to pass on unchanged source.',
+      'Start Codex work using saved preferences or explicit executionMode: single creates one agent for implementation and verification; team enforces developer, manager and independent QA reviews. Both retain dashboard activity, steering and source-bound completion.',
     readOnly: false,
   },
   {
     name: 'apexrest_team_status',
     operation: 'team.status',
     description:
-      'Read team phase, role sessions, delivery status and enforced review results. Completed means both manager reviews and QA passed for the recorded source digest.',
+      'Read team phase, role sessions, delivery status and enforced review results. Inspect executionMode: completed means self-verification in single mode, or both manager reviews and QA in team mode, on the recorded source digest.',
     readOnly: true,
   },
   {

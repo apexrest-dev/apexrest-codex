@@ -57,7 +57,9 @@ export async function startMcp() {
       (!t.operation.startsWith('team.') &&
         !t.operation.startsWith('work.') &&
         !t.operation.startsWith('panel.') &&
-        (process.env.APEXREST_TEAM_ROLE?.startsWith('developer') || t.readOnly)),
+        (process.env.APEXREST_TEAM_ROLE?.startsWith('developer') ||
+          t.readOnly ||
+          t.operation === 'browser.open')),
   );
   const server = new Server(
     { name: 'apexrest-apex', version: VERSION },

@@ -62,18 +62,20 @@ function help() {
   if (key === 'panel.action')
     lines.push(
       '',
-      'Pass --action as one JSON object. Supported kinds: preferences, sqlcl, start, message, cancel-team, cancel-job, validate, test, plan.',
+      'Pass --action as one JSON object. Supported kinds: preferences, sqlcl, start, message, cancel-team, cancel-job, validate, test, browser, plan.',
       'Example: apexrest panel action --action \'{"kind":"validate"}\' --project PATH --json',
     );
   if (key === 'team.start' || key === 'work.start')
     lines.push(
       '',
-      'Run separate Codex manager, developer and QA sessions with mandatory reviews.',
+      'Use saved project preferences unless explicitly overridden.',
+      '--execution-mode team|single selects a reviewed team or one agent that implements and verifies.',
+      '--browser-mode codex|external selects interactive APEX verification; the dashboard stays in Codex.',
       '--developers 1..3 defaults to 1; edits are serialized in the project.',
       '--sandbox read-only|workspace-write defaults to workspace-write for developers.',
       '--timeout-seconds 30..3600 defaults to 900. No interactive approvals are auto-granted.',
       'The configured project must already be trusted and Codex must be logged in.',
-      'Returns a team ID immediately. Read team status for the reviewed result.',
+      'Returns a team ID immediately. Read team status for the result and verification evidence.',
       'Models and reasoning are selected automatically; there is no manual model option.',
     );
   if (key === 'work.start')

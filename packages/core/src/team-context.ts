@@ -4,6 +4,8 @@ import type { TeamRole, TeamState } from './team-schema.ts';
 // inflated context without replacing independent inspection of source/evidence.
 export function compactTeamContext(state: TeamState, role: TeamRole, fullReport: string) {
   return {
+    executionMode: state.executionMode ?? 'team',
+    browserMode: state.browserMode ?? 'codex',
     phase: state.phase,
     revision: state.revision,
     fullReport,
@@ -31,6 +33,16 @@ export function compactTeamContext(state: TeamState, role: TeamRole, fullReport:
       decision: q.report.decision,
       summary: q.report.summary.slice(0, 800),
       checks: q.report.checks.map((c) => ({
+        name: c.name.slice(0, 160),
+        status: c.status,
+        evidence: c.evidence.slice(0, 300),
+      })),
+    })),
+    verification: state.verification?.slice(-1).map((v) => ({
+      revision: v.revision,
+      decision: v.report.decision,
+      summary: v.report.summary.slice(0, 800),
+      checks: v.report.checks.map((c) => ({
         name: c.name.slice(0, 160),
         status: c.status,
         evidence: c.evidence.slice(0, 300),

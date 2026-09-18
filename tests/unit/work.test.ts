@@ -4,10 +4,10 @@ import path from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { rm } from 'node:fs/promises';
 import { fixture } from '../fixtures/project.ts';
-import { writeJson } from '../../packages/core/src/fs.ts';
+import { writeJson, readJson } from '../../packages/core/src/fs.ts';
 import { startWork, waitForTeam, teamProgressCursor } from '../../packages/core/src/work.ts';
 import { TeamService } from '../../packages/core/src/team.ts';
-import type { TeamRequest, TeamState } from '../../packages/core/src/team-schema.ts';
+import { teamStartSchema, type TeamRequest, type TeamState } from '../../packages/core/src/team-schema.ts';
 
 async function setup(t: import('node:test').TestContext) {
   const { ctx } = await fixture(),
@@ -44,10 +44,18 @@ async function setup(t: import('node:test').TestContext) {
     snapshot: team.snapshot.bind(team),
     async start(request: TeamRequest, id: string = requestId) {
       starts++;
+      state.executionMode = request.executionMode ?? 'team';
+      state.browserMode = request.browserMode ?? 'codex';
       const directory = await team.directory(id);
       await writeJson(path.join(directory, 'request.json'), request);
       await writeJson(path.join(directory, 'state.json'), state);
-      return { teamId: id, status: 'queued', nextAction: 'Wait.' };
+      return {
+        teamId: id,
+        executionMode: state.executionMode,
+        browserMode: state.browserMode,
+        status: 'queued',
+        nextAction: 'Wait.',
+      };
     },
   };
   const input = {
@@ -159,4 +167,56 @@ test('wait ignores heartbeat and tool-only changes and returns meaningful progre
   const result = await waitForTeam(f.ctx, { id: f.state.id, cursor: next.cursor, waitSeconds: 1 });
   assert.equal(result.terminal, true);
   assert.equal(result.team.status, 'blocked');
+});
+
+test('chat inherits saved preferences and exact retries retain their original mode after settings change', async (t) => {
+  const f = await setup(t);
+  const file = path.join(f.ctx.root, '.apexrest/panel/preferences.json');
+  await writeJson(file, {
+    executionMode: 'single',
+    browserMode: 'external',
+    developers: 3,
+    sandbox: 'read-only',
+    timeoutSeconds: 300,
+  });
+  const input = { requestId: f.input.requestId, task: f.input.task };
+  assert.equal(teamStartSchema.parse({ task: input.task }).developers, undefined);
+  const first = await startWork(f.ctx, input, f.panel, f.fake);
+  assert.equal(first.executionMode, 'single');
+  assert.equal(first.browserMode, 'external');
+  const saved = (await readJson(
+    path.join(await f.team.directory(first.teamId), 'request.json'),
+  )) as TeamRequest;
+  assert.equal(saved.developers, 1);
+  assert.equal(saved.sandbox, 'read-only');
+  assert.equal(saved.timeoutSeconds, 300);
+  await writeJson(file, { executionMode: 'team', browserMode: 'codex' });
+  const retry = await startWork(f.ctx, input, f.panel, f.fake);
+  assert.equal(retry.executionMode, 'single');
+  assert.equal(f.starts(), 1);
+  await assert.rejects(startWork(f.ctx, { ...input, executionMode: 'team' }, f.panel, f.fake), {
+    code: 'WORK_REQUEST_CONFLICT',
+  });
+});
+
+test('explicit launch options override preferences without silently resetting other saved options', async (t) => {
+  const f = await setup(t);
+  await writeJson(path.join(f.ctx.root, '.apexrest/panel/preferences.json'), {
+    executionMode: 'single',
+    browserMode: 'external',
+    timeoutSeconds: 300,
+  });
+  await startWork(
+    f.ctx,
+    { requestId: f.input.requestId, task: f.input.task, executionMode: 'team', developers: 2 },
+    f.panel,
+    f.fake,
+  );
+  const saved = (await readJson(
+    path.join(await f.team.directory(f.input.requestId), 'request.json'),
+  )) as TeamRequest;
+  assert.equal(saved.executionMode, 'team');
+  assert.equal(saved.developers, 2);
+  assert.equal(saved.browserMode, 'external');
+  assert.equal(saved.timeoutSeconds, 300);
 });

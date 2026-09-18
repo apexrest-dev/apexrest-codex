@@ -2,6 +2,8 @@
 
 English | [Українська](agent-workflow.uk.md)
 
+Choose execution mode (`team` or `single`) and verification browser (`codex` or `external`) in project settings. See [mode settings](work-modes.md). Independent review/QA descriptions below apply to team mode; screenshots from September 17 show the earlier panel.
+
 APEXREST runs an implementation through separate Codex sessions for a project manager, developers and independent QA. The runtime creates the roles and enforces the review order. The manager assigns work and reviews it; the developer cannot approve their own implementation, and a manager approval cannot turn failed QA into success.
 
 This guide covers the complete user flow in **Codex desktop and Codex CLI**: opening the panel, starting a task, following the agents, changing a requirement, handling a failed check and moving an accepted change into the authorized APEX deployment workflow. The shorter [team API reference](team.md), [panel reference](panel.md) and [Codex source audit](codex-integration.md) describe the individual interfaces.

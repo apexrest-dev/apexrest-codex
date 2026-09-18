@@ -16,7 +16,9 @@ APEXREST connects native Codex skills and MCP tools to Oracle SQLcl. Generate AP
 
 > **Beta: `0.1.0-beta.1`.** Real Oracle template compilation and Codex native installation have been exercised in the environments recorded below. Stable release readiness is still blocked by the remaining integration, recovery and platform checks. Independent APEXREST tooling; not an official Oracle or OpenAI product.
 
-Describe the implementation in Codex chat: `$apexrest-work` starts the team, opens its in-app panel and returns the reviewed result to the same conversation. Models and reasoning use Auto; no web form or manual model configuration is required. See [chat workflow and Auto models](docs/chat-workflow.md). The team retains separate developers, mandatory manager code review, independent QA and final manager review. See [team APIs and review gates](docs/team.md) and the [Codex source audit](docs/codex-integration.md).
+Describe the implementation in Codex chat: `$apexrest-work` starts the configured single agent or team, opens its in-app panel and returns the reviewed result to the same conversation. Models and reasoning use Auto; no web form or manual model configuration is required. See [chat workflow and Auto models](docs/chat-workflow.md). The team retains separate developers, mandatory manager code review, independent QA and final manager review. See [team APIs and review gates](docs/team.md) and the [Codex source audit](docs/codex-integration.md).
+
+Settings offer **Single agent / Agent team** and **Codex in-app browser / External system browser** for APEX verification. Both execution modes have a live dashboard. [Settings and verification boundaries](docs/work-modes.md).
 
 Open `$apexrest-panel` for live project settings, Pokémon agent activity, mandatory reviews, QA and APEX operations inside Codex. The console view is `apexrest panel tui`. See the [development panel](docs/panel.md).
 

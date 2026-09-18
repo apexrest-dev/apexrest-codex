@@ -1,15 +1,22 @@
 import path from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
 import { z } from 'zod';
-import { canonical, hash, contained, exists, readJson, withLock } from './fs.ts';
+import { canonical, hash, contained, exists, readJson, writeJson, withLock } from './fs.ts';
 import { parse, requireTrust, type ProjectContext } from './config.ts';
 import { Fault, redact } from './result.ts';
 import { TeamService, teamActive } from './team.ts';
-import { teamStartSchema, workStartSchema, teamWaitSchema, type TeamState } from './team-schema.ts';
+import {
+  teamStartSchema,
+  resolvedTeamStartSchema,
+  workStartSchema,
+  teamWaitSchema,
+  type TeamState,
+} from './team-schema.ts';
+import { resolveWorkRequest } from './work-preferences.ts';
 import { openPanel } from './panel-server.ts';
 
 export function teamProgressCursor(
-  state: Pick<TeamState, 'status' | 'phase' | 'revision' | 'members' | 'reviews' | 'qa'>,
+  state: Pick<TeamState, 'status' | 'phase' | 'revision' | 'members' | 'reviews' | 'qa' | 'verification'>,
 ) {
   // Heartbeats and token updates alone must not cause a chat polling loop.
   return hash(
@@ -20,6 +27,7 @@ export function teamProgressCursor(
       members: state.members.map((m) => [m.role, m.status]),
       reviews: state.reviews.length,
       qa: state.qa.length,
+      verification: state.verification?.length ?? 0,
     }),
   );
 }
@@ -39,8 +47,14 @@ export async function startWork(
     await contained(ctx.root, '.apexrest/work-' + requestId + '.lock'),
     async () => {
       const directory = await team.directory(requestId);
+      const inputFile = path.join(directory, 'work-input.json');
       if (await exists(path.join(directory, 'request.json'))) {
-        if (canonical(await readJson(path.join(directory, 'request.json'))) !== canonical(request))
+        const saved = await readJson(path.join(directory, 'request.json'));
+        const matches = (await exists(inputFile))
+          ? canonical(await readJson(inputFile)) === canonical(request)
+          : canonical(resolvedTeamStartSchema.parse(saved)) ===
+            canonical(resolvedTeamStartSchema.parse(request));
+        if (!matches)
           throw new Fault(
             'WORK_REQUEST_CONFLICT',
             'This request ID belongs to a different task. Inspect the original team.',
@@ -54,7 +68,11 @@ export async function startWork(
             6,
             'outcome_unknown',
           );
-      } else await team.start(request, requestId);
+      } else {
+        const effective = await resolveWorkRequest(ctx.root, request);
+        await writeJson(inputFile, request);
+        await team.start(effective, requestId);
+      }
       return team.snapshot(requestId);
     },
   );
@@ -76,6 +94,8 @@ export async function startWork(
   }
   return {
     teamId: requestId,
+    executionMode: state.executionMode ?? 'team',
+    browserMode: state.browserMode ?? 'codex',
     status: state.status,
     cursor: teamProgressCursor(state),
     panel: display,

@@ -82,14 +82,14 @@ export function selectTeamModel(
       reason = 'Two implementation repair cycles failed; escalating the next scheduled turn.';
     } else if (policy.complexity === 'complex' && role !== 'qa') {
       tier = 'strong';
-      reason = 'Manager assessed complex work: ' + policy.reason;
+      reason = 'Task assessment: complex work. ' + policy.reason;
     } else if (
       policy.complexity === 'simple' &&
       role.startsWith('developer') &&
       policy.repairFailures === 0
     ) {
       tier = 'fast';
-      reason = 'Manager assessed a bounded simple change: ' + policy.reason;
+      reason = 'Task assessment: bounded simple change. ' + policy.reason;
     } else if (policy.repairFailures === 1) {
       reason = 'One implementation repair cycle failed; use at least balanced reasoning.';
     }

@@ -30,9 +30,17 @@ const badge = (value: string) =>
         ? 'good'
         : active(value)
           ? 'running'
-          : ['failed', 'fail', 'blocked', 'review_failed', 'outcome_unknown', 'unavailable'].includes(value)
+          : [
+                'failed',
+                'fail',
+                'blocked',
+                'review_failed',
+                'verification_failed',
+                'outcome_unknown',
+                'unavailable',
+              ].includes(value)
             ? 'bad'
-            : ['revise', 'review_stale', 'not_run', 'cancelled'].includes(value)
+            : ['revise', 'review_stale', 'result_stale', 'not_run', 'cancelled'].includes(value)
               ? 'warn'
               : ''),
     human(value),
@@ -74,7 +82,9 @@ let snapshot: PanelSnapshot | undefined,
   chosenTeam: string | undefined = launch.get('team') ?? undefined,
   busy = false,
   connected = false,
-  initialized = false;
+  initialized = false,
+  preferencesDirty = false,
+  preferencesSignature = '';
 let bridgeProject: string | undefined,
   bridgeReady = false,
   requestId = 0;
@@ -182,12 +192,13 @@ async function act(action: PanelAction) {
       ['sqlcl', 'preferences'].includes(action.kind)
         ? 'Settings saved for future runs.'
         : action.kind === 'message'
-          ? 'Task update queued for the manager.'
+          ? 'Task update queued for the active workflow.'
           : action.kind.startsWith('cancel')
             ? 'Stop requested. Existing changes are not rolled back.'
             : 'Operation accepted. Follow its actual status below.',
     );
     if (action.kind === 'message') input('message').value = '';
+    if (action.kind === 'preferences') preferencesDirty = false;
     await refresh();
   } catch (error) {
     notice(error instanceof Error ? error.message : String(error), true);
@@ -209,9 +220,7 @@ function pipeline(data: PanelSnapshot) {
   const team = data.team,
     box = node('div');
   if (!team) {
-    box.append(
-      empty('No team yet. Start a task to see developers, manager reviews and independent QA here.'),
-    );
+    box.append(empty('No run yet. Start a task to follow its agents, tools and verification here.'));
     return card('Development workflow', box);
   }
   const head = node('div', 'section-heading');
@@ -236,7 +245,10 @@ function pipeline(data: PanelSnapshot) {
           ' seconds. Token counts are cumulative, including cached input; they are not a cost estimate.',
       ),
     );
-  const stages = ['planning', 'development', 'code_review', 'qa', 'final_review'],
+  const stages =
+      team.executionMode === 'single'
+        ? ['planning', 'development', 'verification']
+        : ['planning', 'development', 'code_review', 'qa', 'final_review'],
     index = stages.indexOf(team.phase);
   const bar = node('div', 'steps');
   stages.forEach((phase, i) =>
@@ -260,7 +272,10 @@ function pipeline(data: PanelSnapshot) {
     avatar.alt = identity.name;
     avatar.width = 64;
     avatar.height = 64;
-    label.append(node('span', '', member.name ?? identity.name), node('small', 'subtle', identity.label));
+    label.append(
+      node('span', '', member.name ?? identity.name),
+      node('small', 'subtle', team.executionMode === 'single' ? 'Single agent' : identity.label),
+    );
     title.append(avatar);
     title.append(label);
     cell.append(
@@ -323,12 +338,28 @@ function pipeline(data: PanelSnapshot) {
   box.append(agents);
   if (team.diagnostics.length) box.append(node('p', 'notice error', team.diagnostics.join('\n')));
   if (team.result) box.append(node('p', 'notice', team.result));
-  return card('Development workflow', box, 'Separate Codex sessions · mandatory manager and QA reviews');
+  return card(
+    'Development workflow',
+    box,
+    (team.executionMode === 'single'
+      ? 'Single agent · implementation and self-verification'
+      : 'Agent team · mandatory manager and QA reviews') +
+      ' · Browser: ' +
+      (team.browserMode === 'external' ? 'External' : 'Codex in-app'),
+  );
 }
 function reviews(data: PanelSnapshot) {
   const box = node('div'),
     team = data.team;
-  if (!team?.reviews.length && !team?.qa.length)
+  if (team?.executionMode === 'single')
+    box.append(
+      node(
+        'p',
+        'subtle',
+        'Checks performed by the implementation agent. Independent manager review and QA are not part of this run.',
+      ),
+    );
+  if (!team?.reviews.length && !team?.qa.length && !team?.verification?.length)
     box.append(empty('Review evidence appears after development.'));
   for (const item of team?.reviews ?? []) {
     const row = node('div', 'review'),
@@ -343,10 +374,18 @@ function reviews(data: PanelSnapshot) {
     if (list.childNodes.length) row.append(list);
     box.append(row);
   }
-  for (const item of team?.qa ?? []) {
+  for (const item of team?.executionMode === 'single' ? (team.verification ?? []) : (team?.qa ?? [])) {
     const row = node('div', 'review'),
       head = node('div', 'section-heading');
-    head.append(node('h3', '', 'Independent QA · revision ' + item.revision), badge(item.report.decision));
+    head.append(
+      node(
+        'h3',
+        '',
+        (team?.executionMode === 'single' ? 'Agent verification · revision ' : 'Independent QA · revision ') +
+          item.revision,
+      ),
+      badge(item.report.decision),
+    );
     row.append(head, node('p', '', item.report.summary));
     for (const check of item.report.checks) {
       const checkRow = node('div', 'review');
@@ -374,8 +413,7 @@ function activity(data: PanelSnapshot) {
 }
 function messages(data: PanelSnapshot) {
   const box = node('div');
-  if (!data.team?.messages.length)
-    box.append(empty('Messages between the manager, developers and QA will appear here.'));
+  if (!data.team?.messages.length) box.append(empty('Task updates and agent messages will appear here.'));
   for (const message of data.team?.messages ?? []) {
     const row = node('div', 'activity');
     row.append(
@@ -385,7 +423,7 @@ function messages(data: PanelSnapshot) {
     );
     box.append(row);
   }
-  return card('Team communication', box);
+  return card('Communication', box);
 }
 function operations(data: PanelSnapshot) {
   const box = node('div', 'table-wrap');
@@ -455,15 +493,22 @@ function render(data: PanelSnapshot) {
   $('updated').textContent = 'Updated ' + new Date(data.updatedAt).toLocaleTimeString();
   $('connection-error').hidden = true;
   document.body.dataset.disconnected = 'false';
+  const nextPreferences = JSON.stringify(data.preferences);
+  if (!preferencesDirty && nextPreferences !== preferencesSignature) {
+    for (const prefix of ['default', 'task']) {
+      input(prefix + '-execution-mode').value = data.preferences.executionMode;
+      input(prefix + '-browser-mode').value = data.preferences.browserMode;
+      input(prefix + '-developers').value = String(data.preferences.developers);
+      modeControls(prefix);
+      input(prefix + '-sandbox').value = data.preferences.sandbox;
+      input(prefix + '-timeout').value = String(data.preferences.timeoutSeconds);
+    }
+    preferencesSignature = nextPreferences;
+  }
   if (!initialized) {
     initialized = true;
     input('sqlcl-mode').value = data.sqlcl.mode;
     input('sqlcl-level').value = data.sqlcl.mcpRestrictLevel;
-    for (const prefix of ['default', 'task']) {
-      input(prefix + '-developers').value = String(data.preferences.developers);
-      input(prefix + '-sandbox').value = data.preferences.sandbox;
-      input(prefix + '-timeout').value = String(data.preferences.timeoutSeconds);
-    }
     const environment = $<HTMLSelectElement>('environment');
     for (const [name, env] of Object.entries(data.configuration?.environments ?? {})) {
       const option = node('option', '', name + ' · ' + env.kind);
@@ -498,14 +543,18 @@ function render(data: PanelSnapshot) {
     teamSelect.value = data.team?.id ?? '';
     teamSelect.disabled = !options.length;
   }
-  draw('metrics', [data.teams, data.sqlcl, data.jobs, data.team?.status], () =>
+  draw('metrics', [data.teams, data.sqlcl, data.jobs, data.team?.status, data.team?.executionMode], () =>
     [
       [
-        'Active team',
+        'Active runs',
         String(data.teams.filter((team) => active(team.status)).length),
         data.team ? human(data.team.phase) : 'Ready for a new task',
       ],
-      ['Review gate', data.team ? human(data.team.status) : 'No result', 'Manager + independent QA'],
+      [
+        data.team?.executionMode === 'single' ? 'Verification' : 'Review gate',
+        data.team ? human(data.team.status) : 'No result',
+        data.team?.executionMode === 'single' ? 'Single-agent checks' : 'Manager + independent QA',
+      ],
       ['APEX operations', String(data.jobs.filter((job) => active(job.status)).length), 'Running or queued'],
       [
         'Oracle transport',
@@ -560,6 +609,7 @@ function render(data: PanelSnapshot) {
   draw(
     'settings-live',
     [
+      data.preferences,
       data.configuration,
       data.connections,
       data.toolchain,
@@ -580,7 +630,14 @@ function render(data: PanelSnapshot) {
               data.configuration ? data.configuration.artifacts.retentionDays + ' days' : null,
             ],
             ['Required suites', data.configuration?.tests.requiredSuites.join(', ') || 'None declared'],
-            ['Browser', data.configuration?.tests.defaultBrowser],
+            ['Automated browser', data.configuration?.tests.defaultBrowser],
+            [
+              'Verification browser',
+              data.preferences.browserMode === 'external'
+                ? 'External system browser'
+                : 'Codex in-app browser',
+            ],
+            ['Execution mode', data.preferences.executionMode === 'single' ? 'Single agent' : 'Agent team'],
             ['Active deploy/test grants', data.permissions.activeGrants.length],
           ]),
         ),
@@ -640,7 +697,7 @@ async function refresh() {
 }
 const views: Record<string, [string, string]> = {
   overview: ['Workspace overview', 'Your team, settings and APEX work in one place.'],
-  team: ['Agent team', 'Follow implementation, communication and required review gates.'],
+  team: ['Agents', 'Follow implementation, communication and verification.'],
   operations: ['APEX operations', 'Compile, verify and follow deployment state.'],
   settings: ['Workspace settings', 'Inspect effective configuration and choose defaults for future work.'],
 };
@@ -664,7 +721,10 @@ $('refresh').onclick = () => {
 };
 $('new-task').onclick = () => {
   if (snapshot) {
+    input('task-execution-mode').value = snapshot.preferences.executionMode;
+    input('task-browser-mode').value = snapshot.preferences.browserMode;
     input('task-developers').value = String(snapshot.preferences.developers);
+    modeControls('task');
     input('task-sandbox').value = snapshot.preferences.sandbox;
     input('task-timeout').value = String(snapshot.preferences.timeoutSeconds);
   }
@@ -682,17 +742,33 @@ $('task-form').onsubmit = (event) => {
     kind: 'start',
     request: {
       task: input('task').value,
+      executionMode: input('task-execution-mode').value as 'team' | 'single',
+      browserMode: input('task-browser-mode').value as 'codex' | 'external',
       developers: Number(input('task-developers').value),
       sandbox: input('task-sandbox').value as 'read-only' | 'workspace-write',
       timeoutSeconds: Number(input('task-timeout').value),
     },
   });
 };
+function modeControls(prefix: string) {
+  const single = input(prefix + '-execution-mode').value === 'single';
+  input(prefix + '-developers').disabled = single;
+  $(prefix + '-workflow-note').textContent = single
+    ? 'One agent plans, implements and verifies. Activity, messages and checks remain visible here.'
+    : 'Plan → developers → manager review → independent QA → final manager review. Reviewers remain read only.';
+}
+for (const prefix of ['default', 'task'])
+  input(prefix + '-execution-mode').onchange = () => modeControls(prefix);
+$('preferences-form').oninput = () => {
+  preferencesDirty = true;
+};
 $('preferences-form').onsubmit = (event) => {
   event.preventDefault();
   void act({
     kind: 'preferences',
     settings: {
+      executionMode: input('default-execution-mode').value as 'team' | 'single',
+      browserMode: input('default-browser-mode').value as 'codex' | 'external',
       developers: Number(input('default-developers').value),
       sandbox: input('default-sandbox').value as 'read-only' | 'workspace-write',
       timeoutSeconds: Number(input('default-timeout').value),

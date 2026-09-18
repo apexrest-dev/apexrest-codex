@@ -1,11 +1,25 @@
 import { z } from 'zod';
 
-export const teamStartSchema = z.strictObject({
-  project: z.string().optional(),
-  task: z.string().trim().min(1).max(16000),
+export const workPreferencesSchema = z.strictObject({
+  executionMode: z.enum(['team', 'single']).default('team'),
+  browserMode: z.enum(['codex', 'external']).default('codex'),
   developers: z.number().int().min(1).max(3).default(1),
   sandbox: z.enum(['read-only', 'workspace-write']).default('workspace-write'),
   timeoutSeconds: z.number().int().min(30).max(3600).default(900),
+});
+// Keep omitted options absent at transport boundaries so saved preferences win.
+export const teamStartSchema = z.strictObject({
+  executionMode: workPreferencesSchema.shape.executionMode.removeDefault().optional(),
+  browserMode: workPreferencesSchema.shape.browserMode.removeDefault().optional(),
+  developers: workPreferencesSchema.shape.developers.removeDefault().optional(),
+  sandbox: workPreferencesSchema.shape.sandbox.removeDefault().optional(),
+  timeoutSeconds: workPreferencesSchema.shape.timeoutSeconds.removeDefault().optional(),
+  project: z.string().optional(),
+  task: z.string().trim().min(1).max(16000),
+});
+export const resolvedTeamStartSchema = workPreferencesSchema.extend({
+  project: z.string().optional(),
+  task: teamStartSchema.shape.task,
 });
 export const teamIdSchema = z.strictObject({ project: z.string().optional(), id: z.uuid() });
 export const workStartSchema = teamStartSchema.extend({ requestId: z.uuid() });
@@ -49,7 +63,8 @@ export type TeamRequest = z.infer<typeof teamStartSchema>;
 export type Review = z.infer<typeof reviewSchema>;
 export type QaReport = z.infer<typeof qaSchema>;
 export type TeamRole = 'manager' | 'qa' | 'developer-1' | 'developer-2' | 'developer-3';
-export type TeamPhase = 'queued' | 'planning' | 'development' | 'code_review' | 'qa' | 'final_review';
+export type TeamPhase =
+  'queued' | 'planning' | 'development' | 'code_review' | 'qa' | 'final_review' | 'verification';
 export interface ModelSelection {
   mode: 'auto';
   tier: 'fast' | 'balanced' | 'strong';
@@ -93,6 +108,8 @@ export interface TeamMessage {
 }
 export interface TeamState {
   id: string;
+  executionMode?: 'team' | 'single';
+  browserMode?: 'codex' | 'external';
   status: string;
   phase: TeamPhase;
   updatedAt: string;
@@ -112,6 +129,8 @@ export interface TeamState {
     at?: string;
   }[];
   approvedDigest?: string;
+  completedDigest?: string;
+  verification?: { revision: number; digest: string; report: QaReport }[];
   modelPolicy?: {
     mode: 'auto';
     complexity: 'simple' | 'standard' | 'complex';

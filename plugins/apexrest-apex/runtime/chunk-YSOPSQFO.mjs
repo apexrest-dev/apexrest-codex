@@ -3,10 +3,16 @@ import {
   dispatch,
   schemas,
   toolCatalog
-} from "./chunk-TRQZWEKW.mjs";
+} from "./chunk-OFNIUM7N.mjs";
 import {
   panelDocument
-} from "./chunk-5S7CBHIF.mjs";
+} from "./chunk-S7O65K5Z.mjs";
+import {
+  JobService
+} from "./chunk-XDCPF2Z3.mjs";
+import {
+  VERSION
+} from "./chunk-WWBXTYRS.mjs";
 import {
   AjvJsonSchemaValidator,
   CallToolRequestSchema,
@@ -17,6 +23,7 @@ import {
   ElicitResultSchema,
   EmptyResultSchema,
   ErrorCode,
+  Fault,
   InitializeRequestSchema,
   InitializedNotificationSchema,
   LATEST_PROTOCOL_VERSION,
@@ -32,26 +39,17 @@ import {
   SetLevelRequestSchema,
   assertClientRequestTaskCapability,
   assertToolsCallTaskCapability,
-  getLiteralValue,
-  getObjectShape,
-  mergeCapabilities,
-  safeParse,
-  serializeMessage
-} from "./chunk-5X6KTDSR.mjs";
-import {
-  JobService
-} from "./chunk-FT4HB4SQ.mjs";
-import {
-  VERSION
-} from "./chunk-5MUOGWVK.mjs";
-import {
-  Fault,
   external_exports,
   failure,
+  getLiteralValue,
+  getObjectShape,
   loadProject,
+  mergeCapabilities,
   parse,
+  safeParse,
+  serializeMessage,
   success
-} from "./chunk-2M4WFEIW.mjs";
+} from "./chunk-GKQBRVST.mjs";
 
 // node_modules/@modelcontextprotocol/sdk/dist/esm/experimental/tasks/server.js
 var ExperimentalServerTasks = class {
@@ -725,7 +723,7 @@ for (const { operation } of toolCatalog) {
 }
 async function startMcp() {
   const exposed = toolCatalog.filter(
-    (t) => process.env.APEXREST_TEAM_WORKER !== "1" || !t.operation.startsWith("team.") && !t.operation.startsWith("work.") && !t.operation.startsWith("panel.") && (process.env.APEXREST_TEAM_ROLE?.startsWith("developer") || t.readOnly)
+    (t) => process.env.APEXREST_TEAM_WORKER !== "1" || !t.operation.startsWith("team.") && !t.operation.startsWith("work.") && !t.operation.startsWith("panel.") && (process.env.APEXREST_TEAM_ROLE?.startsWith("developer") || t.readOnly || t.operation === "browser.open")
   );
   const server = new Server(
     { name: "apexrest-apex", version: VERSION },

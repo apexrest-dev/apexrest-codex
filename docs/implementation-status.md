@@ -2,6 +2,14 @@
 
 English | [Українська](implementation-status.uk.md)
 
+## Single agent, team and browser selection — 2026-09-18
+
+Settings implement `executionMode: team|single` and `browserMode: codex|external`. Saved preferences apply to chat, CLI and panel; active runs and exact retries retain their original options. Single creates one session for planning, implementation and self-verification with live actions, tokens, messages and cancellation. Manager/QA gates remain mandatory in `team` mode. The dashboard labels the selected mode and self-verification separately. `apexrest_browser_open` returns a Codex handoff or launches the system browser; opening alone never counts as a passed check. See [settings](work-modes.md).
+
+[Single-agent execution](evidence/single-agent-native.json) and [team execution](evidence/team-mode-native.json) record actual Codex sessions on isolated local coding tasks, real source edits and independent harness tests. The [first team attempt](evidence/team-mode-native-first-attempt.json) preserves a failed manager turn without false completion; native turn errors now reach panel diagnostics with secret redaction. [Native installation](evidence/work-modes-discovery-native.json) checks an isolated profile, 24 MCP tools and 13 skills. [Local checks](evidence/work-modes-local.json) cover types, lint, unit, contracts, installers, packaging, docs and plugin validation.
+
+The [single-agent panel](evidence/single-panel-browser.json) and [team panel](evidence/team-panel-browser.json) are checked with local Chrome/Playwright: all four setting combinations, persistence after reload, correct roles/phases/results and a 390 px viewport. This is not Codex in-app control. [Browser routing evidence](evidence/browser-modes-native.json) records exact MCP responses and actual system-browser navigation to a local fixture. `open_in_codex` queued its tab; new Codex in-app observation is unverified. Google SSO, connected Oracle and native Windows/Linux launches were not tested. Historical evidence below retains its own source scope.
+
 ## Chat workflow and Auto models — 2026-09-17
 
 The [chat workflow](chat-workflow.md) adds `apexrest_work_start`, bounded `apexrest_team_wait` and the implicitly discoverable `apexrest-work` skill. The originating Codex conversation starts the internal team, opens its selected in-app panel and reports the reviewed terminal result. Exact retries reuse the request ID; panel failure preserves monitoring. The host skill handles presentation; this is not a global message interceptor or a callback into closed conversations.

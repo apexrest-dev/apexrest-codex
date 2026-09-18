@@ -9,6 +9,7 @@ import { parse, requireTrust, type ProjectContext } from './config.ts';
 import { Fault } from './result.ts';
 import { teamSourceDigest } from './team-source.ts';
 import { teamStartSchema, teamMessageSchema, type TeamRequest, type TeamState } from './team-schema.ts';
+import { resolveWorkRequest } from './work-preferences.ts';
 
 export const teamActive = new Set(['queued', 'running', 'cancelling']);
 export const teamRuntime = () => path.join(path.dirname(fileURLToPath(import.meta.url)), 'apexrest.mjs');
@@ -22,7 +23,7 @@ export class TeamService {
     await requireTrust(this.ctx.root);
     if (process.env.APEXREST_TEAM_WORKER === '1')
       throw new Fault('TEAM_RECURSION', 'Team workers cannot create another team.', 2);
-    const request = parse(teamStartSchema, input);
+    const request = await resolveWorkRequest(this.ctx.root, parse(teamStartSchema, input));
     const root = await this.directory(id);
     if (await exists(path.join(root, 'request.json')))
       throw new Fault(
@@ -34,6 +35,8 @@ export class TeamService {
     await writeJson(path.join(root, 'request.json'), { ...request, project: this.ctx.root });
     await writeJson(path.join(root, 'state.json'), {
       id,
+      executionMode: request.executionMode,
+      browserMode: request.browserMode,
       status: 'queued',
       phase: 'queued',
       revision: 0,
@@ -69,9 +72,11 @@ export class TeamService {
     }
     return {
       teamId: id,
+      executionMode: request.executionMode,
+      browserMode: request.browserMode,
       status: 'queued',
       nextAction:
-        'Use team status for progress and reviewed results; team message steers the team; team cancel requests a stop.',
+        'Use team status for progress and verification evidence; team message sends task updates; team cancel requests a stop.',
     };
   }
   async status(id: string): Promise<TeamState> {
@@ -89,10 +94,16 @@ export class TeamService {
   }
   async snapshot(id: string) {
     const state = await this.status(id);
-    if (state.status === 'completed' && state.approvedDigest !== (await teamSourceDigest(this.ctx.root))) {
-      state.status = 'review_stale';
+    const single = state.executionMode === 'single';
+    if (
+      state.status === 'completed' &&
+      (single ? state.completedDigest : state.approvedDigest) !== (await teamSourceDigest(this.ctx.root))
+    ) {
+      state.status = single ? 'result_stale' : 'review_stale';
       state.diagnostics.push(
-        'Project files changed after approval. Run the full review cycle for the new source.',
+        single
+          ? 'Project files changed after verification. Verify the new source.'
+          : 'Project files changed after approval. Run the full review cycle for the new source.',
       );
     }
     return {
@@ -117,6 +128,16 @@ export class TeamService {
           ...q.report,
           summary: q.report.summary.slice(0, 400),
           checks: q.report.checks
+            .slice(0, 4)
+            .map((c) => ({ ...c, name: c.name.slice(0, 100), evidence: c.evidence.slice(0, 200) })),
+        },
+      })),
+      verification: (state.verification ?? []).slice(-3).map((v) => ({
+        ...v,
+        report: {
+          ...v.report,
+          summary: v.report.summary.slice(0, 400),
+          checks: v.report.checks
             .slice(0, 4)
             .map((c) => ({ ...c, name: c.name.slice(0, 100), evidence: c.evidence.slice(0, 200) })),
         },

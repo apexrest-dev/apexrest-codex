@@ -2,6 +2,8 @@
 
 English | [Українська](team.uk.md)
 
+Choose execution mode (`team` or `single`) and verification browser (`codex` or `external`) in project settings. See [mode settings](work-modes.md). Independent review/QA descriptions below apply to team mode; screenshots from September 17 show the earlier panel.
+
 New implementation requests use [APEX work from chat](chat-workflow.md): Codex starts the team, opens its panel and returns the result in the originating conversation. [Auto routing](chat-workflow.md#auto-models) selects supported models and reasoning for each scheduled turn without a manual selector.
 
 For a complete walkthrough with actual screenshots, see [Agent workflow: from task to reviewed result](agent-workflow.md).

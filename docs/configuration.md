@@ -2,6 +2,8 @@
 
 English | [Українська](configuration.uk.md)
 
+Choose execution mode (`team` or `single`) and verification browser (`codex` or `external`) in project settings. See [mode settings](work-modes.md). Independent review/QA descriptions below apply to team mode; screenshots from September 17 show the earlier panel.
+
 A project has one `apexrest.json` and one pinned toolchain lock. `project init` creates both, with an empty environment map. Every target operation requires an explicit environment; the plugin never guesses a database, workspace or application ID.
 
 ## Configure an environment

@@ -1,5 +1,10 @@
 import { createRequire as __createRequire } from 'node:module'; const require = __createRequire(import.meta.url);
 import {
+  resolveWorkRequest,
+  teamMessageSchema,
+  teamStartSchema
+} from "./chunk-QU2LZEF3.mjs";
+import {
   Fault,
   canonical,
   contained,
@@ -12,47 +17,7 @@ import {
   requireTrust,
   withLock,
   writeJson
-} from "./chunk-2M4WFEIW.mjs";
-
-// packages/core/src/team-schema.ts
-var teamStartSchema = external_exports.strictObject({
-  project: external_exports.string().optional(),
-  task: external_exports.string().trim().min(1).max(16e3),
-  developers: external_exports.number().int().min(1).max(3).default(1),
-  sandbox: external_exports.enum(["read-only", "workspace-write"]).default("workspace-write"),
-  timeoutSeconds: external_exports.number().int().min(30).max(3600).default(900)
-});
-var teamIdSchema = external_exports.strictObject({ project: external_exports.string().optional(), id: external_exports.uuid() });
-var workStartSchema = teamStartSchema.extend({ requestId: external_exports.uuid() });
-var teamWaitSchema = teamIdSchema.extend({
-  cursor: external_exports.string().regex(/^[a-f0-9]{64}$/).optional(),
-  waitSeconds: external_exports.number().int().min(1).max(30).default(25)
-});
-var teamMessageSchema = teamIdSchema.extend({ message: external_exports.string().trim().min(1).max(8e3) });
-var planningSchema = external_exports.strictObject({
-  plan: external_exports.string().min(1).max(6e3),
-  complexity: external_exports.enum(["simple", "standard", "complex"]),
-  reason: external_exports.string().min(1).max(600)
-});
-var reviewSchema = external_exports.strictObject({
-  decision: external_exports.enum(["approve", "revise"]),
-  summary: external_exports.string().min(1).max(4e3),
-  findings: external_exports.array(external_exports.string().min(1).max(2e3)).max(20)
-});
-var routedReviewSchema = reviewSchema.extend({
-  revisionCause: external_exports.enum(["none", "implementation", "prerequisite"])
-});
-var qaSchema = external_exports.strictObject({
-  decision: external_exports.enum(["pass", "fail", "blocked"]),
-  summary: external_exports.string().min(1).max(4e3),
-  checks: external_exports.array(
-    external_exports.strictObject({
-      name: external_exports.string().min(1).max(500),
-      status: external_exports.enum(["passed", "failed", "not_run"]),
-      evidence: external_exports.string().min(1).max(2e3)
-    })
-  ).min(1).max(20)
-});
+} from "./chunk-GKQBRVST.mjs";
 
 // packages/core/src/team-source.ts
 import path from "node:path";
@@ -97,7 +62,7 @@ var TeamService = class {
     await requireTrust(this.ctx.root);
     if (process.env.APEXREST_TEAM_WORKER === "1")
       throw new Fault("TEAM_RECURSION", "Team workers cannot create another team.", 2);
-    const request = parse(teamStartSchema, input);
+    const request = await resolveWorkRequest(this.ctx.root, parse(teamStartSchema, input));
     const root = await this.directory(id);
     if (await exists(path2.join(root, "request.json")))
       throw new Fault(
@@ -109,6 +74,8 @@ var TeamService = class {
     await writeJson(path2.join(root, "request.json"), { ...request, project: this.ctx.root });
     await writeJson(path2.join(root, "state.json"), {
       id,
+      executionMode: request.executionMode,
+      browserMode: request.browserMode,
       status: "queued",
       phase: "queued",
       revision: 0,
@@ -144,8 +111,10 @@ var TeamService = class {
     }
     return {
       teamId: id,
+      executionMode: request.executionMode,
+      browserMode: request.browserMode,
       status: "queued",
-      nextAction: "Use team status for progress and reviewed results; team message steers the team; team cancel requests a stop."
+      nextAction: "Use team status for progress and verification evidence; team message sends task updates; team cancel requests a stop."
     };
   }
   async status(id) {
@@ -163,10 +132,11 @@ var TeamService = class {
   }
   async snapshot(id) {
     const state = await this.status(id);
-    if (state.status === "completed" && state.approvedDigest !== await teamSourceDigest(this.ctx.root)) {
-      state.status = "review_stale";
+    const single = state.executionMode === "single";
+    if (state.status === "completed" && (single ? state.completedDigest : state.approvedDigest) !== await teamSourceDigest(this.ctx.root)) {
+      state.status = single ? "result_stale" : "review_stale";
       state.diagnostics.push(
-        "Project files changed after approval. Run the full review cycle for the new source."
+        single ? "Project files changed after verification. Verify the new source." : "Project files changed after approval. Run the full review cycle for the new source."
       );
     }
     return {
@@ -189,6 +159,14 @@ var TeamService = class {
           ...q.report,
           summary: q.report.summary.slice(0, 400),
           checks: q.report.checks.slice(0, 4).map((c) => ({ ...c, name: c.name.slice(0, 100), evidence: c.evidence.slice(0, 200) }))
+        }
+      })),
+      verification: (state.verification ?? []).slice(-3).map((v) => ({
+        ...v,
+        report: {
+          ...v.report,
+          summary: v.report.summary.slice(0, 400),
+          checks: v.report.checks.slice(0, 4).map((c) => ({ ...c, name: c.name.slice(0, 100), evidence: c.evidence.slice(0, 200) }))
         }
       })),
       fullReport: ".apexrest/teams/" + id + "/state.json"
@@ -228,14 +206,6 @@ var TeamService = class {
 };
 
 export {
-  teamStartSchema,
-  teamIdSchema,
-  workStartSchema,
-  teamWaitSchema,
-  teamMessageSchema,
-  planningSchema,
-  routedReviewSchema,
-  qaSchema,
   teamSourceDigest,
   teamActive,
   teamRuntime,

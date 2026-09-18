@@ -10,7 +10,7 @@ export function panelLines(data: PanelSnapshot, tab: number): string[] {
     return [
       `Oracle transport: SQLcl ${data.sqlcl.mode.toUpperCase()} · restriction ${data.sqlcl.mcpRestrictLevel}`,
       `Trusted: ${data.trusted} · configured: ${data.configured}`,
-      'Future team defaults: ' + JSON.stringify(data.preferences),
+      'Future work defaults: ' + JSON.stringify(data.preferences),
       'Model selection: Auto (task complexity and implementation repair results; no manual override).',
       ...JSON.stringify(
         {
@@ -37,7 +37,7 @@ export function panelLines(data: PanelSnapshot, tab: number): string[] {
     ];
   const lines = [
     team
-      ? `TEAM · ${team.status} · ${team.phase} · revision ${team.revision}`
+      ? `${team.executionMode === 'single' ? 'SINGLE AGENT' : 'TEAM'} · ${team.status} · ${team.phase} · revision ${team.revision}`
       : 'No team yet. Use apexrest team start "Task" in Codex.',
     '',
   ];
@@ -77,7 +77,13 @@ export function panelLines(data: PanelSnapshot, tab: number): string[] {
       '',
     );
   if (tab === 1) {
-    lines.push('MANDATORY REVIEWS');
+    lines.push(team?.executionMode === 'single' ? 'AGENT VERIFICATION' : 'MANDATORY REVIEWS');
+    for (const v of team?.verification ?? [])
+      lines.push(
+        `${v.report.decision} · revision ${v.revision}`,
+        v.report.summary,
+        ...v.report.checks.map((c) => `${c.status} · ${c.name}: ${c.evidence}`),
+      );
     for (const r of team?.reviews ?? [])
       lines.push(
         `${r.phase}: ${r.report.decision} · revision ${r.revision}`,

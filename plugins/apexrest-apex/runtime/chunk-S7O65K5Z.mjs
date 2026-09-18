@@ -1,14 +1,11 @@
 import { createRequire as __createRequire } from 'node:module'; const require = __createRequire(import.meta.url);
 import {
-  resourceRoot
-} from "./chunk-5X6KTDSR.mjs";
-import {
   PanelService,
   panelActionSchema
-} from "./chunk-FT4HB4SQ.mjs";
+} from "./chunk-XDCPF2Z3.mjs";
 import {
   teamRuntime
-} from "./chunk-2X5UC4WR.mjs";
+} from "./chunk-OEOKHSHA.mjs";
 import {
   Fault,
   contained,
@@ -16,9 +13,10 @@ import {
   failure,
   parse,
   readJson,
+  resourceRoot,
   withLock,
   writeJson
-} from "./chunk-2M4WFEIW.mjs";
+} from "./chunk-GKQBRVST.mjs";
 
 // packages/core/src/panel-server.ts
 import path from "node:path";

@@ -287,6 +287,11 @@ export async function dispatch(operation: string, input: Record<string, unknown>
           case 'test.auth':
             data = await tests.auth(ctx, text('env'));
             break;
+          case 'browser.open': {
+            const { openVerificationBrowser } = await import('./browser.ts');
+            data = await openVerificationBrowser(ctx, text('env'));
+            break;
+          }
           case 'jobs.status':
             data = await new JobService(ctx).status(text('id'));
             break;

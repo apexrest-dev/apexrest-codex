@@ -1,21 +1,21 @@
 import { createRequire as __createRequire } from 'node:module'; const require = __createRequire(import.meta.url);
 import {
   TeamService,
-  teamRuntime,
-  teamStartSchema
-} from "./chunk-2X5UC4WR.mjs";
+  teamRuntime
+} from "./chunk-OEOKHSHA.mjs";
+import {
+  openVerificationBrowser,
+  teamStartSchema,
+  workPreferences,
+  workPreferencesSchema
+} from "./chunk-QU2LZEF3.mjs";
 import {
   VERSION
-} from "./chunk-5MUOGWVK.mjs";
-import {
-  configureSqlcl,
-  connections,
-  runProcess,
-  sqlclConfig,
-  sqlclConfigSchema
-} from "./chunk-TDSYBJUK.mjs";
+} from "./chunk-WWBXTYRS.mjs";
 import {
   Fault,
+  configureSqlcl,
+  connections,
   contained,
   exists,
   external_exports,
@@ -24,12 +24,15 @@ import {
   policy,
   readJson,
   requireTrust,
+  runProcess,
   sanitized,
+  sqlclConfig,
+  sqlclConfigSchema,
   writeJson
-} from "./chunk-2M4WFEIW.mjs";
+} from "./chunk-GKQBRVST.mjs";
 
 // packages/core/src/panel-schema.ts
-var panelPreferencesSchema = teamStartSchema.omit({ project: true, task: true });
+var panelPreferencesSchema = workPreferencesSchema;
 var panelReadSchema = external_exports.strictObject({
   project: external_exports.string().min(1).max(4096).optional(),
   team: external_exports.uuid().optional()
@@ -44,6 +47,7 @@ var panelActionSchema = external_exports.strictObject({
     external_exports.strictObject({ kind: external_exports.literal("cancel-team"), id: external_exports.uuid() }),
     external_exports.strictObject({ kind: external_exports.literal("cancel-job"), id: external_exports.uuid() }),
     external_exports.strictObject({ kind: external_exports.literal("validate") }),
+    external_exports.strictObject({ kind: external_exports.literal("browser"), env: external_exports.string().min(1).max(100) }),
     external_exports.strictObject({
       kind: external_exports.literal("test"),
       suite: external_exports.enum(["unit", "sql", "api", "e2e", "all"]),
@@ -175,8 +179,7 @@ var PanelService = class {
   }
   root;
   async preferences() {
-    const file = await contained(this.root, ".apexrest/panel/preferences.json");
-    return await exists(file) ? parse(panelPreferencesSchema, await readJson(file)) : panelPreferencesSchema.parse({});
+    return workPreferences(this.root);
   }
   async records(folder) {
     const base = await contained(this.root, ".apexrest/" + folder);
@@ -239,7 +242,8 @@ var PanelService = class {
       phase: String(row.phase ?? "unknown"),
       revision: Number(row.revision ?? 0),
       updatedAt: String(row.updatedAt ?? ""),
-      members: Array.isArray(row.members) ? row.members.length : 0
+      members: Array.isArray(row.members) ? row.members.length : 0,
+      executionMode: row.executionMode === "single" ? "single" : "team"
     })).map(
       (row) => ["queued", "running"].includes(row.status) && Date.parse(row.updatedAt) + 6e4 < Date.now() ? { ...row, status: "outcome_unknown" } : row
     );
@@ -311,7 +315,7 @@ var PanelService = class {
     });
   }
   async act(action) {
-    parse(panelActionSchema, { action });
+    action = parse(panelActionSchema, { action }).action;
     this.root = await realpath(this.root);
     await requireTrust(this.root);
     if (action.kind === "preferences") {
@@ -323,6 +327,7 @@ var PanelService = class {
     }
     const ctx = await loadProject(this.root), team = new TeamService(ctx);
     if (action.kind === "start") return team.start({ ...action.request, project: this.root });
+    if (action.kind === "browser") return openVerificationBrowser(ctx, action.env);
     if (action.kind === "message") return team.message(action.id, action.message);
     if (action.kind === "cancel-team") return team.cancel(action.id);
     if (action.kind === "cancel-job") return new JobService(ctx).cancel(action.id);

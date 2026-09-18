@@ -51,6 +51,86 @@
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "properties": {
+      "executionMode": {
+        "type": "string",
+        "enum": [
+          "team",
+          "single"
+        ]
+      },
+      "browserMode": {
+        "type": "string",
+        "enum": [
+          "codex",
+          "external"
+        ]
+      },
+      "developers": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 3
+      },
+      "sandbox": {
+        "type": "string",
+        "enum": [
+          "read-only",
+          "workspace-write"
+        ]
+      },
+      "timeoutSeconds": {
+        "type": "integer",
+        "minimum": 30,
+        "maximum": 3600
+      },
+      "project": {
+        "type": "string"
+      },
+      "task": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 16000
+      }
+    },
+    "required": [
+      "task"
+    ],
+    "additionalProperties": false
+  },
+  "work.start": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "properties": {
+      "executionMode": {
+        "type": "string",
+        "enum": [
+          "team",
+          "single"
+        ]
+      },
+      "browserMode": {
+        "type": "string",
+        "enum": [
+          "codex",
+          "external"
+        ]
+      },
+      "developers": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 3
+      },
+      "sandbox": {
+        "type": "string",
+        "enum": [
+          "read-only",
+          "workspace-write"
+        ]
+      },
+      "timeoutSeconds": {
+        "type": "integer",
+        "minimum": 30,
+        "maximum": 3600
+      },
       "project": {
         "type": "string"
       },
@@ -59,32 +139,44 @@
         "minLength": 1,
         "maxLength": 16000
       },
-      "developers": {
-        "default": 1,
-        "type": "integer",
-        "minimum": 1,
-        "maximum": 3
-      },
-      "sandbox": {
-        "default": "workspace-write",
+      "requestId": {
         "type": "string",
-        "enum": [
-          "read-only",
-          "workspace-write"
-        ]
-      },
-      "timeoutSeconds": {
-        "default": 900,
-        "type": "integer",
-        "minimum": 30,
-        "maximum": 3600
+        "format": "uuid",
+        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
       }
     },
     "required": [
       "task",
-      "developers",
-      "sandbox",
-      "timeoutSeconds"
+      "requestId"
+    ],
+    "additionalProperties": false
+  },
+  "team.wait": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "properties": {
+      "project": {
+        "type": "string"
+      },
+      "id": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+      },
+      "cursor": {
+        "type": "string",
+        "pattern": "^[a-f0-9]{64}$"
+      },
+      "waitSeconds": {
+        "default": 25,
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 30
+      }
+    },
+    "required": [
+      "id",
+      "waitSeconds"
     ],
     "additionalProperties": false
   },
@@ -198,6 +290,22 @@
               "settings": {
                 "type": "object",
                 "properties": {
+                  "executionMode": {
+                    "default": "team",
+                    "type": "string",
+                    "enum": [
+                      "team",
+                      "single"
+                    ]
+                  },
+                  "browserMode": {
+                    "default": "codex",
+                    "type": "string",
+                    "enum": [
+                      "codex",
+                      "external"
+                    ]
+                  },
                   "developers": {
                     "default": 1,
                     "type": "integer",
@@ -220,6 +328,8 @@
                   }
                 },
                 "required": [
+                  "executionMode",
+                  "browserMode",
                   "developers",
                   "sandbox",
                   "timeoutSeconds"
@@ -286,19 +396,26 @@
               "request": {
                 "type": "object",
                 "properties": {
-                  "task": {
+                  "executionMode": {
                     "type": "string",
-                    "minLength": 1,
-                    "maxLength": 16000
+                    "enum": [
+                      "team",
+                      "single"
+                    ]
+                  },
+                  "browserMode": {
+                    "type": "string",
+                    "enum": [
+                      "codex",
+                      "external"
+                    ]
                   },
                   "developers": {
-                    "default": 1,
                     "type": "integer",
                     "minimum": 1,
                     "maximum": 3
                   },
                   "sandbox": {
-                    "default": "workspace-write",
                     "type": "string",
                     "enum": [
                       "read-only",
@@ -306,17 +423,18 @@
                     ]
                   },
                   "timeoutSeconds": {
-                    "default": 900,
                     "type": "integer",
                     "minimum": 30,
                     "maximum": 3600
+                  },
+                  "task": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 16000
                   }
                 },
                 "required": [
-                  "task",
-                  "developers",
-                  "sandbox",
-                  "timeoutSeconds"
+                  "task"
                 ],
                 "additionalProperties": false
               }
@@ -400,6 +518,25 @@
             },
             "required": [
               "kind"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "browser"
+              },
+              "env": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+              }
+            },
+            "required": [
+              "kind",
+              "env"
             ],
             "additionalProperties": false
           },
@@ -1366,6 +1503,25 @@
     "additionalProperties": false
   },
   "test.auth": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "properties": {
+      "project": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4096
+      },
+      "env": {
+        "type": "string",
+        "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,100}$"
+      }
+    },
+    "required": [
+      "env"
+    ],
+    "additionalProperties": false
+  },
+  "browser.open": {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "properties": {

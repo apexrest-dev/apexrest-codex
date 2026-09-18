@@ -5,11 +5,11 @@ description: Show the APEXREST plugin menu and route to all available functions.
 
 # All functions
 
-Opening this menu is navigation. Show the following choices in the conversation and let the user select an action. Route application implementation tasks through [APEX work from chat](../apexrest-work/SKILL.md): manager and QA reviews are enforced by its runtime. Route administrative or reference-only tasks directly to their workflow. Do not execute every function, start installation or import an application merely because the menu was opened.
+Opening this menu is navigation. Show the following choices in the conversation and let the user select an action. Route application implementation tasks through [APEX work from chat](../apexrest-work/SKILL.md): saved single-agent or team settings select the runtime; team mode enforces manager and QA reviews. Route administrative or reference-only tasks directly to their workflow. Do not execute every function, start installation or import an application merely because the menu was opened.
 
 | Menu entry | Functions | Workflow |
 | --- | --- | --- |
-| APEX work from chat | Automatic team and panel from the current chat; reviewed result returned here | [Work](../apexrest-work/SKILL.md) |
+| APEX work from chat | Configured agent run and panel from the current chat; result returned here | [Work](../apexrest-work/SKILL.md) |
 | Reviewed development team | Fixed developer → manager code review → independent QA → manager QA review; status, messages and cancellation | [Team](../apexrest-team/SKILL.md) |
 | Install dependencies | Install or preview Node.js, Java, SQLcl, Playwright and Chromium; Oracle tools only; offline/cache options | [Install dependencies](../apexrest-install-dependencies/SKILL.md) |
 | Setup and connections | Diagnose tools; select SQLcl CLI or official SQLcl MCP; add, list, test or remove local connection references; inspect plugin version and installation | [Setup](../apexrest-setup/SKILL.md) |
@@ -17,7 +17,7 @@ Opening this menu is navigation. Show the following choices in the conversation 
 | APEX applications | Generate, edit, export, validate or compare APEXlang; pages, forms, reports, grids, charts and shared components; search/read pinned Oracle references | [APEXlang](../apexrest-apexlang/SKILL.md) |
 | Database and PL/SQL | Read allowlisted metadata, design migrations and PL/SQL, plan database changes | [Database](../apexrest-database/SKILL.md) |
 | Deployment and recovery | Create/review a plan, apply an authorized change, inspect deployment status, prepare a restore plan | [Deployment](../apexrest-deploy/SKILL.md) |
-| Tests and browser checks | Unit, SQL, API, browser or all configured suites; interactive browser authentication; reports and in-app verification | [Tests](../apexrest-test/SKILL.md) |
+| Tests and browser checks | Unit, SQL, API, browser or all configured suites; interactive browser authentication; reports and verification in the selected browser | [Tests](../apexrest-test/SKILL.md) |
 | Diagnostics and jobs | Diagnose failures, inspect/cancel background jobs, read registered artifacts | [Debug](../apexrest-debug/SKILL.md) |
 | Review changes | Review source preservation, deployment risk, security, package integrity and release evidence | [Review](../apexrest-review/SKILL.md) |
 
@@ -37,7 +37,7 @@ The following entries cover the shared operation catalog. Dots below correspond 
 | APEX and references | `apex.generate`, `apex.export`, `apex.validate`, `apex.diff`, `docs.search`, `docs.read`, `docs.sync` |
 | Database | `metadata.read`, `db.plan` |
 | Deployment and recovery | `deploy.plan`, `deploy.apply`, `deploy.status`, `deploy.restore-plan` |
-| Tests | `test.run`, `test.report`, `test.auth` |
+| Tests | `test.run`, `test.report`, `test.auth`, `browser.open` |
 | Jobs and artifacts | `jobs.status`, `jobs.cancel`, `artifacts.read` |
 | Sandbox capability diagnostics | `sandbox.status`, `sandbox.up`, `sandbox.down` |
 
@@ -47,4 +47,4 @@ Menu selection does not supply missing target identity, accept Oracle licenses o
 
 ## Development panel
 
-Use `$apexrest-panel` to open the native Codex workspace view. `panel.open` returns the local desktop URL; `panel.status` reads the effective configuration and live work; `panel.action` starts or steers a reviewed team, saves future defaults or queues supported checks. `apexrest panel tui --project PATH` opens the terminal view.
+Use `$apexrest-panel` to open the native Codex workspace view. `panel.open` returns the local desktop URL; `panel.status` reads the effective configuration and live work; `panel.action` starts or steers the selected single agent or reviewed team, saves future defaults or queues supported checks. `apexrest panel tui --project PATH` opens the terminal view.

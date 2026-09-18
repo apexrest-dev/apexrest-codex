@@ -2,6 +2,8 @@
 
 English | [Українська](panel.uk.md)
 
+Choose execution mode (`team` or `single`) and verification browser (`codex` or `external`) in project settings. See [mode settings](work-modes.md). Independent review/QA descriptions below apply to team mode; screenshots from September 17 show the earlier panel.
+
 [APEX work from chat](chat-workflow.md) automatically opens the selected team view; the web task form is optional. Auto routing reasons, cumulative token breakdowns and the task time limit appear on the team cards. Cached input and reasoning output are subsets, not extra tokens or a price estimate.
 
 For a complete walkthrough with actual screenshots, see [Agent workflow: from task to reviewed result](agent-workflow.md).
@@ -23,7 +25,7 @@ The TUI uses the same snapshot. Keys `1`–`4` or left/right switch views, up/do
 | View | Recorded information and available work |
 | --- | --- |
 | Overview | Task, current phase, review gate, effective SQLcl mode, Git changes and observed agent tool activity |
-| Agent team | Separate sessions, current tool, actual model/reasoning/sandbox, reported token usage, peer messages, manager reviews, independent QA checks and task updates/cancellation |
+| Agents | Separate sessions, current tool, actual model/reasoning/sandbox, reported token usage, peer messages, manager reviews, independent QA checks and task updates/cancellation |
 | APEX operations | Real background jobs and nested result status, diagnostics/artifact references, durable deployment/import state; queue source compilation, tests or an explicit-environment deployment plan |
 | Settings | Full project configuration, environment identity and connection references, toolchain lock, required suites, browser/artifact settings and grant metadata; edit SQLcl CLI/MCP mode and defaults for future teams |
 
@@ -35,7 +37,7 @@ Refresh runs every two seconds while the view is visible. Focused inputs are pre
 apexrest panel action --project /absolute/application --action '{"kind":"validate"}' --json
 ```
 
-Supported kinds: `preferences`, `sqlcl`, `start`, `message`, `cancel-team`, `cancel-job`, `validate`, `test`, `plan`. A new implementation always goes through the [mandatory team](team.md). The panel cannot submit review approvals, grant trust or apply a deployment directly. An authorized import still uses the existing [deploy workflow](deployment-safety.md). An expired heartbeat or a lost mutation response is not success; reconcile recorded state before retrying. Cancellation does not undo changes.
+Supported kinds: `preferences`, `sqlcl`, `start`, `message`, `cancel-team`, `cancel-job`, `validate`, `test`, `browser`, `plan`. New implementations use the selected single-agent or reviewed-team mode. The panel cannot submit review approvals, grant trust or apply a deployment directly. An authorized import still uses the existing [deploy workflow](deployment-safety.md). An expired heartbeat or a lost mutation response is not success; reconcile recorded state before retrying. Cancellation does not undo changes.
 
 ## Pokémon identities
 

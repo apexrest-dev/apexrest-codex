@@ -3,21 +3,19 @@ import { createRequire as __createRequire } from 'node:module'; const require = 
 import {
   dispatch,
   schemas
-} from "./chunk-TRQZWEKW.mjs";
-import "./chunk-5S7CBHIF.mjs";
-import "./chunk-SQLI3IEY.mjs";
-import "./chunk-5X6KTDSR.mjs";
+} from "./chunk-OFNIUM7N.mjs";
+import "./chunk-S7O65K5Z.mjs";
 import {
   executeJob
-} from "./chunk-FT4HB4SQ.mjs";
-import "./chunk-2X5UC4WR.mjs";
-import "./chunk-5MUOGWVK.mjs";
-import "./chunk-TDSYBJUK.mjs";
+} from "./chunk-XDCPF2Z3.mjs";
+import "./chunk-OEOKHSHA.mjs";
+import "./chunk-QU2LZEF3.mjs";
+import "./chunk-WWBXTYRS.mjs";
 import {
   Fault,
   failure,
   loadProject
-} from "./chunk-2M4WFEIW.mjs";
+} from "./chunk-GKQBRVST.mjs";
 
 // packages/cli/src/main.ts
 var argv = process.argv.slice(2);
@@ -75,18 +73,20 @@ function help() {
   if (key === "panel.action")
     lines.push(
       "",
-      "Pass --action as one JSON object. Supported kinds: preferences, sqlcl, start, message, cancel-team, cancel-job, validate, test, plan.",
+      "Pass --action as one JSON object. Supported kinds: preferences, sqlcl, start, message, cancel-team, cancel-job, validate, test, browser, plan.",
       `Example: apexrest panel action --action '{"kind":"validate"}' --project PATH --json`
     );
   if (key === "team.start" || key === "work.start")
     lines.push(
       "",
-      "Run separate Codex manager, developer and QA sessions with mandatory reviews.",
+      "Use saved project preferences unless explicitly overridden.",
+      "--execution-mode team|single selects a reviewed team or one agent that implements and verifies.",
+      "--browser-mode codex|external selects interactive APEX verification; the dashboard stays in Codex.",
       "--developers 1..3 defaults to 1; edits are serialized in the project.",
       "--sandbox read-only|workspace-write defaults to workspace-write for developers.",
       "--timeout-seconds 30..3600 defaults to 900. No interactive approvals are auto-granted.",
       "The configured project must already be trusted and Codex must be logged in.",
-      "Returns a team ID immediately. Read team status for the reviewed result.",
+      "Returns a team ID immediately. Read team status for the result and verification evidence.",
       "Models and reasoning are selected automatically; there is no manual model option."
     );
   if (key === "work.start")
@@ -132,28 +132,28 @@ try {
   else if (argv[0] === "tui" || !argv.length && process.stdin.isTTY && process.stdout.isTTY && process.env.TERM !== "dumb") {
     if (argv.length > 1 && (argv.length !== 3 || argv[1] !== "--project" || !argv[2] || argv[2].startsWith("--")))
       throw new Fault("INVALID_INPUT", "Usage: apexrest tui [--project PATH]", 2);
-    const { runTui } = await import("./chunk-WGNPX2RK.mjs");
+    const { runTui } = await import("./chunk-FUZFKQPD.mjs");
     await runTui(argv[2] ? { project: argv[2] } : {});
   } else if (!argv.length) help();
   else if (argv[0] === "panel" && argv[1] === "tui") {
     if (argv.length !== 2 && (argv.length !== 4 || argv[2] !== "--project" || !argv[3]))
       throw new Fault("INVALID_INPUT", "Usage: apexrest panel tui [--project PATH]", 2);
-    const { runPanelTui } = await import("./chunk-IOKUTU6D.mjs");
+    const { runPanelTui } = await import("./chunk-7MGWXXZT.mjs");
     await runPanelTui(argv[3] ?? process.cwd());
   } else if (argv[0] === "--panel-worker") {
     if (argv.length !== 2 || !argv[1]) throw new Fault("INVALID_INPUT", "Invalid panel worker request.", 2);
-    const { servePanel } = await import("./chunk-LGJ6WW37.mjs");
+    const { servePanel } = await import("./chunk-UUKEQCS2.mjs");
     await servePanel(argv[1]);
   } else if (argv[0] === "--job-worker") {
     if (argv.length !== 3) throw new Fault("INVALID_INPUT", "Invalid internal job request.", 2);
     await executeJob(await loadProject(argv[1]), argv[2], dispatch);
   } else if (argv[0] === "--team-worker") {
     if (argv.length !== 3) throw new Fault("INVALID_INPUT", "Invalid internal team request.", 2);
-    const { executeTeam } = await import("./chunk-KRSZQFMB.mjs");
+    const { executeTeam } = await import("./chunk-LSXC4MRY.mjs");
     await executeTeam(await loadProject(argv[1]), argv[2]);
   } else if (argv[0] === "mcp") {
     if (argv.length !== 1) throw new Fault("INVALID_INPUT", "mcp accepts no arguments.", 2);
-    const { startMcp } = await import("./chunk-RSEBEP35.mjs");
+    const { startMcp } = await import("./chunk-V362VAQX.mjs");
     await startMcp();
   } else {
     const selectedOp = argv[0] === "--version" ? { op: "version", start: 1 } : selected;

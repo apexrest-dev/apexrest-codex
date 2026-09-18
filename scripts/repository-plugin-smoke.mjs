@@ -68,9 +68,9 @@ try {
   assert.ok(server, 'Native MCP server missing');
   assert.equal(server.runtimeStatus, 'connected');
   const tools = Object.keys(server.tools).sort();
-  assert.equal(tools.length, 23);
+  assert.equal(tools.length, 24);
   evidence.tools = tools;
-  evidence.checks.push('23-native-mcp-tools-connected');
+  evidence.checks.push('24-native-mcp-tools-connected');
   const skills = await rpc.call('skills/list', { cwds: [project], forceReload: true });
   const nativeSkills = skills.data.flatMap((entry) => entry.skills);
   const menu = [];

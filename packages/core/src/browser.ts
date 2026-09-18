@@ -1,0 +1,61 @@
+import { environment, requireTrust, type ProjectContext } from './config.ts';
+import { allowedOrigin } from './testing.ts';
+import { workPreferences } from './work-preferences.ts';
+import { runProcess } from './process.ts';
+import { Fault } from './result.ts';
+
+export type BrowserMode = 'codex' | 'external';
+
+export function browserInstructions(mode: BrowserMode) {
+  return (
+    `Interactive APEX verification browser: ${mode}. ` +
+    (mode === 'external'
+      ? "Use apexrest_browser_open for the explicit environment to open the system browser. Use available external-browser controls and the user's interactive SSO session. Do not substitute the Codex in-app browser."
+      : 'Use apexrest_browser_open for the explicit environment, then open its URL with the host Codex in-app browser controls. Do not substitute an external browser.') +
+    ' Opening a URL is not verification. Inspect the affected interactions with controls for the selected browser; if those controls or authentication are unavailable, report the check as not_run and the exact limitation. Never read or copy browser profiles, cookies or credentials. Login is interactive, without login capture. Automated Playwright suites remain separate and do not inherit system-browser or Codex cookies.'
+  );
+}
+
+export function externalBrowserCommand(url: string, platform: NodeJS.Platform = process.platform) {
+  if (platform === 'darwin') return { executable: '/usr/bin/open', args: [url] };
+  if (platform === 'win32')
+    return {
+      executable: 'powershell.exe',
+      args: [
+        '-NoProfile',
+        '-NonInteractive',
+        '-Command',
+        "Start-Process -FilePath '" + url.replaceAll("'", "''") + "'",
+      ],
+    };
+  return { executable: 'xdg-open', args: [url] };
+}
+
+export async function openVerificationBrowser(ctx: ProjectContext, name: string, launch = runProcess) {
+  await requireTrust(ctx.root);
+  const target = environment(ctx, name);
+  const url = allowedOrigin(target.baseUrl, [
+    new URL(target.baseUrl).origin,
+    ...target.allowedOrigins,
+  ]).toString();
+  const pinned = process.env.APEXREST_TEAM_WORKER === '1' ? process.env.APEXREST_BROWSER_MODE : undefined;
+  const mode: BrowserMode =
+    pinned === 'external' || pinned === 'codex' ? pinned : (await workPreferences(ctx.root)).browserMode;
+  const common = {
+    browserMode: mode,
+    environment: name,
+    url,
+    verified: false,
+    nextAction: browserInstructions(mode),
+  };
+  if (mode === 'codex') return { ...common, status: 'host_action_required' };
+  const result = await launch({ ...externalBrowserCommand(url), cwd: ctx.root, timeoutMs: 10000 });
+  if (result.code !== 0 || result.timedOut || result.cancelled)
+    throw new Fault(
+      'BROWSER_OPEN_FAILED',
+      'The system browser could not be opened. Check the local desktop session; no browser verification was performed.',
+      3,
+      'blocked',
+    );
+  return { ...common, status: 'opened' };
+}

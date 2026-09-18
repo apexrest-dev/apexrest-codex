@@ -1,14 +1,5 @@
 import { createRequire as __createRequire } from 'node:module'; const require = __createRequire(import.meta.url);
 import {
-  dispatch,
-  schemas
-} from "./chunk-TRQZWEKW.mjs";
-import "./chunk-5S7CBHIF.mjs";
-import "./chunk-SQLI3IEY.mjs";
-import {
-  resourceRoot
-} from "./chunk-5X6KTDSR.mjs";
-import {
   brand,
   clip,
   labelFor,
@@ -20,19 +11,24 @@ import {
   terminalText,
   valueText,
   wrap
-} from "./chunk-GHLJSFSV.mjs";
-import "./chunk-FT4HB4SQ.mjs";
-import "./chunk-2X5UC4WR.mjs";
-import "./chunk-5MUOGWVK.mjs";
+} from "./chunk-XSWFFYGU.mjs";
 import {
-  sqlclConfig
-} from "./chunk-TDSYBJUK.mjs";
+  dispatch,
+  schemas
+} from "./chunk-OFNIUM7N.mjs";
+import "./chunk-S7O65K5Z.mjs";
+import "./chunk-XDCPF2Z3.mjs";
+import "./chunk-OEOKHSHA.mjs";
+import "./chunk-QU2LZEF3.mjs";
+import "./chunk-WWBXTYRS.mjs";
 import {
   Fault,
   external_exports,
   failure,
-  sanitized
-} from "./chunk-2M4WFEIW.mjs";
+  resourceRoot,
+  sanitized,
+  sqlclConfig
+} from "./chunk-GKQBRVST.mjs";
 
 // packages/cli/src/tui.ts
 import { emitKeypressEvents } from "node:readline";

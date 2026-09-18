@@ -9,7 +9,9 @@ import { sqlclConfig, configureSqlcl } from './sqlcl-config.ts';
 import { connections } from './connections.ts';
 import { TeamService, teamRuntime } from './team.ts';
 import { JobService } from './jobs.ts';
-import { panelPreferencesSchema, panelActionSchema, type PanelAction } from './panel-schema.ts';
+import { panelActionSchema, type PanelAction } from './panel-schema.ts';
+import { workPreferences } from './work-preferences.ts';
+import { openVerificationBrowser } from './browser.ts';
 import { VERSION } from './version.ts';
 import { runProcess } from './process.ts';
 
@@ -18,10 +20,7 @@ const safe = <T>(value: T) => sanitized(value) as T;
 export class PanelService {
   constructor(private root: string) {}
   async preferences() {
-    const file = await contained(this.root, '.apexrest/panel/preferences.json');
-    return (await exists(file))
-      ? parse(panelPreferencesSchema, await readJson(file))
-      : panelPreferencesSchema.parse({});
+    return workPreferences(this.root);
   }
   private async records(folder: string) {
     const base = await contained(this.root, '.apexrest/' + folder);
@@ -90,6 +89,7 @@ export class PanelService {
         revision: Number(row.revision ?? 0),
         updatedAt: String(row.updatedAt ?? ''),
         members: Array.isArray(row.members) ? row.members.length : 0,
+        executionMode: row.executionMode === 'single' ? 'single' : 'team',
       }))
       .map((row) =>
         ['queued', 'running'].includes(row.status) && Date.parse(row.updatedAt) + 60000 < Date.now()
@@ -171,7 +171,7 @@ export class PanelService {
     });
   }
   async act(action: PanelAction) {
-    parse(panelActionSchema, { action });
+    action = parse(panelActionSchema, { action }).action;
     this.root = await realpath(this.root);
     await requireTrust(this.root);
     if (action.kind === 'preferences') {
@@ -184,6 +184,7 @@ export class PanelService {
     const ctx = await loadProject(this.root),
       team = new TeamService(ctx);
     if (action.kind === 'start') return team.start({ ...action.request, project: this.root });
+    if (action.kind === 'browser') return openVerificationBrowser(ctx, action.env);
     if (action.kind === 'message') return team.message(action.id, action.message);
     if (action.kind === 'cancel-team') return team.cancel(action.id);
     if (action.kind === 'cancel-job') return new JobService(ctx).cancel(action.id);

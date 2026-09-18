@@ -6,16 +6,16 @@ import {
   clip,
   paint,
   wrap
-} from "./chunk-GHLJSFSV.mjs";
+} from "./chunk-XSWFFYGU.mjs";
 import {
   PanelService
-} from "./chunk-FT4HB4SQ.mjs";
-import "./chunk-2X5UC4WR.mjs";
-import "./chunk-5MUOGWVK.mjs";
-import "./chunk-TDSYBJUK.mjs";
+} from "./chunk-XDCPF2Z3.mjs";
+import "./chunk-OEOKHSHA.mjs";
+import "./chunk-QU2LZEF3.mjs";
+import "./chunk-WWBXTYRS.mjs";
 import {
   Fault
-} from "./chunk-2M4WFEIW.mjs";
+} from "./chunk-GKQBRVST.mjs";
 
 // packages/cli/src/panel-tui.ts
 import { emitKeypressEvents } from "node:readline";
@@ -25,7 +25,7 @@ function panelLines(data, tab) {
     return [
       `Oracle transport: SQLcl ${data.sqlcl.mode.toUpperCase()} \xB7 restriction ${data.sqlcl.mcpRestrictLevel}`,
       `Trusted: ${data.trusted} \xB7 configured: ${data.configured}`,
-      "Future team defaults: " + JSON.stringify(data.preferences),
+      "Future work defaults: " + JSON.stringify(data.preferences),
       "Model selection: Auto (task complexity and implementation repair results; no manual override).",
       ...JSON.stringify(
         {
@@ -51,7 +51,7 @@ function panelLines(data, tab) {
       "Existing project trust and deployment authorization remain required."
     ];
   const lines = [
-    team ? `TEAM \xB7 ${team.status} \xB7 ${team.phase} \xB7 revision ${team.revision}` : 'No team yet. Use apexrest team start "Task" in Codex.',
+    team ? `${team.executionMode === "single" ? "SINGLE AGENT" : "TEAM"} \xB7 ${team.status} \xB7 ${team.phase} \xB7 revision ${team.revision}` : 'No team yet. Use apexrest team start "Task" in Codex.',
     ""
   ];
   if (data.task) lines.push(data.task, "");
@@ -80,7 +80,13 @@ function panelLines(data, tab) {
       ""
     );
   if (tab === 1) {
-    lines.push("MANDATORY REVIEWS");
+    lines.push(team?.executionMode === "single" ? "AGENT VERIFICATION" : "MANDATORY REVIEWS");
+    for (const v of team?.verification ?? [])
+      lines.push(
+        `${v.report.decision} \xB7 revision ${v.revision}`,
+        v.report.summary,
+        ...v.report.checks.map((c) => `${c.status} \xB7 ${c.name}: ${c.evidence}`)
+      );
     for (const r of team?.reviews ?? [])
       lines.push(
         `${r.phase}: ${r.report.decision} \xB7 revision ${r.revision}`,
