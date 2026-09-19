@@ -44,6 +44,8 @@ apexrest connection test 'Development connection' --saved --json
 
 These commands read the SQLcl store directly and test the exact saved name with a read-only identity query. If the store is empty or credentials are missing, configure them in SQLcl. You can then register references for a project environment as described below. CLI commands without `--saved` use those references.
 
+For HTTP access when the listener is unreachable, configure plugin-level ORDS URL, username and password and select the network transport. See [SQL through ORDS](ords.md). The saved SQLcl connections below apply to direct access.
+
 ## Save connection references
 
 Create named connections interactively in SQLcl's local connection store. Then register their names:

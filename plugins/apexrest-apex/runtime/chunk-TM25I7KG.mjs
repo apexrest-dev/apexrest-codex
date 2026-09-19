@@ -1,43 +1,22 @@
 import { createRequire as __createRequire } from 'node:module'; const require = __createRequire(import.meta.url);
-var __create = Object.create;
-var __defProp = Object.defineProperty;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __getOwnPropNames = Object.getOwnPropertyNames;
-var __getProtoOf = Object.getPrototypeOf;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __require = /* @__PURE__ */ ((x) => typeof require !== "undefined" ? require : typeof Proxy !== "undefined" ? new Proxy(x, {
-  get: (a, b2) => (typeof require !== "undefined" ? require : a)[b2]
-}) : x)(function(x) {
-  if (typeof require !== "undefined") return require.apply(this, arguments);
-  throw Error('Dynamic require of "' + x + '" is not supported');
-});
-var __commonJS = (cb, mod) => function __require2() {
-  try {
-    return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-  } catch (e) {
-    throw mod = 0, e;
-  }
-};
-var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
-};
-var __copyProps = (to2, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
-    for (let key of __getOwnPropNames(from))
-      if (!__hasOwnProp.call(to2, key) && key !== except)
-        __defProp(to2, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
-  }
-  return to2;
-};
-var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
-  // If the importer is in node compatibility mode or this is not an ESM
-  // file that has been converted to a CommonJS file using a Babel-
-  // compatible transform (i.e. "__esModule" has not been set), then set
-  // "default" to the CommonJS "module.exports" for node compatibility.
-  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
-  mod
-));
+import {
+  Fault,
+  __commonJS,
+  __export,
+  __require,
+  __toESM,
+  atomicWrite,
+  canonical,
+  contained,
+  exists,
+  hash,
+  hashFile,
+  inventory,
+  readJson,
+  redact,
+  withLock,
+  writeJson
+} from "./chunk-MJC6ZMRG.mjs";
 
 // node_modules/ajv/dist/compile/codegen/code.js
 var require_code = __commonJS({
@@ -7227,15 +7206,15 @@ var require_windows = __commonJS({
       }
       return false;
     }
-    function checkStat(stat2, path10, options2) {
-      if (!stat2.isSymbolicLink() && !stat2.isFile()) {
+    function checkStat(stat3, path10, options2) {
+      if (!stat3.isSymbolicLink() && !stat3.isFile()) {
         return false;
       }
       return checkPathExt(path10, options2);
     }
     function isexe(path10, options2, cb) {
-      fs2.stat(path10, function(er2, stat2) {
-        cb(er2, er2 ? false : checkStat(stat2, path10, options2));
+      fs2.stat(path10, function(er2, stat3) {
+        cb(er2, er2 ? false : checkStat(stat3, path10, options2));
       });
     }
     function sync(path10, options2) {
@@ -7251,20 +7230,20 @@ var require_mode = __commonJS({
     isexe.sync = sync;
     var fs2 = __require("fs");
     function isexe(path10, options2, cb) {
-      fs2.stat(path10, function(er2, stat2) {
-        cb(er2, er2 ? false : checkStat(stat2, options2));
+      fs2.stat(path10, function(er2, stat3) {
+        cb(er2, er2 ? false : checkStat(stat3, options2));
       });
     }
     function sync(path10, options2) {
       return checkStat(fs2.statSync(path10), options2);
     }
-    function checkStat(stat2, options2) {
-      return stat2.isFile() && checkMode(stat2, options2);
+    function checkStat(stat3, options2) {
+      return stat3.isFile() && checkMode(stat3, options2);
     }
-    function checkMode(stat2, options2) {
-      var mod = stat2.mode;
-      var uid = stat2.uid;
-      var gid = stat2.gid;
+    function checkMode(stat3, options2) {
+      var mod = stat3.mode;
+      var uid = stat3.uid;
+      var gid = stat3.gid;
       var myUid = options2.uid !== void 0 ? options2.uid : process.getuid && process.getuid();
       var myGid = options2.gid !== void 0 ? options2.gid : process.getgid && process.getgid();
       var u2 = parseInt("100", 8);
@@ -8197,7 +8176,7 @@ var require_yauzl = __commonJS({
     var PassThrough2 = __require("stream").PassThrough;
     var Writable = __require("stream").Writable;
     var crc32 = typeof zlib.crc32 === "function" ? zlib.crc32 : require_crc32();
-    exports.open = open3;
+    exports.open = open2;
     exports.fromFd = fromFd;
     exports.fromBuffer = fromBuffer;
     exports.fromRandomAccessReader = fromRandomAccessReader;
@@ -8215,7 +8194,7 @@ var require_yauzl = __commonJS({
     exports.RandomAccessReader = RandomAccessReader;
     function openPromise(path10, options2) {
       return new Promise((resolve, reject) => {
-        open3(path10, { ...options2, lazyEntries: true }, function(err, zipfile) {
+        open2(path10, { ...options2, lazyEntries: true }, function(err, zipfile) {
           if (err) return reject(err);
           resolve(zipfile);
         });
@@ -8245,7 +8224,7 @@ var require_yauzl = __commonJS({
         });
       });
     }
-    function open3(path10, options2, callback) {
+    function open2(path10, options2, callback) {
       if (typeof options2 === "function") {
         callback = options2;
         options2 = null;
@@ -9046,7 +9025,7 @@ var require_yauzl = __commonJS({
 
 // packages/installer/src/toolchain.ts
 import path9 from "node:path";
-import { cp as cp3, mkdir as mkdir5, mkdtemp as mkdtemp2, rename as rename3, chmod, statfs, realpath as realpath4 } from "node:fs/promises";
+import { cp as cp3, mkdir as mkdir5, mkdtemp as mkdtemp2, rename as rename2, chmod as chmod2, statfs, realpath as realpath4 } from "node:fs/promises";
 
 // node_modules/zod/v4/classic/external.js
 var external_exports = {};
@@ -9190,7 +9169,7 @@ __export(external_exports, {
   gt: () => _gt,
   gte: () => _gte,
   guid: () => guid2,
-  hash: () => hash,
+  hash: () => hash2,
   hex: () => hex2,
   hostname: () => hostname2,
   httpUrl: () => httpUrl,
@@ -11813,9 +11792,9 @@ var asciiTabOrNewline = /[\t\n\r]/g;
 function stripTabAndNewline(value) {
   return value.replace(asciiTabOrNewline, "");
 }
-function urlHostnameOk(url2, hostname4) {
-  hostname4.lastIndex = 0;
-  return hostname4.test(url2.hostname);
+function urlHostnameOk(url2, hostname3) {
+  hostname3.lastIndex = 0;
+  return hostname3.test(url2.hostname);
 }
 function urlProtocolOk(url2, protocol) {
   protocol.lastIndex = 0;
@@ -26070,7 +26049,7 @@ __export(schemas_exports2, {
   float64: () => float64,
   function: () => _function,
   guid: () => guid2,
-  hash: () => hash,
+  hash: () => hash2,
   hex: () => hex2,
   hostname: () => hostname2,
   httpUrl: () => httpUrl,
@@ -26767,7 +26746,7 @@ function hostname2(_params) {
 function hex2(_params) {
   return _stringFormat(ZodCustomStringFormat, "hex", regexes_exports.hex, _params);
 }
-function hash(alg, params) {
+function hash2(alg, params) {
   const enc = params?.enc ?? "hex";
   const format = `${alg}_${enc}`;
   const regex = regexes_exports[format];
@@ -28723,221 +28702,14 @@ function date4(params) {
   return _coercedDate(ZodDate, params);
 }
 
-// packages/core/src/fs.ts
-import { mkdir, open as open2, readFile, readdir, realpath, rename, lstat, rm } from "node:fs/promises";
-import { createReadStream } from "node:fs";
-import path from "node:path";
-import { hostname as hostname3 } from "node:os";
-import { createHash, randomUUID as randomUUID2 } from "node:crypto";
-
-// packages/core/src/result.ts
-import { randomUUID } from "node:crypto";
-var Fault = class extends Error {
-  constructor(code, message, exitCode = 1, status = "failed") {
-    super(message);
-    this.code = code;
-    this.exitCode = exitCode;
-    this.status = status;
-  }
-  code;
-  exitCode;
-  status;
-};
-function redact(value) {
-  return value.replace(
-    /("(?:password|passwd|pwd|token|secret|authorization|cookie|set-cookie|wallet_location)"\s*:\s*)"(?:[^"\\]|\\.)*"/gi,
-    '$1"[REDACTED]"'
-  ).replace(/(https?:\/\/)[^\s/@]+:[^\s/@]+@/gi, "$1[REDACTED]@").replace(
-    /((?:password|passwd|pwd|token|secret|authorization|cookie|set-cookie|wallet_location)\s*[:=]\s*)([^\r\n,}]+)/gi,
-    "$1[REDACTED]"
-  ).replace(/\bBearer\s+[\w.\-+/=]+/gi, "Bearer [REDACTED]");
-}
-function sanitized(value) {
-  if (typeof value === "string") return redact(value);
-  if (Array.isArray(value)) return value.map(sanitized);
-  if (value && typeof value === "object")
-    return Object.fromEntries(
-      Object.entries(value).map(([key, item]) => [
-        key,
-        /^(?:password|passwd|pwd|token|secret|authorization|cookie|set-cookie|wallet_location)$/i.test(key) ? "[REDACTED]" : sanitized(item)
-      ])
-    );
-  return value;
-}
-function success2(operation, data, summary = "Operation completed.") {
-  return {
-    schemaVersion: 1,
-    ok: true,
-    operation,
-    status: "succeeded",
-    runId: randomUUID(),
-    summary,
-    diagnostics: [],
-    artifacts: [],
-    nextActions: [],
-    data: sanitized(data),
-    exitCode: 0
-  };
-}
-function failure2(operation, error62) {
-  const e = error62 instanceof Fault ? error62 : new Fault("INTERNAL_ERROR", error62 instanceof Error ? error62.message : "Unknown failure");
-  return {
-    schemaVersion: 1,
-    ok: false,
-    operation,
-    status: e.status,
-    runId: randomUUID(),
-    summary: redact(e.message),
-    diagnostics: [{ severity: "error", code: e.code, message: redact(e.message) }],
-    artifacts: [],
-    nextActions: [],
-    exitCode: e.exitCode
-  };
-}
-
-// packages/core/src/fs.ts
-var hash2 = (data) => createHash("sha256").update(data).digest("hex");
-async function hashFile(file2) {
-  const digest = createHash("sha256");
-  for await (const chunk of createReadStream(file2)) digest.update(chunk);
-  return digest.digest("hex");
-}
-function canonical(value) {
-  if (Array.isArray(value)) return "[" + value.map(canonical).join(",") + "]";
-  if (value !== null && typeof value === "object")
-    return "{" + Object.entries(value).sort(([a], [b2]) => a.localeCompare(b2)).map(([k2, v2]) => JSON.stringify(k2) + ":" + canonical(v2)).join(",") + "}";
-  return JSON.stringify(value);
-}
-async function atomicWrite(file2, value) {
-  await mkdir(path.dirname(file2), { recursive: true, mode: 448 });
-  const temporary = file2 + "." + randomUUID2() + ".tmp";
-  const handle = await open2(temporary, "wx", 384);
-  try {
-    try {
-      if (typeof value === "string" || Buffer.isBuffer(value)) await handle.writeFile(value);
-      else for await (const chunk of value) await handle.writeFile(chunk);
-      await handle.sync();
-    } finally {
-      await handle.close();
-    }
-    await rename(temporary, file2);
-  } catch (error62) {
-    await rm(temporary, { force: true });
-    throw error62;
-  }
-}
-var writeJson = (file2, value) => atomicWrite(file2, JSON.stringify(value, null, 2) + "\n");
-async function readJson(file2) {
-  return JSON.parse(await readFile(file2, "utf8"));
-}
-async function exists(file2) {
-  try {
-    await lstat(file2);
-    return true;
-  } catch (e) {
-    if (e.code === "ENOENT") return false;
-    throw e;
-  }
-}
-async function contained(root, candidate) {
-  const base = await realpath(root), target = path.resolve(base, candidate);
-  const rel = path.relative(base, target);
-  if (rel === ".." || rel.startsWith(".." + path.sep) || path.isAbsolute(rel))
-    throw new Fault("PATH_ESCAPE", "Path escapes the permitted root.", 2);
-  let probe = target;
-  while (!await exists(probe)) probe = path.dirname(probe);
-  const physical = await realpath(probe), physicalRel = path.relative(base, physical);
-  if (physicalRel === ".." || physicalRel.startsWith(".." + path.sep) || path.isAbsolute(physicalRel))
-    throw new Fault("SYMLINK_ESCAPE", "Symlink escapes the permitted root.", 2);
-  return target;
-}
-async function inventory(root) {
-  const out = {};
-  async function walk(dir) {
-    for (const entry of await readdir(dir, { withFileTypes: true })) {
-      const file2 = path.join(dir, entry.name);
-      if (entry.isSymbolicLink())
-        throw new Fault("SYMLINK_NOT_ALLOWED", "Source and bundle inventories reject symlinks.", 2);
-      if (entry.isDirectory()) await walk(file2);
-      else if (entry.isFile())
-        out[path.relative(root, file2).split(path.sep).join("/")] = hash2(await readFile(file2));
-      else throw new Fault("SPECIAL_FILE_NOT_ALLOWED", "Source inventories accept regular files only.", 2);
-    }
-  }
-  await walk(root);
-  return Object.fromEntries(Object.entries(out).sort());
-}
-async function withLock(file2, action) {
-  await mkdir(path.dirname(file2), { recursive: true, mode: 448 });
-  const recovery = file2 + ".recovery";
-  if (await exists(recovery))
-    throw new Fault(
-      "LOCKED",
-      "Lock recovery is in progress; inspect a stale recovery gate before retry.",
-      5,
-      "conflict"
-    );
-  if (await exists(file2)) {
-    let owner;
-    try {
-      owner = await readJson(file2);
-    } catch {
-    }
-    if (owner && owner.hostname === hostname3() && Number.isInteger(owner.pid) && owner.pid > 0) {
-      let dead = false;
-      try {
-        process.kill(owner.pid, 0);
-      } catch (error62) {
-        dead = error62.code === "ESRCH";
-      }
-      if (dead) {
-        try {
-          await mkdir(recovery, { mode: 448 });
-        } catch {
-          throw new Fault("LOCKED", "Another runner owns lock recovery.", 5, "conflict");
-        }
-        try {
-          const current = await readJson(file2);
-          if (current.pid === owner.pid && current.hostname === owner.hostname) await rm(file2);
-        } finally {
-          await rm(recovery, { recursive: true, force: true });
-        }
-      }
-    }
-  }
-  let handle;
-  try {
-    handle = await open2(file2, "wx", 384);
-  } catch (e) {
-    if (e.code === "EEXIST")
-      throw new Fault(
-        "LOCKED",
-        "Another operation holds the lock. Inspect its owner before recovery.",
-        5,
-        "conflict"
-      );
-    throw e;
-  }
-  try {
-    await handle.writeFile(
-      JSON.stringify({ pid: process.pid, hostname: hostname3(), createdAt: (/* @__PURE__ */ new Date()).toISOString() })
-    );
-    await handle.sync();
-    return await action();
-  } finally {
-    await handle.close();
-    await rm(file2, { force: true });
-  }
-}
-
 // packages/core/src/config.ts
-import path2 from "node:path";
+import path from "node:path";
 import { homedir } from "node:os";
-import { realpath as realpath2 } from "node:fs/promises";
+import { realpath } from "node:fs/promises";
 var identifier = external_exports.string().regex(/^[A-Za-z][A-Za-z0-9_$#]{0,127}$/);
 var refName = external_exports.string().regex(/^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,100}$/);
 var relativePath = external_exports.string().min(1).max(1024).refine(
-  (s3) => !path2.isAbsolute(s3) && !s3.split(/[\\/]/).includes("..") && !/[\x00-\x1f]/.test(s3),
+  (s3) => !path.isAbsolute(s3) && !s3.split(/[\\/]/).includes("..") && !/[\x00-\x1f]/.test(s3),
   "Expected a contained relative path"
 );
 var suiteName = external_exports.enum(["unit", "sql", "api", "e2e"]);
@@ -28975,7 +28747,7 @@ var projectSchema = external_exports.strictObject({
   }),
   artifacts: external_exports.strictObject({ directory: relativePath, retentionDays: external_exports.number().int().min(1).max(365) })
 });
-var managedHome = () => path2.resolve(process.env.APEXREST_HOME ?? path2.join(homedir(), ".apexrest"));
+var managedHome = () => path.resolve(process.env.APEXREST_HOME ?? path.join(homedir(), ".apexrest"));
 function parse3(schema, value) {
   const result = schema.safeParse(value);
   if (!result.success)
@@ -28987,7 +28759,7 @@ function parse3(schema, value) {
   return result.data;
 }
 async function loadProject(root) {
-  const physical = await realpath2(root);
+  const physical = await realpath(root);
   const file2 = await contained(physical, "apexrest.json");
   if (!await exists(file2))
     throw new Fault(
@@ -29029,11 +28801,11 @@ var policySchema = external_exports.strictObject({
   )
 });
 async function policy() {
-  const file2 = path2.join(managedHome(), "policy.json");
+  const file2 = path.join(managedHome(), "policy.json");
   return await exists(file2) ? parse3(policySchema, await readJson(file2)) : { schemaVersion: 1, trustedProjects: [], grants: [] };
 }
 async function requireTrust(root) {
-  if (!(await policy()).trustedProjects.includes(await realpath2(root)))
+  if (!(await policy()).trustedProjects.includes(await realpath(root)))
     throw new Fault(
       "PROJECT_TRUST_REQUIRED",
       "Review this project and add its canonical path to the user-owned policy trustedProjects. Host trust is also required.",
@@ -29044,21 +28816,93 @@ async function requireTrust(root) {
 
 // packages/core/src/project.ts
 import path6 from "node:path";
-import { cp as cp2, mkdir as mkdir3, lstat as lstat2, readdir as readdir3, writeFile } from "node:fs/promises";
+import { cp as cp2, mkdir as mkdir3, lstat, readdir as readdir2, writeFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 
 // packages/core/src/oracle.ts
 import path5 from "node:path";
-import { randomUUID as randomUUID3 } from "node:crypto";
-import { cp, mkdir as mkdir2, mkdtemp, readFile as readFile2, readdir as readdir2, realpath as realpath3, rename as rename2, stat } from "node:fs/promises";
+import { randomUUID } from "node:crypto";
+import { cp, mkdir as mkdir2, mkdtemp, readFile as readFile2, readdir, realpath as realpath3, rename, stat as stat2 } from "node:fs/promises";
 
 // packages/core/src/connections.ts
-import path3 from "node:path";
+import path2 from "node:path";
+import { chmod, mkdir, readFile, rm, stat } from "node:fs/promises";
 var savedConnectionName = external_exports.string().min(1).max(512).regex(/^[^\x00-\x1f\x7f-\x9f]+$/);
-var connectionSchema = external_exports.strictObject({ kind: external_exports.literal("sqlcl-store"), name: savedConnectionName });
+var ordsUrl = external_exports.string().url().max(2048).refine((value) => {
+  const url2 = new URL(value);
+  return ["http:", "https:"].includes(url2.protocol) && !url2.username && !url2.password && !url2.search && !url2.hash && url2.pathname.endsWith("/") && !url2.pathname.replace(/\/+$/, "").endsWith("/_/sql") && !/[\s"\x00-\x1f]/.test(value);
+}, "Use the ORDS schema HTTP(S) URL ending in /, without credentials, query or fragment.");
+var ordsUsername = external_exports.string().min(1).max(128).regex(/^[^"\x00-\x1f\x7f-\x9f]+$/);
+var ordsSchema = external_exports.strictObject({ url: ordsUrl, username: ordsUsername });
+var connectionSchema = external_exports.strictObject({
+  kind: external_exports.literal("sqlcl-store"),
+  name: savedConnectionName.optional(),
+  ords: ordsSchema.optional()
+}).refine((value) => !!(value.name || value.ords), "Configure a direct connection or ORDS endpoint.");
 var storeSchema = external_exports.record(refName, connectionSchema);
+var references = /* @__PURE__ */ new WeakMap();
+var connectionReference = (connection) => references.get(connection);
+var credentialSchema = ordsSchema.extend({ password: external_exports.string().min(1).max(4096) }).strict();
+function checkPassword(password) {
+  if (!password || password.length > 4096 || /["\x00-\x1f\x7f-\x9f]/.test(password))
+    throw new Fault(
+      "INVALID_ORDS_PASSWORD",
+      "ORDS passwords must be nonempty and cannot contain control characters or double quotes.",
+      2
+    );
+  return password;
+}
+async function credentialPath(name) {
+  parse3(refName, name);
+  return contained(managedHome(), path2.join("credentials", name + ".json"));
+}
+async function ordsCredentials(connection) {
+  const name = references.get(connection);
+  if (!name || !connection.ords)
+    throw new Fault(
+      "ORDS_CONNECTION_REQUIRED",
+      "Configure this connection reference with a plugin-level ORDS endpoint and credentials.",
+      3,
+      "blocked"
+    );
+  const file2 = await credentialPath(name);
+  if (!await exists(file2))
+    throw new Fault(
+      "ORDS_CREDENTIALS_REQUIRED",
+      "Save the ORDS password locally in plugin connection settings.",
+      3,
+      "blocked"
+    );
+  if (process.platform !== "win32" && ((await stat(file2)).mode & 63) !== 0)
+    throw new Fault(
+      "ORDS_CREDENTIAL_PERMISSIONS",
+      "ORDS credential files must only be readable by their owner (0600).",
+      3,
+      "blocked"
+    );
+  let value;
+  try {
+    value = parse3(credentialSchema, await readJson(file2));
+  } catch {
+    throw new Fault(
+      "ORDS_CREDENTIALS_INVALID",
+      "The local ORDS credential file is invalid. Save it again in plugin settings.",
+      3,
+      "blocked"
+    );
+  }
+  if (value.url !== connection.ords.url || value.username !== connection.ords.username)
+    throw new Fault(
+      "ORDS_CREDENTIALS_REQUIRED",
+      "Save credentials for the configured ORDS endpoint and username.",
+      3,
+      "blocked"
+    );
+  checkPassword(value.password);
+  return value;
+}
 async function connections() {
-  const file2 = path3.join(managedHome(), "connections.json");
+  const file2 = path2.join(managedHome(), "connections.json");
   return await exists(file2) ? parse3(storeSchema, await readJson(file2)) : {};
 }
 async function resolveConnection(name) {
@@ -29070,16 +28914,62 @@ async function resolveConnection(name) {
       3,
       "blocked"
     );
+  references.set(connection, name);
   return connection;
 }
 async function editConnection(name, value) {
   parse3(refName, name);
-  return withLock(path3.join(managedHome(), "connections.lock"), async () => {
+  return withLock(path2.join(managedHome(), "connections.lock"), async () => {
     const current = await connections();
-    if (value) current[name] = parse3(connectionSchema, value);
-    else delete current[name];
-    await writeJson(path3.join(managedHome(), "connections.json"), current);
-    return { name, status: value ? "configured" : "removed", credentialsDeleted: false };
+    let credentialsDeleted = false;
+    if (value) current[name] = parse3(connectionSchema, { ...current[name], ...value });
+    else {
+      delete current[name];
+      const file2 = await credentialPath(name);
+      credentialsDeleted = await exists(file2);
+      await rm(file2, { force: true });
+    }
+    await writeJson(path2.join(managedHome(), "connections.json"), current);
+    return { name, status: value ? "configured" : "removed", credentialsDeleted };
+  });
+}
+async function configureConnection(name, input2) {
+  parse3(refName, name);
+  return withLock(path2.join(managedHome(), "connections.lock"), async () => {
+    const current = await connections();
+    const previous = current[name];
+    const ords = input2.ordsUrl || input2.ordsUsername ? parse3(ordsSchema, { url: input2.ordsUrl, username: input2.ordsUsername }) : previous?.ords;
+    const value = parse3(connectionSchema, {
+      ...previous,
+      kind: "sqlcl-store",
+      ...input2.sqlclName ? { name: input2.sqlclName } : {},
+      ...ords ? { ords } : {}
+    });
+    let password = input2.password;
+    if (input2.passwordFile) {
+      if (password !== void 0) throw new Fault("INVALID_INPUT", "Supply one local password source.", 2);
+      password = (await readFile(path2.resolve(input2.passwordFile), "utf8")).replace(/\r?\n$/, "");
+    }
+    if (password !== void 0 && !ords)
+      throw new Fault(
+        "INVALID_INPUT",
+        "Configure the ORDS endpoint and username before saving its password.",
+        2
+      );
+    if (ords && (input2.ordsUrl || input2.ordsUsername || password !== void 0)) {
+      if (password !== void 0) {
+        const folder = await contained(managedHome(), "credentials");
+        await mkdir(folder, { recursive: true, mode: 448 });
+        if (process.platform !== "win32") await chmod(folder, 448);
+        await writeJson(await credentialPath(name), { ...ords, password: checkPassword(password) });
+      } else {
+        references.set(value, name);
+        await ordsCredentials(value);
+      }
+    }
+    current[name] = value;
+    await writeJson(path2.join(managedHome(), "connections.json"), current);
+    return { name, status: "configured" };
   });
 }
 
@@ -29143,13 +29033,15 @@ async function runProcess(r) {
 }
 
 // packages/core/src/sqlcl-config.ts
-import path4 from "node:path";
+import path3 from "node:path";
 var sqlclMode = external_exports.enum(["cli", "mcp"]);
 var sqlclRestriction = external_exports.enum(["4", "1"]);
+var databaseTransport = external_exports.enum(["direct", "ords"]);
 var sqlclConfigSchema = external_exports.strictObject({
   schemaVersion: external_exports.literal(1),
   mode: sqlclMode,
-  mcpRestrictLevel: sqlclRestriction
+  mcpRestrictLevel: sqlclRestriction,
+  databaseTransport: databaseTransport.optional()
 });
 async function sqlclConfig() {
   const home = managedHome();
@@ -29157,15 +29049,23 @@ async function sqlclConfig() {
   const file2 = await contained(home, "sqlcl.json");
   return await exists(file2) ? parse3(sqlclConfigSchema, await readJson(file2)) : { schemaVersion: 1, mode: "cli", mcpRestrictLevel: "4" };
 }
-async function configureSqlcl(mode, level) {
+async function configureSqlcl(mode, level, transport) {
   const home = managedHome();
-  return withLock(path4.join(home, "sqlcl-config.lock"), async () => {
+  return withLock(path3.join(home, "sqlcl-config.lock"), async () => {
     const previous = await sqlclConfig();
     const configuration = parse3(sqlclConfigSchema, {
       ...previous,
       mode,
-      mcpRestrictLevel: level ?? previous.mcpRestrictLevel
+      mcpRestrictLevel: level ?? previous.mcpRestrictLevel,
+      ...transport ? { databaseTransport: transport } : {}
     });
+    if (configuration.mode === "mcp" && configuration.databaseTransport === "ords")
+      throw new Fault(
+        "ORDS_CLI_REQUIRED",
+        "ORDS HTTP requires SQLcl CLI mode. Select CLI execution for this transport.",
+        3,
+        "blocked"
+      );
     await writeJson(await contained(home, "sqlcl.json"), configuration);
     return configuration;
   });
@@ -32847,6 +32747,117 @@ async function runSqlclMcp(request) {
   }
 }
 
+// packages/core/src/ords.ts
+import path4 from "node:path";
+import { realpath as realpath2, rm as rm2 } from "node:fs/promises";
+async function sqlclHome(executable) {
+  const candidates = path4.isAbsolute(executable) ? [executable] : executable.includes(path4.sep) ? [path4.resolve(executable)] : (process.env.PATH ?? "").split(path4.delimiter).flatMap(
+    (directory) => process.platform === "win32" ? ["", ".exe", ".cmd", ".bat"].map((extension) => path4.join(directory, executable + extension)) : [path4.join(directory, executable)]
+  );
+  for (const candidate of candidates) {
+    if (!await exists(candidate)) continue;
+    const home = path4.dirname(path4.dirname(await realpath2(candidate)));
+    if (await exists(path4.join(home, "lib", "jdbcrest.jar"))) return home;
+    break;
+  }
+  throw new Fault(
+    "ORDS_SQLCL_LIBRARIES_REQUIRED",
+    "ORDS APEX operations require the selected SQLcl installation with lib/jdbcrest.jar and the Oracle APEXlang compiler. Set APEXREST_SQLCL to its bin/sql executable.",
+    3,
+    "blocked"
+  );
+}
+async function resolveOrdsJava(javaHome, stage, env, signal, runner = runProcess) {
+  const executableName = process.platform === "win32" ? "java.exe" : "java";
+  const candidates = [
+    ...[javaHome, process.env.JAVA_HOME].filter((home) => !!home).map((home) => ({ executable: path4.join(home, "bin", executableName), javaHome: home })),
+    { executable: executableName, javaHome: void 0 }
+  ];
+  const attempted = /* @__PURE__ */ new Set();
+  for (const candidate of candidates) {
+    if (attempted.has(candidate.executable)) continue;
+    attempted.add(candidate.executable);
+    if (signal?.aborted) throw new Fault("CANCELLED", "ORDS operation cancelled.", 6, "cancelled");
+    try {
+      const result = await runner({
+        executable: candidate.executable,
+        args: ["--list-modules"],
+        cwd: stage,
+        env: { ...env, JAVA_HOME: candidate.javaHome },
+        timeoutMs: 1e4,
+        ...signal ? { signal } : {}
+      });
+      if (result.cancelled || signal?.aborted)
+        throw new Fault("CANCELLED", "ORDS operation cancelled.", 6, "cancelled");
+      const major = Number(result.stdout.match(/^java\.base@(\d+)/m)?.[1] ?? 0);
+      if (result.code === 0 && !result.timedOut && !result.truncated && major >= 21 && /^jdk\.compiler@/m.test(result.stdout))
+        return candidate;
+    } catch (error62) {
+      if (!(error62 instanceof Fault) || error62.code !== "DEPENDENCY_MISSING") throw error62;
+    }
+  }
+  throw new Fault(
+    "ORDS_JDK_REQUIRED",
+    "ORDS APEX operations need an installed JDK 21 or newer with jdk.compiler. The configured Java runtime and JAVA_HOME/PATH do not provide one. Set APEXREST_JAVA_HOME or JAVA_HOME to an existing JDK; ordinary SQLcl can continue using its managed JRE.",
+    3,
+    "blocked"
+  );
+}
+async function runOrdsBridge(settings, job, credentials, stage, signal, runner = runProcess) {
+  if (signal?.aborted) throw new Fault("CANCELLED", "ORDS operation cancelled.", 6, "cancelled");
+  const home = await sqlclHome(settings.executable);
+  const helper = path4.join(resourceRoot(), "ords", "OrdsBridge.java");
+  if (!await exists(helper))
+    throw new Fault("ORDS_HELPER_REQUIRED", "The installed plugin is missing its ORDS helper.", 3, "blocked");
+  const jobFile = path4.join(stage, "ords-job.json");
+  const output2 = path4.join(stage, "ords-result.json");
+  await rm2(output2, { force: true });
+  await writeJson(jobFile, { ...job, output: output2 });
+  const env = { ...process.env, JAVA_HOME: settings.javaHome };
+  delete env.NODE_OPTIONS;
+  delete env.JAVA_TOOL_OPTIONS;
+  delete env._JAVA_OPTIONS;
+  delete env.JDK_JAVA_OPTIONS;
+  const java = await resolveOrdsJava(settings.javaHome, stage, env, signal, runner);
+  env.JAVA_HOME = java.javaHome;
+  const processResult = await runner({
+    executable: java.executable,
+    args: ["-cp", path4.join(home, "lib", "*"), helper, jobFile],
+    cwd: stage,
+    env,
+    input: credentials ? JSON.stringify(credentials) : "",
+    timeoutMs: 18e4,
+    ...signal ? { signal } : {}
+  });
+  const mutation = job.operation === "import" || job.operation === "script";
+  if (processResult.timedOut || processResult.cancelled || processResult.truncated)
+    throw new Fault(
+      processResult.truncated ? "OUTPUT_LIMIT" : processResult.cancelled ? "CANCELLED" : "TIMEOUT",
+      "The ORDS helper did not confirm completion. Reconcile any import before retrying.",
+      6,
+      mutation ? "outcome_unknown" : "cancelled"
+    );
+  let result;
+  if (await exists(output2)) {
+    try {
+      const value = await readJson(output2);
+      if (value && value.operation === job.operation && ["succeeded", "failed"].includes(value.status))
+        result = value;
+    } catch {
+    }
+  }
+  if (processResult.code !== 0 || result?.status !== "succeeded" || !processResult.stdout.split(/\r?\n/).some((line) => line.trim() === "APEXREST_ORDS_COMPLETE")) {
+    const unknown2 = mutation && (!result || result.writeStarted === true);
+    throw new Fault(
+      unknown2 ? "ORDS_OUTCOME_UNKNOWN" : result?.code ?? "ORDS_BRIDGE_FAILED",
+      unknown2 ? "ORDS import did not confirm a complete outcome; reconcile the target before retrying." : "The Oracle ORDS helper failed. Check the SQLcl/Java prerequisites, ORDS authentication and schema privileges.",
+      unknown2 ? 6 : 1,
+      unknown2 ? "outcome_unknown" : "failed"
+    );
+  }
+  return result;
+}
+
 // packages/core/src/oracle.ts
 function sqlclToken(value) {
   if (!value || /[\r\n\x00"&]/.test(value))
@@ -32908,6 +32919,7 @@ var OracleAdapter = class {
   executable;
   mcpRunner;
   selectedTransport;
+  selectedConnections = /* @__PURE__ */ new Map();
   capabilityHelp;
   pendingHelp = [];
   async settings() {
@@ -32920,15 +32932,36 @@ var OracleAdapter = class {
       javaHome: process.env.APEXREST_JAVA_HOME ?? (state.java ? path5.dirname(path5.dirname(state.java)) : process.env.JAVA_HOME)
     };
   }
+  async selectedConnection(connection) {
+    const settings = await this.settings();
+    const key = connectionReference(connection) ?? JSON.stringify(connection);
+    let selected = this.selectedConnections.get(key);
+    if (!selected) {
+      selected = (async () => {
+        if (settings.databaseTransport === "ords") {
+          if (settings.mode !== "cli")
+            throw new Fault("ORDS_CLI_REQUIRED", "ORDS HTTP requires SQLcl CLI mode.", 3, "blocked");
+          return { ords: await ordsCredentials(connection) };
+        }
+        if (!connection.name)
+          throw new Fault(
+            "DIRECT_CONNECTION_REQUIRED",
+            "Configure a direct SQLcl saved connection for this reference or select ORDS HTTP in plugin settings.",
+            3,
+            "blocked"
+          );
+        return { name: parse3(savedConnectionName, connection.name) };
+      })();
+      this.selectedConnections.set(key, selected);
+    }
+    return selected;
+  }
   async session(input2, connection, mutation = false, signal, cwd, format = "text") {
     const work = cwd ?? await this.stage();
     const settings = await this.settings();
     if (mutation) await this.requireMutationSupport();
-    const args = [
-      "-S",
-      "-L",
-      ...connection ? ["-name", parse3(savedConnectionName, connection.name)] : ["/nolog"]
-    ];
+    const selected = connection ? await this.selectedConnection(connection) : void 0;
+    const args = ["-S", "-L", ...selected?.name ? ["-name", selected.name] : ["/nolog"]];
     const env = {
       ...process.env,
       SQLPATH: "",
@@ -32941,17 +32974,20 @@ var OracleAdapter = class {
     delete env._JAVA_OPTIONS;
     delete env.JDK_JAVA_OPTIONS;
     const preamble = "set define off\nset echo off\nset feedback off\n" + (settings.mode === "mcp" && settings.mcpRestrictLevel === "4" ? "" : "whenever oserror exit failure rollback\nwhenever sqlerror exit failure rollback\n");
-    const marker = `APEXREST_COMPLETE_${randomUUID3().replaceAll("-", "")}`;
+    const connect = selected?.ords ? `set history filter default connect
+connect -orest -user "${selected.ords.username}" -password "${selected.ords.password}" -url "${selected.ords.url}"
+` : "";
+    const marker = `APEXREST_COMPLETE_${randomUUID().replaceAll("-", "")}`;
     const request = {
       executable: settings.executable,
       args,
       cwd: work,
       env,
-      input: preamble + input2 + "\nexit\n",
+      input: preamble + connect + input2 + "\nexit\n",
       timeoutMs: 18e4,
       ...signal ? { signal } : {}
     };
-    const result = settings.mode === "mcp" ? await this.mcpRunner({
+    const raw = settings.mode === "mcp" ? await this.mcpRunner({
       ...request,
       // Let SQLcl apply its MCP default. In 26.1, explicit -R 4
       // also suppresses connmgr output, unlike the default MCP profile.
@@ -32961,9 +32997,21 @@ var OracleAdapter = class {
       input: preamble + input2 + (mutation ? "\ncommit;\n" : "\n") + `prompt ${marker}
 `,
       mutation,
-      ...connection ? { connectionName: parse3(savedConnectionName, connection.name) } : {}
+      ...selected?.name ? { connectionName: selected.name } : {}
     }) : await this.runner(request);
-    const output2 = oracleDiagnostics(result, mutation, format);
+    const secret = selected?.ords?.password;
+    const result = secret && format !== "json" ? {
+      ...raw,
+      stdout: raw.stdout.replaceAll(secret, "[REDACTED]"),
+      stderr: raw.stderr.replaceAll(secret, "[REDACTED]")
+    } : raw;
+    let output2;
+    try {
+      output2 = oracleDiagnostics(result, mutation, format);
+    } catch (error62) {
+      if (secret && error62 instanceof Error) error62.message = error62.message.replaceAll(secret, "[REDACTED]");
+      throw error62;
+    }
     if (settings.mode === "mcp" && !output2.split(/\r?\n/).some((line) => line.trim() === marker))
       throw new Fault(
         "SQLCL_MCP_INCOMPLETE",
@@ -32975,6 +33023,8 @@ var OracleAdapter = class {
   }
   async requireMutationSupport() {
     const settings = await this.settings();
+    if (settings.databaseTransport === "ords" && settings.mode !== "cli")
+      throw new Fault("ORDS_CLI_REQUIRED", "ORDS HTTP requires SQLcl CLI mode.", 3, "blocked");
     if (settings.mode === "mcp" && settings.mcpRestrictLevel !== "1")
       throw new Fault(
         "SQLCL_MCP_RESTRICTED",
@@ -32988,6 +33038,18 @@ var OracleAdapter = class {
     await mkdir2(root, { recursive: true, mode: 448 });
     return mkdtemp(path5.join(root, "oracle-"));
   }
+  async ordsBridge(job, connection, signal, stage) {
+    const settings = await this.settings();
+    const selected = connection ? await this.selectedConnection(connection) : void 0;
+    if (connection && !selected?.ords)
+      throw new Fault(
+        "ORDS_CONNECTION_REQUIRED",
+        "Select the ORDS transport for this operation.",
+        3,
+        "blocked"
+      );
+    return runOrdsBridge(settings, job, selected?.ords, stage ?? await this.stage(), signal, this.runner);
+  }
   async capabilityKey(settings, version2) {
     if (!path5.isAbsolute(settings.executable)) return;
     try {
@@ -32996,19 +33058,19 @@ var OracleAdapter = class {
       if (path5.basename(bin) !== "bin") return;
       const files = {};
       const walk = async (directory) => {
-        for (const entry of await readdir2(directory, { withFileTypes: true })) {
+        for (const entry of await readdir(directory, { withFileTypes: true })) {
           const file2 = path5.join(directory, entry.name);
           if (entry.isSymbolicLink()) throw new Error("Untracked SQLcl dependency");
           if (entry.isDirectory()) await walk(file2);
           else if (entry.isFile()) {
-            const info = await stat(file2, { bigint: true });
+            const info = await stat2(file2, { bigint: true });
             files[file2] = [info.dev, info.ino, info.mode, info.size, info.mtimeNs, info.ctimeNs].map(String);
           } else throw new Error("Untracked SQLcl dependency");
         }
       };
       await walk(bin);
       await walk(path5.join(path5.dirname(bin), "lib"));
-      return hash2(canonical({ ...settings, executable, version: version2, files }));
+      return hash(canonical({ ...settings, executable, version: version2, files }));
     } catch {
       return;
     }
@@ -33055,7 +33117,7 @@ var OracleAdapter = class {
         new RegExp("\\b" + command + "\\b", "i").test(help)
       ])
     );
-    return { version: currentVersion, commands, helpHash: hash2(help), help };
+    return { version: currentVersion, commands, helpHash: hash(help), help };
   }
   async requireCapability(name, signal) {
     const capabilities = await this.capabilities(signal);
@@ -33079,12 +33141,12 @@ var OracleAdapter = class {
   async findApplication(root) {
     if (await exists(path5.join(root, "application.apx"))) return root;
     const found = [];
-    for (const entry of await readdir2(root, { withFileTypes: true }))
+    for (const entry of await readdir(root, { withFileTypes: true }))
       if (entry.isDirectory()) {
         const dir = path5.join(root, entry.name);
         if (await exists(path5.join(dir, "application.apx"))) found.push(dir);
         else
-          for (const sub of await readdir2(dir, { withFileTypes: true }))
+          for (const sub of await readdir(dir, { withFileTypes: true }))
             if (sub.isDirectory() && await exists(path5.join(dir, sub.name, "application.apx")))
               found.push(path5.join(dir, sub.name));
       }
@@ -33128,28 +33190,45 @@ var OracleAdapter = class {
       status: "passed",
       compiler,
       mmd: JSON.parse(await readFile2(path5.join(source, ".apex/apexlang.json"), "utf8")),
-      sourceDigest: hash2(canonical(before)),
+      sourceDigest: hash(canonical(before)),
       output: result.output
     };
   }
   async exportApplication(env, connection, format = "APEXLANG") {
     await this.requireCapability("export");
     const stage = await this.stage();
-    const result = await this.session(
+    const ords = (await this.settings()).databaseTransport === "ords";
+    const exportRoot = ords ? path5.join(stage, "export") : stage;
+    const result = ords ? {
+      output: String(
+        (await this.ordsBridge(
+          {
+            operation: "export",
+            applicationId: env.applicationId,
+            exportType: format,
+            split: format === "APEXLANG",
+            outputDirectory: exportRoot
+          },
+          connection,
+          void 0,
+          stage
+        )).message ?? "Export successful"
+      )
+    } : await this.session(
       `apex export -applicationid ${env.applicationId} -exptype ${format} -skipExportDate -expOriginalIds -dir ${sqlclToken(stage)}`,
       connection,
       false,
       void 0,
       stage
     );
-    const directory = format === "APEXLANG" ? await this.findApplication(stage) : stage;
+    const directory = format === "APEXLANG" ? await this.findApplication(exportRoot) : exportRoot;
     const files = await inventory(directory);
     if (!Object.keys(files).length || format === "SQL" && !Object.keys(files).some((f2) => f2.endsWith(".sql")))
       throw new Fault("EMPTY_BACKUP", "Oracle export produced no usable files.", 1);
-    return { directory, files, digest: hash2(canonical(files)), format, output: result.output };
+    return { directory, files, digest: hash(canonical(files)), format, output: result.output };
   }
   async savedConnections(signal) {
-    const marker = `APEXREST_CONNECTIONS_${randomUUID3().replaceAll("-", "")}`;
+    const marker = `APEXREST_CONNECTIONS_${randomUUID().replaceAll("-", "")}`;
     const result = await this.session(
       `prompt ${marker}_BEGIN
 connmgr list -flat
@@ -33173,10 +33252,22 @@ prompt ${marker}_END`,
     };
   }
   async jsonQuery(sql, connection, bindings = {}, signal) {
+    const ords = (await this.settings()).databaseTransport === "ords";
     const preamble = Object.entries(bindings).map(([key, value]) => {
       if (!/^p_[a-z_]+$/.test(key)) throw new Fault("INVALID_BIND", "Invalid internal bind name.", 2);
-      return `variable ${key} ${typeof value === "number" ? "number" : "varchar2(1024)"}
-exec :${key} := ${typeof value === "number" ? value : sqlLiteral(value)};`;
+      const declaration = `variable ${key} ${typeof value === "number" ? "number" : "varchar2(1024)"}`;
+      const literal2 = typeof value === "number" ? value : sqlLiteral(value);
+      if (ords) {
+        if (typeof value === "string" && /[\x00-\x1f\x7f-\x9f]/.test(value))
+          throw new Fault(
+            "INVALID_BIND",
+            "ORDS metadata bind values cannot contain control characters.",
+            2
+          );
+        return `${declaration} = ${typeof value === "number" ? value : `'${value}'`}`;
+      }
+      return `${declaration}
+exec :${key} := ${literal2};`;
     }).join("\n");
     const result = await this.session(
       `${preamble}
@@ -33285,6 +33376,22 @@ ${sql};`,
   async importApplication(ctx, env, connection, source, signal) {
     await this.requireCapability("import", signal);
     const config2 = await this.nativeDeployment(ctx, env, source);
+    if ((await this.settings()).databaseTransport === "ords") {
+      await this.requireMutationSupport();
+      const result2 = await this.ordsBridge(
+        {
+          operation: "import",
+          input: source,
+          deployment: config2,
+          applicationId: env.applicationId,
+          workspace: env.workspace,
+          parsingSchema: env.parsingSchema
+        },
+        connection,
+        signal
+      );
+      return String(result2.message ?? "Import successful");
+    }
     const result = await this.session(
       `apex import -input ${sqlclToken(source)} -deployment ${sqlclToken(config2)} -workspace ${sqlclToken(env.workspace)} -schema ${sqlclToken(env.parsingSchema)} -id ${env.applicationId}`,
       connection,
@@ -33300,6 +33407,23 @@ ${sql};`,
       );
     return result.output;
   }
+  async restoreApplication(env, connection, file2, signal) {
+    const setup = `begin
+ apex_application_install.set_workspace(${sqlLiteral(env.workspace)});
+ apex_application_install.set_schema(${sqlLiteral(env.parsingSchema)});
+ apex_application_install.set_application_id(${env.applicationId});
+end;
+/
+`;
+    if ((await this.settings()).databaseTransport === "ords") {
+      await this.requireMutationSupport();
+      const stage = await this.stage();
+      const input2 = path5.join(stage, "restore.sql");
+      await (await import("./chunk-COQR3B5N.mjs")).atomicWrite(input2, setup + await readFile2(file2, "utf8"));
+      return this.ordsBridge({ operation: "script", input: input2 }, connection, signal, stage);
+    }
+    return this.session(setup + `@${sqlclToken(file2)}`, connection, true, signal);
+  }
 };
 async function installSources(source, root, destination) {
   const target = await contained(root, destination);
@@ -33314,7 +33438,7 @@ async function installSources(source, root, destination) {
   const staging = await mkdtemp(path5.join(path5.dirname(target), ".apexrest-copy-"));
   await inventory(source);
   await cp(source, staging, { recursive: true });
-  await rename2(staging, target);
+  await rename(staging, target);
   return { directory: target, files: await inventory(target) };
 }
 
@@ -33332,7 +33456,7 @@ async function projectInit(directory, template, alias) {
     "conflict"
   );
   if (!await exists(root)) await mkdir3(root, { recursive: true, mode: 448 });
-  if (!(await lstat2(root)).isDirectory() || (await readdir3(root)).length !== 0) throw conflict();
+  if (!(await lstat(root)).isDirectory() || (await readdir2(root)).length !== 0) throw conflict();
   const createFile = async (file2, content) => {
     try {
       await writeFile(file2, content, { flag: "wx", mode: 384 });
@@ -33445,7 +33569,7 @@ async function projectInspect(ctx) {
 
 // packages/installer/src/download.ts
 import path7 from "node:path";
-import { createHash as createHash2 } from "node:crypto";
+import { createHash } from "node:crypto";
 async function download(artifact, cache, offline = false, fetcher = fetch) {
   if (!/^[a-f0-9]{64}$/.test(artifact.sha256) || /(?:latest|main)(?:[./?]|$)/.test(artifact.url))
     throw new Fault("UNPINNED_ARTIFACT", "Downloads require an immutable version URL and SHA-256.", 2);
@@ -33507,7 +33631,7 @@ async function download(artifact, cache, offline = false, fetcher = fetch) {
     const body = response.body;
     async function* verifiedChunks() {
       let size = 0;
-      const digest = createHash2("sha256");
+      const digest = createHash("sha256");
       for await (const value of body) {
         size += value.length;
         if (size > 512 * 1024 * 1024) throw new Fault("DOWNLOAD_LIMIT", "Download exceeds 512 MiB.", 3);
@@ -33535,7 +33659,7 @@ async function download(artifact, cache, offline = false, fetcher = fetch) {
 
 // packages/installer/src/archive.ts
 import path8 from "node:path";
-import { mkdir as mkdir4, lstat as lstat3, symlink, link } from "node:fs/promises";
+import { mkdir as mkdir4, lstat as lstat2, symlink, link } from "node:fs/promises";
 import { createWriteStream } from "node:fs";
 import { pipeline } from "node:stream/promises";
 
@@ -36568,7 +36692,7 @@ async function extractArchive(file2, target, type, allowLinks = false) {
     });
     for (const entry of links) {
       const destination = await contained(target, entry.name), source = await contained(target, entry.target);
-      await lstat3(source);
+      await lstat2(source);
       await mkdir4(path8.dirname(destination), { recursive: true });
       if (entry.hard) await link(source, destination);
       else await symlink(path8.relative(path8.dirname(destination), source), destination);
@@ -36762,9 +36886,9 @@ var ToolchainService = class {
               "Vendor executable is missing from the locked archive layout.",
               3
             );
-          await rename3(staging, step.destination);
+          await rename2(staging, step.destination);
         }
-        if (process.platform !== "win32" && !step.reuse) await chmod(executable, 448);
+        if (process.platform !== "win32" && !step.reuse) await chmod2(executable, 448);
         const javaHome = state.java ? path9.dirname(path9.dirname(state.java)) : void 0;
         const result = await runProcess({
           executable,
@@ -36876,25 +37000,8 @@ var ToolchainService = class {
 };
 
 export {
-  __commonJS,
-  __toESM,
-  Fault,
-  redact,
-  sanitized,
-  success2 as success,
-  failure2 as failure,
   runProcess,
   external_exports,
-  hash2 as hash,
-  hashFile,
-  canonical,
-  atomicWrite,
-  writeJson,
-  readJson,
-  exists,
-  contained,
-  inventory,
-  withLock,
   identifier,
   refName,
   relativePath,
@@ -36905,11 +37012,15 @@ export {
   policy,
   requireTrust,
   savedConnectionName,
+  ordsUrl,
+  ordsUsername,
   connections,
   resolveConnection,
   editConnection,
+  configureConnection,
   sqlclMode,
   sqlclRestriction,
+  databaseTransport,
   sqlclConfigSchema,
   sqlclConfig,
   configureSqlcl,

@@ -6,7 +6,7 @@ import { failure, Fault, success } from './result.ts';
 import { schemas } from './operations.ts';
 import type { Operation } from './operations.ts';
 import { environment, loadProject, managedHome, parse, requireTrust } from './config.ts';
-import { connections, editConnection, resolveConnection } from './connections.ts';
+import { connections, configureConnection, editConnection, resolveConnection } from './connections.ts';
 import { contained, readJson, writeJson } from './fs.ts';
 import { OracleAdapter, installSources } from './oracle.ts';
 import { projectInit, projectInspect } from './project.ts';
@@ -49,7 +49,17 @@ export async function dispatch(operation: string, input: Record<string, unknown>
         data = await new PanelService(root).snapshot(parsed.team as string | undefined);
         break;
       case 'panel.action':
-        data = await new PanelService(root).act(panelActionSchema.parse(parsed).action);
+        {
+          const action = panelActionSchema.parse(parsed).action;
+          if (action.kind === 'connection' && action.password !== undefined)
+            throw new Fault(
+              'LOCAL_CREDENTIAL_ENTRY_REQUIRED',
+              'Enter the ORDS password only in the local browser settings form, or supply a local password file to connection.add.',
+              3,
+              'blocked',
+            );
+          data = await new PanelService(root).act(action);
+        }
         break;
       case 'version':
         data = { version: VERSION, node: process.version };
@@ -64,6 +74,7 @@ export async function dispatch(operation: string, input: Record<string, unknown>
         data = await configureSqlcl(
           text('mode') as SqlclConfig['mode'],
           parsed.mcpRestrictLevel as SqlclConfig['mcpRestrictLevel'] | undefined,
+          parsed.databaseTransport as SqlclConfig['databaseTransport'],
         );
         break;
       case 'dependencies.install': {
@@ -105,7 +116,12 @@ export async function dispatch(operation: string, input: Record<string, unknown>
         );
         break;
       case 'connection.add':
-        data = await editConnection(text('name'), { kind: 'sqlcl-store', name: text('sqlclName') });
+        data = await configureConnection(text('name'), {
+          sqlclName: text('sqlclName'),
+          ordsUrl: text('ordsUrl'),
+          ordsUsername: text('ordsUsername'),
+          passwordFile: text('passwordFile'),
+        });
         break;
       case 'connection.remove':
         data = await editConnection(text('name'));
@@ -114,6 +130,13 @@ export async function dispatch(operation: string, input: Record<string, unknown>
         data = parsed.saved ? await oracle.savedConnections(signal) : await connections();
         break;
       case 'connection.test':
+        if (parsed.saved && (await oracle.settings()).databaseTransport === 'ords')
+          throw new Fault(
+            'ORDS_SAVED_CONNECTION_UNSUPPORTED',
+            'ORDS uses plugin connection references. Test the configured reference without --saved.',
+            3,
+            'blocked',
+          );
         data = await oracle.identity(
           parsed.saved ? { kind: 'sqlcl-store', name: text('name') } : await resolveConnection(text('name')),
           signal,

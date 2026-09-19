@@ -3,7 +3,7 @@ import { createRequire as __createRequire } from 'node:module'; const require = 
 // plugins/metadata.json
 var metadata_default = {
   name: "apexrest-apex",
-  version: "0.1.0-beta.1+codex.20260918090859",
+  version: "0.2.0-beta.1+codex.20260919143707",
   description: "Develop, deploy and test Oracle APEX applications with Codex.",
   author: {
     name: "APEXREST",

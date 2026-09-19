@@ -1,8 +1,8 @@
 import { z } from 'zod';
 import { metadataRequest } from './metadata.ts';
 import { refName, relativePath } from './config.ts';
-import { savedConnectionName } from './connections.ts';
-import { sqlclMode, sqlclRestriction } from './sqlcl-config.ts';
+import { savedConnectionName, ordsUrl, ordsUsername } from './connections.ts';
+import { sqlclMode, sqlclRestriction, databaseTransport } from './sqlcl-config.ts';
 import {
   teamStartSchema,
   teamIdSchema,
@@ -10,7 +10,7 @@ import {
   workStartSchema,
   teamWaitSchema,
 } from './team-schema.ts';
-import { panelReadSchema, panelActionSchema } from './panel-schema.ts';
+import { panelReadSchema, publicPanelActionSchema } from './panel-schema.ts';
 const project = z.string().min(1).max(4096).optional(),
   env = refName;
 const base = { project };
@@ -38,7 +38,11 @@ export const schemas = {
   version: z.strictObject({}),
   doctor: z.strictObject(base),
   'sqlcl.status': z.strictObject({}),
-  'sqlcl.configure': z.strictObject({ mode: sqlclMode, mcpRestrictLevel: sqlclRestriction.optional() }),
+  'sqlcl.configure': z.strictObject({
+    mode: sqlclMode,
+    mcpRestrictLevel: sqlclRestriction.optional(),
+    databaseTransport: databaseTransport.optional(),
+  }),
   'team.start': teamStartSchema,
   'work.start': workStartSchema,
   'team.wait': teamWaitSchema,
@@ -47,7 +51,7 @@ export const schemas = {
   'team.cancel': teamIdSchema,
   'panel.open': panelReadSchema.omit({ team: true }),
   'panel.status': panelReadSchema,
-  'panel.action': panelActionSchema,
+  'panel.action': publicPanelActionSchema,
   setup: z.strictObject(setup),
   'dependencies.install': z.strictObject(dependencies),
   'dependencies.uninstall': z.strictObject({
@@ -71,7 +75,19 @@ export const schemas = {
   }),
   'project.adopt': z.strictObject({ ...base, env, appId: z.number().int().positive() }),
   'project.inspect': z.strictObject(base),
-  'connection.add': z.strictObject({ ...base, name: refName, sqlclName: savedConnectionName }),
+  'connection.add': z
+    .strictObject({
+      ...base,
+      name: refName,
+      sqlclName: savedConnectionName.optional(),
+      ordsUrl: ordsUrl.optional(),
+      ordsUsername: ordsUsername.optional(),
+      passwordFile: z.string().min(1).max(4096).optional(),
+    })
+    .refine(
+      (value) => !!value.sqlclName || !!(value.ordsUrl && value.ordsUsername),
+      'Supply a direct SQLcl name or ORDS URL and username.',
+    ),
   'connection.list': z.strictObject({ ...base, saved: z.boolean().default(false) }),
   'connection.test': z.strictObject({
     ...base,

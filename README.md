@@ -14,11 +14,13 @@ APEXREST connects native Codex skills and MCP tools to Oracle SQLcl. Generate AP
 
 ![APEXREST connects a Codex request to APEXlang source, a verified deployment plan, Oracle APEX and runtime checks.](docs/assets/overview.svg)
 
-> **Beta: `0.1.0-beta.1`.** Real Oracle template compilation and Codex native installation have been exercised in the environments recorded below. Stable release readiness is still blocked by the remaining integration, recovery and platform checks. Independent APEXREST tooling; not an official Oracle or OpenAI product.
+> **Beta: `0.2.0-beta.1`.** Adds ORDS HTTP(S) connectivity and clearer connection settings; see the [release notes](docs/release-notes.md). Real Oracle template compilation, an unchanged application round trip through ORDS and Codex native installation have been exercised within the evidence scopes below. Stable release readiness is still blocked by the remaining integration, recovery and platform checks. Independent APEXREST tooling; not an official Oracle or OpenAI product.
 
 Describe the implementation in Codex chat: `$apexrest-work` starts the configured single agent or team, opens its in-app panel and returns the reviewed result to the same conversation. Models and reasoning use Auto; no web form or manual model configuration is required. See [chat workflow and Auto models](docs/chat-workflow.md). The team retains separate developers, mandatory manager code review, independent QA and final manager review. See [team APIs and review gates](docs/team.md) and the [Codex source audit](docs/codex-integration.md).
 
 Settings offer **Single agent / Agent team** and **Codex in-app browser / External system browser** for APEX verification. Both execution modes have a live dashboard. [Settings and verification boundaries](docs/work-modes.md).
+
+**Settings → Database network transport** selects **Direct Oracle listener** or **ORDS HTTP(S)** for new operations across projects. Direct mode offers a picker of your saved SQLcl connections. ORDS uses your existing database username and password with the schema's ORDS URL when the listener, commonly on port 1521, is unavailable. Its connection settings and password stay in private plugin-level local files; enter the password in the local dashboard or through CLI `--password-file`. ORDS uses SQLcl CLI and supports the APEXlang import/export workflow. Switching back preserves both connection mappings. See [SQL through ORDS](docs/ords.md) for setup and verification limits.
 
 Open `$apexrest-panel` for live project settings, Pokémon agent activity, mandatory reviews, QA and APEX operations inside Codex. The console view is `apexrest panel tui`. See the [development panel](docs/panel.md).
 
@@ -26,7 +28,7 @@ Read the [complete agent workflow with screenshots](docs/agent-workflow.md): tas
 
 ![Actual Codex panel with Mewtwo, Pikachu, Charmander and Squirtle after a reviewed local coding task.](docs/assets/panel-agent-team.jpg)
 
-*Actual Codex in-app browser capture. This isolated coding example verifies team execution; it does not represent an Oracle import.*
+_Actual Codex in-app browser capture. This isolated coding example verifies team execution; it does not represent an Oracle import._
 
 ## Install with the terminal menu
 
@@ -59,7 +61,7 @@ After installation, start a new Codex task and ask:
 
 > Use APEXREST to check my setup. Report the compiler, connection and target checks that still need attention.
 
-You need a Codex host with native plugin support. Oracle work also needs the reviewed Node, Java and SQLcl runtimes, an existing supported APEX target and a locally saved SQLcl connection. The [quickstart](docs/getting-started.md) explains each step; never paste passwords into a prompt.
+You need a Codex host with native plugin support. Oracle work also needs the reviewed Node, Java and SQLcl runtimes, an existing supported APEX target, and either a saved direct SQLcl connection or plugin-local ORDS connection credentials. The [quickstart](docs/getting-started.md) explains each step; never paste passwords into a prompt.
 
 Send `Use $apexrest-menu` in the Codex message box to show **All functions** in the conversation: setup, projects, APEX, database, deployment, testing, diagnostics and review. This is a skill that displays a conversational menu; the plugin does not add a permanent APEXREST sidebar or top-menu button. See [how to find the menu](docs/getting-started.md#all-functions-in-the-codex-plugin-menu) for picker and plugin-page navigation.
 
@@ -115,11 +117,12 @@ A clean supported APEX installation is sufficient. APEXREST service tables are *
 
 ## What has been verified
 
-| Area                | Available evidence                                                                        | Remaining scope                                                                          |
-| ------------------- | ----------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| Native Codex plugin | Isolated installation, discovery, tool calls and lifecycle on Codex 0.154.0 / macOS arm64 | Other host and platform combinations; evidence must be refreshed for a stable release    |
-| Oracle APEXlang     | Real blank/CRM compilation with local SQLcl, without a database connection                | Connected imports, broader component coverage and unsupported-component fixtures         |
-| Local runtime       | Unit, CLI/MCP contract, installer and packaging checks with explicitly labelled fixtures  | Connected recovery, fault-injection, SQL/CRUD integration and application browser checks |
+| Area                | Available evidence                                                                                                              | Remaining scope                                                                            |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| Native Codex plugin | Isolated installation, discovery, tool calls and lifecycle on Codex 0.154.0 / macOS arm64                                       | Other host and platform combinations; evidence must be refreshed for a stable release      |
+| Oracle APEXlang     | Real blank/CRM compilation with local SQLcl, without a database connection                                                      | Changed imports, broader component coverage and unsupported-component fixtures             |
+| ORDS connectivity   | [Authorized unchanged export/import/export](docs/evidence/ords-connected.json), SQL backup creation and 21 byte-identical files | Changed imports, SQL restore, interrupted-response recovery and application browser checks |
+| Local runtime       | Unit, CLI/MCP contract, installer and packaging checks with explicitly labelled fixtures                                        | Connected recovery, fault-injection, SQL/CRUD integration and application browser checks   |
 
 Unit tests, mocked failure scenarios, real Oracle operations and native-host checks are recorded separately. See the [acceptance matrix](docs/acceptance.json), [implementation status](docs/implementation-status.md) and [remaining release gates](docs/next-actions.md). A missing or skipped integration suite is not a passing result.
 
@@ -145,6 +148,7 @@ After source or resource changes, run `npm run plugin:sync` to refresh the check
 
 - [Getting started](docs/getting-started.md): install, connect, create or adopt, plan and verify.
 - [Configuration](docs/configuration.md): explicit targets, connection references and private policy.
+- [SQL through ORDS](docs/ords.md): HTTP(S) transport, database credentials and APEXlang import/export.
 - [Architecture](docs/architecture.md): one core behind the CLI, MCP and skills.
 - [Troubleshooting](docs/troubleshooting.md): setup, compiler, auth and recovery diagnostics.
 - [Security](SECURITY.md): credential boundaries, trusted code and private reports.

@@ -2,6 +2,10 @@
 
 English | [Українська](panel.uk.md)
 
+Settings also select **Direct Oracle listener / ORDS HTTP(S)** and manage plugin-level connection references. For ORDS, enter the schema URL, **Database username** and **Database password** of an existing Oracle database account with access through ORDS. No separate ORDS account is needed. These fields configure the plugin's connection to that account. ORDS uses CLI execution. See [ORDS setup and APEXlang behavior](ords.md).
+
+For direct Oracle access, choose an existing SQLcl saved connection from the selector. Opening Direct connection settings loads the list; **Refresh saved connections** reads it again on request. Loading reads SQLcl's local connection names without connecting to a database. The control shows loading, empty-list and error states, with **Retry** after a failure. Existing mappings remain available even if SQLcl does not return them in the refreshed list. Switching database transport preserves each reference's direct mapping and stored ORDS credentials.
+
 Choose execution mode (`team` or `single`) and verification browser (`codex` or `external`) in project settings. See [mode settings](work-modes.md). Independent review/QA descriptions below apply to team mode; screenshots from September 17 show the earlier panel.
 
 [APEX work from chat](chat-workflow.md) automatically opens the selected team view; the web task form is optional. Auto routing reasons, cumulative token breakdowns and the task time limit appear on the team cards. Cached input and reasoning output are subsets, not extra tokens or a price estimate.
@@ -29,7 +33,7 @@ The TUI uses the same snapshot. Keys `1`–`4` or left/right switch views, up/do
 | APEX operations | Real background jobs and nested result status, diagnostics/artifact references, durable deployment/import state; queue source compilation, tests or an explicit-environment deployment plan |
 | Settings | Full project configuration, environment identity and connection references, toolchain lock, required suites, browser/artifact settings and grant metadata; edit SQLcl CLI/MCP mode and defaults for future teams |
 
-Refresh runs every two seconds while the view is visible. Focused inputs are preserved. Settings changes affect future work; do not switch transport during active database work. Secret stores are never read for display. History is bounded to twelve recent runs, with concise team events and reports; the durable local records retain the original details. Token counts are the totals reported by Codex, including input context, not an estimate of cost.
+Refresh runs every two seconds while the view is visible. The saved SQLcl connection list is loaded by an explicit action, independently of this refresh. Focused inputs are preserved. Settings changes affect future work; do not switch transport during active database work. Secret stores are never read for display. History is bounded to twelve recent runs, with concise team events and reports; the durable local records retain the original details. Token counts are the totals reported by Codex, including input context, not an estimate of cost.
 
 `apexrest_panel_action` accepts an explicit allowlisted action. CLI example:
 
@@ -37,7 +41,7 @@ Refresh runs every two seconds while the view is visible. Focused inputs are pre
 apexrest panel action --project /absolute/application --action '{"kind":"validate"}' --json
 ```
 
-Supported kinds: `preferences`, `sqlcl`, `start`, `message`, `cancel-team`, `cancel-job`, `validate`, `test`, `browser`, `plan`. New implementations use the selected single-agent or reviewed-team mode. The panel cannot submit review approvals, grant trust or apply a deployment directly. An authorized import still uses the existing [deploy workflow](deployment-safety.md). An expired heartbeat or a lost mutation response is not success; reconcile recorded state before retrying. Cancellation does not undo changes.
+Supported kinds: `preferences`, `sqlcl`, `connection`, `saved-connections`, `start`, `message`, `cancel-team`, `cancel-job`, `validate`, `test`, `browser`, `plan`. The `saved-connections` action reads the selected SQLcl installation's saved names. Only the local browser form accepts an ORDS password; MCP connection actions exclude that field. New implementations use the selected single-agent or reviewed-team mode. The panel cannot submit review approvals, grant trust or apply a deployment directly. An authorized import still uses the existing [deploy workflow](deployment-safety.md). An expired heartbeat or a lost mutation response is not success; reconcile recorded state before retrying. Cancellation does not undo changes.
 
 ## Pokémon identities
 
@@ -58,3 +62,5 @@ The local server binds only to loopback, validates Host/Origin, requires a priva
 The MCP server also advertises a self-contained `text/html;profile=mcp-app` resource and the documented UI bridge for Codex hosts that expose it. Resource discovery and content checks do **not** establish embedded MCP UI rendering. The verified desktop route is the actual Codex in-app browser, not a custom sidebar extension. No Codex fork or other-agent compatibility layer is used. See the [source audit](codex-integration.md).
 
 [Panel evidence](evidence/panel-local-checks.json) separates local security/contracts, actual in-app browser observations, console PTY checks and native plugin discovery. [Native team evidence](evidence/panel-team-native.json) uses real Codex inference on an isolated local coding task. No Oracle import, production change, Windows panel run or private desktop subagent attachment is claimed.
+
+The connection-settings revision has separate [local evidence](evidence/connection-settings-local.json) and [native-host evidence](evidence/connection-settings-native.json). Their recorded results define which controls and calls were actually checked; implementing the labels and selector does not itself establish browser rendering or a successful database connection. Earlier panel evidence retains its original scope.

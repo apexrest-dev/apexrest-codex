@@ -8,7 +8,8 @@ export function panelLines(data: PanelSnapshot, tab: number): string[] {
   const team = data.team;
   if (tab === 3)
     return [
-      `Oracle transport: SQLcl ${data.sqlcl.mode.toUpperCase()} · restriction ${data.sqlcl.mcpRestrictLevel}`,
+      `Database network: ${data.sqlcl.databaseTransport === 'ords' ? 'ORDS HTTP(S)' : 'Direct Oracle listener'}`,
+      `SQLcl execution: ${data.sqlcl.mode.toUpperCase()} · restriction ${data.sqlcl.mcpRestrictLevel}`,
       `Trusted: ${data.trusted} · configured: ${data.configured}`,
       'Future work defaults: ' + JSON.stringify(data.preferences),
       'Model selection: Auto (task complexity and implementation repair results; no manual override).',

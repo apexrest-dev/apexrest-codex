@@ -11,6 +11,7 @@ import { PanelService } from '../../packages/core/src/panel.ts';
 import { startPanelServer, panelDocument } from '../../packages/core/src/panel-server.ts';
 import { panelLines } from '../../packages/cli/src/panel-tui.ts';
 import { teamIdentities } from '../../packages/core/src/team-identity.ts';
+import { schemas } from '../../packages/core/src/operations.ts';
 
 async function setup(t: import('node:test').TestContext, trusted = true) {
   const { ctx } = await fixture(),
@@ -70,6 +71,83 @@ test('panel trust and action allowlist cannot be bypassed; saved preferences rou
   });
   assert.equal((await service.snapshot()).preferences.developers, 2);
   await assert.rejects(service.snapshot('../outside'), /Invalid/);
+});
+test('panel saves plugin ORDS settings, preserves direct connections, and never returns passwords', async (t) => {
+  const { service } = await setup(t);
+  await service.act({ kind: 'connection', name: 'dev-read', sqlclName: 'direct-read' });
+  const result = await service.act({
+    kind: 'connection',
+    name: 'dev-read',
+    ordsUrl: 'https://example.test/ords/app/',
+    ordsUsername: 'app',
+    password: 'local-test-secret',
+  });
+  await service.act({
+    kind: 'sqlcl',
+    settings: { schemaVersion: 1, mode: 'cli', databaseTransport: 'ords', mcpRestrictLevel: '4' },
+  });
+  const snapshot = await service.snapshot();
+  assert.equal(snapshot.sqlcl.databaseTransport, 'ords');
+  assert.equal(snapshot.connections['dev-read']?.name, 'direct-read');
+  assert.deepEqual(snapshot.connections['dev-read']?.ords, {
+    url: 'https://example.test/ords/app/',
+    username: 'app',
+  });
+  assert.doesNotMatch(JSON.stringify({ result, snapshot }), /local-test-secret/);
+  assert.ok(panelLines(snapshot, 3).includes('Database network: ORDS HTTP(S)'));
+  await service.act({
+    kind: 'connection',
+    name: 'dev-read',
+    ordsUrl: 'https://example.test/ords/app/',
+    ordsUsername: 'app',
+  });
+  await assert.rejects(
+    service.act({
+      kind: 'connection',
+      name: 'dev-read',
+      ordsUrl: 'https://other.test/ords/app/',
+      ordsUsername: 'app',
+    }),
+    /credential|password|match|changed/i,
+  );
+});
+test('panel loads saved SQLcl names only on an explicit trusted action', async (t) => {
+  const { ctx } = await setup(t, false);
+  let calls = 0;
+  let failure = false;
+  const saved = { source: 'sqlcl-store', connections: [{ name: 'Dev / Київ' }, { name: 'QA exact name' }] };
+  const service = new PanelService(ctx.root, {
+    savedConnections: async () => {
+      calls++;
+      if (failure) throw new Error('SQLcl fixture unavailable');
+      return saved;
+    },
+  });
+  assert.equal(
+    schemas['panel.action'].safeParse({ project: ctx.root, action: { kind: 'saved-connections' } }).success,
+    true,
+  );
+  assert.equal(
+    schemas['panel.action'].safeParse({ action: { kind: 'saved-connections', password: 'forbidden' } })
+      .success,
+    false,
+  );
+  await service.snapshot();
+  assert.equal(calls, 0);
+  await assert.rejects(service.act({ kind: 'saved-connections' }), { code: 'PROJECT_TRUST_REQUIRED' });
+  assert.equal(calls, 0);
+  await writeJson(path.join(process.env.APEXREST_HOME!, 'policy.json'), {
+    schemaVersion: 1,
+    trustedProjects: [ctx.root],
+    grants: [],
+  });
+  assert.deepEqual(await service.act({ kind: 'saved-connections' }), saved);
+  assert.equal(calls, 1);
+  await service.snapshot();
+  assert.equal(calls, 1, 'Status polling must not read the SQLcl store');
+  failure = true;
+  await assert.rejects(service.act({ kind: 'saved-connections' }), /SQLcl fixture unavailable/);
+  assert.equal(calls, 2);
 });
 test('panel HTTP rejects unauthenticated, foreign-origin and unlisted mutations; no arbitrary file serving', async (t) => {
   const { ctx } = await setup(t),

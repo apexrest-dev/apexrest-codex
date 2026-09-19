@@ -11,24 +11,26 @@ import {
   terminalText,
   valueText,
   wrap
-} from "./chunk-XSWFFYGU.mjs";
+} from "./chunk-ZRUGD4ND.mjs";
 import {
   dispatch,
   schemas
-} from "./chunk-OFNIUM7N.mjs";
-import "./chunk-S7O65K5Z.mjs";
-import "./chunk-XDCPF2Z3.mjs";
-import "./chunk-OEOKHSHA.mjs";
-import "./chunk-QU2LZEF3.mjs";
-import "./chunk-WWBXTYRS.mjs";
+} from "./chunk-SSB3P5TK.mjs";
+import "./chunk-B4HSPAOP.mjs";
+import "./chunk-TLBRWMVR.mjs";
+import "./chunk-TKVKS5YD.mjs";
+import "./chunk-F762AFRT.mjs";
+import "./chunk-G26NEU3N.mjs";
+import {
+  external_exports,
+  resourceRoot,
+  sqlclConfig
+} from "./chunk-TM25I7KG.mjs";
 import {
   Fault,
-  external_exports,
   failure,
-  resourceRoot,
-  sanitized,
-  sqlclConfig
-} from "./chunk-GKQBRVST.mjs";
+  sanitized
+} from "./chunk-MJC6ZMRG.mjs";
 
 // packages/cli/src/tui.ts
 import { emitKeypressEvents } from "node:readline";
@@ -66,9 +68,9 @@ var descriptions = {
     "Test connection"
   ],
   "sqlcl.configure": [
-    "SQLcl mode: CLI / MCP",
-    "Choose SQLcl CLI or the official SQLcl MCP server for Oracle operations.",
-    "Save SQLcl mode"
+    "SQLcl settings: CLI / MCP / ORDS",
+    "Choose SQLcl execution and direct Oracle or ORDS HTTP(S) connectivity.",
+    "Save SQLcl settings"
   ]
 };
 var commands = Object.keys(descriptions).map((operation) => ({
@@ -80,6 +82,7 @@ var commands = Object.keys(descriptions).map((operation) => ({
 }));
 var labels = {
   mode: "SQLcl execution mode",
+  databaseTransport: "Database network transport",
   mcpRestrictLevel: "MCP restrict level",
   home: "Managed tools directory",
   offline: "Use cached downloads only",
@@ -93,6 +96,7 @@ var labels = {
 };
 var hints = {
   mode: "CLI runs SQLcl directly. MCP uses the official sql -mcp server. Applies to new operations.",
+  databaseTransport: "direct: Oracle listener. ords: HTTP(S) through ORDS, with plugin connection settings; requires CLI.",
   mcpRestrictLevel: "4: Oracle default restrictions. 1: allow scripts, block host commands. Applies only to MCP.",
   home: "Optional directory for managed APEXREST tools and installation records.",
   acceptOracleLicense: "Enable only after accepting the Oracle terms linked on the review screen.",
@@ -118,7 +122,7 @@ var visibleFields = {
   "plugin.uninstall": ["keepRuntime", "home"],
   "connection.list": [],
   "connection.test": [],
-  "sqlcl.configure": ["mode", "mcpRestrictLevel"]
+  "sqlcl.configure": ["mode", "databaseTransport", "mcpRestrictLevel"]
 };
 var advancedFields = /* @__PURE__ */ new Set([
   "mcpRestrictLevel",
@@ -241,7 +245,13 @@ function homeFrame(state) {
   const { width, height, color, focus } = state;
   const styled = (text, tone = "plain", size = width) => paint(clip(text, size), tone, color);
   const header = brand(color, width < 62 || height < 28);
-  if (height >= 18) header.push(styled(` SQLcl: ${state.sqlclMode ?? "Loading\u2026"}`, "muted"));
+  if (height >= 18)
+    header.push(
+      styled(
+        ` SQLcl: ${state.sqlclMode ?? "Loading\u2026"}${state.sqlclMode ? " \xB7 " + (state.databaseTransport === "ords" ? "ORDS HTTP(S)" : "Direct Oracle") : ""}`,
+        "muted"
+      )
+    );
   if (height >= 18) header.push("");
   header.push(
     styled(
@@ -403,7 +413,10 @@ async function runTui({
     ...advanced ? fields.filter((field) => field.advanced).map((field) => ({ kind: "field", field })) : [],
     { kind: "review" }
   ];
-  const choices = () => editField.required ? editField.choices : ["", ...editField.choices];
+  const choices = () => {
+    const available = command.operation === "sqlcl.configure" && editField.name === "mode" && values.databaseTransport === "ords" ? editField.choices.filter((choice) => choice === "cli") : editField.choices;
+    return editField.required || editField.name === "databaseTransport" ? available : ["", ...available];
+  };
   const close = () => {
     closed = true;
     finish();
@@ -444,7 +457,8 @@ async function runTui({
           catalogueError,
           catalogueQuery,
           catalogueSelected,
-          sqlclMode: sqlclError ? "Configuration unavailable" : sqlcl?.mode.toUpperCase()
+          sqlclMode: sqlclError ? "Configuration unavailable" : sqlcl?.mode.toUpperCase(),
+          databaseTransport: sqlcl?.databaseTransport
         }).join("\r\n")
       );
       return;
@@ -560,6 +574,12 @@ async function runTui({
             {
               text: "Saved for new Oracle operations in this APEXREST home. Current operations keep their mode."
             },
+            ...parsed.databaseTransport === "ords" ? [
+              {
+                text: "ORDS requires CLI execution. Configure each reference with connection add --ords-url URL --ords-username USER --password-file PATH.",
+                tone: "muted"
+              }
+            ] : [],
             ...parsed.mode === "mcp" ? [
               {
                 text: "Oracle MCP may write DBTOOLS$MCP_LOG during connected operations.",
@@ -660,7 +680,11 @@ async function runTui({
       sqlcl = loaded;
       sqlclError = false;
       if (edit) {
-        values = { mode: sqlcl.mode, mcpRestrictLevel: sqlcl.mcpRestrictLevel };
+        values = {
+          mode: sqlcl.mode,
+          databaseTransport: sqlcl.databaseTransport ?? "direct",
+          mcpRestrictLevel: sqlcl.mcpRestrictLevel
+        };
         drafts.set(command.operation, values);
         screen = "form";
       }
@@ -849,6 +873,8 @@ async function runTui({
       else if (down) choiceIndex = Math.min(choices().length - 1, choiceIndex + 1);
       else if (enter) {
         values[editField.name] = choices()[choiceIndex];
+        if (command.operation === "sqlcl.configure" && editField.name === "databaseTransport" && values.databaseTransport === "ords")
+          values.mode = "cli";
         nextField();
       } else if (escape) screen = "form";
     } else if (screen === "edit") {

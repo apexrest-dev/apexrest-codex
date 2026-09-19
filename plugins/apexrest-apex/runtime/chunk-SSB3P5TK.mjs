@@ -1,17 +1,18 @@
 import { createRequire as __createRequire } from 'node:module'; const require = __createRequire(import.meta.url);
 import {
   openPanel
-} from "./chunk-S7O65K5Z.mjs";
+} from "./chunk-B4HSPAOP.mjs";
 import {
   JobService,
   PanelService,
   panelActionSchema,
-  panelReadSchema
-} from "./chunk-XDCPF2Z3.mjs";
+  panelReadSchema,
+  publicPanelActionSchema
+} from "./chunk-TLBRWMVR.mjs";
 import {
   TeamService,
   teamActive
-} from "./chunk-OEOKHSHA.mjs";
+} from "./chunk-TKVKS5YD.mjs";
 import {
   ArtifactService,
   DeploymentService,
@@ -23,32 +24,28 @@ import {
   teamStartSchema,
   teamWaitSchema,
   workStartSchema
-} from "./chunk-QU2LZEF3.mjs";
+} from "./chunk-F762AFRT.mjs";
 import {
   VERSION
-} from "./chunk-WWBXTYRS.mjs";
+} from "./chunk-G26NEU3N.mjs";
 import {
-  Fault,
   OracleAdapter,
-  canonical,
+  configureConnection,
   configureSqlcl,
   connections,
-  contained,
+  databaseTransport,
   editConnection,
   environment,
-  exists,
   external_exports,
-  failure,
-  hash,
   identifier,
   installSources,
   loadProject,
   managedHome,
+  ordsUrl,
+  ordsUsername,
   parse,
   projectInit,
   projectInspect,
-  readJson,
-  redact,
   refName,
   relativePath,
   requireTrust,
@@ -59,11 +56,21 @@ import {
   savedConnectionName,
   sqlclConfig,
   sqlclMode,
-  sqlclRestriction,
+  sqlclRestriction
+} from "./chunk-TM25I7KG.mjs";
+import {
+  Fault,
+  canonical,
+  contained,
+  exists,
+  failure,
+  hash,
+  readJson,
+  redact,
   success,
   withLock,
   writeJson
-} from "./chunk-GKQBRVST.mjs";
+} from "./chunk-MJC6ZMRG.mjs";
 
 // packages/core/src/metadata.ts
 var metadataRequest = external_exports.strictObject({
@@ -136,7 +143,11 @@ var schemas = {
   version: external_exports.strictObject({}),
   doctor: external_exports.strictObject(base),
   "sqlcl.status": external_exports.strictObject({}),
-  "sqlcl.configure": external_exports.strictObject({ mode: sqlclMode, mcpRestrictLevel: sqlclRestriction.optional() }),
+  "sqlcl.configure": external_exports.strictObject({
+    mode: sqlclMode,
+    mcpRestrictLevel: sqlclRestriction.optional(),
+    databaseTransport: databaseTransport.optional()
+  }),
   "team.start": teamStartSchema,
   "work.start": workStartSchema,
   "team.wait": teamWaitSchema,
@@ -145,7 +156,7 @@ var schemas = {
   "team.cancel": teamIdSchema,
   "panel.open": panelReadSchema.omit({ team: true }),
   "panel.status": panelReadSchema,
-  "panel.action": panelActionSchema,
+  "panel.action": publicPanelActionSchema,
   setup: external_exports.strictObject(setup),
   "dependencies.install": external_exports.strictObject(dependencies),
   "dependencies.uninstall": external_exports.strictObject({
@@ -169,7 +180,17 @@ var schemas = {
   }),
   "project.adopt": external_exports.strictObject({ ...base, env, appId: external_exports.number().int().positive() }),
   "project.inspect": external_exports.strictObject(base),
-  "connection.add": external_exports.strictObject({ ...base, name: refName, sqlclName: savedConnectionName }),
+  "connection.add": external_exports.strictObject({
+    ...base,
+    name: refName,
+    sqlclName: savedConnectionName.optional(),
+    ordsUrl: ordsUrl.optional(),
+    ordsUsername: ordsUsername.optional(),
+    passwordFile: external_exports.string().min(1).max(4096).optional()
+  }).refine(
+    (value) => !!value.sqlclName || !!(value.ordsUrl && value.ordsUsername),
+    "Supply a direct SQLcl name or ORDS URL and username."
+  ),
   "connection.list": external_exports.strictObject({ ...base, saved: external_exports.boolean().default(false) }),
   "connection.test": external_exports.strictObject({
     ...base,
@@ -461,7 +482,7 @@ var references = [
   },
   {
     id: "deployment-safety",
-    version: "0.1.0-beta.1",
+    version: "0.2.0-beta.1",
     source: "docs/adr/007-clean-apex-deployment.md",
     text: "Use an explicit environment. Plans bind source hashes and target identity. Recheck drift, acquire local coordination by default and create an export backup before writes. Clean APEX deployment needs no service tables. Local runners must share one managed home; independent machines need external serialization or explicitly selected database coordination. DDL cannot be generally rolled back. Interrupted writes require reconciliation. Production requires an external approval boundary."
   }
@@ -791,7 +812,7 @@ async function dispatch(operation, input = {}, signal) {
     let data;
     switch (operation) {
       case "panel.open": {
-        const { openPanel: openPanel2 } = await import("./chunk-UUKEQCS2.mjs");
+        const { openPanel: openPanel2 } = await import("./chunk-ZUP5TIFO.mjs");
         data = await openPanel2(await realpath(root));
         break;
       }
@@ -799,7 +820,17 @@ async function dispatch(operation, input = {}, signal) {
         data = await new PanelService(root).snapshot(parsed.team);
         break;
       case "panel.action":
-        data = await new PanelService(root).act(panelActionSchema.parse(parsed).action);
+        {
+          const action = panelActionSchema.parse(parsed).action;
+          if (action.kind === "connection" && action.password !== void 0)
+            throw new Fault(
+              "LOCAL_CREDENTIAL_ENTRY_REQUIRED",
+              "Enter the ORDS password only in the local browser settings form, or supply a local password file to connection.add.",
+              3,
+              "blocked"
+            );
+          data = await new PanelService(root).act(action);
+        }
         break;
       case "version":
         data = { version: VERSION, node: process.version };
@@ -813,33 +844,34 @@ async function dispatch(operation, input = {}, signal) {
       case "sqlcl.configure":
         data = await configureSqlcl(
           text("mode"),
-          parsed.mcpRestrictLevel
+          parsed.mcpRestrictLevel,
+          parsed.databaseTransport
         );
         break;
       case "dependencies.install": {
-        const { ToolchainService } = await import("./chunk-TIEFTLD5.mjs");
+        const { ToolchainService } = await import("./chunk-4WKK2U2D.mjs");
         data = await new ToolchainService().apply(parsed);
         break;
       }
       case "dependencies.uninstall": {
-        const { uninstallTools } = await import("./chunk-ESDKRZW5.mjs");
+        const { uninstallTools } = await import("./chunk-NRRCCFJW.mjs");
         data = await uninstallTools(parsed);
         break;
       }
       case "setup":
       case "plugin.install":
       case "plugin.update": {
-        const { setup: setup2 } = await import("./chunk-2HUI7J4P.mjs");
+        const { setup: setup2 } = await import("./chunk-GECK4DF3.mjs");
         data = await setup2(parsed);
         break;
       }
       case "plugin.validate": {
-        const { validateNative } = await import("./chunk-2HUI7J4P.mjs");
+        const { validateNative } = await import("./chunk-GECK4DF3.mjs");
         data = await validateNative(text("from"));
         break;
       }
       case "plugin.uninstall": {
-        const { uninstallNative } = await import("./chunk-2HUI7J4P.mjs");
+        const { uninstallNative } = await import("./chunk-GECK4DF3.mjs");
         data = await uninstallNative(text("home") ?? managedHome(), Boolean(parsed.keepRuntime));
         break;
       }
@@ -851,7 +883,12 @@ async function dispatch(operation, input = {}, signal) {
         );
         break;
       case "connection.add":
-        data = await editConnection(text("name"), { kind: "sqlcl-store", name: text("sqlclName") });
+        data = await configureConnection(text("name"), {
+          sqlclName: text("sqlclName"),
+          ordsUrl: text("ordsUrl"),
+          ordsUsername: text("ordsUsername"),
+          passwordFile: text("passwordFile")
+        });
         break;
       case "connection.remove":
         data = await editConnection(text("name"));
@@ -860,6 +897,13 @@ async function dispatch(operation, input = {}, signal) {
         data = parsed.saved ? await oracle.savedConnections(signal) : await connections();
         break;
       case "connection.test":
+        if (parsed.saved && (await oracle.settings()).databaseTransport === "ords")
+          throw new Fault(
+            "ORDS_SAVED_CONNECTION_UNSUPPORTED",
+            "ORDS uses plugin connection references. Test the configured reference without --saved.",
+            3,
+            "blocked"
+          );
         data = await oracle.identity(
           parsed.saved ? { kind: "sqlcl-store", name: text("name") } : await resolveConnection(text("name")),
           signal
@@ -1030,7 +1074,7 @@ async function dispatch(operation, input = {}, signal) {
             data = await tests.auth(ctx, text("env"));
             break;
           case "browser.open": {
-            const { openVerificationBrowser } = await import("./chunk-HI63WBHB.mjs");
+            const { openVerificationBrowser } = await import("./chunk-HRKLXJU4.mjs");
             data = await openVerificationBrowser(ctx, text("env"));
             break;
           }

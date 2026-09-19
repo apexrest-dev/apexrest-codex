@@ -2,21 +2,23 @@ import { createRequire as __createRequire } from 'node:module'; const require = 
 import {
   PanelService,
   panelActionSchema
-} from "./chunk-XDCPF2Z3.mjs";
+} from "./chunk-TLBRWMVR.mjs";
 import {
   teamRuntime
-} from "./chunk-OEOKHSHA.mjs";
+} from "./chunk-TKVKS5YD.mjs";
+import {
+  parse,
+  resourceRoot
+} from "./chunk-TM25I7KG.mjs";
 import {
   Fault,
   contained,
   exists,
   failure,
-  parse,
   readJson,
-  resourceRoot,
   withLock,
   writeJson
-} from "./chunk-GKQBRVST.mjs";
+} from "./chunk-MJC6ZMRG.mjs";
 
 // packages/core/src/panel-server.ts
 import path from "node:path";

@@ -124,7 +124,15 @@ export async function runTui({
       : []),
     { kind: 'review' },
   ];
-  const choices = () => (editField!.required ? editField!.choices : ['', ...editField!.choices]);
+  const choices = () => {
+    const available =
+      command.operation === 'sqlcl.configure' &&
+      editField!.name === 'mode' &&
+      values.databaseTransport === 'ords'
+        ? editField!.choices.filter((choice) => choice === 'cli')
+        : editField!.choices;
+    return editField!.required || editField!.name === 'databaseTransport' ? available : ['', ...available];
+  };
   const close = () => {
     closed = true;
     finish();
@@ -176,6 +184,7 @@ export async function runTui({
             catalogueQuery,
             catalogueSelected,
             sqlclMode: sqlclError ? 'Configuration unavailable' : sqlcl?.mode.toUpperCase(),
+            databaseTransport: sqlcl?.databaseTransport,
           }).join('\r\n'),
       );
       return;
@@ -304,6 +313,14 @@ export async function runTui({
             {
               text: 'Saved for new Oracle operations in this APEXREST home. Current operations keep their mode.',
             },
+            ...(parsed.databaseTransport === 'ords'
+              ? [
+                  {
+                    text: 'ORDS requires CLI execution. Configure each reference with connection add --ords-url URL --ords-username USER --password-file PATH.',
+                    tone: 'muted' as const,
+                  },
+                ]
+              : []),
             ...(parsed.mode === 'mcp'
               ? [
                   {
@@ -433,7 +450,11 @@ export async function runTui({
       sqlcl = loaded;
       sqlclError = false;
       if (edit) {
-        values = { mode: sqlcl.mode, mcpRestrictLevel: sqlcl.mcpRestrictLevel };
+        values = {
+          mode: sqlcl.mode,
+          databaseTransport: sqlcl.databaseTransport ?? 'direct',
+          mcpRestrictLevel: sqlcl.mcpRestrictLevel,
+        };
         drafts.set(command.operation, values);
         screen = 'form';
       }
@@ -629,6 +650,12 @@ export async function runTui({
       else if (down) choiceIndex = Math.min(choices().length - 1, choiceIndex + 1);
       else if (enter) {
         values[editField!.name] = choices()[choiceIndex]!;
+        if (
+          command.operation === 'sqlcl.configure' &&
+          editField!.name === 'databaseTransport' &&
+          values.databaseTransport === 'ords'
+        )
+          values.mode = 'cli';
         nextField();
       } else if (escape) screen = 'form';
     } else if (screen === 'edit') {

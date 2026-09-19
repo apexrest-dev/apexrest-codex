@@ -42,9 +42,9 @@ const descriptions: Record<SupportedOperation, [string, string, string]> = {
     'Test connection',
   ],
   'sqlcl.configure': [
-    'SQLcl mode: CLI / MCP',
-    'Choose SQLcl CLI or the official SQLcl MCP server for Oracle operations.',
-    'Save SQLcl mode',
+    'SQLcl settings: CLI / MCP / ORDS',
+    'Choose SQLcl execution and direct Oracle or ORDS HTTP(S) connectivity.',
+    'Save SQLcl settings',
   ],
 };
 export const commands = (Object.keys(descriptions) as SupportedOperation[]).map((operation) => ({
@@ -67,6 +67,7 @@ export interface Field {
 }
 const labels: Record<string, string> = {
   mode: 'SQLcl execution mode',
+  databaseTransport: 'Database network transport',
   mcpRestrictLevel: 'MCP restrict level',
   home: 'Managed tools directory',
   offline: 'Use cached downloads only',
@@ -80,6 +81,8 @@ const labels: Record<string, string> = {
 };
 const hints: Record<string, string> = {
   mode: 'CLI runs SQLcl directly. MCP uses the official sql -mcp server. Applies to new operations.',
+  databaseTransport:
+    'direct: Oracle listener. ords: HTTP(S) through ORDS, with plugin connection settings; requires CLI.',
   mcpRestrictLevel:
     '4: Oracle default restrictions. 1: allow scripts, block host commands. Applies only to MCP.',
   home: 'Optional directory for managed APEXREST tools and installation records.',
@@ -106,7 +109,7 @@ const visibleFields: Record<SupportedOperation, string[]> = {
   'plugin.uninstall': ['keepRuntime', 'home'],
   'connection.list': [],
   'connection.test': [],
-  'sqlcl.configure': ['mode', 'mcpRestrictLevel'],
+  'sqlcl.configure': ['mode', 'databaseTransport', 'mcpRestrictLevel'],
 };
 const advancedFields = new Set([
   'mcpRestrictLevel',

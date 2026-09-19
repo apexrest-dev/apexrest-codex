@@ -3,21 +3,23 @@ import {
   resolveWorkRequest,
   teamMessageSchema,
   teamStartSchema
-} from "./chunk-QU2LZEF3.mjs";
+} from "./chunk-F762AFRT.mjs";
+import {
+  external_exports,
+  parse,
+  requireTrust
+} from "./chunk-TM25I7KG.mjs";
 import {
   Fault,
   canonical,
   contained,
   exists,
-  external_exports,
   hash,
   hashFile,
-  parse,
   readJson,
-  requireTrust,
   withLock,
   writeJson
-} from "./chunk-GKQBRVST.mjs";
+} from "./chunk-MJC6ZMRG.mjs";
 
 // packages/core/src/team-source.ts
 import path from "node:path";

@@ -15,6 +15,7 @@ export interface HomeState {
   catalogueQuery: string;
   catalogueSelected: number;
   sqlclMode?: string | undefined;
+  databaseTransport?: string | undefined;
 }
 
 function startAt(selected: number, length: number, room: number) {
@@ -25,7 +26,13 @@ export function homeFrame(state: HomeState): string[] {
   const { width, height, color, focus } = state;
   const styled = (text: string, tone: Tone = 'plain', size = width) => paint(clip(text, size), tone, color);
   const header = brand(color, width < 62 || height < 28);
-  if (height >= 18) header.push(styled(` SQLcl: ${state.sqlclMode ?? 'Loading…'}`, 'muted'));
+  if (height >= 18)
+    header.push(
+      styled(
+        ` SQLcl: ${state.sqlclMode ?? 'Loading…'}${state.sqlclMode ? ' · ' + (state.databaseTransport === 'ords' ? 'ORDS HTTP(S)' : 'Direct Oracle') : ''}`,
+        'muted',
+      ),
+    );
   if (height >= 18) header.push('');
   header.push(
     styled(

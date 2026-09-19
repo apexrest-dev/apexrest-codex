@@ -6,7 +6,7 @@ import { contained, exists, readJson, writeJson } from './fs.ts';
 import { loadProject, parse, policy, requireTrust } from './config.ts';
 import { sanitized, Fault } from './result.ts';
 import { sqlclConfig, configureSqlcl } from './sqlcl-config.ts';
-import { connections } from './connections.ts';
+import { connections, configureConnection } from './connections.ts';
 import { TeamService, teamRuntime } from './team.ts';
 import { JobService } from './jobs.ts';
 import { panelActionSchema, type PanelAction } from './panel-schema.ts';
@@ -14,11 +14,15 @@ import { workPreferences } from './work-preferences.ts';
 import { openVerificationBrowser } from './browser.ts';
 import { VERSION } from './version.ts';
 import { runProcess } from './process.ts';
+import { OracleAdapter } from './oracle.ts';
 
 type Row = Record<string, unknown>;
 const safe = <T>(value: T) => sanitized(value) as T;
 export class PanelService {
-  constructor(private root: string) {}
+  constructor(
+    private root: string,
+    private oracle: Pick<OracleAdapter, 'savedConnections'> = new OracleAdapter(),
+  ) {}
   async preferences() {
     return workPreferences(this.root);
   }
@@ -174,13 +178,19 @@ export class PanelService {
     action = parse(panelActionSchema, { action }).action;
     this.root = await realpath(this.root);
     await requireTrust(this.root);
+    if (action.kind === 'saved-connections') return this.oracle.savedConnections();
     if (action.kind === 'preferences') {
       await writeJson(await contained(this.root, '.apexrest/panel/preferences.json'), action.settings);
       return { saved: true, appliesTo: 'new-teams' };
     }
     if (action.kind === 'sqlcl') {
-      return configureSqlcl(action.settings.mode, action.settings.mcpRestrictLevel);
+      return configureSqlcl(
+        action.settings.mode,
+        action.settings.mcpRestrictLevel,
+        action.settings.databaseTransport,
+      );
     }
+    if (action.kind === 'connection') return configureConnection(action.name, action);
     const ctx = await loadProject(this.root),
       team = new TeamService(ctx);
     if (action.kind === 'start') return team.start({ ...action.request, project: this.root });

@@ -598,10 +598,10 @@ export class DeploymentService {
             'Restore requires one complete non-split Oracle SQL export.',
             3,
           );
-        await this.oracle.session(
-          `begin\n apex_application_install.set_workspace(${sqlLiteral(env.workspace)});\n apex_application_install.set_schema(${sqlLiteral(env.parsingSchema)});\n apex_application_install.set_application_id(${env.applicationId});\nend;\n/\n@${sqlclToken(path.join(frozen, main[0]!))}`,
+        await this.oracle.restoreApplication(
+          env,
           deployConnection,
-          true,
+          path.join(frozen, main[0]!),
           controller.signal,
         );
       } else

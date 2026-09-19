@@ -1,21 +1,22 @@
 import { createRequire as __createRequire } from 'node:module'; const require = __createRequire(import.meta.url);
 import {
-  teamLabel
-} from "./chunk-GFRSRK3K.mjs";
-import {
   clip,
   paint,
   wrap
-} from "./chunk-XSWFFYGU.mjs";
+} from "./chunk-ZRUGD4ND.mjs";
+import {
+  teamLabel
+} from "./chunk-GFRSRK3K.mjs";
 import {
   PanelService
-} from "./chunk-XDCPF2Z3.mjs";
-import "./chunk-OEOKHSHA.mjs";
-import "./chunk-QU2LZEF3.mjs";
-import "./chunk-WWBXTYRS.mjs";
+} from "./chunk-TLBRWMVR.mjs";
+import "./chunk-TKVKS5YD.mjs";
+import "./chunk-F762AFRT.mjs";
+import "./chunk-G26NEU3N.mjs";
+import "./chunk-TM25I7KG.mjs";
 import {
   Fault
-} from "./chunk-GKQBRVST.mjs";
+} from "./chunk-MJC6ZMRG.mjs";
 
 // packages/cli/src/panel-tui.ts
 import { emitKeypressEvents } from "node:readline";
@@ -23,7 +24,8 @@ function panelLines(data, tab) {
   const team = data.team;
   if (tab === 3)
     return [
-      `Oracle transport: SQLcl ${data.sqlcl.mode.toUpperCase()} \xB7 restriction ${data.sqlcl.mcpRestrictLevel}`,
+      `Database network: ${data.sqlcl.databaseTransport === "ords" ? "ORDS HTTP(S)" : "Direct Oracle listener"}`,
+      `SQLcl execution: ${data.sqlcl.mode.toUpperCase()} \xB7 restriction ${data.sqlcl.mcpRestrictLevel}`,
       `Trusted: ${data.trusted} \xB7 configured: ${data.configured}`,
       "Future work defaults: " + JSON.stringify(data.preferences),
       "Model selection: Auto (task complexity and implementation repair results; no manual override).",

@@ -24,11 +24,22 @@ class Output extends PassThrough {
   columns = 80;
   rows = 24;
 }
+function terminalEnvironment(t: TestContext, term: string) {
+  const previous = process.env.TERM;
+  process.env.TERM = term;
+  t.after(() => {
+    if (previous === undefined) delete process.env.TERM;
+    else process.env.TERM = previous;
+  });
+}
 function session(
   t: TestContext,
   execute: typeof dispatch = async (op, data) => success(op, data),
   loadCatalogue = loadApexlangCatalogue,
 ) {
+  // The streams below simulate an interactive terminal regardless of the
+  // shell that launched the tests (CI/Codex commonly provides TERM=dumb).
+  terminalEnvironment(t, 'xterm-256color');
   const input = new Input(),
     output = new Output();
   let transcript = '';
@@ -157,10 +168,45 @@ test('SQLcl mode is editable, cancellation does not save, and Enter persists the
   s.key('r', true);
   s.key('return');
   await setImmediate();
-  assert.deepEqual(calls, [{ op: 'sqlcl.configure', input: { mode: 'mcp', mcpRestrictLevel: '4' } }]);
+  assert.deepEqual(calls, [
+    { op: 'sqlcl.configure', input: { mode: 'mcp', databaseTransport: 'direct', mcpRestrictLevel: '4' } },
+  ]);
   assert.match(s.screen(), /SQLcl mode: MCP/);
   s.key('escape');
   assert.match(s.screen(), /SQLcl: MCP/);
+});
+
+test('ORDS transport forces CLI execution and persists the network choice from the TUI', async (t) => {
+  const calls: { op: string; input: Record<string, unknown> }[] = [];
+  const s = session(t, async (op, input = {}) => {
+    calls.push({ op, input });
+    return success(op, { schemaVersion: 1, ...input });
+  });
+  s.type('sqlcl configure');
+  s.key('return');
+  await setImmediate();
+  s.select('SQLcl execution mode');
+  s.key('return');
+  s.key('down');
+  s.key('return');
+  s.select('Database network transport');
+  s.key('return');
+  s.key('down');
+  s.key('return');
+  s.select('SQLcl execution mode');
+  s.key('return');
+  assert.doesNotMatch(s.screen(), /(?:^|\r\n)[> ]+mcp(?:\r\n|$)/);
+  s.key('return');
+  s.key('r', true);
+  assert.match(s.screen(), /ORDS requires CLI/);
+  s.key('return');
+  await setImmediate();
+  assert.deepEqual(calls, [
+    { op: 'sqlcl.configure', input: { mode: 'cli', databaseTransport: 'ords', mcpRestrictLevel: '4' } },
+  ]);
+  assert.match(s.screen(), /Database network: ORDS HTTP\(S\)/);
+  s.key('escape');
+  assert.match(s.screen(), /SQLcl: CLI · ORDS HTTP\(S\)/);
 });
 
 test('home catalogue filters and scrolls independently without dispatching actions', async (t) => {
@@ -420,6 +466,15 @@ test('explicit TUI rejects non-interactive input without changing terminal state
   input.isTTY = false;
   await assert.rejects(runTui({ input, output }), { code: 'TTY_REQUIRED', exitCode: 2 });
   assert.equal(input.isRaw, false);
+});
+
+test('explicit TUI rejects a dumb terminal even when its streams are interactive', async (t) => {
+  terminalEnvironment(t, 'dumb');
+  const input = new Input(),
+    output = new Output();
+  await assert.rejects(runTui({ input, output }), { code: 'TTY_REQUIRED', exitCode: 2 });
+  assert.equal(input.isRaw, false);
+  assert.equal(input.listenerCount('keypress'), 0);
 });
 
 test('minimum terminal size keeps the value and caret visible while editing a long field label', (t) => {

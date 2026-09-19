@@ -1,7 +1,7 @@
 import { createRequire as __createRequire } from 'node:module'; const require = __createRequire(import.meta.url);
 import {
   sanitized
-} from "./chunk-GKQBRVST.mjs";
+} from "./chunk-MJC6ZMRG.mjs";
 
 // packages/cli/src/tui-view.ts
 import { stripVTControlCharacters } from "node:util";
@@ -222,6 +222,9 @@ function resultLines(result) {
       { text: `SQLcl mode: ${String(payload.mode).toUpperCase()}`, tone: "accent" },
       {
         text: payload.mode === "mcp" ? `Official SQLcl MCP server \xB7 restrict level ${payload.mcpRestrictLevel}` : "SQLcl command-line process"
+      },
+      {
+        text: payload.databaseTransport === "ords" ? "Database network: ORDS HTTP(S) \xB7 plugin connection settings" : "Database network: Direct Oracle listener"
       },
       { text: "New Oracle operations use this mode. Active operations keep their selected mode." }
     ];

@@ -4,13 +4,19 @@ import { cp, mkdir, mkdtemp, readFile, readdir, realpath, rename, stat } from 'n
 import { managedHome, parse, refName } from './config.ts';
 import type { Environment, ProjectContext } from './config.ts';
 import type { Connection } from './connections.ts';
-import { savedConnectionName } from './connections.ts';
+import {
+  savedConnectionName,
+  connectionReference,
+  ordsCredentials,
+  type OrdsCredentials,
+} from './connections.ts';
 import { canonical, contained, exists, hash, inventory, readJson, writeJson } from './fs.ts';
 import { Fault } from './result.ts';
 import { runProcess } from './process.ts';
 import type { ProcessRequest, ProcessResult } from './process.ts';
 import { sqlclConfig, type SqlclConfig } from './sqlcl-config.ts';
 import { runSqlclMcp, type SqlclMcpRequest } from './sqlcl-mcp.ts';
+import { runOrdsBridge, type OrdsBridgeJob } from './ords.ts';
 export type Runner = (request: ProcessRequest) => Promise<ProcessResult>;
 export function sqlclToken(value: string) {
   if (!value || /[\r\n\x00"&]/.test(value))
@@ -85,6 +91,7 @@ export function oracleDiagnostics(r: ProcessResult, mutation = false, format: 't
 }
 export class OracleAdapter {
   private selectedTransport: Promise<SqlclConfig> | undefined;
+  private selectedConnections = new Map<string, Promise<{ name?: string; ords?: OrdsCredentials }>>();
   private capabilityHelp: { key: string; help: string } | undefined;
   private pendingHelp: { key: string; signal: AbortSignal | undefined; result: Promise<string> }[] = [];
   constructor(
@@ -105,6 +112,30 @@ export class OracleAdapter {
         (state.java ? path.dirname(path.dirname(state.java)) : process.env.JAVA_HOME),
     };
   }
+  async selectedConnection(connection: Connection) {
+    const settings = await this.settings();
+    const key = connectionReference(connection) ?? JSON.stringify(connection);
+    let selected = this.selectedConnections.get(key);
+    if (!selected) {
+      selected = (async () => {
+        if (settings.databaseTransport === 'ords') {
+          if (settings.mode !== 'cli')
+            throw new Fault('ORDS_CLI_REQUIRED', 'ORDS HTTP requires SQLcl CLI mode.', 3, 'blocked');
+          return { ords: await ordsCredentials(connection) };
+        }
+        if (!connection.name)
+          throw new Fault(
+            'DIRECT_CONNECTION_REQUIRED',
+            'Configure a direct SQLcl saved connection for this reference or select ORDS HTTP in plugin settings.',
+            3,
+            'blocked',
+          );
+        return { name: parse(savedConnectionName, connection.name) };
+      })();
+      this.selectedConnections.set(key, selected);
+    }
+    return selected;
+  }
   async session(
     input: string,
     connection?: Connection,
@@ -116,11 +147,8 @@ export class OracleAdapter {
     const work = cwd ?? (await this.stage());
     const settings = await this.settings();
     if (mutation) await this.requireMutationSupport();
-    const args = [
-      '-S',
-      '-L',
-      ...(connection ? ['-name', parse(savedConnectionName, connection.name)] : ['/nolog']),
-    ];
+    const selected = connection ? await this.selectedConnection(connection) : undefined;
+    const args = ['-S', '-L', ...(selected?.name ? ['-name', selected.name] : ['/nolog'])];
     const env: NodeJS.ProcessEnv = {
       ...process.env,
       SQLPATH: '',
@@ -137,17 +165,23 @@ export class OracleAdapter {
       (settings.mode === 'mcp' && settings.mcpRestrictLevel === '4'
         ? ''
         : 'whenever oserror exit failure rollback\nwhenever sqlerror exit failure rollback\n');
+    // Credentials are read from the plugin's private store and passed only on
+    // stdin. Validation forbids command delimiters; quotes retain literal
+    // spaces and substitution is disabled before CONNECT executes.
+    const connect = selected?.ords
+      ? `set history filter default connect\nconnect -orest -user "${selected.ords.username}" -password "${selected.ords.password}" -url "${selected.ords.url}"\n`
+      : '';
     const marker = `APEXREST_COMPLETE_${randomUUID().replaceAll('-', '')}`;
     const request: ProcessRequest = {
       executable: settings.executable,
       args,
       cwd: work,
       env,
-      input: preamble + input + '\nexit\n',
+      input: preamble + connect + input + '\nexit\n',
       timeoutMs: 180000,
       ...(signal ? { signal } : {}),
     };
-    const result =
+    const raw =
       settings.mode === 'mcp'
         ? await this.mcpRunner({
             ...request,
@@ -158,10 +192,28 @@ export class OracleAdapter {
             // boundary before acknowledging a write over a persistent MCP session.
             input: preamble + input + (mutation ? '\ncommit;\n' : '\n') + `prompt ${marker}\n`,
             mutation,
-            ...(connection ? { connectionName: parse(savedConnectionName, connection.name) } : {}),
+            ...(selected?.name ? { connectionName: selected.name } : {}),
           })
         : await this.runner(request);
-    const output = oracleDiagnostics(result, mutation, format);
+    const secret = selected?.ords?.password;
+    // Internal JSON rows can legitimately equal a short password (for example
+    // the schema name). Do not rewrite result data before parsing/identity
+    // checks. Any thrown diagnostic is still redacted before it leaves here.
+    const result =
+      secret && format !== 'json'
+        ? {
+            ...raw,
+            stdout: raw.stdout.replaceAll(secret, '[REDACTED]'),
+            stderr: raw.stderr.replaceAll(secret, '[REDACTED]'),
+          }
+        : raw;
+    let output: string;
+    try {
+      output = oracleDiagnostics(result, mutation, format);
+    } catch (error) {
+      if (secret && error instanceof Error) error.message = error.message.replaceAll(secret, '[REDACTED]');
+      throw error;
+    }
     if (settings.mode === 'mcp' && !output.split(/\r?\n/).some((line) => line.trim() === marker))
       throw new Fault(
         'SQLCL_MCP_INCOMPLETE',
@@ -173,6 +225,8 @@ export class OracleAdapter {
   }
   async requireMutationSupport() {
     const settings = await this.settings();
+    if (settings.databaseTransport === 'ords' && settings.mode !== 'cli')
+      throw new Fault('ORDS_CLI_REQUIRED', 'ORDS HTTP requires SQLcl CLI mode.', 3, 'blocked');
     if (settings.mode === 'mcp' && settings.mcpRestrictLevel !== '1')
       throw new Fault(
         'SQLCL_MCP_RESTRICTED',
@@ -185,6 +239,18 @@ export class OracleAdapter {
     const root = path.join(managedHome(), 'staging');
     await mkdir(root, { recursive: true, mode: 0o700 });
     return mkdtemp(path.join(root, 'oracle-'));
+  }
+  async ordsBridge(job: OrdsBridgeJob, connection?: Connection, signal?: AbortSignal, stage?: string) {
+    const settings = await this.settings();
+    const selected = connection ? await this.selectedConnection(connection) : undefined;
+    if (connection && !selected?.ords)
+      throw new Fault(
+        'ORDS_CONNECTION_REQUIRED',
+        'Select the ORDS transport for this operation.',
+        3,
+        'blocked',
+      );
+    return runOrdsBridge(settings, job, selected?.ords, stage ?? (await this.stage()), signal, this.runner);
   }
   private async capabilityKey(settings: Awaited<ReturnType<OracleAdapter['settings']>>, version: string) {
     // Only cache bundled help for an identifiable SQLcl installation. Bare PATH
@@ -342,14 +408,35 @@ export class OracleAdapter {
   async exportApplication(env: Environment, connection: Connection, format: 'APEXLANG' | 'SQL' = 'APEXLANG') {
     await this.requireCapability('export');
     const stage = await this.stage();
-    const result = await this.session(
-      `apex export -applicationid ${env.applicationId} -exptype ${format} -skipExportDate -expOriginalIds -dir ${sqlclToken(stage)}`,
-      connection,
-      false,
-      undefined,
-      stage,
-    );
-    const directory = format === 'APEXLANG' ? await this.findApplication(stage) : stage;
+    const ords = (await this.settings()).databaseTransport === 'ords';
+    const exportRoot = ords ? path.join(stage, 'export') : stage;
+    const result = ords
+      ? {
+          output: String(
+            (
+              await this.ordsBridge(
+                {
+                  operation: 'export',
+                  applicationId: env.applicationId,
+                  exportType: format,
+                  split: format === 'APEXLANG',
+                  outputDirectory: exportRoot,
+                },
+                connection,
+                undefined,
+                stage,
+              )
+            ).message ?? 'Export successful',
+          ),
+        }
+      : await this.session(
+          `apex export -applicationid ${env.applicationId} -exptype ${format} -skipExportDate -expOriginalIds -dir ${sqlclToken(stage)}`,
+          connection,
+          false,
+          undefined,
+          stage,
+        );
+    const directory = format === 'APEXLANG' ? await this.findApplication(exportRoot) : exportRoot;
     const files = await inventory(directory);
     if (
       !Object.keys(files).length ||
@@ -387,10 +474,25 @@ export class OracleAdapter {
     bindings: Record<string, string | number> = {},
     signal?: AbortSignal,
   ) {
+    const ords = (await this.settings()).databaseTransport === 'ords';
     const preamble = Object.entries(bindings)
       .map(([key, value]) => {
         if (!/^p_[a-z_]+$/.test(key)) throw new Fault('INVALID_BIND', 'Invalid internal bind name.', 2);
-        return `variable ${key} ${typeof value === 'number' ? 'number' : 'varchar2(1024)'}\nexec :${key} := ${typeof value === 'number' ? value : sqlLiteral(value)};`;
+        const declaration = `variable ${key} ${typeof value === 'number' ? 'number' : 'varchar2(1024)'}`;
+        const literal = typeof value === 'number' ? value : sqlLiteral(value);
+        // Initialize OREST bind values in SQLcl itself. A separate EXEC for an
+        // OUT bind fails with ORA-17283 in the REST driver before the SELECT.
+        if (ords) {
+          if (typeof value === 'string' && /[\x00-\x1f\x7f-\x9f]/.test(value))
+            throw new Fault(
+              'INVALID_BIND',
+              'ORDS metadata bind values cannot contain control characters.',
+              2,
+            );
+          // VARIABLE removes its outer quotes without SQL string unescaping.
+          return `${declaration} = ${typeof value === 'number' ? value : `'${value}'`}`;
+        }
+        return `${declaration}\nexec :${key} := ${literal};`;
       })
       .join('\n');
     const result = await this.session(
@@ -520,6 +622,22 @@ export class OracleAdapter {
   ) {
     await this.requireCapability('import', signal);
     const config = await this.nativeDeployment(ctx, env, source);
+    if ((await this.settings()).databaseTransport === 'ords') {
+      await this.requireMutationSupport();
+      const result = await this.ordsBridge(
+        {
+          operation: 'import',
+          input: source,
+          deployment: config,
+          applicationId: env.applicationId,
+          workspace: env.workspace,
+          parsingSchema: env.parsingSchema,
+        },
+        connection,
+        signal,
+      );
+      return String(result.message ?? 'Import successful');
+    }
     const result = await this.session(
       `apex import -input ${sqlclToken(source)} -deployment ${sqlclToken(config)} -workspace ${sqlclToken(env.workspace)} -schema ${sqlclToken(env.parsingSchema)} -id ${env.applicationId}`,
       connection,
@@ -534,6 +652,19 @@ export class OracleAdapter {
         'outcome_unknown',
       );
     return result.output;
+  }
+  async restoreApplication(env: Environment, connection: Connection, file: string, signal?: AbortSignal) {
+    const setup = `begin\n apex_application_install.set_workspace(${sqlLiteral(env.workspace)});\n apex_application_install.set_schema(${sqlLiteral(env.parsingSchema)});\n apex_application_install.set_application_id(${env.applicationId});\nend;\n/\n`;
+    if ((await this.settings()).databaseTransport === 'ords') {
+      await this.requireMutationSupport();
+      // Keep installation context and the complete non-split backup in one
+      // server-side script request. Do not execute the setup as a separate call.
+      const stage = await this.stage();
+      const input = path.join(stage, 'restore.sql');
+      await (await import('./fs.ts')).atomicWrite(input, setup + (await readFile(file, 'utf8')));
+      return this.ordsBridge({ operation: 'script', input }, connection, signal, stage);
+    }
+    return this.session(setup + `@${sqlclToken(file)}`, connection, true, signal);
   }
 }
 export async function installSources(source: string, root: string, destination: string) {

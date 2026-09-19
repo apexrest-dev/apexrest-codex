@@ -2,6 +2,8 @@
 
 English | [Українська](tui.uk.md)
 
+The SQLcl settings action also selects **Direct Oracle listener / ORDS HTTP(S)** for new operations. Configure ORDS credentials in the local dashboard or with CLI `connection add --password-file`; saved SQLcl connection listing applies to direct access. See [ORDS setup](ords.md).
+
 Run `apexrest` or `apexrest tui` in an interactive terminal. The home screen shows the APEXREST logo, an APEXlang dashboard and seven actions, without category menus:
 
 | Action                       | Behavior                                                                                                                                                                      |

@@ -2,20 +2,20 @@
 
 English | [Українська](getting-started.uk.md)
 
-Start with the terminal menu to install tools and the plugin, then test a saved SQLcl connection. The repository includes the built runtime, so these steps need no TypeScript build or `npm ci`. Direct installation through the Codex CLI is also documented below.
+Start with the terminal menu to install tools and the plugin, then configure a direct SQLcl or ORDS HTTP(S) connection. The repository includes the built runtime, so these steps need no TypeScript build or `npm ci`. Direct installation through the Codex CLI is also documented below.
 
 The current distribution is beta. Native-host evidence is specific to the tested Codex and platform combination; [stable release gates](next-actions.md) remain open.
 
 ## Prerequisites
 
-| Requirement                             | When it is needed                                                   |
-| --------------------------------------- | ------------------------------------------------------------------- |
-| Codex with native plugin support        | Plugin registration; Codex CLI 0.154.0 was exercised on macOS arm64 |
-| Node 24 LTS available on `PATH`         | Starting the bundled TUI, CLI and MCP runtime                       |
-| Java 21 and reviewed SQLcl 26.1.2       | Oracle generation, validation, export and import                    |
-| Existing supported Oracle APEX target   | Connected workflows require APEX 26.1+                              |
-| Named SQLcl connections                 | Authorized access to the configured target, saved locally           |
-| Chromium and relevant test dependencies | Browser/API suites; utPLSQL only when a SQL suite requires it       |
+| Requirement                                                    | When it is needed                                                                      |
+| -------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| Codex with native plugin support                               | Plugin registration; Codex CLI 0.154.0 was exercised on macOS arm64                    |
+| Node 24 LTS available on `PATH`                                | Starting the bundled TUI, CLI and MCP runtime                                          |
+| Java 21 and reviewed SQLcl 26.1.2                              | Oracle generation, validation, export and import; ORDS needs a JDK with `jdk.compiler` |
+| Existing supported Oracle APEX target                          | Connected workflows require APEX 26.1+                                                 |
+| Saved direct SQLcl connection or plugin-local ORDS credentials | Authorized access to the configured target through the selected transport              |
+| Chromium and relevant test dependencies                        | Browser/API suites; utPLSQL only when a SQL suite requires it                          |
 
 An existing clean APEX installation is enough for ordinary deployment. Service tables, utPLSQL and a provisioned sandbox are not blanket prerequisites for an application-only import. Source installation does not include Oracle binaries, browser credentials or a database account.
 
@@ -43,7 +43,7 @@ The home screen shows the APEXREST logo and seven actions:
 | Uninstall plugin             | Remove the managed plugin registration and files.                               |
 | List saved SQLcl connections | Show names directly from SQLcl's connection store.                              |
 | Test saved SQLcl connection  | Choose a saved connection and check database access.                            |
-| SQLcl mode: CLI / MCP | Choose SQLcl CLI or official SQLcl MCP for new Oracle operations. |
+| SQLcl mode: CLI / MCP        | Choose SQLcl CLI or official SQLcl MCP for new Oracle operations.               |
 
 The APEXlang dashboard on the home screen lists bundled item and component types in a searchable table. Tab switches between actions and the catalogue; type a name or group to filter. Browsing requires no installed tools or database connection. See the [terminal guide](tui.md#apexlang-dashboard).
 
@@ -83,18 +83,18 @@ To find the installed plugin in the desktop app, open **Plugins**, review the **
 
 The conversational menu routes to every workflow below. Each workflow also has its own readable skill label and starter prompt:
 
-| Menu entry               | Functions                                                                    |
-| ------------------------ | ---------------------------------------------------------------------------- |
+| Menu entry                | Functions                                                                     |
+| ------------------------- | ----------------------------------------------------------------------------- |
 | Reviewed development team | Fixed developer, manager code review, independent QA and final manager review |
-| Install dependencies     | Java, SQLcl, Node.js, Playwright and Chromium; preview and offline options   |
-| Setup and connections    | Toolchain diagnostics, local connection references and plugin maintenance    |
-| Projects                 | Create, adopt and inspect projects                                           |
-| APEX applications        | Generate, edit, export, validate and compare applications; Oracle references |
-| Database and PL/SQL      | Read metadata, design schema changes and plan migrations                     |
-| Deployment and recovery  | Plan, authorized import, status and restore planning                         |
-| Tests and browser checks | Configured suites, browser authentication, reports and in-app verification   |
-| Diagnostics and jobs     | Troubleshoot failures, inspect/cancel jobs and read artifacts                |
-| Review changes           | Source preservation, deployment risk, security and release evidence          |
+| Install dependencies      | Java, SQLcl, Node.js, Playwright and Chromium; preview and offline options    |
+| Setup and connections     | Toolchain diagnostics, local connection references and plugin maintenance     |
+| Projects                  | Create, adopt and inspect projects                                            |
+| APEX applications         | Generate, edit, export, validate and compare applications; Oracle references  |
+| Database and PL/SQL       | Read metadata, design schema changes and plan migrations                      |
+| Deployment and recovery   | Plan, authorized import, status and restore planning                          |
+| Tests and browser checks  | Configured suites, browser authentication, reports and in-app verification    |
+| Diagnostics and jobs      | Troubleshoot failures, inspect/cancel jobs and read artifacts                 |
+| Review changes            | Source preservation, deployment risk, security and release evidence           |
 
 Open `$apexrest-panel` for the live development panel, or `$apexrest-team` to start the reviewed workflow directly. The [complete agent guide](agent-workflow.md) explains settings, roles, communication, repair loops and delivery with actual screenshots.
 
@@ -147,22 +147,29 @@ The local packaging command generates unsigned beta artifacts and reports readin
 
 ## Connect and configure
 
-Open **List saved SQLcl connections** or **Test saved SQLcl connection**. Both load the SQLcl store without APEXREST references. Type to search, select with arrow keys and press Enter to test; Ctrl+R refreshes the list. The result shows the database, service and schema or the actual failure. Save missing credentials in SQLcl; the TUI has no password field.
+Open `$apexrest-panel`, then **Settings → Database network transport**. Choose **Direct Oracle listener** or **ORDS HTTP(S)** and save the SQLcl settings. This preference applies at plugin level to new operations across projects. Under **Connection references**, choose the project's read or deploy reference and configure the selected transport:
 
-Equivalent commands after configuring the launcher:
+- **Direct Oracle listener:** choose a **Saved SQLcl connection** from the local store and select **Save direct connection**. The list loads when Direct settings open; **Refresh saved connections** reloads it. An empty list means you need to save a connection interactively in SQLcl. Errors offer **Retry**; an existing mapping remains available even if SQLcl does not list it.
+- **ORDS HTTP(S):** enter the schema's **ORDS schema URL**, your existing Oracle **Database username** and **Database password**, then select **Save ORDS connection**. No separate ORDS account is needed. The schema must permit REST-enabled SQL, and its URL alias can differ from the database username. Use the administrator-provided schema URL, such as `https://ords.example.invalid/ords/app_user/`, rather than an APEX application URL. ORDS selects SQLcl CLI; APEXREST's Codex MCP tools remain available.
+
+ORDS settings are stored locally at plugin level, with the password in a separate private file rather than project configuration or SQLcl's saved connection store. Enter it only in the local dashboard or through CLI `--password-file`; the embedded MCP view does not submit passwords. A blank password preserves it for the same URL and database username; changing either requires a password for the new identity. Switching transports preserves both mappings. See [SQL through ORDS](ords.md) for CLI commands, storage details and import/export verification limits.
+
+For direct connections, the terminal's **List saved SQLcl connections** and **Test saved SQLcl connection** also load the SQLcl store without APEXREST references. Type to search, select with arrow keys and press Enter to test; Ctrl+R refreshes the list. The result shows the database, service and schema or the actual failure. The TUI has no password field.
+
+Equivalent direct-connection commands after configuring the launcher:
 
 ```sh
 apexrest connection list --saved --json
 apexrest connection test 'Development connection' --saved --json
 ```
 
-Replace `Development connection` with the exact saved name. An empty list means the local SQLcl store has no saved connections. Project deployment still requires explicit connection references and target configuration:
+Replace `Development connection` with the exact saved name. These `--saved` commands use direct SQLcl connections; test an ORDS reference with `apexrest connection test dev-read --json` after configuring it and selecting ORDS.
 
-Save the needed connections interactively in SQLcl's local store. Use separate read and deploy connections when available. Give Codex the connection reference names and non-secret target identity:
+For either transport, project deployment requires explicit connection references and target configuration. Use separate read and deploy connections when available. Once both references are configured, give Codex their names and non-secret target identity:
 
-> Configure an APEXREST test environment using the locally saved SQLcl connections `saved-read-connection` and `saved-deploy-connection`. The workspace is `YOUR_WORKSPACE`, parsing schema `YOUR_SCHEMA`, application ID `100`, database unique name `YOUR_DB`, service `YOUR_SERVICE`, and application URL `https://your-host.example/ords/r/workspace/app/`. Verify that the read connection matches this identity.
+> Configure an APEXREST test environment using the connection references `dev-read` and `dev-deploy`. The workspace is `YOUR_WORKSPACE`, parsing schema `YOUR_SCHEMA`, application ID `100`, database unique name `YOUR_DB`, service `YOUR_SERVICE`, and application URL `https://your-host.example/ords/r/workspace/app/`. Verify that the read connection matches this identity.
 
-Replace every placeholder with the actual target. APEXREST records names rather than passwords. No target environment is invented by project initialization. Follow [configuration](configuration.md) for the exact environment schema, private trust policy and test origins.
+Replace every placeholder with the actual target. Project configuration records connection reference names rather than passwords. No target environment is invented by project initialization. Follow [configuration](configuration.md) for the exact environment schema, private trust policy and test origins.
 
 ## Create or adopt a project
 
@@ -223,8 +230,11 @@ For a custom managed directory, use its `<home>/bin` path. Without managed insta
 The following examples abbreviate the launcher as `apexrest`; replace it with its full path or the checked-in Node command:
 
 ```sh
+# Map saved SQLcl connections for the direct transport.
 apexrest connection add dev-read --sqlcl-name saved-read-connection
 apexrest connection add dev-deploy --sqlcl-name saved-deploy-connection
+
+# These project operations use the selected direct or ORDS transport.
 apexrest project inspect --project ./crm --json
 apexrest deploy plan --project ./crm --env dev --out plans/dev.json
 apexrest deploy apply --project ./crm --plan plans/dev.json

@@ -95,11 +95,17 @@
   var busy = false;
   var connected = false;
   var initialized = false;
+  var sqlclDirty = false;
+  var sqlclSignature = "";
   var preferencesDirty = false;
   var preferencesSignature = "";
   var bridgeProject;
   var bridgeReady = false;
   var requestId = 0;
+  var currentView = "overview";
+  var savedConnectionsState = "idle";
+  var savedConnectionNames = [];
+  var savedConnectionsError = "";
   var embedded = window.parent !== window;
   var token = launch.get("session") ?? "";
   var pending = /* @__PURE__ */ new Map();
@@ -134,6 +140,8 @@
   });
   async function api(action) {
     if (embedded) {
+      if (action?.kind === "connection" && action.password)
+        throw new Error("Enter the password in the local dashboard or use CLI --password-file.");
       if (!bridgeReady || !bridgeProject) throw new Error("Waiting for the Codex workspace context.");
       const response2 = await bridge("tools/call", {
         name: action ? "apexrest_panel_action" : "apexrest_panel_status",
@@ -155,21 +163,65 @@
           ...action ? { "Content-Type": "application/json" } : {}
         },
         ...action ? { body: JSON.stringify(action) } : {},
-        signal: AbortSignal.timeout(15e3)
+        signal: AbortSignal.timeout(action?.kind === "saved-connections" ? 6e4 : 15e3)
       }
     );
     const result = await response.json();
     if (!response.ok) throw new Error(result.summary ?? result.error ?? "The local panel request failed.");
     return result;
   }
+  function renderSavedConnections(selected = input("connection-direct").value) {
+    const select = $("connection-direct"), current = snapshot?.connections[input("connection-ref").value.trim()]?.name, selectedCurrent = !!current && selected === current, names = [
+      .../* @__PURE__ */ new Set([...savedConnectionNames, ...current ? [current] : [], ...selected ? [selected] : []])
+    ];
+    const placeholder = node("option", "", "Choose a saved connection");
+    placeholder.value = "";
+    select.replaceChildren(
+      placeholder,
+      ...names.map((name) => {
+        const retained = !savedConnectionNames.includes(name);
+        const label = retained && savedConnectionsState === "loaded" ? `${name} \xB7 ${name === current ? "current mapping" : "previous selection"} (not in SQLcl list)` : retained && name === current ? `${name} \xB7 current mapping` : name;
+        const option = node("option", "", label);
+        option.value = name;
+        return option;
+      })
+    );
+    select.value = selected;
+    select.disabled = savedConnectionsState === "loading";
+    const status = $("saved-connections-status");
+    status.dataset.state = savedConnectionsState;
+    status.textContent = savedConnectionsState === "loading" ? "Loading saved connections from SQLcl\u2026" : savedConnectionsState === "error" ? "Could not load saved SQLcl connections. " + savedConnectionsError + " Use Retry to try again." : savedConnectionsState === "loaded" ? savedConnectionNames.length ? `${savedConnectionNames.length} saved SQLcl connection${savedConnectionNames.length === 1 ? "" : "s"} loaded.${selectedCurrent && !savedConnectionNames.includes(current) ? " The current mapping is retained even though SQLcl did not list it." : ""}` : "No saved SQLcl connections found. Save a direct connection in SQLcl, then refresh." + (selectedCurrent ? " The current mapping is retained." : "") : snapshot && !snapshot.trusted ? "Trust this project before loading saved SQLcl connections." : "Saved connections load when you open Direct connection settings.";
+    $("saved-connections-refresh").textContent = savedConnectionsState === "loading" ? "Loading\u2026" : savedConnectionsState === "error" ? "Retry" : savedConnectionsState === "idle" ? "Load saved connections" : "Refresh saved connections";
+    controls();
+  }
+  async function loadSavedConnections(force = false) {
+    if (!connected || !snapshot?.trusted || busy || savedConnectionsState === "loading" || !force && savedConnectionsState === "loaded")
+      return;
+    savedConnectionsState = "loading";
+    savedConnectionsError = "";
+    renderSavedConnections();
+    try {
+      const result = await api({ kind: "saved-connections" });
+      if (result.source !== "sqlcl-store" || !Array.isArray(result.connections) || result.connections.some((connection) => typeof connection?.name !== "string" || !connection.name))
+        throw new Error("SQLcl returned an invalid connection list.");
+      savedConnectionNames = result.connections.map((connection) => connection.name);
+      savedConnectionsState = "loaded";
+    } catch (error) {
+      savedConnectionsState = "error";
+      savedConnectionsError = error instanceof Error ? error.message : String(error);
+    }
+    renderSavedConnections();
+  }
   function controls() {
     const canAct = connected && !!snapshot?.trusted && !busy;
     for (const id of ["new-task", "validate", "run-tests", "plan"])
       $(id).disabled = !canAct || !snapshot?.configured;
-    for (const form of ["sqlcl-form", "preferences-form", "task-form"])
+    for (const form of ["sqlcl-form", "connection-form", "preferences-form", "task-form"])
       $(form).querySelectorAll("button[type=submit]").forEach((button) => {
         button.disabled = !canAct;
       });
+    $("saved-connections-refresh").disabled = !canAct || savedConnectionsState === "loading";
+    $("connection-save").disabled = !canAct || input("sqlcl-transport").value === "direct" && savedConnectionsState === "loading";
     $("message-form").querySelectorAll("button").forEach((b) => {
       b.disabled = !canAct || !snapshot?.team || !active(snapshot.team.status);
     });
@@ -186,10 +238,12 @@
         view("team");
       }
       notice(
-        ["sqlcl", "preferences"].includes(action.kind) ? "Settings saved for future runs." : action.kind === "message" ? "Task update queued for the active workflow." : action.kind.startsWith("cancel") ? "Stop requested. Existing changes are not rolled back." : "Operation accepted. Follow its actual status below."
+        ["sqlcl", "connection", "preferences"].includes(action.kind) ? "Settings saved for future runs." : action.kind === "message" ? "Task update queued for the active workflow." : action.kind.startsWith("cancel") ? "Stop requested. Existing changes are not rolled back." : "Operation accepted. Follow its actual status below."
       );
       if (action.kind === "message") input("message").value = "";
       if (action.kind === "preferences") preferencesDirty = false;
+      if (action.kind === "sqlcl") sqlclDirty = false;
+      if (action.kind === "connection") input("connection-ords-password").value = "";
       await refresh();
     } catch (error) {
       notice(error instanceof Error ? error.message : String(error), true);
@@ -432,6 +486,7 @@
     return output;
   }
   function render(data) {
+    const connectionsChanged = JSON.stringify(snapshot?.connections) !== JSON.stringify(data.connections);
     snapshot = data;
     connected = true;
     $("project-name").textContent = data.configuration?.application.alias ?? "Unconfigured workspace";
@@ -443,6 +498,14 @@
     $("connection-error").hidden = true;
     document.body.dataset.disconnected = "false";
     const nextPreferences = JSON.stringify(data.preferences);
+    const nextSqlcl = JSON.stringify(data.sqlcl);
+    if (!sqlclDirty && nextSqlcl !== sqlclSignature) {
+      input("sqlcl-mode").value = data.sqlcl.mode;
+      input("sqlcl-level").value = data.sqlcl.mcpRestrictLevel;
+      input("sqlcl-transport").value = data.sqlcl.databaseTransport ?? "direct";
+      sqlclControls();
+      sqlclSignature = nextSqlcl;
+    }
     if (!preferencesDirty && nextPreferences !== preferencesSignature) {
       for (const prefix of ["default", "task"]) {
         input(prefix + "-execution-mode").value = data.preferences.executionMode;
@@ -456,8 +519,10 @@
     }
     if (!initialized) {
       initialized = true;
-      input("sqlcl-mode").value = data.sqlcl.mode;
-      input("sqlcl-level").value = data.sqlcl.mcpRestrictLevel;
+      if (embedded) {
+        input("connection-ords-password").disabled = true;
+        $("connection-password-note").textContent = "Set the password in the local dashboard opened by apexrest panel open, or use CLI --password-file. Passwords are never sent through the embedded Codex panel.";
+      }
       const environment = $("environment");
       for (const [name, env] of Object.entries(data.configuration?.environments ?? {})) {
         const option = node("option", "", name + " \xB7 " + env.kind);
@@ -473,6 +538,23 @@
           "This project is not trusted in APEXREST. The panel can display its state; actions require the existing project trust setup."
         );
     }
+    draw(
+      "connection-refs",
+      [data.connections, data.configuration?.environments],
+      () => Array.from(
+        /* @__PURE__ */ new Set([
+          ...Object.keys(data.connections),
+          ...Object.values(data.configuration?.environments ?? {}).flatMap((env) => [
+            env.readConnectionRef,
+            env.deployConnectionRef
+          ])
+        ])
+      ).map((name) => {
+        const option = node("option");
+        option.value = name;
+        return option;
+      })
+    );
     const teamSelect = $("team-select");
     if (document.activeElement !== teamSelect) {
       const options = data.teams.map((team) => {
@@ -504,9 +586,9 @@
         ],
         ["APEX operations", String(data.jobs.filter((job) => active(job.status)).length), "Running or queued"],
         [
-          "Oracle transport",
-          data.sqlcl.mode === "cli" ? "SQLcl CLI" : "SQLcl MCP",
-          data.sqlcl.mode === "mcp" ? "Restriction level " + data.sqlcl.mcpRestrictLevel : "Direct CLI execution"
+          "Database connectivity",
+          data.sqlcl.databaseTransport === "ords" ? "ORDS HTTP(S)" : "Direct Oracle",
+          data.sqlcl.mode === "mcp" ? "SQLcl MCP \xB7 restriction " + data.sqlcl.mcpRestrictLevel : "SQLcl CLI"
         ]
       ].map(([label, value, sub]) => {
         const box = node("div", "metric");
@@ -611,7 +693,10 @@
         return [box];
       }
     );
+    if (connectionsChanged) renderSavedConnections();
     controls();
+    if (currentView === "settings" && input("sqlcl-transport").value === "direct" && savedConnectionsState === "idle")
+      void loadSavedConnections();
   }
   var refreshing = false;
   async function refresh() {
@@ -638,6 +723,7 @@
     settings: ["Workspace settings", "Inspect effective configuration and choose defaults for future work."]
   };
   function view(name) {
+    currentView = name;
     document.querySelectorAll("[data-page]").forEach((page) => {
       page.hidden = page.dataset.page !== name;
     });
@@ -648,6 +734,7 @@
     const titles = views[name];
     $("view-title").textContent = titles[0];
     $("view-subtitle").textContent = titles[1];
+    if (name === "settings" && input("sqlcl-transport").value === "direct") void loadSavedConnections();
   }
   document.querySelectorAll("[data-view]").forEach((button) => {
     button.onclick = () => view(button.dataset.view);
@@ -716,8 +803,66 @@
       settings: {
         schemaVersion: 1,
         mode: input("sqlcl-mode").value,
-        mcpRestrictLevel: input("sqlcl-level").value
+        mcpRestrictLevel: input("sqlcl-level").value,
+        databaseTransport: input("sqlcl-transport").value
       }
+    });
+  };
+  function sqlclControls() {
+    const ords = input("sqlcl-transport").value === "ords";
+    if (ords) input("sqlcl-mode").value = "cli";
+    $("sqlcl-mode").querySelector("option[value=mcp]").disabled = ords;
+    input("sqlcl-level").disabled = input("sqlcl-mode").value !== "mcp";
+    $("sqlcl-transport-note").textContent = ords ? "Connect through ORDS over HTTP(S) when the Oracle listener is unavailable. Uses SQLcl CLI and the ORDS settings for each connection reference below." : "Connect through the Oracle listener using saved SQLcl connections.";
+    for (const [id, enabled] of [
+      ["connection-direct-group", !ords],
+      ["connection-ords-group", ords]
+    ]) {
+      const group = $(id);
+      group.hidden = !enabled;
+      group.disabled = !enabled;
+    }
+    input("connection-ords-password").disabled = embedded;
+    $("connection-mode-note").textContent = ords ? "Editing ORDS HTTP(S) settings for the selected connection reference." : "Editing the direct Oracle connection for the selected connection reference.";
+    $("connection-save").textContent = ords ? "Save ORDS connection" : "Save direct connection";
+    controls();
+  }
+  $("sqlcl-form").oninput = (event) => {
+    sqlclDirty = true;
+    sqlclControls();
+    if (event.target.id === "sqlcl-transport" && input("sqlcl-transport").value === "direct" && currentView === "settings")
+      void loadSavedConnections();
+  };
+  $("saved-connections-refresh").onclick = () => {
+    void loadSavedConnections(true);
+  };
+  input("connection-direct").onchange = () => renderSavedConnections();
+  input("connection-ref").onchange = () => {
+    const connection = snapshot?.connections[input("connection-ref").value.trim()];
+    renderSavedConnections(connection?.name ?? "");
+    input("connection-ords-url").value = connection?.ords?.url ?? "";
+    input("connection-ords-user").value = connection?.ords?.username ?? "";
+    input("connection-ords-password").value = "";
+  };
+  $("connection-form").onsubmit = (event) => {
+    event.preventDefault();
+    const ords = input("sqlcl-transport").value === "ords", sqlclName = input("connection-direct").value, ordsUrl = input("connection-ords-url").value.trim(), ordsUsername = input("connection-ords-user").value.trim(), password = input("connection-ords-password").value;
+    if (ords && embedded && password) {
+      notice("Enter the password in the local dashboard or use CLI --password-file.", true);
+      return;
+    }
+    if (!ords && !sqlclName) {
+      notice("Choose a saved SQLcl connection for this reference.", true);
+      return;
+    }
+    if (ords && (!ordsUrl || !ordsUsername)) {
+      notice("Enter the ORDS schema URL and your database username.", true);
+      return;
+    }
+    void act({
+      kind: "connection",
+      name: input("connection-ref").value.trim(),
+      ...!ords ? { sqlclName } : { ordsUrl, ordsUsername, ...password ? { password } : {} }
     });
   };
   $("message-form").onsubmit = (event) => {

@@ -1,0 +1,269 @@
+import { createRequire as __createRequire } from 'node:module'; const require = __createRequire(import.meta.url);
+var __create = Object.create;
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __require = /* @__PURE__ */ ((x) => typeof require !== "undefined" ? require : typeof Proxy !== "undefined" ? new Proxy(x, {
+  get: (a, b) => (typeof require !== "undefined" ? require : a)[b]
+}) : x)(function(x) {
+  if (typeof require !== "undefined") return require.apply(this, arguments);
+  throw Error('Dynamic require of "' + x + '" is not supported');
+});
+var __commonJS = (cb, mod) => function __require2() {
+  try {
+    return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+  } catch (e) {
+    throw mod = 0, e;
+  }
+};
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
+
+// packages/core/src/fs.ts
+import { mkdir, open, readFile, readdir, realpath, rename, lstat, rm } from "node:fs/promises";
+import { createReadStream } from "node:fs";
+import path from "node:path";
+import { hostname } from "node:os";
+import { createHash, randomUUID as randomUUID2 } from "node:crypto";
+
+// packages/core/src/result.ts
+import { randomUUID } from "node:crypto";
+var Fault = class extends Error {
+  constructor(code, message, exitCode = 1, status = "failed") {
+    super(message);
+    this.code = code;
+    this.exitCode = exitCode;
+    this.status = status;
+  }
+  code;
+  exitCode;
+  status;
+};
+function redact(value) {
+  return value.replace(
+    /("(?:password|passwd|pwd|token|secret|authorization|cookie|set-cookie|wallet_location)"\s*:\s*)"(?:[^"\\]|\\.)*"/gi,
+    '$1"[REDACTED]"'
+  ).replace(/(https?:\/\/)[^\s/@]+:[^\s/@]+@/gi, "$1[REDACTED]@").replace(
+    /((?:password|passwd|pwd|token|secret|authorization|cookie|set-cookie|wallet_location)\s*[:=]\s*)([^\r\n,}]+)/gi,
+    "$1[REDACTED]"
+  ).replace(/\bBearer\s+[\w.\-+/=]+/gi, "Bearer [REDACTED]");
+}
+function sanitized(value) {
+  if (typeof value === "string") return redact(value);
+  if (Array.isArray(value)) return value.map(sanitized);
+  if (value && typeof value === "object")
+    return Object.fromEntries(
+      Object.entries(value).map(([key, item]) => [
+        key,
+        /^(?:password|passwd|pwd|token|secret|authorization|cookie|set-cookie|wallet_location)$/i.test(key) ? "[REDACTED]" : sanitized(item)
+      ])
+    );
+  return value;
+}
+function success(operation, data, summary = "Operation completed.") {
+  return {
+    schemaVersion: 1,
+    ok: true,
+    operation,
+    status: "succeeded",
+    runId: randomUUID(),
+    summary,
+    diagnostics: [],
+    artifacts: [],
+    nextActions: [],
+    data: sanitized(data),
+    exitCode: 0
+  };
+}
+function failure(operation, error) {
+  const e = error instanceof Fault ? error : new Fault("INTERNAL_ERROR", error instanceof Error ? error.message : "Unknown failure");
+  return {
+    schemaVersion: 1,
+    ok: false,
+    operation,
+    status: e.status,
+    runId: randomUUID(),
+    summary: redact(e.message),
+    diagnostics: [{ severity: "error", code: e.code, message: redact(e.message) }],
+    artifacts: [],
+    nextActions: [],
+    exitCode: e.exitCode
+  };
+}
+
+// packages/core/src/fs.ts
+var hash = (data) => createHash("sha256").update(data).digest("hex");
+async function hashFile(file) {
+  const digest = createHash("sha256");
+  for await (const chunk of createReadStream(file)) digest.update(chunk);
+  return digest.digest("hex");
+}
+function canonical(value) {
+  if (Array.isArray(value)) return "[" + value.map(canonical).join(",") + "]";
+  if (value !== null && typeof value === "object")
+    return "{" + Object.entries(value).sort(([a], [b]) => a.localeCompare(b)).map(([k, v]) => JSON.stringify(k) + ":" + canonical(v)).join(",") + "}";
+  return JSON.stringify(value);
+}
+async function atomicWrite(file, value) {
+  await mkdir(path.dirname(file), { recursive: true, mode: 448 });
+  const temporary = file + "." + randomUUID2() + ".tmp";
+  const handle = await open(temporary, "wx", 384);
+  try {
+    try {
+      if (typeof value === "string" || Buffer.isBuffer(value)) await handle.writeFile(value);
+      else for await (const chunk of value) await handle.writeFile(chunk);
+      await handle.sync();
+    } finally {
+      await handle.close();
+    }
+    await rename(temporary, file);
+  } catch (error) {
+    await rm(temporary, { force: true });
+    throw error;
+  }
+}
+var writeJson = (file, value) => atomicWrite(file, JSON.stringify(value, null, 2) + "\n");
+async function readJson(file) {
+  return JSON.parse(await readFile(file, "utf8"));
+}
+async function exists(file) {
+  try {
+    await lstat(file);
+    return true;
+  } catch (e) {
+    if (e.code === "ENOENT") return false;
+    throw e;
+  }
+}
+async function contained(root, candidate) {
+  const base = await realpath(root), target = path.resolve(base, candidate);
+  const rel = path.relative(base, target);
+  if (rel === ".." || rel.startsWith(".." + path.sep) || path.isAbsolute(rel))
+    throw new Fault("PATH_ESCAPE", "Path escapes the permitted root.", 2);
+  let probe = target;
+  while (!await exists(probe)) probe = path.dirname(probe);
+  const physical = await realpath(probe), physicalRel = path.relative(base, physical);
+  if (physicalRel === ".." || physicalRel.startsWith(".." + path.sep) || path.isAbsolute(physicalRel))
+    throw new Fault("SYMLINK_ESCAPE", "Symlink escapes the permitted root.", 2);
+  return target;
+}
+async function inventory(root) {
+  const out = {};
+  async function walk(dir) {
+    for (const entry of await readdir(dir, { withFileTypes: true })) {
+      const file = path.join(dir, entry.name);
+      if (entry.isSymbolicLink())
+        throw new Fault("SYMLINK_NOT_ALLOWED", "Source and bundle inventories reject symlinks.", 2);
+      if (entry.isDirectory()) await walk(file);
+      else if (entry.isFile())
+        out[path.relative(root, file).split(path.sep).join("/")] = hash(await readFile(file));
+      else throw new Fault("SPECIAL_FILE_NOT_ALLOWED", "Source inventories accept regular files only.", 2);
+    }
+  }
+  await walk(root);
+  return Object.fromEntries(Object.entries(out).sort());
+}
+async function withLock(file, action) {
+  await mkdir(path.dirname(file), { recursive: true, mode: 448 });
+  const recovery = file + ".recovery";
+  if (await exists(recovery))
+    throw new Fault(
+      "LOCKED",
+      "Lock recovery is in progress; inspect a stale recovery gate before retry.",
+      5,
+      "conflict"
+    );
+  if (await exists(file)) {
+    let owner;
+    try {
+      owner = await readJson(file);
+    } catch {
+    }
+    if (owner && owner.hostname === hostname() && Number.isInteger(owner.pid) && owner.pid > 0) {
+      let dead = false;
+      try {
+        process.kill(owner.pid, 0);
+      } catch (error) {
+        dead = error.code === "ESRCH";
+      }
+      if (dead) {
+        try {
+          await mkdir(recovery, { mode: 448 });
+        } catch {
+          throw new Fault("LOCKED", "Another runner owns lock recovery.", 5, "conflict");
+        }
+        try {
+          const current = await readJson(file);
+          if (current.pid === owner.pid && current.hostname === owner.hostname) await rm(file);
+        } finally {
+          await rm(recovery, { recursive: true, force: true });
+        }
+      }
+    }
+  }
+  let handle;
+  try {
+    handle = await open(file, "wx", 384);
+  } catch (e) {
+    if (e.code === "EEXIST")
+      throw new Fault(
+        "LOCKED",
+        "Another operation holds the lock. Inspect its owner before recovery.",
+        5,
+        "conflict"
+      );
+    throw e;
+  }
+  try {
+    await handle.writeFile(
+      JSON.stringify({ pid: process.pid, hostname: hostname(), createdAt: (/* @__PURE__ */ new Date()).toISOString() })
+    );
+    await handle.sync();
+    return await action();
+  } finally {
+    await handle.close();
+    await rm(file, { force: true });
+  }
+}
+
+export {
+  __require,
+  __commonJS,
+  __export,
+  __toESM,
+  Fault,
+  redact,
+  sanitized,
+  success,
+  failure,
+  hash,
+  hashFile,
+  canonical,
+  atomicWrite,
+  writeJson,
+  readJson,
+  exists,
+  contained,
+  inventory,
+  withLock
+};

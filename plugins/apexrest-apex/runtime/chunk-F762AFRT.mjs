@@ -1,20 +1,11 @@
 import { createRequire as __createRequire } from 'node:module'; const require = __createRequire(import.meta.url);
 import {
-  Fault,
   OracleAdapter,
-  atomicWrite,
-  canonical,
-  contained,
   environment,
-  exists,
   external_exports,
-  hash,
-  inventory,
   managedHome,
   parse,
   policy,
-  readJson,
-  redact,
   refName,
   requireTrust,
   resolveConnection,
@@ -22,10 +13,21 @@ import {
   runProcess,
   runtimeState,
   sqlLiteral,
-  sqlclToken,
+  sqlclToken
+} from "./chunk-TM25I7KG.mjs";
+import {
+  Fault,
+  atomicWrite,
+  canonical,
+  contained,
+  exists,
+  hash,
+  inventory,
+  readJson,
+  redact,
   withLock,
   writeJson
-} from "./chunk-GKQBRVST.mjs";
+} from "./chunk-MJC6ZMRG.mjs";
 
 // packages/core/src/testing.ts
 import path4 from "node:path";
@@ -759,16 +761,10 @@ commit;`,
             "Restore requires one complete non-split Oracle SQL export.",
             3
           );
-        await this.oracle.session(
-          `begin
- apex_application_install.set_workspace(${sqlLiteral(env.workspace)});
- apex_application_install.set_schema(${sqlLiteral(env.parsingSchema)});
- apex_application_install.set_application_id(${env.applicationId});
-end;
-/
-@${sqlclToken(path3.join(frozen, main[0]))}`,
+        await this.oracle.restoreApplication(
+          env,
           deployConnection,
-          true,
+          path3.join(frozen, main[0]),
           controller.signal
         );
       } else

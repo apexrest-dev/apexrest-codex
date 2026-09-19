@@ -2,34 +2,42 @@ import { createRequire as __createRequire } from 'node:module'; const require = 
 import {
   TeamService,
   teamRuntime
-} from "./chunk-OEOKHSHA.mjs";
+} from "./chunk-TKVKS5YD.mjs";
 import {
   openVerificationBrowser,
   teamStartSchema,
   workPreferences,
   workPreferencesSchema
-} from "./chunk-QU2LZEF3.mjs";
+} from "./chunk-F762AFRT.mjs";
 import {
   VERSION
-} from "./chunk-WWBXTYRS.mjs";
+} from "./chunk-G26NEU3N.mjs";
 import {
-  Fault,
+  OracleAdapter,
+  configureConnection,
   configureSqlcl,
   connections,
-  contained,
-  exists,
   external_exports,
   loadProject,
+  ordsUrl,
+  ordsUsername,
   parse,
   policy,
-  readJson,
+  refName,
   requireTrust,
   runProcess,
-  sanitized,
+  savedConnectionName,
   sqlclConfig,
-  sqlclConfigSchema,
+  sqlclConfigSchema
+} from "./chunk-TM25I7KG.mjs";
+import {
+  Fault,
+  contained,
+  exists,
+  readJson,
+  sanitized,
   writeJson
-} from "./chunk-GKQBRVST.mjs";
+} from "./chunk-MJC6ZMRG.mjs";
 
 // packages/core/src/panel-schema.ts
 var panelPreferencesSchema = workPreferencesSchema;
@@ -37,11 +45,21 @@ var panelReadSchema = external_exports.strictObject({
   project: external_exports.string().min(1).max(4096).optional(),
   team: external_exports.uuid().optional()
 });
+var connectionActionSchema = external_exports.strictObject({
+  kind: external_exports.literal("connection"),
+  name: refName,
+  sqlclName: savedConnectionName.optional(),
+  ordsUrl: ordsUrl.optional(),
+  ordsUsername: ordsUsername.optional(),
+  password: external_exports.string().min(1).max(4096).optional()
+});
 var panelActionSchema = external_exports.strictObject({
   project: external_exports.string().min(1).max(4096).optional(),
   action: external_exports.discriminatedUnion("kind", [
     external_exports.strictObject({ kind: external_exports.literal("preferences"), settings: panelPreferencesSchema }),
     external_exports.strictObject({ kind: external_exports.literal("sqlcl"), settings: sqlclConfigSchema }),
+    external_exports.strictObject({ kind: external_exports.literal("saved-connections") }),
+    connectionActionSchema,
     external_exports.strictObject({ kind: external_exports.literal("start"), request: teamStartSchema.omit({ project: true }) }),
     external_exports.strictObject({ kind: external_exports.literal("message"), id: external_exports.uuid(), message: external_exports.string().trim().min(1).max(8e3) }),
     external_exports.strictObject({ kind: external_exports.literal("cancel-team"), id: external_exports.uuid() }),
@@ -54,6 +72,14 @@ var panelActionSchema = external_exports.strictObject({
       env: external_exports.string().min(1).max(100).optional()
     }),
     external_exports.strictObject({ kind: external_exports.literal("plan"), env: external_exports.string().min(1).max(100) })
+  ])
+});
+var publicPanelActionSchema = panelActionSchema.extend({
+  action: external_exports.discriminatedUnion("kind", [
+    panelActionSchema.shape.action.options[0],
+    ...panelActionSchema.shape.action.options.slice(1).map(
+      (option) => option.shape.kind.value === "connection" ? connectionActionSchema.omit({ password: true }) : option
+    )
   ])
 });
 
@@ -174,10 +200,12 @@ import { readdir, realpath, stat } from "node:fs/promises";
 import { randomUUID as randomUUID2 } from "node:crypto";
 var safe = (value) => sanitized(value);
 var PanelService = class {
-  constructor(root) {
+  constructor(root, oracle = new OracleAdapter()) {
     this.root = root;
+    this.oracle = oracle;
   }
   root;
+  oracle;
   async preferences() {
     return workPreferences(this.root);
   }
@@ -318,13 +346,19 @@ var PanelService = class {
     action = parse(panelActionSchema, { action }).action;
     this.root = await realpath(this.root);
     await requireTrust(this.root);
+    if (action.kind === "saved-connections") return this.oracle.savedConnections();
     if (action.kind === "preferences") {
       await writeJson(await contained(this.root, ".apexrest/panel/preferences.json"), action.settings);
       return { saved: true, appliesTo: "new-teams" };
     }
     if (action.kind === "sqlcl") {
-      return configureSqlcl(action.settings.mode, action.settings.mcpRestrictLevel);
+      return configureSqlcl(
+        action.settings.mode,
+        action.settings.mcpRestrictLevel,
+        action.settings.databaseTransport
+      );
     }
+    if (action.kind === "connection") return configureConnection(action.name, action);
     const ctx = await loadProject(this.root), team = new TeamService(ctx);
     if (action.kind === "start") return team.start({ ...action.request, project: this.root });
     if (action.kind === "browser") return openVerificationBrowser(ctx, action.env);
@@ -340,6 +374,7 @@ var PanelService = class {
 export {
   panelReadSchema,
   panelActionSchema,
+  publicPanelActionSchema,
   JobService,
   executeJob,
   PanelService

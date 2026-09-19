@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "asOf": "2026-09-17",
-  "release": "0.1.0-beta.1",
+  "release": "0.2.0-beta.1",
   "overall": "partial-local-beta",
   "statusSemantics": {
     "implemented": "Executable code exists; does not imply live verification.",
@@ -484,6 +484,30 @@
         "docs/evidence/chat-auto-local.json"
       ],
       "blocker": "Actual local Codex task and host-opened in-app panel verified separately from implicit skill-selection consistency. Windows, closed-host callback/recovery, alternative live model catalogs and task-matched efficiency benchmarks remain unverified. No global chat interceptor or hard token-spend cap."
+    },
+    {
+      "id": "A32",
+      "criterion": "Plugin-level ORDS HTTP(S) transport preserves APEXlang import/export and direct connection settings without requiring SQLcl saved OREST connections",
+      "implementation": "implemented",
+      "verification": "partial",
+      "evidence": [
+        "docs/ords.md",
+        "docs/ords.uk.md",
+        "packages/core/src/ords.ts",
+        "resources/ords/OrdsBridge.java",
+        "tests/unit/ords-transport.test.ts",
+        "tests/unit/ords-adapter.test.ts",
+        "tests/unit/ords-bridge.test.ts",
+        "tests/unit/ords-protocol.test.ts",
+        "docs/evidence/ords-local.json",
+        "docs/evidence/ords-panel-local.json",
+        "docs/evidence/ords-panel-codex.json",
+        "docs/evidence/connection-settings-local.json",
+        "docs/evidence/connection-settings-native.json",
+        "docs/evidence/ords-native.json",
+        "docs/evidence/ords-connected.json"
+      ],
+      "blocker": "Authorized live CLI no-op import/export and SQL backup verified on a private test target: deterministic pre-import exports and all 21 files identical after import. Changed imports, additional component/static-file/MMD variants, SQL restore, live interruption/reconciliation, remote rollback and Windows remain open. Application browser verification is explicitly deferred by the user. Native-host settings evidence is separate from connected CLI operation evidence."
     }
   ],
   "amendments": [

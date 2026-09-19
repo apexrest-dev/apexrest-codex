@@ -3,19 +3,21 @@ import { createRequire as __createRequire } from 'node:module'; const require = 
 import {
   dispatch,
   schemas
-} from "./chunk-OFNIUM7N.mjs";
-import "./chunk-S7O65K5Z.mjs";
+} from "./chunk-SSB3P5TK.mjs";
+import "./chunk-B4HSPAOP.mjs";
 import {
   executeJob
-} from "./chunk-XDCPF2Z3.mjs";
-import "./chunk-OEOKHSHA.mjs";
-import "./chunk-QU2LZEF3.mjs";
-import "./chunk-WWBXTYRS.mjs";
+} from "./chunk-TLBRWMVR.mjs";
+import "./chunk-TKVKS5YD.mjs";
+import "./chunk-F762AFRT.mjs";
+import "./chunk-G26NEU3N.mjs";
+import {
+  loadProject
+} from "./chunk-TM25I7KG.mjs";
 import {
   Fault,
-  failure,
-  loadProject
-} from "./chunk-GKQBRVST.mjs";
+  failure
+} from "./chunk-MJC6ZMRG.mjs";
 
 // packages/cli/src/main.ts
 var argv = process.argv.slice(2);
@@ -73,7 +75,7 @@ function help() {
   if (key === "panel.action")
     lines.push(
       "",
-      "Pass --action as one JSON object. Supported kinds: preferences, sqlcl, start, message, cancel-team, cancel-job, validate, test, browser, plan.",
+      "Pass --action as one JSON object. Supported kinds: preferences, sqlcl, connection, start, message, cancel-team, cancel-job, validate, test, browser, plan.",
       `Example: apexrest panel action --action '{"kind":"validate"}' --project PATH --json`
     );
   if (key === "team.start" || key === "work.start")
@@ -115,12 +117,25 @@ function help() {
     );
   if (key === "connection.list" || key === "connection.test")
     lines.push("", "--saved uses the SQLcl connection store directly, without an APEXREST reference.");
+  if (key === "connection.add")
+    lines.push(
+      "",
+      "--sqlcl-name is a saved direct Oracle connection. ORDS uses --ords-url and --ords-username.",
+      "ORDS SQLcl connections cannot be saved in the SQLcl connection store.",
+      "APEXREST saves ORDS settings and credentials locally at plugin level, across projects.",
+      "Use --password-file PATH to read the password from a local file; omit it to keep an existing password.",
+      "Example: apexrest connection add --name REF --ords-url https://msboard.apex.rest/ords/megasport/ --ords-username megasport --password-file PATH --json",
+      "Configure each project read/deploy reference. Updating ORDS preserves its direct SQLcl alias."
+    );
   if (key === "sqlcl.configure" || key === "sqlcl.status")
     lines.push(
       "",
       "Select the Oracle backend for CLI and APEXREST MCP operations; existing sessions keep their mode.",
-      "apexrest sqlcl configure --mode cli|mcp --json",
+      "apexrest sqlcl configure --mode cli|mcp --database-transport direct|ords --json",
       "cli: SQLcl subprocess (default). mcp: official SQLcl stdio server (sql -mcp).",
+      "direct: Oracle listener connection (default). ords: SQLcl OREST over HTTP(S), without port 1521.",
+      "ORDS uses SQLcl CLI; select --mode cli with --database-transport ords.",
+      "Configure the ORDS URL, username and password for each reference using connection add or panel Settings.",
       "--mcp-restrict-level 4|1: 4 is the default; 1 explicitly permits scripts but blocks host commands.",
       "Saved in APEXREST_HOME/sqlcl.json. No connection, download or Codex registration is changed.",
       "SQLcl MCP can write its own database audit log on connected operations. No silent CLI fallback."
@@ -132,28 +147,28 @@ try {
   else if (argv[0] === "tui" || !argv.length && process.stdin.isTTY && process.stdout.isTTY && process.env.TERM !== "dumb") {
     if (argv.length > 1 && (argv.length !== 3 || argv[1] !== "--project" || !argv[2] || argv[2].startsWith("--")))
       throw new Fault("INVALID_INPUT", "Usage: apexrest tui [--project PATH]", 2);
-    const { runTui } = await import("./chunk-FUZFKQPD.mjs");
+    const { runTui } = await import("./chunk-ES6ULBA7.mjs");
     await runTui(argv[2] ? { project: argv[2] } : {});
   } else if (!argv.length) help();
   else if (argv[0] === "panel" && argv[1] === "tui") {
     if (argv.length !== 2 && (argv.length !== 4 || argv[2] !== "--project" || !argv[3]))
       throw new Fault("INVALID_INPUT", "Usage: apexrest panel tui [--project PATH]", 2);
-    const { runPanelTui } = await import("./chunk-7MGWXXZT.mjs");
+    const { runPanelTui } = await import("./chunk-RPYX2TJX.mjs");
     await runPanelTui(argv[3] ?? process.cwd());
   } else if (argv[0] === "--panel-worker") {
     if (argv.length !== 2 || !argv[1]) throw new Fault("INVALID_INPUT", "Invalid panel worker request.", 2);
-    const { servePanel } = await import("./chunk-UUKEQCS2.mjs");
+    const { servePanel } = await import("./chunk-ZUP5TIFO.mjs");
     await servePanel(argv[1]);
   } else if (argv[0] === "--job-worker") {
     if (argv.length !== 3) throw new Fault("INVALID_INPUT", "Invalid internal job request.", 2);
     await executeJob(await loadProject(argv[1]), argv[2], dispatch);
   } else if (argv[0] === "--team-worker") {
     if (argv.length !== 3) throw new Fault("INVALID_INPUT", "Invalid internal team request.", 2);
-    const { executeTeam } = await import("./chunk-LSXC4MRY.mjs");
+    const { executeTeam } = await import("./chunk-VYRDETAK.mjs");
     await executeTeam(await loadProject(argv[1]), argv[2]);
   } else if (argv[0] === "mcp") {
     if (argv.length !== 1) throw new Fault("INVALID_INPUT", "mcp accepts no arguments.", 2);
-    const { startMcp } = await import("./chunk-V362VAQX.mjs");
+    const { startMcp } = await import("./chunk-Z7HLYU4L.mjs");
     await startMcp();
   } else {
     const selectedOp = argv[0] === "--version" ? { op: "version", start: 1 } : selected;

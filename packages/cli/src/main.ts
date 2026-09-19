@@ -62,7 +62,7 @@ function help() {
   if (key === 'panel.action')
     lines.push(
       '',
-      'Pass --action as one JSON object. Supported kinds: preferences, sqlcl, start, message, cancel-team, cancel-job, validate, test, browser, plan.',
+      'Pass --action as one JSON object. Supported kinds: preferences, sqlcl, connection, start, message, cancel-team, cancel-job, validate, test, browser, plan.',
       'Example: apexrest panel action --action \'{"kind":"validate"}\' --project PATH --json',
     );
   if (key === 'team.start' || key === 'work.start')
@@ -104,12 +104,25 @@ function help() {
     );
   if (key === 'connection.list' || key === 'connection.test')
     lines.push('', '--saved uses the SQLcl connection store directly, without an APEXREST reference.');
+  if (key === 'connection.add')
+    lines.push(
+      '',
+      '--sqlcl-name is a saved direct Oracle connection. ORDS uses --ords-url and --ords-username.',
+      'ORDS SQLcl connections cannot be saved in the SQLcl connection store.',
+      'APEXREST saves ORDS settings and credentials locally at plugin level, across projects.',
+      'Use --password-file PATH to read the password from a local file; omit it to keep an existing password.',
+      'Example: apexrest connection add --name REF --ords-url https://msboard.apex.rest/ords/megasport/ --ords-username megasport --password-file PATH --json',
+      'Configure each project read/deploy reference. Updating ORDS preserves its direct SQLcl alias.',
+    );
   if (key === 'sqlcl.configure' || key === 'sqlcl.status')
     lines.push(
       '',
       'Select the Oracle backend for CLI and APEXREST MCP operations; existing sessions keep their mode.',
-      'apexrest sqlcl configure --mode cli|mcp --json',
+      'apexrest sqlcl configure --mode cli|mcp --database-transport direct|ords --json',
       'cli: SQLcl subprocess (default). mcp: official SQLcl stdio server (sql -mcp).',
+      'direct: Oracle listener connection (default). ords: SQLcl OREST over HTTP(S), without port 1521.',
+      'ORDS uses SQLcl CLI; select --mode cli with --database-transport ords.',
+      'Configure the ORDS URL, username and password for each reference using connection add or panel Settings.',
       '--mcp-restrict-level 4|1: 4 is the default; 1 explicitly permits scripts but blocks host commands.',
       'Saved in APEXREST_HOME/sqlcl.json. No connection, download or Codex registration is changed.',
       'SQLcl MCP can write its own database audit log on connected operations. No silent CLI fallback.',

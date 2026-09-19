@@ -2,10 +2,15 @@
 
 English | [Українська](next-actions.uk.md)
 
+The current local minor update is `0.2.0-beta.1`; see the [release notes](release-notes.md) and [build checks](evidence/minor-update-020.json). Start a new Codex task after reinstalling to load the updated plugin. Public publication and stable qualification remain separate actions; prior Oracle and UI evidence keeps its original build identity.
+
+The [connection settings](panel.md) passed [20 built-panel checks and Codex in-app form saving](evidence/connection-settings-local.json) with synthetic credentials. [Native verification](evidence/connection-settings-native.json) discovered 24 installed tools and confirmed the exact `saved-connections` MCP response against 21 real local SQLcl names, published as a count only. Regression, lint, typecheck and 45 documentation language pairs passed. Next verify this UI and saved-store discovery on Windows/Linux. These checks made no database login attempt and do not extend the earlier ORDS import/export evidence.
+
+The authorized [ORDS](ords.md) CLI no-op import/export round trip and real SQL backup passed on a private test target; all 21 re-exported files matched byte for byte. See the [connected evidence](evidence/ords-connected.json). Next, within separately authorized test scope, cover changed imports, additional static-file/shared-component/MMD variants, SQL restore, interrupted-response reconciliation and Windows. Application browser verification is deferred at the user's explicit request; the present scope is import/export. Do not extend database changes or reuse unrelated credentials to obtain further evidence.
+
 [Execution and browser modes](work-modes.md) are implemented and checked locally. Start a new Codex chat to pick up the updated installed plugin's tools and instructions. The next separate check is an authorized APEX application with actual Google/SSO login in the selected browser and available controls for it. URL opening does not prove authentication or tests; automated Playwright keeps separate state. Native Windows/Linux, embedded MCP UI and a new Codex in-app browser observation remain unverified.
 
 [Chat-driven work and Auto models](chat-workflow.md) are implemented. Extend verification to implicit skill choice across fresh desktop and CLI chats, interrupted-host resumption, unavailable catalog variants and task-matched token/latency comparisons. Keep independent reviews mandatory and distinguish cumulative cached input from cost. Current native execution and in-app panel observations are recorded in the implementation status.
-
 
 The [illustrated agent guide](agent-workflow.md) is complete in both languages, with four actual panel captures and a workflow diagram. Refresh these images when the UI or workflow changes; retain their isolated-coding-fixture captions. Connected Oracle team execution, embedded MCP rendering and Windows verification remain separate open checks.
 

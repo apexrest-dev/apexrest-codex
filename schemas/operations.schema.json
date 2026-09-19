@@ -40,6 +40,13 @@
           "1",
           "4"
         ]
+      },
+      "databaseTransport": {
+        "type": "string",
+        "enum": [
+          "direct",
+          "ords"
+        ]
       }
     },
     "required": [
@@ -370,6 +377,13 @@
                       "1",
                       "4"
                     ]
+                  },
+                  "databaseTransport": {
+                    "type": "string",
+                    "enum": [
+                      "direct",
+                      "ords"
+                    ]
                   }
                 },
                 "required": [
@@ -383,6 +397,54 @@
             "required": [
               "kind",
               "settings"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "saved-connections"
+              }
+            },
+            "required": [
+              "kind"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "connection"
+              },
+              "name": {
+                "type": "string",
+                "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,100}$"
+              },
+              "sqlclName": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 512,
+                "pattern": "^[^\\x00-\\x1f\\x7f-\\x9f]+$"
+              },
+              "ordsUrl": {
+                "type": "string",
+                "maxLength": 2048,
+                "format": "uri"
+              },
+              "ordsUsername": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128,
+                "pattern": "^[^\"\\x00-\\x1f\\x7f-\\x9f]+$"
+              }
+            },
+            "required": [
+              "kind",
+              "name"
             ],
             "additionalProperties": false
           },
@@ -1029,11 +1091,26 @@
         "minLength": 1,
         "maxLength": 512,
         "pattern": "^[^\\x00-\\x1f\\x7f-\\x9f]+$"
+      },
+      "ordsUrl": {
+        "type": "string",
+        "maxLength": 2048,
+        "format": "uri"
+      },
+      "ordsUsername": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 128,
+        "pattern": "^[^\"\\x00-\\x1f\\x7f-\\x9f]+$"
+      },
+      "passwordFile": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4096
       }
     },
     "required": [
-      "name",
-      "sqlclName"
+      "name"
     ],
     "additionalProperties": false
   },

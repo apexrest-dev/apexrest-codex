@@ -279,6 +279,12 @@ export function resultLines(result: Result): Line[] {
             ? `Official SQLcl MCP server · restrict level ${payload.mcpRestrictLevel}`
             : 'SQLcl command-line process',
       },
+      {
+        text:
+          payload.databaseTransport === 'ords'
+            ? 'Database network: ORDS HTTP(S) · plugin connection settings'
+            : 'Database network: Direct Oracle listener',
+      },
       { text: 'New Oracle operations use this mode. Active operations keep their selected mode.' },
     ];
   for (const diagnostic of result.diagnostics) {
