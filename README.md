@@ -8,6 +8,8 @@ English | [Українська](README.uk.md)
 
 **Build and change Oracle APEX applications with Codex, from source to a verified import.**
 
+New to Oracle APEX? It is a platform for building business web applications—forms, dashboards, reports and internal tools—on top of Oracle Database. APEXREST connects that workflow to Codex, OpenAI's coding agent: a request such as “add an order status report” becomes application source changes, checks and a controlled deployment process.
+
 APEXREST connects native Codex skills and MCP tools to Oracle SQLcl. Generate APEXlang, adopt an existing app, edit pages and shared components, plan the change, import it into an authorized target, and check the result in the Codex in-app browser.
 
 [Get started](docs/getting-started.md) · [Documentation](docs/index.md) · [Deployment safety](docs/deployment-safety.md) · [Verification status](docs/implementation-status.md) · [Contributing](CONTRIBUTING.md)
@@ -29,6 +31,45 @@ Read the [complete agent workflow with screenshots](docs/agent-workflow.md): tas
 ![Actual Codex panel with Mewtwo, Pikachu, Charmander and Squirtle after a reviewed local coding task.](docs/assets/panel-agent-team.jpg)
 
 _Actual Codex in-app browser capture. This isolated coding example verifies team execution; it does not represent an Oracle import._
+
+## ORDS SQL: a path to Codex Cloud
+
+APEXREST supports SQL through **Oracle REST Data Services (ORDS)**. ORDS lets the tools communicate with your database over HTTPS, without a direct connection to the Oracle database listener. This enables a Cloud setup using APEXREST's bundled command-line tools inside the Codex Cloud container. Your database stays where it is.
+
+For example, in SQLcl—Oracle's command-line tool:
+
+```sql
+connect -orest app_user@https://example.com/ords/app_user/
+```
+
+The `-orest` option selects the REST connection. Replace the example account and schema URL with your authorized target; REST-Enabled SQL must be enabled. The account still needs database credentials and the permissions required for the requested work. See [SQL through ORDS](docs/ords.md).
+
+| | Local mode | Codex Cloud setup |
+| --- | --- | --- |
+| Where tasks run | On your computer; it must stay on while agents work. | In a hosted container; your home computer can be off. |
+| Tools and dependencies | Installed and maintained on your computer. | Prepared through reusable setup and maintenance scripts. |
+| Database access | Direct Oracle connection or ORDS HTTP(S). | The documented setup uses an authorized ORDS endpoint over HTTPS. |
+
+### Delegate from your phone
+
+After configuring [Codex's native Slack integration](https://learn.chatgpt.com/docs/third-party/slack), you can send a request with `@Codex` and follow its Cloud task. Slack's [mobile messaging](https://slack.com/help/articles/201457107-Send-and-read-messages) makes this a way to delegate from your phone. Cloud execution frees your laptop for other work and does not depend on a computer running at home.
+
+The **ChatGPT mobile app's [Remote mode](https://learn.chatgpt.com/docs/remote)** connects to a computer that must remain awake and online. It has a different execution requirement from a Cloud task.
+
+### An agent-team workflow to configure and verify
+
+With the Cloud environment, database access and applicable tests configured, the intended workflow is:
+
+1. A developer agent prepares the APEX application changes.
+2. A reviewer checks the code.
+3. An independent QA agent runs the configured tests.
+4. You review the result before an authorized deployment.
+
+The [Cloud setup guide](docs/codex-cloud.md) covers **CLI + ORDS**. The complete agent-team workflow in Codex Cloud still needs end-to-end verification; the guide does not establish native Cloud plugin/MCP discovery or panel support. Existing local team and Oracle evidence retains its documented scope.
+
+![APEXREST concept: a browser or Slack on a phone delegates to Codex Cloud, whose CLI reaches Oracle through ORDS HTTPS; local and Cloud execution are compared, and the agent-team workflow still needs configuration and verification.](docs/assets/ords-codex-cloud.png)
+
+_Illustrative overview, with the setup and verification limits described above._
 
 ## Install with the terminal menu
 

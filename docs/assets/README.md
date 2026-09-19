@@ -16,6 +16,8 @@ The English and Ukrainian SVG diagrams below are maintained directly in this rep
 
 Use meaningful alternative text when embedding these images in Markdown. Keep the linked text documentation available so the graphics are never the only source of operational instructions.
 
+[ords-codex-cloud.png](ords-codex-cloud.png) is the owner-requested, AI-generated APEXREST infographic prepared for the ORDS/Cloud announcement on 19 September 2026. Both README languages use the same English graphic with localized alternative text and a complete text explanation. It illustrates CLI connectivity and a proposed Cloud agent-team workflow; it is not a product screenshot or evidence of Cloud execution. Its example account and URL are placeholders.
+
 The four `panel-*.jpg` files are unretouched 872 × 683 viewport captures from the actual installed panel in the Codex in-app browser on 17 September 2026. They show agent identities, manager reviews and QA, SQLcl/team settings, and operation state for an isolated local coding fixture. Captures use scrolling without changing the recorded results; no local capability URL or credentials are included. See the [capture manifest](../evidence/agent-workflow-documentation.json) for hashes and evidence limits.
 
 Pokémon artwork visible inside the screenshots comes from the locally bundled [PokeAPI sprite sources](../../packages/panel/assets/sources.json). The [upstream notice](../../packages/panel/assets/LICENCE.txt) applies to these images; the repository code license does not relicense the Pokémon artwork.

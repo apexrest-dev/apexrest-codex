@@ -4,6 +4,10 @@ English | [Українська](implementation-status.uk.md)
 
 ## Codex Cloud documentation — 2026-09-19
 
+The [README overview](../README.md#ords-sql-a-path-to-codex-cloud) and its Ukrainian version explain APEX for new readers, the neutral SQLcl `connect -orest` example, local/Cloud tradeoffs, Slack delegation from a phone and ChatGPT mobile Remote's running-computer requirement. They include the [announcement infographic](assets/ords-codex-cloud.png) as an illustration. The Cloud agent-team sequence is explicitly a scenario to configure and verify, with no new execution evidence claimed.
+
+README verification: 46 EN/UK documentation pairs, the 30-page site build and all 14 packaging checks passed. Both README versions render the image, command and comparison table; the PNG matches the supplied Desktop artifact and the copied site asset. These are local documentation checks, with no publication or runtime verification.
+
 The [Cloud guide](codex-cloud.md) and its Ukrainian companion document the container CLI/ORDS route, with six reusable [example scripts](examples/codex-cloud/). They cover a pinned built checkout, Node/JDK selection, setup and maintenance, private proxy/CA configuration, explicitly enabled credential retention, connection identity checks and project instructions. README, getting-started, installation pages and site navigation link to the guide. Native desktop registration, MCP discovery and panel availability are not implied by this CLI route.
 
 Local verification: `npm run docs:check` passed for 46 EN/UK pairs; `npm run site:build` generated 30 pages; eight site Markdown/navigation checks and the existing route/accessibility structure check passed. Local Chrome checked both Cloud pages at desktop and mobile widths, with working search/language switching and no page overflow or JavaScript errors. Shell/JavaScript syntax and safe setup/launcher guards passed without dependency downloads or database access. This documentation change does not supply live Cloud setup/resume, native-host, Oracle or application-browser evidence, and does not change the acceptance matrix's existing verification states.

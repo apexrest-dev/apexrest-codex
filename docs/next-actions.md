@@ -2,6 +2,8 @@
 
 English | [Українська](next-actions.uk.md)
 
+The [README Cloud overview](../README.md#ords-sql-a-path-to-codex-cloud) includes the announcement infographic and describes phone delegation and an intended developer/reviewer/QA sequence. Before presenting that APEXREST Cloud team as verified, exercise it end to end on an authorized development/test target, including Slack task dispatch, agent coordination and the applicable application tests. ChatGPT mobile Remote retains its awake, online computer requirement.
+
 The [Codex Cloud guide](codex-cloud.md) and reusable bootstrap examples are documented and locally checked. Next, exercise setup and cached maintenance in an actual Linux Cloud environment with authorized credential retention, its proxy/CA and an identified development/test ORDS target. Record agent-phase identity verification separately from native skill/MCP discovery or browser checks. Preserve private deployment history/backups and coordinate independent containers before authorizing imports; local documentation checks do not qualify Cloud deployment support.
 
 The current local minor update is `0.2.0-beta.1`; see the [release notes](release-notes.md) and [build checks](evidence/minor-update-020.json). Start a new Codex task after reinstalling to load the updated plugin. Public publication and stable qualification remain separate actions; prior Oracle and UI evidence keeps its original build identity.
