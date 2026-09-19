@@ -31,6 +31,13 @@
       "key": "getting-started"
     },
     {
+      "slug": "codex-cloud",
+      "title": "Codex Cloud",
+      "source": "docs/codex-cloud.md",
+      "lang": "en",
+      "key": "codex-cloud"
+    },
+    {
       "slug": "existing-app",
       "title": "Existing applications",
       "source": "docs/existing-app.md",
@@ -127,6 +134,13 @@
       "source": "docs/getting-started.uk.md",
       "lang": "uk",
       "key": "getting-started"
+    },
+    {
+      "slug": "uk/codex-cloud",
+      "title": "Codex Cloud",
+      "source": "docs/codex-cloud.uk.md",
+      "lang": "uk",
+      "key": "codex-cloud"
     },
     {
       "slug": "uk/existing-app",

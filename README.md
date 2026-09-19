@@ -147,6 +147,7 @@ After source or resource changes, run `npm run plugin:sync` to refresh the check
 ## Documentation and support
 
 - [Getting started](docs/getting-started.md): install, connect, create or adopt, plan and verify.
+- [Codex Cloud](docs/codex-cloud.md): container setup, CLI over ORDS, secrets, proxy and maintenance.
 - [Configuration](docs/configuration.md): explicit targets, connection references and private policy.
 - [SQL through ORDS](docs/ords.md): HTTP(S) transport, database credentials and APEXlang import/export.
 - [Architecture](docs/architecture.md): one core behind the CLI, MCP and skills.

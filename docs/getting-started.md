@@ -6,6 +6,10 @@ Start with the terminal menu to install tools and the plugin, then configure a d
 
 The current distribution is beta. Native-host evidence is specific to the tested Codex and platform combination; [stable release gates](next-actions.md) remain open.
 
+## Codex Cloud
+
+For a cloud task, follow [Run APEXREST in Codex Cloud](codex-cloud.md). It provides a pinned CLI bootstrap, setup/maintenance scripts and ORDS HTTPS configuration for a Linux container, including private credentials and proxy/CA handling. Desktop registration and panel instructions below apply to native hosts; the Cloud example uses the CLI.
+
 ## Prerequisites
 
 | Requirement                                                    | When it is needed                                                                      |

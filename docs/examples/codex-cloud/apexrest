@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set +x
+set -euo pipefail
+unset APEXREST_ORDS_PASSWORD
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+root="$(cd "$script_dir/../.." && pwd)"
+[[ "$script_dir" == "$root/scripts/codex-cloud" ]] || {
+  echo 'Copy this example to scripts/codex-cloud/ in your application repository.' >&2
+  exit 2
+}
+export APEXREST_HOME="$root/.codex/cloud/tools"
+export APEXREST_JAVA_HOME="$root/.codex/cloud/java"
+source "$script_dir/version.sh"
+source "$script_dir/network.sh"
+node_runtime="$root/.codex/cloud/node"
+cli="$root/.codex/cloud/apexrest-$APEXREST_REVISION/plugins/apexrest-apex/runtime/apexrest.mjs"
+if [[ ! -x "$node_runtime" || ! -f "$cli" || ! -x "$APEXREST_JAVA_HOME/bin/java" ]]; then
+  echo 'Cloud runtime is missing. Rerun the Cloud Setup script.' >&2
+  exit 3
+fi
+exec "$node_runtime" "$cli" "$@"

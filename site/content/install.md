@@ -68,6 +68,10 @@ codex plugin list --json
 
 This route does not create an `apexrest` shell command. In a new Codex task, send `Use $apexrest-menu` for all workflows or use `$apexrest-install-dependencies` for dependencies. The conversational skill menu and explicit CLI retain their additional options; the seven TUI actions are described above. The [plugin installation guide](../../docs/getting-started.md#install-the-plugin) covers verification and navigation.
 
+## Codex Cloud
+
+Use the [Cloud setup guide](../../docs/codex-cloud.md) for a repository-backed cloud task. Copy its example scripts into the application repository, configure the environment and Secret, and use the CLI launcher for ORDS HTTPS operations. The example does not install the desktop interface or verify native Cloud MCP discovery.
+
 ## Uninstall
 
 In the TUI, choose **Uninstall tools** or **Uninstall plugin**, review the action and press Enter. If removing both, uninstall tools first: removing plugin files removes the code targeted by the managed launcher. **Keep plugin files** retains that code after unregistering the plugin.

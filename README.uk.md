@@ -147,6 +147,7 @@ npm run test:packaging
 ## Документація та підтримка
 
 - [Початок роботи](docs/getting-started.uk.md): встановлення, підключення, створення чи перенесення, планування й перевірка.
+- [Codex Cloud](docs/codex-cloud.uk.md): налаштування контейнера, CLI через ORDS, секрети, proxy та maintenance.
 - [Конфігурація](docs/configuration.uk.md): явні цілі, посилання на з’єднання та приватна політика.
 - [SQL через ORDS](docs/ords.uk.md): HTTP(S)-транспорт, облікові дані бази та імпорт/експорт APEXlang.
 - [Архітектура](docs/architecture.uk.md): єдине ядро для CLI, MCP і навичок.

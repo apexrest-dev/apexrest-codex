@@ -2,6 +2,8 @@
 
 English | [Українська](next-actions.uk.md)
 
+The [Codex Cloud guide](codex-cloud.md) and reusable bootstrap examples are documented and locally checked. Next, exercise setup and cached maintenance in an actual Linux Cloud environment with authorized credential retention, its proxy/CA and an identified development/test ORDS target. Record agent-phase identity verification separately from native skill/MCP discovery or browser checks. Preserve private deployment history/backups and coordinate independent containers before authorizing imports; local documentation checks do not qualify Cloud deployment support.
+
 The current local minor update is `0.2.0-beta.1`; see the [release notes](release-notes.md) and [build checks](evidence/minor-update-020.json). Start a new Codex task after reinstalling to load the updated plugin. Public publication and stable qualification remain separate actions; prior Oracle and UI evidence keeps its original build identity.
 
 The [connection settings](panel.md) passed [20 built-panel checks and Codex in-app form saving](evidence/connection-settings-local.json) with synthetic credentials. [Native verification](evidence/connection-settings-native.json) discovered 24 installed tools and confirmed the exact `saved-connections` MCP response against 21 real local SQLcl names, published as a count only. Regression, lint, typecheck and 45 documentation language pairs passed. Next verify this UI and saved-store discovery on Windows/Linux. These checks made no database login attempt and do not extend the earlier ORDS import/export evidence.

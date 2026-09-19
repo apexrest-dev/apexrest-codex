@@ -2,6 +2,12 @@
 
 English | [Українська](implementation-status.uk.md)
 
+## Codex Cloud documentation — 2026-09-19
+
+The [Cloud guide](codex-cloud.md) and its Ukrainian companion document the container CLI/ORDS route, with six reusable [example scripts](examples/codex-cloud/). They cover a pinned built checkout, Node/JDK selection, setup and maintenance, private proxy/CA configuration, explicitly enabled credential retention, connection identity checks and project instructions. README, getting-started, installation pages and site navigation link to the guide. Native desktop registration, MCP discovery and panel availability are not implied by this CLI route.
+
+Local verification: `npm run docs:check` passed for 46 EN/UK pairs; `npm run site:build` generated 30 pages; eight site Markdown/navigation checks and the existing route/accessibility structure check passed. Local Chrome checked both Cloud pages at desktop and mobile widths, with working search/language switching and no page overflow or JavaScript errors. Shell/JavaScript syntax and safe setup/launcher guards passed without dependency downloads or database access. This documentation change does not supply live Cloud setup/resume, native-host, Oracle or application-browser evidence, and does not change the acceptance matrix's existing verification states.
+
 ## Minor update 0.2.0-beta.1 — 2026-09-19
 
 This local beta groups the ORDS HTTP(S) transport, plugin-level database credentials and direct SQLcl connection picker described in the [release notes](release-notes.md). Package metadata, workspace versions, the browser-test runtime and the acceptance matrix use `0.2.0-beta.1`; local Codex builds add a `+codex.<timestamp>` cache suffix. The [minor-update report](evidence/minor-update-020.json) records checks of this build. Earlier Oracle and panel reports retain their original versions, source digests and verification scope. No tag or public release is created by this update.

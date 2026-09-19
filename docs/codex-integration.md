@@ -2,6 +2,8 @@
 
 English | [Українська](codex-integration.uk.md)
 
+For container execution, see [Codex Cloud](codex-cloud.md). That separate recipe runs the same APEXREST CLI through ORDS; it does not extend this native desktop/CLI host audit to Cloud plugin discovery. The native integration scope below remains unchanged.
+
 This plugin targets **Codex desktop and Codex CLI only**. There is no compatibility layer for other agent products. The audit on 2026-09-17 inspected OpenAI's actual Rust source at `rust-v0.154.0` (`6b9826e3aa83b1a5947db50f4332cb9c65f1b340`), matching the locally installed CLI, and compared the relevant files with upstream `main` (`e269f2164cbb9f499e4f22301c393500e2a831f3`). These are observations of those revisions, not a promise about later releases.
 
 ## Agent communication
