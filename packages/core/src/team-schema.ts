@@ -1,11 +1,16 @@
 import { z } from 'zod';
 
-export const workPreferencesSchema = z.strictObject({
-  executionMode: z.enum(['team', 'single']).default('team'),
+const workOptionsSchema = z.strictObject({
+  executionMode: z.enum(['single', 'team']).default('single'),
   browserMode: z.enum(['codex', 'external']).default('codex'),
   developers: z.number().int().min(1).max(3).default(1),
   sandbox: z.enum(['read-only', 'workspace-write']).default('workspace-write'),
   timeoutSeconds: z.number().int().min(30).max(3600).default(900),
+});
+export const workPreferencesSchema = workOptionsSchema.extend({
+  // Legacy executionMode: team was also written by unrelated settings saves.
+  // Only this explicit settings opt-in authorizes new multi-agent runs.
+  multiAgentEnabled: z.boolean().default(false),
 });
 // Keep omitted options absent at transport boundaries so saved preferences win.
 export const teamStartSchema = z.strictObject({
@@ -17,10 +22,30 @@ export const teamStartSchema = z.strictObject({
   project: z.string().optional(),
   task: z.string().trim().min(1).max(16000),
 });
-export const resolvedTeamStartSchema = workPreferencesSchema.extend({
+export const resolvedTeamStartSchema = workOptionsSchema.extend({
   project: z.string().optional(),
   task: teamStartSchema.shape.task,
 });
+export const queuedWorkSchema = resolvedTeamStartSchema.extend({
+  multiAgentEnabled: z.boolean().default(false),
+});
+
+// Historical display only: never use a roster or old reviews to authorize a launch.
+export function recordedExecutionMode(state: {
+  executionMode?: unknown;
+  members?: unknown;
+  reviews?: unknown;
+  qa?: unknown;
+}): 'single' | 'team' {
+  if (state.executionMode === 'single' || state.executionMode === 'team') return state.executionMode;
+  const reviewed = [state.reviews, state.qa].some((rows) => Array.isArray(rows) && rows.length > 0);
+  const peers =
+    Array.isArray(state.members) &&
+    state.members.some(
+      (member) => member && ['manager', 'qa', 'developer-2', 'developer-3'].includes(member.role),
+    );
+  return reviewed || peers ? 'team' : 'single';
+}
 export const teamIdSchema = z.strictObject({ project: z.string().optional(), id: z.uuid() });
 export const workStartSchema = teamStartSchema.extend({ requestId: z.uuid() });
 export const teamWaitSchema = teamIdSchema.extend({

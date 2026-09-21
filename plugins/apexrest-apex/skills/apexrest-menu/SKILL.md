@@ -5,12 +5,12 @@ description: Show the APEXREST plugin menu and route to all available functions.
 
 # All functions
 
-Opening this menu is navigation. Show the following choices in the conversation and let the user select an action. Route application implementation tasks through [APEX work from chat](../apexrest-work/SKILL.md): saved single-agent or team settings select the runtime; team mode enforces manager and QA reviews. Route administrative or reference-only tasks directly to their workflow. Do not execute every function, start installation or import an application merely because the menu was opened.
+Opening this menu is navigation. Show the following choices in the conversation and let the user select an action. Route application implementation tasks through [APEX work from chat](../apexrest-work/SKILL.md): single agent is the default; only explicit user opt-in in Settings enables multi-agent work; team mode enforces manager and QA reviews. Route administrative or reference-only tasks directly to their workflow. Do not execute every function, start installation or import an application merely because the menu was opened.
 
 | Menu entry | Functions | Workflow |
 | --- | --- | --- |
 | APEX work from chat | Configured agent run and panel from the current chat; result returned here | [Work](../apexrest-work/SKILL.md) |
-| Reviewed development team | Fixed developer → manager code review → independent QA → manager QA review; status, messages and cancellation | [Team](../apexrest-team/SKILL.md) |
+| Reviewed development team (opt-in) | After explicit Settings opt-in: fixed developer → manager code review → independent QA → manager QA review; status, messages and cancellation | [Team](../apexrest-team/SKILL.md) |
 | Install dependencies | Install or preview Node.js, Java, SQLcl, Playwright and Chromium; Oracle tools only; offline/cache options | [Install dependencies](../apexrest-install-dependencies/SKILL.md) |
 | Setup and connections | Diagnose tools; select SQLcl CLI or official SQLcl MCP; add, list, test or remove local connection references; inspect plugin version and installation | [Setup](../apexrest-setup/SKILL.md) |
 | Projects | Create a project, adopt an identified application, inspect source and environment configuration | [Projects](../apexrest-project/SKILL.md) |

@@ -7,7 +7,9 @@ import { Fault, redact } from './result.ts';
 import { TeamService, teamActive } from './team.ts';
 import {
   teamStartSchema,
+  queuedWorkSchema,
   resolvedTeamStartSchema,
+  recordedExecutionMode,
   workStartSchema,
   teamWaitSchema,
   type TeamState,
@@ -49,11 +51,12 @@ export async function startWork(
       const directory = await team.directory(requestId);
       const inputFile = path.join(directory, 'work-input.json');
       if (await exists(path.join(directory, 'request.json'))) {
-        const saved = await readJson(path.join(directory, 'request.json'));
+        const saved = queuedWorkSchema.parse(await readJson(path.join(directory, 'request.json')));
+        // The worker's pinned opt-in is not a caller-supplied launch option.
+        const { multiAgentEnabled: _optIn, ...savedRequest } = saved;
         const matches = (await exists(inputFile))
           ? canonical(await readJson(inputFile)) === canonical(request)
-          : canonical(resolvedTeamStartSchema.parse(saved)) ===
-            canonical(resolvedTeamStartSchema.parse(request));
+          : canonical(savedRequest) === canonical(resolvedTeamStartSchema.parse(request));
         if (!matches)
           throw new Fault(
             'WORK_REQUEST_CONFLICT',
@@ -94,7 +97,7 @@ export async function startWork(
   }
   return {
     teamId: requestId,
-    executionMode: state.executionMode ?? 'team',
+    executionMode: recordedExecutionMode(state),
     browserMode: state.browserMode ?? 'codex',
     status: state.status,
     cursor: teamProgressCursor(state),
@@ -123,5 +126,23 @@ export async function waitForTeam(
     state = await team.status(request.id);
   }
   const result = await team.snapshot(request.id);
-  return { cursor: teamProgressCursor(result), terminal: !teamActive.has(result.status), team: result };
+  const cursor = teamProgressCursor(result),
+    terminal = !teamActive.has(result.status);
+  const unchanged = !terminal && request.cursor === cursor;
+  return {
+    cursor,
+    terminal,
+    unchanged,
+    team: unchanged
+      ? {
+          id: result.id,
+          status: result.status,
+          phase: result.phase,
+          revision: result.revision,
+          executionMode: result.executionMode,
+          browserMode: result.browserMode,
+          fullReport: result.fullReport,
+        }
+      : result,
+  };
 }

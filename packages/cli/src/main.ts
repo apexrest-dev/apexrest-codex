@@ -68,7 +68,7 @@ function help() {
   if (key === 'team.start' || key === 'work.start')
     lines.push(
       '',
-      'Use saved project preferences unless explicitly overridden.',
+      'Single agent by default. Team requires explicit multiAgentEnabled: true in saved Settings.',
       '--execution-mode team|single selects a reviewed team or one agent that implements and verifies.',
       '--browser-mode codex|external selects interactive APEX verification; the dashboard stays in Codex.',
       '--developers 1..3 defaults to 1; edits are serialized in the project.',

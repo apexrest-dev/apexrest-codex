@@ -2,7 +2,9 @@
 
 Українська | [English](work-modes.md)
 
-У **Settings → Defaults for new work** оберіть **Execution mode** і **Browser for APEX verification**, потім натисніть **Save work defaults**. Це параметри проєкту у `.apexrest/panel/preferences.json`. Вони застосовуються до запуску з чату (`apexrest_work_start`), CLI та dashboard. Без збережених параметрів залишаються типові `team` і `codex`. Старі файли налаштувань підтримуються.
+У **Settings → Defaults for new work** оберіть **Execution mode** і **Browser for APEX verification**, потім натисніть **Save work defaults**. Це параметри проєкту у `.apexrest/panel/preferences.json`. Вони застосовуються до запуску з чату (`apexrest_work_start`), CLI та dashboard. Типові значення завжди `single` і `codex`. Для multi-agent явно оберіть тут **Agent team** і збережіть: форма запише `multiAgentEnabled: true`. Збереження **Single agent** вимикає цей дозвіл. Форма запуску не може його увімкнути.
+
+Старі файли без `multiAgentEnabled: true` означають одного агента, навіть за `executionMode: team`: попередні версії записували це значення автоматично, тому воно не доводить вибір користувача. Читання не переписує файл; браузер, кількість розробників, sandbox і timeout зберігаються. Явний дозвіл зберігається при частковому оновленні параметрів. Командні запити в черзі без зафіксованого дозволу блокуються до запуску сесій; активні й історичні запуски не переосмислюються й не перезапускаються.
 
 ## Режим виконання
 
@@ -15,7 +17,7 @@
 
 Результат прив’язаний до кінцевого digest джерел і ревізії завдання. Подальші зміни дають `result_stale` для одного агента або `review_stale` для команди. Невдалі чи недоступні обов’язкові перевірки та скасування не означають успіху. Доступно до трьох ревізій виправлень; відсутні передумови зазначаються. Уточнення користувача під час завершення вимагають нової ревізії.
 
-Явні параметри запиту мають пріоритет над типовими. Активні запуски зберігають параметри на момент старту. Точний повтор `requestId` повертає початковий запуск, навіть якщо типові параметри змінилися; інші вхідні дані з тим самим ID відхиляються. Для сумісності API зберігає поле `teamId` та операції `team.*` в обох режимах. Утиліти налаштування й довідки залишаються доступними напряму.
+Явні параметри запиту мають пріоритет у межах дозволу в Settings: `executionMode: team` відхиляється з `MULTI_AGENT_DISABLED`, якщо `multiAgentEnabled` не дорівнює true. Активні запуски зберігають параметри на момент старту. Точний повтор `requestId` повертає початковий запуск, навіть якщо типові параметри змінилися; інші вхідні дані з тим самим ID відхиляються. Для сумісності API зберігає поле `teamId` та операції `team.*` в обох режимах. Утиліти налаштування й довідки залишаються доступними напряму.
 
 ## Браузер перевірки
 
@@ -31,7 +33,7 @@ Dashboard завжди залишається всередині Codex. Режи
 ## CLI та MCP
 
 ```sh
-apexrest panel action --project /absolute/application --action '{"kind":"preferences","settings":{"executionMode":"single","browserMode":"external","developers":1,"sandbox":"workspace-write","timeoutSeconds":900}}' --json
+apexrest panel action --project /absolute/application --action '{"kind":"preferences","settings":{"executionMode":"single","multiAgentEnabled":false,"browserMode":"external","developers":1,"sandbox":"workspace-write","timeoutSeconds":900}}' --json
 apexrest work start "Implement the requested change" --request-id REQUEST_UUID --project /absolute/application --json
 apexrest browser open --project /absolute/application --env dev --json
 ```
@@ -39,3 +41,5 @@ apexrest browser open --project /absolute/application --env dev --json
 Замість `REQUEST_UUID` використайте новий UUID. `--execution-mode team|single` та `--browser-mode codex|external` явно перевизначають типові параметри запуску. Без них діють збережені налаштування. MCP-відповідники — `apexrest_panel_action`, `apexrest_work_start` і `apexrest_browser_open`. Інструмент браузера приймає явне налаштоване середовище, а не довільні URL чи shell-команди.
 
 Дивіться [актуальні докази реалізації](implementation-status.uk.md), [роботу з чату](chat-workflow.uk.md) та [панель](panel.uk.md). Нативні запуски Codex, локальне відображення панелі через Playwright, відкриття системного браузера й автентифікована перевірка Oracle/SSO — окремі види доказів.
+
+Щоб увімкнути команду через CLI/MCP після явного запиту користувача, збережіть `{"kind":"preferences","settings":{"multiAgentEnabled":true,"executionMode":"team"}}` через `panel action`; самого `--execution-mode team` недостатньо.

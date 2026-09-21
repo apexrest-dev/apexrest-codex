@@ -665,29 +665,47 @@ function render(data: PanelSnapshot) {
     teamSelect.value = data.team?.id ?? '';
     teamSelect.disabled = !options.length;
   }
-  draw('metrics', [data.teams, data.sqlcl, data.jobs, data.team?.status, data.team?.executionMode], () =>
+  draw(
+    'metrics',
     [
+      data.teams,
+      data.sqlcl,
+      data.jobs,
+      data.team?.status,
+      data.team?.executionMode,
+      data.preferences.executionMode,
+    ],
+    () =>
       [
-        'Active runs',
-        String(data.teams.filter((team) => active(team.status)).length),
-        data.team ? human(data.team.phase) : 'Ready for a new task',
-      ],
-      [
-        data.team?.executionMode === 'single' ? 'Verification' : 'Review gate',
-        data.team ? human(data.team.status) : 'No result',
-        data.team?.executionMode === 'single' ? 'Single-agent checks' : 'Manager + independent QA',
-      ],
-      ['APEX operations', String(data.jobs.filter((job) => active(job.status)).length), 'Running or queued'],
-      [
-        'Database connectivity',
-        data.sqlcl.databaseTransport === 'ords' ? 'ORDS HTTP(S)' : 'Direct Oracle',
-        data.sqlcl.mode === 'mcp' ? 'SQLcl MCP · restriction ' + data.sqlcl.mcpRestrictLevel : 'SQLcl CLI',
-      ],
-    ].map(([label, value, sub]) => {
-      const box = node('div', 'metric');
-      box.append(node('div', 'subtle', label), node('div', 'value', value), node('div', 'subtle', sub));
-      return box;
-    }),
+        [
+          'Active runs',
+          String(data.teams.filter((team) => active(team.status)).length),
+          data.team ? human(data.team.phase) : 'Ready for a new task',
+        ],
+        [
+          (data.team?.executionMode ?? data.preferences.executionMode) === 'single'
+            ? 'Verification'
+            : 'Review gate',
+          data.team ? human(data.team.status) : 'No result',
+          (data.team?.executionMode ?? data.preferences.executionMode) === 'single'
+            ? 'Single-agent checks'
+            : 'Manager + independent QA',
+        ],
+        [
+          'APEX operations',
+          String(data.jobs.filter((job) => active(job.status)).length),
+          'Running or queued',
+        ],
+        [
+          'Database connectivity',
+          data.sqlcl.databaseTransport === 'ords' ? 'ORDS HTTP(S)' : 'Direct Oracle',
+          data.sqlcl.mode === 'mcp' ? 'SQLcl MCP · restriction ' + data.sqlcl.mcpRestrictLevel : 'SQLcl CLI',
+        ],
+      ].map(([label, value, sub]) => {
+        const box = node('div', 'metric');
+        box.append(node('div', 'subtle', label), node('div', 'value', value), node('div', 'subtle', sub));
+        return box;
+      }),
   );
   const stableTeam = data.team ? { ...data.team, updatedAt: '' } : null;
   draw('overview-live', [stableTeam, data.changes, data.configuration, data.trusted], () => {
@@ -880,10 +898,18 @@ $('task-form').onsubmit = (event) => {
   });
 };
 function modeControls(prefix: string) {
+  if (prefix === 'task') {
+    const teamOption =
+      $<HTMLSelectElement>('task-execution-mode').querySelector<HTMLOptionElement>('option[value=team]')!;
+    teamOption.disabled = !snapshot?.preferences.multiAgentEnabled;
+    if (teamOption.disabled) input('task-execution-mode').value = 'single';
+  }
   const single = input(prefix + '-execution-mode').value === 'single';
   input(prefix + '-developers').disabled = single;
+  if (prefix === 'task')
+    input('task-developers').value = single ? '1' : String(snapshot?.preferences.developers ?? 1);
   $(prefix + '-workflow-note').textContent = single
-    ? 'One agent plans, implements and verifies. Activity, messages and checks remain visible here.'
+    ? 'Single agent is the default: one agent plans, implements and verifies. Enable Agent team explicitly in Settings and save to allow multi-agent runs.'
     : 'Plan → developers → manager review → independent QA → final manager review. Reviewers remain read only.';
 }
 for (const prefix of ['default', 'task'])
@@ -897,6 +923,7 @@ $('preferences-form').onsubmit = (event) => {
     kind: 'preferences',
     settings: {
       executionMode: input('default-execution-mode').value as 'team' | 'single',
+      multiAgentEnabled: input('default-execution-mode').value === 'team',
       browserMode: input('default-browser-mode').value as 'codex' | 'external',
       developers: Number(input('default-developers').value),
       sandbox: input('default-sandbox').value as 'read-only' | 'workspace-write',

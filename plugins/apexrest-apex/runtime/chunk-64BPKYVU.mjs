@@ -1,22 +1,24 @@
 import { createRequire as __createRequire } from 'node:module'; const require = __createRequire(import.meta.url);
 import {
   openPanel
-} from "./chunk-B4HSPAOP.mjs";
+} from "./chunk-5VARQ3I7.mjs";
 import {
   JobService,
   PanelService,
   panelActionSchema,
   panelReadSchema,
   publicPanelActionSchema
-} from "./chunk-TLBRWMVR.mjs";
+} from "./chunk-MOMUL4AV.mjs";
 import {
   TeamService,
   teamActive
-} from "./chunk-TKVKS5YD.mjs";
+} from "./chunk-H36DRKRO.mjs";
 import {
   ArtifactService,
   DeploymentService,
   TestService,
+  queuedWorkSchema,
+  recordedExecutionMode,
   resolveWorkRequest,
   resolvedTeamStartSchema,
   teamIdSchema,
@@ -24,7 +26,7 @@ import {
   teamStartSchema,
   teamWaitSchema,
   workStartSchema
-} from "./chunk-F762AFRT.mjs";
+} from "./chunk-RFT5ELVI.mjs";
 import {
   VERSION
 } from "./chunk-G26NEU3N.mjs";
@@ -259,7 +261,7 @@ var toolCatalog = [
   {
     name: "apexrest_work_start",
     operation: "work.start",
-    description: "Start Oracle APEX work using saved single-agent or team preferences from this chat and prepare its private agent panel. Use a fresh UUID requestId per task; exact retries reuse the same team. Open the returned panel URL inside Codex, wait for the team and report in this chat. Auto model routing; no web form required.",
+    description: "Start Oracle APEX work using saved single-agent or team preferences from this chat and prepare its private agent panel. Default: single. Team requires explicit multiAgentEnabled in Settings. Use a fresh UUID requestId per task; exact retries reuse the same team. Open the returned panel URL inside Codex, wait for the team and report in this chat. Auto model routing; no web form required.",
     readOnly: false
   },
   {
@@ -284,13 +286,13 @@ var toolCatalog = [
   {
     name: "apexrest_panel_action",
     operation: "panel.action",
-    description: "Perform an explicit panel action: save execution/browser or SQLcl preferences, start/steer/stop a run, validate source, run checks or prepare a deployment plan. Existing trust and authorization apply; this does not bypass deployment approval.",
+    description: "Perform an explicit panel action: save execution/browser or SQLcl preferences (enable multiAgentEnabled only on explicit user request), start/steer/stop a run, validate source, run checks or prepare a deployment plan. Existing trust and authorization apply; this does not bypass deployment approval.",
     readOnly: false
   },
   {
     name: "apexrest_team_start",
     operation: "team.start",
-    description: "Start Codex work using saved preferences or explicit executionMode: single creates one agent for implementation and verification; team enforces developer, manager and independent QA reviews. Both retain dashboard activity, steering and source-bound completion.",
+    description: "Start Codex work; single by default, team only after explicit multiAgentEnabled in Settings. single creates one agent for implementation and verification; team enforces developer, manager and independent QA reviews. Both retain dashboard activity, steering and source-bound completion.",
     readOnly: false
   },
   {
@@ -735,8 +737,9 @@ async function startWork(ctx, input, panel = openPanel, team = new TeamService(c
       const directory = await team.directory(requestId);
       const inputFile = path3.join(directory, "work-input.json");
       if (await exists(path3.join(directory, "request.json"))) {
-        const saved = await readJson(path3.join(directory, "request.json"));
-        const matches = await exists(inputFile) ? canonical(await readJson(inputFile)) === canonical(request) : canonical(resolvedTeamStartSchema.parse(saved)) === canonical(resolvedTeamStartSchema.parse(request));
+        const saved = queuedWorkSchema.parse(await readJson(path3.join(directory, "request.json")));
+        const { multiAgentEnabled: _optIn, ...savedRequest } = saved;
+        const matches = await exists(inputFile) ? canonical(await readJson(inputFile)) === canonical(request) : canonical(savedRequest) === canonical(resolvedTeamStartSchema.parse(request));
         if (!matches)
           throw new Fault(
             "WORK_REQUEST_CONFLICT",
@@ -775,7 +778,7 @@ async function startWork(ctx, input, panel = openPanel, team = new TeamService(c
   }
   return {
     teamId: requestId,
-    executionMode: state.executionMode ?? "team",
+    executionMode: recordedExecutionMode(state),
     browserMode: state.browserMode ?? "codex",
     status: state.status,
     cursor: teamProgressCursor(state),
@@ -792,7 +795,22 @@ async function waitForTeam(ctx, input, signal) {
     state = await team.status(request.id);
   }
   const result = await team.snapshot(request.id);
-  return { cursor: teamProgressCursor(result), terminal: !teamActive.has(result.status), team: result };
+  const cursor = teamProgressCursor(result), terminal = !teamActive.has(result.status);
+  const unchanged = !terminal && request.cursor === cursor;
+  return {
+    cursor,
+    terminal,
+    unchanged,
+    team: unchanged ? {
+      id: result.id,
+      status: result.status,
+      phase: result.phase,
+      revision: result.revision,
+      executionMode: result.executionMode,
+      browserMode: result.browserMode,
+      fullReport: result.fullReport
+    } : result
+  };
 }
 
 // packages/core/src/service.ts
@@ -812,7 +830,7 @@ async function dispatch(operation, input = {}, signal) {
     let data;
     switch (operation) {
       case "panel.open": {
-        const { openPanel: openPanel2 } = await import("./chunk-ZUP5TIFO.mjs");
+        const { openPanel: openPanel2 } = await import("./chunk-ZY4ULKPV.mjs");
         data = await openPanel2(await realpath(root));
         break;
       }
@@ -1074,7 +1092,7 @@ async function dispatch(operation, input = {}, signal) {
             data = await tests.auth(ctx, text("env"));
             break;
           case "browser.open": {
-            const { openVerificationBrowser } = await import("./chunk-HRKLXJU4.mjs");
+            const { openVerificationBrowser } = await import("./chunk-YW67SVUF.mjs");
             data = await openVerificationBrowser(ctx, text("env"));
             break;
           }

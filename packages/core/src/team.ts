@@ -8,7 +8,13 @@ import { contained, exists, readJson, writeJson, withLock } from './fs.ts';
 import { parse, requireTrust, type ProjectContext } from './config.ts';
 import { Fault } from './result.ts';
 import { teamSourceDigest } from './team-source.ts';
-import { teamStartSchema, teamMessageSchema, type TeamRequest, type TeamState } from './team-schema.ts';
+import {
+  teamStartSchema,
+  teamMessageSchema,
+  recordedExecutionMode,
+  type TeamRequest,
+  type TeamState,
+} from './team-schema.ts';
 import { resolveWorkRequest } from './work-preferences.ts';
 
 export const teamActive = new Set(['queued', 'running', 'cancelling']);
@@ -32,7 +38,11 @@ export class TeamService {
         5,
         'conflict',
       );
-    await writeJson(path.join(root, 'request.json'), { ...request, project: this.ctx.root });
+    await writeJson(path.join(root, 'request.json'), {
+      ...request,
+      project: this.ctx.root,
+      multiAgentEnabled: request.executionMode === 'team',
+    });
     await writeJson(path.join(root, 'state.json'), {
       id,
       executionMode: request.executionMode,
@@ -81,6 +91,7 @@ export class TeamService {
   }
   async status(id: string): Promise<TeamState> {
     const state = (await readJson(path.join(await this.directory(id), 'state.json'))) as TeamState;
+    state.executionMode = recordedExecutionMode(state);
     if (teamActive.has(state.status) && Date.parse(state.updatedAt) + 60000 < Date.now())
       return {
         ...state,

@@ -28,6 +28,8 @@ async function prepared(t: import('node:test').TestContext) {
     root = await new TeamService(ctx).directory(id);
   await writeJson(path.join(root, 'request.json'), {
     task: 'Implement a fixture change.',
+    executionMode: 'team',
+    multiAgentEnabled: true,
     developers: 2,
     timeoutSeconds: 30,
     sandbox: 'workspace-write',
@@ -524,4 +526,38 @@ test('native turn failures retain a redacted diagnostic for the dashboard', asyn
   assert.match(result.diagnostics.join(' '), /Fixture protocol error/);
   assert.ok(!JSON.stringify(result.diagnostics).includes('never-show-this'));
   assert.ok(result.observations?.some((o) => o.kind === 'turnError'));
+});
+
+test('queued legacy defaults launch one agent and unproven explicit team queues cannot dispatch sessions', async (t) => {
+  const { ctx, id, root } = await prepared(t);
+  await writeJson(path.join(root, 'request.json'), {
+    task: 'Check fixture',
+    developers: 3,
+    timeoutSeconds: 30,
+  });
+  const mock = protocol();
+  assert.equal((await executeTeam(ctx, id, mock.connect)).status, 'completed');
+  assert.equal(mock.starts.length, 1);
+  assert.deepEqual(mock.calls, ['single', 'single', 'single', 'closed']);
+  const before = (await readJson(path.join(root, 'state.json'))) as TeamState;
+  await writeJson(path.join(root, 'state.json'), { ...before, status: 'queued', members: [] });
+  await writeJson(path.join(root, 'request.json'), { task: 'Check fixture', executionMode: 'team' });
+  const denied = protocol();
+  const result = await executeTeam(ctx, id, denied.connect);
+  assert.equal(result.status, 'blocked');
+  assert.match(result.diagnostics.join(' '), /Settings opt-in/);
+  assert.equal(denied.starts.length, 0);
+});
+
+test('persistent sessions receive the assignment only once while live updates and review gates remain', async (t) => {
+  const { ctx, id, root } = await preparedSingle(t);
+  const task = 'UNIQUE_FULL_TASK_CONSTRAINTS';
+  await writeJson(path.join(root, 'request.json'), { task, timeoutSeconds: 30 });
+  const mock = protocol({ qaFail: true });
+  assert.equal((await executeTeam(ctx, id, mock.connect)).status, 'verification_failed');
+  const prompts = mock.turnRequests.map((r) => JSON.stringify(r.input));
+  assert.equal(prompts.filter((text) => text.includes(task)).length, 1);
+  assert.equal(prompts.length, 7);
+  assert.ok(prompts.every((text) => text.includes('request.json') && text.includes('plan.json')));
+  assert.ok(prompts.slice(3).some((text) => text.includes('Required repairs')));
 });

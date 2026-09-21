@@ -61,8 +61,8 @@
       "executionMode": {
         "type": "string",
         "enum": [
-          "team",
-          "single"
+          "single",
+          "team"
         ]
       },
       "browserMode": {
@@ -110,8 +110,8 @@
       "executionMode": {
         "type": "string",
         "enum": [
-          "team",
-          "single"
+          "single",
+          "team"
         ]
       },
       "browserMode": {
@@ -298,15 +298,16 @@
                 "type": "object",
                 "properties": {
                   "executionMode": {
-                    "default": "team",
                     "type": "string",
                     "enum": [
-                      "team",
-                      "single"
+                      "single",
+                      "team"
                     ]
                   },
+                  "multiAgentEnabled": {
+                    "type": "boolean"
+                  },
                   "browserMode": {
-                    "default": "codex",
                     "type": "string",
                     "enum": [
                       "codex",
@@ -314,13 +315,11 @@
                     ]
                   },
                   "developers": {
-                    "default": 1,
                     "type": "integer",
                     "minimum": 1,
                     "maximum": 3
                   },
                   "sandbox": {
-                    "default": "workspace-write",
                     "type": "string",
                     "enum": [
                       "read-only",
@@ -328,19 +327,11 @@
                     ]
                   },
                   "timeoutSeconds": {
-                    "default": 900,
                     "type": "integer",
                     "minimum": 30,
                     "maximum": 3600
                   }
                 },
-                "required": [
-                  "executionMode",
-                  "browserMode",
-                  "developers",
-                  "sandbox",
-                  "timeoutSeconds"
-                ],
                 "additionalProperties": false
               }
             },
@@ -461,8 +452,8 @@
                   "executionMode": {
                     "type": "string",
                     "enum": [
-                      "team",
-                      "single"
+                      "single",
+                      "team"
                     ]
                   },
                   "browserMode": {

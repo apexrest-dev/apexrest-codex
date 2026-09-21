@@ -2,9 +2,9 @@
 
 English | [Українська](agent-workflow.uk.md)
 
-Choose execution mode (`team` or `single`) and verification browser (`codex` or `external`) in project settings. See [mode settings](work-modes.md). Independent review/QA descriptions below apply to team mode; screenshots from September 17 show the earlier panel.
+Single-agent execution is the default. Multi-agent work runs only after the user explicitly selects **Agent team** in **Settings → Defaults for new work** and saves it (`multiAgentEnabled: true`). A launch override cannot enable a team. Choose verification browser (`codex` or `external`) in the same settings. See [mode settings](work-modes.md). Independent review/QA descriptions below apply only to enabled team mode; screenshots from September 17 show the earlier panel.
 
-APEXREST runs an implementation through separate Codex sessions for a project manager, developers and independent QA. The runtime creates the roles and enforces the review order. The manager assigns work and reviews it; the developer cannot approve their own implementation, and a manager approval cannot turn failed QA into success.
+After explicit multi-agent opt-in, APEXREST runs an implementation through separate Codex sessions for a project manager, developers and independent QA. The runtime creates the roles and enforces the review order. The manager assigns work and reviews it; the developer cannot approve their own implementation, and a manager approval cannot turn failed QA into success.
 
 This guide covers the complete user flow in **Codex desktop and Codex CLI**: opening the panel, starting a task, following the agents, changing a requirement, handling a failed check and moving an accepted change into the authorized APEX deployment workflow. The shorter [team API reference](team.md), [panel reference](panel.md) and [Codex source audit](codex-integration.md) describe the individual interfaces.
 
@@ -16,9 +16,9 @@ Install the plugin using [Getting started](getting-started.md), sign in to Codex
 
 For Oracle work, configure the reviewed Java/SQLcl toolchain, locally saved connections and explicit environment identities. The [configuration guide](configuration.md) covers workspace, parsing schema, application ID, source paths, toolchain locks and required test suites. Keep passwords out of tasks and screenshots.
 
-For a new implementation, describe the change in Codex chat. The automatically discoverable `$apexrest-work` skill starts the team, opens its panel and brings the reviewed result back to this chat; no web form is required. See [Chat workflow and Auto models](chat-workflow.md).
+For a new implementation, describe the change in Codex chat. The automatically discoverable `$apexrest-work` skill starts the selected single agent or explicitly enabled team, opens its panel and brings the reviewed result back to this chat; no web form is required. See [Chat workflow and Auto models](chat-workflow.md).
 
-To inspect a panel separately in Codex desktop, invoke `$apexrest-panel`. The skill opens the private local panel in the Codex in-app browser. `$apexrest-menu` describes the panel and lists **Reviewed development team** among its workflows. A direct `$apexrest-team` request starts the same reviewed implementation workflow without requiring the panel to be open.
+To inspect a panel separately in Codex desktop, invoke `$apexrest-panel`. The skill opens the private local panel in the Codex in-app browser. `$apexrest-menu` describes the panel and lists **Reviewed development team** among its workflows. A direct `$apexrest-team` request starts the same configured workflow without requiring the panel to be open.
 
 In Codex CLI, open the live terminal view or read a scriptable snapshot:
 
@@ -31,7 +31,7 @@ The panel TUI uses `1`–`4` or left/right to select a view, up/down or page key
 
 ## 2. Choose settings and describe the task
 
-In **Settings**, inspect the effective project configuration and choose defaults for future teams. **New team task** opens a form with the task, developer count, developer permissions and time limit. State the expected behavior, files or pages in scope, acceptance checks and the identified environment if database work is intended. Starting the form launches a background team and returns its identifier; it is not a completed result.
+In **Settings**, inspect the effective project configuration and choose defaults for future teams. **New task** opens a form with the task, developer count, developer permissions and time limit. State the expected behavior, files or pages in scope, acceptance checks and the identified environment if database work is intended. Starting the form launches a background team and returns its identifier; it is not a completed result.
 
 | Setting | Behavior |
 | --- | --- |

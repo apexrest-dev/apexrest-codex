@@ -4,7 +4,15 @@ import { sqlclConfigSchema } from './sqlcl-config.ts';
 import { refName } from './config.ts';
 import { savedConnectionName, ordsUrl, ordsUsername } from './connections.ts';
 
-export const panelPreferencesSchema = workPreferencesSchema;
+// Keep absent fields absent so changing browser settings preserves an explicit opt-in.
+export const panelPreferencesSchema = z.strictObject({
+  executionMode: workPreferencesSchema.shape.executionMode.removeDefault().optional(),
+  multiAgentEnabled: workPreferencesSchema.shape.multiAgentEnabled.removeDefault().optional(),
+  browserMode: workPreferencesSchema.shape.browserMode.removeDefault().optional(),
+  developers: workPreferencesSchema.shape.developers.removeDefault().optional(),
+  sandbox: workPreferencesSchema.shape.sandbox.removeDefault().optional(),
+  timeoutSeconds: workPreferencesSchema.shape.timeoutSeconds.removeDefault().optional(),
+});
 export const panelReadSchema = z.strictObject({
   project: z.string().min(1).max(4096).optional(),
   team: z.uuid().optional(),
@@ -51,4 +59,4 @@ export const publicPanelActionSchema = panelActionSchema.extend({
   ]),
 });
 export type PanelAction = z.input<typeof panelActionSchema>['action'];
-export type PanelPreferences = z.infer<typeof panelPreferencesSchema>;
+export type PanelPreferences = z.infer<typeof workPreferencesSchema>;

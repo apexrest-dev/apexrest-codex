@@ -1,9 +1,10 @@
 import { createRequire as __createRequire } from 'node:module'; const require = __createRequire(import.meta.url);
 import {
+  recordedExecutionMode,
   resolveWorkRequest,
   teamMessageSchema,
   teamStartSchema
-} from "./chunk-F762AFRT.mjs";
+} from "./chunk-RFT5ELVI.mjs";
 import {
   external_exports,
   parse,
@@ -73,7 +74,11 @@ var TeamService = class {
         5,
         "conflict"
       );
-    await writeJson(path2.join(root, "request.json"), { ...request, project: this.ctx.root });
+    await writeJson(path2.join(root, "request.json"), {
+      ...request,
+      project: this.ctx.root,
+      multiAgentEnabled: request.executionMode === "team"
+    });
     await writeJson(path2.join(root, "state.json"), {
       id,
       executionMode: request.executionMode,
@@ -121,6 +126,7 @@ var TeamService = class {
   }
   async status(id) {
     const state = await readJson(path2.join(await this.directory(id), "state.json"));
+    state.executionMode = recordedExecutionMode(state);
     if (teamActive.has(state.status) && Date.parse(state.updatedAt) + 6e4 < Date.now())
       return {
         ...state,

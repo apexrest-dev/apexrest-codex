@@ -9,9 +9,9 @@ import {
 } from "./chunk-GFRSRK3K.mjs";
 import {
   PanelService
-} from "./chunk-TLBRWMVR.mjs";
-import "./chunk-TKVKS5YD.mjs";
-import "./chunk-F762AFRT.mjs";
+} from "./chunk-MOMUL4AV.mjs";
+import "./chunk-H36DRKRO.mjs";
+import "./chunk-RFT5ELVI.mjs";
 import "./chunk-G26NEU3N.mjs";
 import "./chunk-TM25I7KG.mjs";
 import {
@@ -82,7 +82,9 @@ function panelLines(data, tab) {
       ""
     );
   if (tab === 1) {
-    lines.push(team?.executionMode === "single" ? "AGENT VERIFICATION" : "MANDATORY REVIEWS");
+    lines.push(
+      (team?.executionMode ?? data.preferences.executionMode) === "single" ? "AGENT VERIFICATION" : "MANDATORY REVIEWS"
+    );
     for (const v of team?.verification ?? [])
       lines.push(
         `${v.report.decision} \xB7 revision ${v.revision}`,

@@ -28,7 +28,7 @@ async function setup(t: import('node:test').TestContext) {
 
 test('legacy preferences retain defaults and saved modes drive all request resolution', async (t) => {
   const { ctx, panel } = await setup(t);
-  assert.equal((await panel.preferences()).executionMode, 'team');
+  assert.equal((await panel.preferences()).executionMode, 'single');
   assert.equal((await panel.preferences()).browserMode, 'codex');
   await panel.act({
     kind: 'preferences',

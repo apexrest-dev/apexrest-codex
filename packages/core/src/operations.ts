@@ -166,7 +166,7 @@ export const toolCatalog: {
     name: 'apexrest_work_start',
     operation: 'work.start',
     description:
-      'Start Oracle APEX work using saved single-agent or team preferences from this chat and prepare its private agent panel. Use a fresh UUID requestId per task; exact retries reuse the same team. Open the returned panel URL inside Codex, wait for the team and report in this chat. Auto model routing; no web form required.',
+      'Start Oracle APEX work using saved single-agent or team preferences from this chat and prepare its private agent panel. Default: single. Team requires explicit multiAgentEnabled in Settings. Use a fresh UUID requestId per task; exact retries reuse the same team. Open the returned panel URL inside Codex, wait for the team and report in this chat. Auto model routing; no web form required.',
     readOnly: false,
   },
   {
@@ -195,14 +195,14 @@ export const toolCatalog: {
     name: 'apexrest_panel_action',
     operation: 'panel.action',
     description:
-      'Perform an explicit panel action: save execution/browser or SQLcl preferences, start/steer/stop a run, validate source, run checks or prepare a deployment plan. Existing trust and authorization apply; this does not bypass deployment approval.',
+      'Perform an explicit panel action: save execution/browser or SQLcl preferences (enable multiAgentEnabled only on explicit user request), start/steer/stop a run, validate source, run checks or prepare a deployment plan. Existing trust and authorization apply; this does not bypass deployment approval.',
     readOnly: false,
   },
   {
     name: 'apexrest_team_start',
     operation: 'team.start',
     description:
-      'Start Codex work using saved preferences or explicit executionMode: single creates one agent for implementation and verification; team enforces developer, manager and independent QA reviews. Both retain dashboard activity, steering and source-bound completion.',
+      'Start Codex work; single by default, team only after explicit multiAgentEnabled in Settings. single creates one agent for implementation and verification; team enforces developer, manager and independent QA reviews. Both retain dashboard activity, steering and source-bound completion.',
     readOnly: false,
   },
   {

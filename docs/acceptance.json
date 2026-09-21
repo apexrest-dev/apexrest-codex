@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "asOf": "2026-09-17",
+  "asOf": "2026-09-21",
   "release": "0.2.0-beta.1",
   "overall": "partial-local-beta",
   "statusSemantics": {
@@ -431,7 +431,7 @@
     },
     {
       "id": "A29",
-      "criterion": "Codex-only team controller enforces separate developer, manager code review, independent QA and final manager review before completing an implementation task",
+      "criterion": "When explicitly enabled in Settings, the Codex-only team controller enforces separate developer, manager code review, independent QA and final manager review before completing a team task",
       "implementation": "implemented",
       "verification": "partial",
       "evidence": [
@@ -468,7 +468,7 @@
     },
     {
       "id": "A31",
-      "criterion": "Codex chat starts a reviewed team and selected in-app panel, uses automatic supported model routing and returns a digest-checked terminal result through bounded waiting",
+      "criterion": "Codex chat starts a single agent by default or an explicitly enabled reviewed team and selected in-app panel, uses automatic supported model routing and returns a digest-checked terminal result through bounded waiting",
       "implementation": "implemented",
       "verification": "partial",
       "evidence": [
@@ -508,6 +508,25 @@
         "docs/evidence/ords-connected.json"
       ],
       "blocker": "Authorized live CLI no-op import/export and SQL backup verified on a private test target: deterministic pre-import exports and all 21 files identical after import. Changed imports, additional component/static-file/MMD variants, SQL restore, live interruption/reconciliation, remote rollback and Windows remain open. Application browser verification is explicitly deferred by the user. Native-host settings evidence is separate from connected CLI operation evidence."
+    },
+    {
+      "id": "A33",
+      "criterion": "Single agent is the default across settings, legacy configuration, CLI/MCP and worker dispatch; multi-agent work requires explicit Settings opt-in, with bounded repeated context and waiting responses",
+      "implementation": "implemented",
+      "verification": "partial",
+      "evidence": [
+        "packages/core/src/work-preferences.ts",
+        "packages/core/src/team-context.ts",
+        "tests/unit/work-preferences.test.ts",
+        "tests/unit/work.test.ts",
+        "tests/unit/team.test.ts",
+        "scripts/verify-single-default.mjs",
+        "docs/evidence/single-default-local.json",
+        "docs/evidence/single-default-runtime.json",
+        "docs/evidence/single-default-checks.json",
+        "docs/evidence/single-default-codex-browser.json"
+      ],
+      "blocker": "Local unit/protocol, built CLI/MCP and panel checks only. This revision does not rerun native Codex model sessions or Oracle tasks and does not establish billed-token savings."
     }
   ],
   "amendments": [

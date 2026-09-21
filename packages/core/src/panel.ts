@@ -11,6 +11,7 @@ import { TeamService, teamRuntime } from './team.ts';
 import { JobService } from './jobs.ts';
 import { panelActionSchema, type PanelAction } from './panel-schema.ts';
 import { workPreferences } from './work-preferences.ts';
+import { recordedExecutionMode } from './team-schema.ts';
 import { openVerificationBrowser } from './browser.ts';
 import { VERSION } from './version.ts';
 import { runProcess } from './process.ts';
@@ -93,7 +94,7 @@ export class PanelService {
         revision: Number(row.revision ?? 0),
         updatedAt: String(row.updatedAt ?? ''),
         members: Array.isArray(row.members) ? row.members.length : 0,
-        executionMode: row.executionMode === 'single' ? 'single' : 'team',
+        executionMode: recordedExecutionMode(row),
       }))
       .map((row) =>
         ['queued', 'running'].includes(row.status) && Date.parse(row.updatedAt) + 60000 < Date.now()
@@ -180,7 +181,17 @@ export class PanelService {
     await requireTrust(this.root);
     if (action.kind === 'saved-connections') return this.oracle.savedConnections();
     if (action.kind === 'preferences') {
-      await writeJson(await contained(this.root, '.apexrest/panel/preferences.json'), action.settings);
+      const settings = { ...(await this.preferences()), ...action.settings };
+      if (!settings.multiAgentEnabled) {
+        if (action.settings.executionMode === 'team')
+          throw new Fault(
+            'MULTI_AGENT_DISABLED',
+            'Explicitly enable multiAgentEnabled in Settings to select a team.',
+            2,
+          );
+        settings.executionMode = 'single';
+      }
+      await writeJson(await contained(this.root, '.apexrest/panel/preferences.json'), settings);
       return { saved: true, appliesTo: 'new-teams' };
     }
     if (action.kind === 'sqlcl') {

@@ -44,7 +44,7 @@ async function setup(t: import('node:test').TestContext) {
     snapshot: team.snapshot.bind(team),
     async start(request: TeamRequest, id: string = requestId) {
       starts++;
-      state.executionMode = request.executionMode ?? 'team';
+      state.executionMode = request.executionMode ?? 'single';
       state.browserMode = request.browserMode ?? 'codex';
       const directory = await team.directory(id);
       await writeJson(path.join(directory, 'request.json'), request);
@@ -109,7 +109,7 @@ test('reusing a completed chat request checks its approval digest before reporti
     approvedDigest: 'outdated',
   });
   const result = await startWork(f.ctx, f.input, f.panel, f.fake);
-  assert.equal(result.status, 'review_stale');
+  assert.equal(result.status, 'result_stale');
   assert.equal(f.starts(), 1);
 });
 
@@ -203,6 +203,7 @@ test('explicit launch options override preferences without silently resetting ot
   const f = await setup(t);
   await writeJson(path.join(f.ctx.root, '.apexrest/panel/preferences.json'), {
     executionMode: 'single',
+    multiAgentEnabled: true,
     browserMode: 'external',
     timeoutSeconds: 300,
   });
@@ -219,4 +220,53 @@ test('explicit launch options override preferences without silently resetting ot
   assert.equal(saved.developers, 2);
   assert.equal(saved.browserMode, 'external');
   assert.equal(saved.timeoutSeconds, 300);
+});
+
+test('chat launch cannot override disabled multi-agent settings or create a duplicate on rejection', async (t) => {
+  const f = await setup(t);
+  await assert.rejects(startWork(f.ctx, { ...f.input, executionMode: 'team' }, f.panel, f.fake), {
+    code: 'MULTI_AGENT_DISABLED',
+  });
+  assert.equal(f.starts(), 0);
+  assert.equal((await startWork(f.ctx, f.input, f.panel, f.fake)).executionMode, 'single');
+});
+
+test('unchanged waits omit histories but terminal waits retain diagnostics and verified stale-state checks', async (t) => {
+  const f = await setup(t);
+  f.state.members = [
+    {
+      role: 'developer-1',
+      threadId: 'agent',
+      sessionId: 'session',
+      status: 'inProgress',
+      result: 'x'.repeat(4000),
+    },
+  ];
+  const started = await startWork(f.ctx, f.input, f.panel, f.fake);
+  const idle = await waitForTeam(f.ctx, { id: f.state.id, cursor: started.cursor, waitSeconds: 1 });
+  assert.equal(idle.unchanged, true);
+  assert.equal('members' in idle.team, false);
+  assert.equal('reviews' in idle.team, false);
+  assert.ok(idle.team.fullReport);
+  await writeJson(path.join(await f.team.directory(f.state.id), 'state.json'), {
+    ...f.state,
+    status: 'completed',
+    completedDigest: 'stale',
+  });
+  const result = await waitForTeam(f.ctx, { id: f.state.id, cursor: started.cursor, waitSeconds: 1 });
+  assert.equal(result.terminal, true);
+  assert.equal(result.unchanged, false);
+  assert.equal(result.team.status, 'result_stale');
+  assert.ok('diagnostics' in result.team && result.team.diagnostics.length > 0);
+});
+
+test('an exact retry preserves an explicitly enabled team after settings revoke future team starts', async (t) => {
+  const f = await setup(t);
+  const preferences = path.join(f.ctx.root, '.apexrest/panel/preferences.json');
+  await writeJson(preferences, { executionMode: 'team', multiAgentEnabled: true });
+  const started = await startWork(f.ctx, f.input, f.panel, f.fake);
+  assert.equal(started.executionMode, 'team');
+  await writeJson(preferences, { executionMode: 'single', multiAgentEnabled: false });
+  assert.equal((await startWork(f.ctx, f.input, f.panel, f.fake)).executionMode, 'team');
+  assert.equal(f.starts(), 1);
 });

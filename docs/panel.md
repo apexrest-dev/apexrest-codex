@@ -6,7 +6,7 @@ Settings also select **Direct Oracle listener / ORDS HTTP(S)** and manage plugin
 
 For direct Oracle access, choose an existing SQLcl saved connection from the selector. Opening Direct connection settings loads the list; **Refresh saved connections** reads it again on request. Loading reads SQLcl's local connection names without connecting to a database. The control shows loading, empty-list and error states, with **Retry** after a failure. Existing mappings remain available even if SQLcl does not return them in the refreshed list. Switching database transport preserves each reference's direct mapping and stored ORDS credentials.
 
-Choose execution mode (`team` or `single`) and verification browser (`codex` or `external`) in project settings. See [mode settings](work-modes.md). Independent review/QA descriptions below apply to team mode; screenshots from September 17 show the earlier panel.
+Single-agent execution is the default. Multi-agent work runs only after the user explicitly selects **Agent team** in **Settings → Defaults for new work** and saves it (`multiAgentEnabled: true`). A launch override cannot enable a team. Choose verification browser (`codex` or `external`) in the same settings. See [mode settings](work-modes.md). Independent review/QA descriptions below apply only to enabled team mode; screenshots from September 17 show the earlier panel.
 
 [APEX work from chat](chat-workflow.md) automatically opens the selected team view; the web task form is optional. Auto routing reasons, cumulative token breakdowns and the task time limit appear on the team cards. Cached input and reasoning output are subsets, not extra tokens or a price estimate.
 

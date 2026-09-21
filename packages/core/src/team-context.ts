@@ -1,10 +1,35 @@
-import type { TeamRole, TeamState } from './team-schema.ts';
+import { recordedExecutionMode, type TeamRole, type TeamState } from './team-schema.ts';
+
+// Each role has one persistent session. Send its assignment once, with durable
+// pointers for recovery after host compaction. Findings and new messages remain
+// in the live context on every turn; this never replaces verification evidence.
+export function taskBriefing(task: string, directory: string) {
+  const tasks = new Set<TeamRole>(),
+    plans = new Set<TeamRole>();
+  return {
+    rememberPlan(role: TeamRole) {
+      plans.add(role);
+    },
+    next(role: TeamRole, plan?: string) {
+      const includeTask = !tasks.has(role),
+        includePlan = plan !== undefined && !plans.has(role);
+      tasks.add(role);
+      if (includePlan) plans.add(role);
+      return {
+        taskFile: directory + '/request.json',
+        planFile: directory + '/plan.json',
+        ...(includeTask ? { task } : {}),
+        ...(includePlan ? { plan } : {}),
+      };
+    },
+  };
+}
 
 // Tool transcripts remain in the durable report; repeating them on every turn
 // inflated context without replacing independent inspection of source/evidence.
 export function compactTeamContext(state: TeamState, role: TeamRole, fullReport: string) {
   return {
-    executionMode: state.executionMode ?? 'team',
+    executionMode: recordedExecutionMode(state),
     browserMode: state.browserMode ?? 'codex',
     phase: state.phase,
     revision: state.revision,

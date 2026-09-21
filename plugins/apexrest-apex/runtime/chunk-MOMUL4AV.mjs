@@ -2,13 +2,14 @@ import { createRequire as __createRequire } from 'node:module'; const require = 
 import {
   TeamService,
   teamRuntime
-} from "./chunk-TKVKS5YD.mjs";
+} from "./chunk-H36DRKRO.mjs";
 import {
   openVerificationBrowser,
+  recordedExecutionMode,
   teamStartSchema,
   workPreferences,
   workPreferencesSchema
-} from "./chunk-F762AFRT.mjs";
+} from "./chunk-RFT5ELVI.mjs";
 import {
   VERSION
 } from "./chunk-G26NEU3N.mjs";
@@ -40,7 +41,14 @@ import {
 } from "./chunk-MJC6ZMRG.mjs";
 
 // packages/core/src/panel-schema.ts
-var panelPreferencesSchema = workPreferencesSchema;
+var panelPreferencesSchema = external_exports.strictObject({
+  executionMode: workPreferencesSchema.shape.executionMode.removeDefault().optional(),
+  multiAgentEnabled: workPreferencesSchema.shape.multiAgentEnabled.removeDefault().optional(),
+  browserMode: workPreferencesSchema.shape.browserMode.removeDefault().optional(),
+  developers: workPreferencesSchema.shape.developers.removeDefault().optional(),
+  sandbox: workPreferencesSchema.shape.sandbox.removeDefault().optional(),
+  timeoutSeconds: workPreferencesSchema.shape.timeoutSeconds.removeDefault().optional()
+});
 var panelReadSchema = external_exports.strictObject({
   project: external_exports.string().min(1).max(4096).optional(),
   team: external_exports.uuid().optional()
@@ -271,7 +279,7 @@ var PanelService = class {
       revision: Number(row.revision ?? 0),
       updatedAt: String(row.updatedAt ?? ""),
       members: Array.isArray(row.members) ? row.members.length : 0,
-      executionMode: row.executionMode === "single" ? "single" : "team"
+      executionMode: recordedExecutionMode(row)
     })).map(
       (row) => ["queued", "running"].includes(row.status) && Date.parse(row.updatedAt) + 6e4 < Date.now() ? { ...row, status: "outcome_unknown" } : row
     );
@@ -348,7 +356,17 @@ var PanelService = class {
     await requireTrust(this.root);
     if (action.kind === "saved-connections") return this.oracle.savedConnections();
     if (action.kind === "preferences") {
-      await writeJson(await contained(this.root, ".apexrest/panel/preferences.json"), action.settings);
+      const settings = { ...await this.preferences(), ...action.settings };
+      if (!settings.multiAgentEnabled) {
+        if (action.settings.executionMode === "team")
+          throw new Fault(
+            "MULTI_AGENT_DISABLED",
+            "Explicitly enable multiAgentEnabled in Settings to select a team.",
+            2
+          );
+        settings.executionMode = "single";
+      }
+      await writeJson(await contained(this.root, ".apexrest/panel/preferences.json"), settings);
       return { saved: true, appliesTo: "new-teams" };
     }
     if (action.kind === "sqlcl") {

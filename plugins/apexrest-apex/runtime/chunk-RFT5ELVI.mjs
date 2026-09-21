@@ -1129,12 +1129,17 @@ end;
 };
 
 // packages/core/src/team-schema.ts
-var workPreferencesSchema = external_exports.strictObject({
-  executionMode: external_exports.enum(["team", "single"]).default("team"),
+var workOptionsSchema = external_exports.strictObject({
+  executionMode: external_exports.enum(["single", "team"]).default("single"),
   browserMode: external_exports.enum(["codex", "external"]).default("codex"),
   developers: external_exports.number().int().min(1).max(3).default(1),
   sandbox: external_exports.enum(["read-only", "workspace-write"]).default("workspace-write"),
   timeoutSeconds: external_exports.number().int().min(30).max(3600).default(900)
+});
+var workPreferencesSchema = workOptionsSchema.extend({
+  // Legacy executionMode: team was also written by unrelated settings saves.
+  // Only this explicit settings opt-in authorizes new multi-agent runs.
+  multiAgentEnabled: external_exports.boolean().default(false)
 });
 var teamStartSchema = external_exports.strictObject({
   executionMode: workPreferencesSchema.shape.executionMode.removeDefault().optional(),
@@ -1145,10 +1150,21 @@ var teamStartSchema = external_exports.strictObject({
   project: external_exports.string().optional(),
   task: external_exports.string().trim().min(1).max(16e3)
 });
-var resolvedTeamStartSchema = workPreferencesSchema.extend({
+var resolvedTeamStartSchema = workOptionsSchema.extend({
   project: external_exports.string().optional(),
   task: teamStartSchema.shape.task
 });
+var queuedWorkSchema = resolvedTeamStartSchema.extend({
+  multiAgentEnabled: external_exports.boolean().default(false)
+});
+function recordedExecutionMode(state) {
+  if (state.executionMode === "single" || state.executionMode === "team") return state.executionMode;
+  const reviewed = [state.reviews, state.qa].some((rows) => Array.isArray(rows) && rows.length > 0);
+  const peers = Array.isArray(state.members) && state.members.some(
+    (member) => member && ["manager", "qa", "developer-2", "developer-3"].includes(member.role)
+  );
+  return reviewed || peers ? "team" : "single";
+}
 var teamIdSchema = external_exports.strictObject({ project: external_exports.string().optional(), id: external_exports.uuid() });
 var workStartSchema = teamStartSchema.extend({ requestId: external_exports.uuid() });
 var teamWaitSchema = teamIdSchema.extend({
@@ -1184,16 +1200,25 @@ var qaSchema = external_exports.strictObject({
 // packages/core/src/work-preferences.ts
 async function workPreferences(root) {
   const file = await contained(root, ".apexrest/panel/preferences.json");
-  return parse(workPreferencesSchema, await exists(file) ? await readJson(file) : {});
+  const preferences = parse(workPreferencesSchema, await exists(file) ? await readJson(file) : {});
+  if (!preferences.multiAgentEnabled) preferences.executionMode = "single";
+  return preferences;
 }
 async function resolveWorkRequest(root, input) {
   const fields = parse(teamStartSchema, input);
   const overrides = Object.fromEntries(Object.entries(fields).filter(([, value]) => value !== void 0));
+  const { multiAgentEnabled, ...preferences } = await workPreferences(root);
   const request = resolvedTeamStartSchema.parse({
-    ...await workPreferences(root),
+    ...preferences,
     ...overrides,
     project: root
   });
+  if (request.executionMode === "team" && !multiAgentEnabled)
+    throw new Fault(
+      "MULTI_AGENT_DISABLED",
+      "Multi-agent work is disabled. The user must explicitly enable multiAgentEnabled in Settings before starting a team.",
+      2
+    );
   if (request.executionMode === "single") request.developers = 1;
   return request;
 }
@@ -1248,6 +1273,8 @@ export {
   workPreferencesSchema,
   teamStartSchema,
   resolvedTeamStartSchema,
+  queuedWorkSchema,
+  recordedExecutionMode,
   teamIdSchema,
   workStartSchema,
   teamWaitSchema,

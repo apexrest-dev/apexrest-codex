@@ -572,7 +572,14 @@
     }
     draw(
       "metrics",
-      [data.teams, data.sqlcl, data.jobs, data.team?.status, data.team?.executionMode],
+      [
+        data.teams,
+        data.sqlcl,
+        data.jobs,
+        data.team?.status,
+        data.team?.executionMode,
+        data.preferences.executionMode
+      ],
       () => [
         [
           "Active runs",
@@ -580,11 +587,15 @@
           data.team ? human(data.team.phase) : "Ready for a new task"
         ],
         [
-          data.team?.executionMode === "single" ? "Verification" : "Review gate",
+          (data.team?.executionMode ?? data.preferences.executionMode) === "single" ? "Verification" : "Review gate",
           data.team ? human(data.team.status) : "No result",
-          data.team?.executionMode === "single" ? "Single-agent checks" : "Manager + independent QA"
+          (data.team?.executionMode ?? data.preferences.executionMode) === "single" ? "Single-agent checks" : "Manager + independent QA"
         ],
-        ["APEX operations", String(data.jobs.filter((job) => active(job.status)).length), "Running or queued"],
+        [
+          "APEX operations",
+          String(data.jobs.filter((job) => active(job.status)).length),
+          "Running or queued"
+        ],
         [
           "Database connectivity",
           data.sqlcl.databaseTransport === "ords" ? "ORDS HTTP(S)" : "Direct Oracle",
@@ -774,9 +785,16 @@
     });
   };
   function modeControls(prefix) {
+    if (prefix === "task") {
+      const teamOption = $("task-execution-mode").querySelector("option[value=team]");
+      teamOption.disabled = !snapshot?.preferences.multiAgentEnabled;
+      if (teamOption.disabled) input("task-execution-mode").value = "single";
+    }
     const single = input(prefix + "-execution-mode").value === "single";
     input(prefix + "-developers").disabled = single;
-    $(prefix + "-workflow-note").textContent = single ? "One agent plans, implements and verifies. Activity, messages and checks remain visible here." : "Plan \u2192 developers \u2192 manager review \u2192 independent QA \u2192 final manager review. Reviewers remain read only.";
+    if (prefix === "task")
+      input("task-developers").value = single ? "1" : String(snapshot?.preferences.developers ?? 1);
+    $(prefix + "-workflow-note").textContent = single ? "Single agent is the default: one agent plans, implements and verifies. Enable Agent team explicitly in Settings and save to allow multi-agent runs." : "Plan \u2192 developers \u2192 manager review \u2192 independent QA \u2192 final manager review. Reviewers remain read only.";
   }
   for (const prefix of ["default", "task"])
     input(prefix + "-execution-mode").onchange = () => modeControls(prefix);
@@ -789,6 +807,7 @@
       kind: "preferences",
       settings: {
         executionMode: input("default-execution-mode").value,
+        multiAgentEnabled: input("default-execution-mode").value === "team",
         browserMode: input("default-browser-mode").value,
         developers: Number(input("default-developers").value),
         sandbox: input("default-sandbox").value,

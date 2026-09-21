@@ -14,7 +14,7 @@ const project = path.join(root, 'project'),
 const runtime = path.resolve(process.argv[2] ?? 'dist/runtime/apexrest.mjs');
 const reportFile = path.resolve(process.argv[3] ?? 'docs/evidence/team-native-local.json');
 const developers = Number(process.argv[4] ?? 2);
-const executionMode = process.argv[5] ?? 'team';
+const executionMode = process.argv[5] ?? 'single';
 const browserMode = process.argv[6] ?? 'codex';
 const single = executionMode === 'single';
 if (!['team', 'single'].includes(executionMode) || !['codex', 'external'].includes(browserMode))
@@ -123,7 +123,16 @@ const callTool = async (name, args) => {
 };
 const requestId = randomUUID();
 await callTool('apexrest_panel_action', {
-  action: { kind: 'preferences', settings: { executionMode, browserMode, developers, timeoutSeconds: 600 } },
+  action: {
+    kind: 'preferences',
+    settings: {
+      executionMode,
+      multiAgentEnabled: executionMode === 'team',
+      browserMode,
+      developers,
+      timeoutSeconds: 600,
+    },
+  },
 });
 const startInput = { requestId, task };
 const started = await callTool('apexrest_work_start', startInput);

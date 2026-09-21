@@ -1,14 +1,14 @@
-# Mandatory development team
+# Opt-in development team
 
 English | [Українська](team.uk.md)
 
-Choose execution mode (`team` or `single`) and verification browser (`codex` or `external`) in project settings. See [mode settings](work-modes.md). Independent review/QA descriptions below apply to team mode; screenshots from September 17 show the earlier panel.
+Single-agent execution is the default. Multi-agent work runs only after the user explicitly selects **Agent team** in **Settings → Defaults for new work** and saves it (`multiAgentEnabled: true`). A launch override cannot enable a team. Choose verification browser (`codex` or `external`) in the same settings. See [mode settings](work-modes.md). Independent review/QA descriptions below apply only to enabled team mode; screenshots from September 17 show the earlier panel.
 
-New implementation requests use [APEX work from chat](chat-workflow.md): Codex starts the team, opens its panel and returns the result in the originating conversation. [Auto routing](chat-workflow.md#auto-models) selects supported models and reasoning for each scheduled turn without a manual selector.
+New implementation requests use [APEX work from chat](chat-workflow.md): Codex starts the selected run, opens its panel and returns the result in the originating conversation. [Auto routing](chat-workflow.md#auto-models) selects supported models and reasoning for each scheduled turn without a manual selector.
 
 For a complete walkthrough with actual screenshots, see [Agent workflow: from task to reviewed result](agent-workflow.md).
 
-The primary implementation entry is `$apexrest-team`. Its runtime creates one project manager, one to three developers and one independent QA agent as separate Codex App Server sessions. Developers work sequentially in the same project. The manager defines assignments; the controller creates the roles and enforces their order.
+The primary chat entry is `$apexrest-work`; `$apexrest-team` exposes direct controls. With multi-agent enabled in Settings, the runtime creates one project manager, one to three developers and one independent QA agent as separate Codex App Server sessions. Developers work sequentially in the same project. The manager defines assignments; the controller creates the roles and enforces their order.
 
 ## Required sequence
 
@@ -22,7 +22,7 @@ The digest includes untracked files and configuration, excluding `.git`, `.apexr
 
 | MCP tool | CLI | Purpose |
 | --- | --- | --- |
-| `apexrest_team_start` | `team start` | Start the fixed review workflow; return immediately with a team ID |
+| `apexrest_team_start` | `team start` | Start the saved mode (single by default); return immediately with a run ID |
 | `apexrest_team_status` | `team status` | Read phase, roles, messages, review decisions and result |
 | `apexrest_team_message` | `team message` | Queue a user correction; invalidate a completion based on earlier input |
 | `apexrest_team_cancel` | `team cancel` | Request interruption; never claim rollback |

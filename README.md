@@ -18,7 +18,9 @@ APEXREST connects native Codex skills and MCP tools to Oracle SQLcl. Generate AP
 
 > **Beta: `0.2.0-beta.1`.** Adds ORDS HTTP(S) connectivity and clearer connection settings; see the [release notes](docs/release-notes.md). Real Oracle template compilation, an unchanged application round trip through ORDS and Codex native installation have been exercised within the evidence scopes below. Stable release readiness is still blocked by the remaining integration, recovery and platform checks. Independent APEXREST tooling; not an official Oracle or OpenAI product.
 
-Describe the implementation in Codex chat: `$apexrest-work` starts the configured single agent or team, opens its in-app panel and returns the reviewed result to the same conversation. Models and reasoning use Auto; no web form or manual model configuration is required. See [chat workflow and Auto models](docs/chat-workflow.md). The team retains separate developers, mandatory manager code review, independent QA and final manager review. See [team APIs and review gates](docs/team.md) and the [Codex source audit](docs/codex-integration.md).
+Describe the implementation in Codex chat: `$apexrest-work` starts the configured single agent or team, opens its in-app panel and returns the verified result to the same conversation. Models and reasoning use Auto; no web form or manual model configuration is required. See [chat workflow and Auto models](docs/chat-workflow.md). The team retains separate developers, mandatory manager code review, independent QA and final manager review. See [team APIs and review gates](docs/team.md) and the [Codex source audit](docs/codex-integration.md).
+
+Single agent is the default; teams require explicit opt-in in Settings. See [execution settings](docs/work-modes.md).
 
 Settings offer **Single agent / Agent team** and **Codex in-app browser / External system browser** for APEX verification. Both execution modes have a live dashboard. [Settings and verification boundaries](docs/work-modes.md).
 

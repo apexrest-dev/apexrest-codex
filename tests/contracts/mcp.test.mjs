@@ -45,6 +45,17 @@ test('real stdio MCP initialize/list/call, CLI parity and bounded catalog', asyn
   await client.connect(transport);
   const catalog = await client.listTools();
   assert.equal(catalog.tools.length, 24);
+  for (const name of ['apexrest_work_start', 'apexrest_team_start']) {
+    const properties = catalog.tools.find((tool) => tool.name === name).inputSchema.properties;
+    assert.equal(properties.executionMode.default, undefined);
+    assert.equal(properties.multiAgentEnabled, undefined);
+  }
+  const settings = catalog.tools
+    .find((tool) => tool.name === 'apexrest_panel_action')
+    .inputSchema.properties.action.oneOf.find((action) => action.properties.kind.const === 'preferences')
+    .properties.settings;
+  assert.equal(settings.properties.multiAgentEnabled.type, 'boolean');
+  assert.equal(settings.properties.executionMode.default, undefined);
   const panelTool = catalog.tools.find((tool) => tool.name === 'apexrest_panel_open');
   assert.equal(panelTool._meta.ui.resourceUri, 'ui://apexrest/development-panel.html');
   const resources = await client.listResources();

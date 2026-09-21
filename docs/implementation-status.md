@@ -2,6 +2,16 @@
 
 English | [Українська](implementation-status.uk.md)
 
+## Single by default and bounded context — 2026-09-21
+
+Single agent is now the default in runtime schemas, settings, chat, CLI/MCP and worker fallbacks. New teams require `multiAgentEnabled: true` saved through an explicit Settings choice. A launch override cannot supply this flag. Ambiguous legacy `executionMode: team` files resolve to single without rewriting them; browser, developer count, sandbox and timeout settings survive. Confirmed opt-in survives partial updates, active runs and exact retries retain their launch options, and queued unproven team requests are blocked before dispatch. Historical team evidence stays labelled as team evidence.
+
+The task and plan are sent once per persistent role session, with durable file pointers for compaction recovery. Live findings, user updates, verification phases, review gates and source-digest checks remain. Unchanged `team.wait` replies omit repeated histories; changed and terminal replies retain bounded reports. Model selection is unchanged. Existing reference lookup is already bounded/lazy, so its pinned-source and compiler checks were retained.
+
+[Reproducible local measurements](evidence/single-default-runtime.json) compare UTF-8 payload bytes for a fixed synthetic assignment: 42,553 → 12,432 bytes across three turns (70.78% less), or 103,837 → 13,128 across seven turns (87.36% less). An unchanged wait response shrank from 5,223 to 344 bytes (93.41%). Assignment measurements exclude prompts, reports and retained host history; these are not tokenizer counts or Codex billing savings.
+
+[Final checks](evidence/single-default-checks.json): 173 unit tests, 19 contract tests, 14 packaging tests, typecheck, lint, 46 documentation pairs and the 30-page site build. Verification covers unit/protocol regressions, built CLI and local stdio MCP rejection of unenabled teams, and actual settings persistence with desktop/mobile Playwright rendering. [Codex in-app observations](evidence/single-default-codex-browser.json) separately check selection, save/reload and launch-form enablement. No model sessions were spawned for this change, and no database was contacted or modified. Native model execution, Oracle and billing comparisons remain unverified for this revision; earlier native reports retain their original scope. The build specification is unchanged. See [execution settings](work-modes.md).
+
 ## Codex Cloud documentation — 2026-09-19
 
 The [README overview](../README.md#ords-sql-a-path-to-codex-cloud) and its Ukrainian version explain APEX for new readers, the neutral SQLcl `connect -orest` example, local/Cloud tradeoffs, Slack delegation from a phone and ChatGPT mobile Remote's running-computer requirement. They include the [announcement infographic](assets/ords-codex-cloud.png) as an illustration. The Cloud agent-team sequence is explicitly a scenario to configure and verify, with no new execution evidence claimed.

@@ -78,7 +78,11 @@ export function panelLines(data: PanelSnapshot, tab: number): string[] {
       '',
     );
   if (tab === 1) {
-    lines.push(team?.executionMode === 'single' ? 'AGENT VERIFICATION' : 'MANDATORY REVIEWS');
+    lines.push(
+      (team?.executionMode ?? data.preferences.executionMode) === 'single'
+        ? 'AGENT VERIFICATION'
+        : 'MANDATORY REVIEWS',
+    );
     for (const v of team?.verification ?? [])
       lines.push(
         `${v.report.decision} · revision ${v.revision}`,
