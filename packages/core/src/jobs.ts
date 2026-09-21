@@ -1,6 +1,7 @@
 import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
+import { setTimeout as delay } from 'node:timers/promises';
 import { z } from 'zod';
 import { contained, exists, readJson, writeJson } from './fs.ts';
 import { parse, requireTrust } from './config.ts';
@@ -44,20 +45,33 @@ export class JobService {
     return {
       jobId: id,
       status: 'queued',
-      nextAction: 'Poll job status; cancellation does not imply database rollback.',
+      nextAction:
+        'Wait for this job with apexrest_job_status and waitSeconds:25; never rerun the operation to fetch results. Cancellation does not imply database rollback.',
     };
   }
-  async status(id: string) {
+  async status(id: string, waitSeconds = 0, signal?: AbortSignal) {
     parse(z.uuid(), id);
+    parse(z.number().int().min(0).max(30), waitSeconds);
     const root = await contained(this.ctx.root, '.apexrest/jobs/' + id);
-    const state = (await readJson(path.join(root, 'state.json'))) as { status: string; updatedAt: string };
-    if (['queued', 'running'].includes(state.status) && Date.parse(state.updatedAt) + 60000 < Date.now())
-      return {
-        ...state,
-        status: 'outcome_unknown',
-        nextAction: 'Worker heartbeat expired. Reconcile target before retrying.',
+    const deadline = Date.now() + waitSeconds * 1000;
+    for (;;) {
+      const state = (await readJson(path.join(root, 'state.json'))) as {
+        status: string;
+        updatedAt: string;
       };
-    return state;
+      if (!['queued', 'running'].includes(state.status)) return state;
+      if (Date.parse(state.updatedAt) + 60000 < Date.now())
+        return {
+          ...state,
+          status: 'outcome_unknown',
+          nextAction: 'Worker heartbeat expired. Reconcile target before retrying.',
+        };
+      const remaining = deadline - Date.now();
+      if (remaining <= 0 || signal?.aborted) return state;
+      await delay(Math.min(250, remaining), undefined, { signal }).catch((error: unknown) => {
+        if (!signal?.aborted) throw error;
+      });
+    }
   }
   async cancel(id: string) {
     await requireTrust(this.ctx.root);

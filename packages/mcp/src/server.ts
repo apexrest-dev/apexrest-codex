@@ -14,11 +14,12 @@ import { fileURLToPath } from 'node:url';
 import { dispatch } from '../../core/src/service.ts';
 import { schemas, toolCatalog } from '../../core/src/operations.ts';
 import type { Operation } from '../../core/src/operations.ts';
-import { failure, success, Fault } from '../../core/src/result.ts';
+import { failure, Fault } from '../../core/src/result.ts';
 import { parse, loadProject } from '../../core/src/config.ts';
 import { JobService } from '../../core/src/jobs.ts';
 import { panelDocument } from '../../core/src/panel-server.ts';
 import { toolOutput } from './output.ts';
+import { jobToolResult, jobWaitSeconds, runJobTool } from './job-tools.ts';
 const panelUri = 'ui://apexrest/development-panel.html';
 
 const absoluteProject = z
@@ -31,21 +32,18 @@ const absoluteProject = z
       (process.platform !== 'win32' || /^(?:[A-Za-z]:[\\/]|[\\/]{2}[^\\/]+[\\/][^\\/]+)/.test(value)),
     'Provide the absolute project directory containing apexrest.json; the plugin runs from its installation directory.',
   )
-  .describe(
-    'Absolute path to the project directory containing apexrest.json. The plugin working directory is its installation directory, not the current Codex project.',
-  );
+  .describe('Absolute project directory containing apexrest.json; never the plugin cache.');
 
 // MCP hosts may launch this process from a plugin cache. Keep this constraint
 // at the transport boundary so the CLI retains its current-directory behavior.
 const mcpSchemas = new Map<Operation, z.ZodType<Record<string, unknown>>>();
-for (const { operation } of toolCatalog) {
+for (const { operation, long } of toolCatalog) {
   const schema = schemas[operation];
-  mcpSchemas.set(
-    operation,
+  const transportSchema =
     'project' in schema.shape
       ? schema.extend({ project: operation === 'doctor' ? absoluteProject.optional() : absoluteProject })
-      : schema,
-  );
+      : schema;
+  mcpSchemas.set(operation, long ? transportSchema.extend({ waitSeconds: jobWaitSeconds }) : transportSchema);
 }
 
 export async function startMcp() {
@@ -98,7 +96,7 @@ export async function startMcp() {
           name: t.name,
           description: t.description,
           ...(t.operation === 'panel.open' ? { _meta: { ui: { resourceUri: panelUri } } } : {}),
-          inputSchema: z.toJSONSchema(mcpSchemas.get(t.operation)!, { target: 'draft-7' }) as {
+          inputSchema: z.toJSONSchema(mcpSchemas.get(t.operation)!, { target: 'draft-7', io: 'input' }) as {
             type: 'object';
           },
           annotations: {
@@ -127,12 +125,14 @@ export async function startMcp() {
       const input = parse(mcpSchemas.get(tool.operation)!, request.params.arguments ?? {});
       project = typeof input.project === 'string' ? input.project : undefined;
       result = tool.long
-        ? success(
+        ? jobToolResult(
             tool.operation,
-            await new JobService(await loadProject(String(input.project))).start(
+            await runJobTool(
+              new JobService(await loadProject(String(input.project))),
               tool.operation,
               input,
               path.join(path.dirname(fileURLToPath(import.meta.url)), 'apexrest.mjs'),
+              extra.signal,
             ),
           )
         : await dispatch(tool.operation, input, extra.signal);

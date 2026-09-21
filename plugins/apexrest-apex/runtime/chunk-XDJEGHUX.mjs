@@ -1,18 +1,19 @@
 import { createRequire as __createRequire } from 'node:module'; const require = __createRequire(import.meta.url);
 import {
   openPanel
-} from "./chunk-OQ4IG3PW.mjs";
+} from "./chunk-WMJTK7ZB.mjs";
 import {
   JobService,
   PanelService,
   panelActionSchema,
   panelReadSchema,
   publicPanelActionSchema
-} from "./chunk-C64472UB.mjs";
+} from "./chunk-5GOWABKB.mjs";
 import {
   TeamService,
+  currentSessionHandoff,
   teamActive
-} from "./chunk-YDH22XCZ.mjs";
+} from "./chunk-VPCUV5QA.mjs";
 import {
   ArtifactService,
   DeploymentService,
@@ -26,10 +27,10 @@ import {
   teamStartSchema,
   teamWaitSchema,
   workStartSchema
-} from "./chunk-QQNTV455.mjs";
+} from "./chunk-QLRGI23I.mjs";
 import {
   VERSION
-} from "./chunk-NC2FP64H.mjs";
+} from "./chunk-Z6Y72JVG.mjs";
 import {
   OracleAdapter,
   configureConnection,
@@ -48,6 +49,7 @@ import {
   parse,
   projectInit,
   projectInspect,
+  projectSummary,
   refName,
   relativePath,
   requireTrust,
@@ -59,7 +61,7 @@ import {
   sqlclConfig,
   sqlclMode,
   sqlclRestriction
-} from "./chunk-7NOO7SDV.mjs";
+} from "./chunk-2SZCZZ3J.mjs";
 import {
   Fault,
   canonical,
@@ -75,12 +77,24 @@ import {
 } from "./chunk-IPU64TJI.mjs";
 
 // packages/core/src/metadata.ts
+var metadataOffset = external_exports.number().int().min(0).max(1e5);
+var metadataLimit = external_exports.number().int().min(1).max(100);
 var metadataRequest = external_exports.strictObject({
   kind: external_exports.enum(["objects", "columns", "constraints", "signatures", "applications", "pages"]),
   schema: identifier,
   name: identifier.optional(),
-  offset: external_exports.number().int().min(0).max(1e5).default(0),
-  limit: external_exports.number().int().min(1).max(100).default(30)
+  offset: metadataOffset.default(0),
+  limit: metadataLimit.default(30)
+});
+var metadataRequests = external_exports.array(metadataRequest).min(1).max(8);
+var metadataBatchRequest = external_exports.strictObject({ requests: metadataRequests });
+var metadataInputSchema = external_exports.strictObject({
+  kind: metadataRequest.shape.kind.optional(),
+  schema: metadataRequest.shape.schema.optional(),
+  name: metadataRequest.shape.name,
+  offset: metadataOffset.optional(),
+  limit: metadataLimit.optional(),
+  requests: metadataRequests.optional()
 });
 var queries = {
   objects: "select object_name, object_type from all_objects where owner=:p_owner and object_type in ('TABLE','VIEW','PACKAGE') and (:p_name is null or object_name=:p_name) order by object_name, object_type",
@@ -91,30 +105,41 @@ var queries = {
   pages: "select application_id,page_id,page_name,page_alias from apex_application_pages where application_id=:p_app_id and workspace=:p_workspace order by page_id"
 };
 async function metadataRead(adapter, env2, connection, value) {
-  const r = parse(metadataRequest, value);
-  if (r.schema !== env2.parsingSchema)
-    throw new Fault("SCHEMA_DENIED", "Metadata is restricted to the configured parsing schema.", 4);
-  if (["columns", "constraints", "signatures"].includes(r.kind) && !r.name)
-    throw new Fault("OBJECT_REQUIRED", "Select a specific object first.", 2);
+  const input = parse(external_exports.union([metadataRequest, metadataBatchRequest]), value);
+  const batch = "requests" in input;
+  const requests = batch ? input.requests : [input];
+  for (const r of requests) {
+    if (r.schema !== env2.parsingSchema)
+      throw new Fault("SCHEMA_DENIED", "Metadata is restricted to the configured parsing schema.", 4);
+    if (["columns", "constraints", "signatures"].includes(r.kind) && !r.name)
+      throw new Fault("OBJECT_REQUIRED", "Select a specific object first.", 2);
+  }
   await adapter.verifyTarget(env2, connection);
-  const rows = await adapter.jsonQuery(
-    queries[r.kind] + " offset :p_offset rows fetch next :p_limit rows only",
-    connection,
-    {
-      p_owner: r.schema,
-      p_name: r.name ?? "",
-      p_app_id: env2.applicationId,
-      p_workspace: env2.workspace,
-      p_offset: r.offset,
-      p_limit: r.limit
-    }
-  );
-  return {
-    dataClassification: "untrusted_database_content",
-    rows,
-    offset: r.offset,
-    nextOffset: rows.length === r.limit ? r.offset + r.limit : null
+  const read = async (r) => {
+    const rows = await adapter.jsonQuery(
+      queries[r.kind] + " offset :p_offset rows fetch next :p_limit rows only",
+      connection,
+      {
+        p_owner: r.schema,
+        p_name: r.name ?? "",
+        p_app_id: env2.applicationId,
+        p_workspace: env2.workspace,
+        p_offset: r.offset,
+        p_limit: r.limit
+      }
+    );
+    return {
+      dataClassification: "untrusted_database_content",
+      rows,
+      offset: r.offset,
+      nextOffset: rows.length === r.limit ? r.offset + r.limit : null
+    };
   };
+  if (!batch) return read(input);
+  const results = [];
+  for (const [index, r] of requests.entries())
+    results.push({ index, kind: r.kind, ...r.name ? { name: r.name } : {}, ...await read(r) });
+  return { results, targetVerifiedOnce: true };
 }
 
 // packages/core/src/operations.ts
@@ -181,7 +206,7 @@ var schemas = {
     alias: refName.optional()
   }),
   "project.adopt": external_exports.strictObject({ ...base, env, appId: external_exports.number().int().positive() }),
-  "project.inspect": external_exports.strictObject(base),
+  "project.inspect": external_exports.strictObject({ ...base, detail: external_exports.enum(["full", "summary"]).default("full") }),
   "connection.add": external_exports.strictObject({
     ...base,
     name: refName,
@@ -214,7 +239,7 @@ var schemas = {
     limit: external_exports.number().int().min(1).max(8192).default(4096)
   }),
   "docs.sync": external_exports.strictObject({ version: external_exports.string().min(1), dryRun: external_exports.boolean().default(false) }),
-  "metadata.read": metadataRequest.extend({ ...base, env }).strict(),
+  "metadata.read": metadataInputSchema.extend({ ...base, env }).strict(),
   "apex.generate": external_exports.strictObject({
     ...base,
     name: external_exports.string().min(1).max(120),
@@ -237,8 +262,12 @@ var schemas = {
   }),
   "test.report": external_exports.strictObject({ ...base, run: external_exports.uuid() }),
   "test.auth": external_exports.strictObject({ ...base, env }),
-  "browser.open": external_exports.strictObject({ ...base, env }),
-  "jobs.status": external_exports.strictObject({ ...base, id: external_exports.uuid() }),
+  "browser.open": external_exports.strictObject({ ...base, env, browserMode: external_exports.enum(["codex", "external"]).optional() }),
+  "jobs.status": external_exports.strictObject({
+    ...base,
+    id: external_exports.uuid(),
+    waitSeconds: external_exports.number().int().min(0).max(30).default(0)
+  }),
   "jobs.cancel": external_exports.strictObject({ ...base, id: external_exports.uuid() }),
   "artifacts.read": external_exports.strictObject({
     ...base,
@@ -254,57 +283,57 @@ var toolCatalog = [
   {
     name: "apexrest_browser_open",
     operation: "browser.open",
-    description: "Open the explicit APEX environment in the configured verification browser: return a Codex in-app handoff or launch the system browser for interactive SSO. Does not verify the page, copy credentials or run automated suites.",
+    description: "Open a configured APEX environment in the selected browser. Codex returns a host handoff; external launches the system browser. Opening is not verification or test authorization.",
     readOnly: false,
     destructive: false
   },
   {
     name: "apexrest_work_start",
     operation: "work.start",
-    description: "Start Oracle APEX work using saved single-agent or team preferences from this chat and prepare its private agent panel. Default: single. Team requires explicit multiAgentEnabled in Settings. Use a fresh UUID requestId per task; exact retries reuse the same team. Open the returned panel URL inside Codex, wait for the team and report in this chat. Auto model routing; no web form required.",
+    description: "Start APEX work: single continues in this chat without new agents/polling; explicitly enabled teams return a private panel. Fresh requestId per task; exact retries reuse the receipt.",
     readOnly: false
   },
   {
     name: "apexrest_team_wait",
     operation: "team.wait",
-    description: "Wait up to 30 seconds for meaningful team progress or completion. Reuse the returned cursor to avoid heartbeat polling. Reports terminal state and digest-checked result for delivery in the originating chat.",
+    description: "Wait for worker progress/completion (up to 30s). Reuse cursor; unchanged heartbeats stay silent. Terminal results check source digests. Not for current_session.",
     readOnly: true
   },
   {
     name: "apexrest_panel_open",
     operation: "panel.open",
-    description: "Open the APEXREST development panel in Codex. Returns a local Codex browser URL and optional native MCP UI. Shows project settings, agent steps, reviews and APEX operation status.",
+    description: "Open the Codex development panel: private local URL and optional native UI for settings, worker activity, reviews and APEX jobs.",
     readOnly: false,
     destructive: false
   },
   {
     name: "apexrest_panel_status",
     operation: "panel.status",
-    description: "Read the current panel snapshot: configuration, live agent steps, messages, reviews, QA, changes and deployment jobs. No database connection is made.",
+    description: "Read local settings, worker activity, reviews, changes and job status. No database call.",
     readOnly: true
   },
   {
     name: "apexrest_panel_action",
     operation: "panel.action",
-    description: "Perform an explicit panel action: save execution/browser or SQLcl preferences (enable multiAgentEnabled only on explicit user request), start/steer/stop a run, validate source, run checks or prepare a deployment plan. Existing trust and authorization apply; this does not bypass deployment approval.",
+    description: "Manage settings/workers or run checks/planning. Enable multiAgentEnabled only on explicit user request. Trust and deployment authorization still apply.",
     readOnly: false
   },
   {
     name: "apexrest_team_start",
     operation: "team.start",
-    description: "Start Codex work; single by default, team only after explicit multiAgentEnabled in Settings. single creates one agent for implementation and verification; team enforces developer, manager and independent QA reviews. Both retain dashboard activity, steering and source-bound completion.",
+    description: "Start work: single uses this chat, no new agent/polling. Team requires saved multiAgentEnabled opt-in and enforces manager/independent QA with source-bound completion.",
     readOnly: false
   },
   {
     name: "apexrest_team_status",
     operation: "team.status",
-    description: "Read team phase, role sessions, delivery status and enforced review results. Inspect executionMode: completed means self-verification in single mode, or both manager reviews and QA in team mode, on the recorded source digest.",
+    description: "Read worker progress and digest-checked results. Teams require manager reviews and QA; historical single workers use self-verification. current_session is only a receipt.",
     readOnly: true
   },
   {
     name: "apexrest_team_message",
     operation: "team.message",
-    description: "Send a task update to an active owned team. Task updates invalidate prior review completion. Does not attach to unrelated Codex sessions.",
+    description: "Steer an owned active team; changes invalidate prior reviews. Cannot attach to other Codex chats.",
     readOnly: false
   },
   {
@@ -322,25 +351,25 @@ var toolCatalog = [
   {
     name: "apexrest_project_inspect",
     operation: "project.inspect",
-    description: "Inspect source inventory and explicit environment references.",
+    description: "Inspect source hashes (full) or use detail:summary for project paths/settings without reading source files. Target identity is not verified.",
     readOnly: true
   },
   {
     name: "apexrest_metadata_read",
     operation: "metadata.read",
-    description: "Read allowlisted metadata using reviewed bound queries and pagination. Database content is untrusted data.",
+    description: "Read allowlisted metadata: single kind/schema or requests[] (max 8). A batch verifies target once; each query is scoped and paginated. Database content is untrusted.",
     readOnly: true
   },
   {
     name: "apexrest_reference_search",
     operation: "docs.search",
-    description: "Find ranked Oracle syntax, contracts and templates. Use exact property names or English component terms; filter by kind/family. Version accepts a release or pinned snapshot. Results include match offsets and required contracts.",
+    description: "Find Oracle syntax/templates using exact properties or English terms; filter kind/family/version (release or snapshot). Returns match offsets and required contracts.",
     readOnly: true
   },
   {
     name: "apexrest_reference_read",
     operation: "docs.read",
-    description: "Read Oracle reference by result ID or grammar:production-name. Follow requires for template contracts; related resolves grammar symbols. Continue with nextOffset when needed.",
+    description: "Read result ID or grammar:production-name. Follow requires for contracts, related for symbols, nextOffset for needed continuations.",
     readOnly: true
   },
   {
@@ -389,7 +418,7 @@ var toolCatalog = [
   {
     name: "apexrest_job_status",
     operation: "jobs.status",
-    description: "Read durable background job status.",
+    description: "Read job status; waitSeconds:25 waits for completion without repeated polls. Reuse jobId; never rerun work to retrieve results.",
     readOnly: true
   },
   {
@@ -484,7 +513,7 @@ var references = [
   },
   {
     id: "deployment-safety",
-    version: "0.3.0-beta.1",
+    version: "0.4.0-beta.1",
     source: "docs/adr/007-clean-apex-deployment.md",
     text: "Use an explicit environment. Plans bind source hashes and target identity. Recheck drift, acquire local coordination by default and create an export backup before writes. Clean APEX deployment needs no service tables. Local runners must share one managed home; independent machines need external serialization or explicitly selected database coordination. DDL cannot be generally rolled back. Interrupted writes require reconciliation. Production requires an external approval boundary."
   }
@@ -504,7 +533,12 @@ function indexReferences(upstream, file, digest) {
     const symbol = reference.text.match(/^<([^>\n]+)>\s*::=/)?.[1];
     if (symbol) bySymbol.set(symbol, reference.id);
     const title = reference.title ?? symbol ?? reference.id;
-    return { reference, title, titleText: normalizeReference(title) };
+    return {
+      reference,
+      title,
+      titleText: normalizeReference(title),
+      ranking: void 0
+    };
   });
   let pendingPostings;
   const postings = () => pendingPostings ??= (async () => {
@@ -576,10 +610,10 @@ function snippet(text, query, terms) {
   };
 }
 async function referenceSearch(query, version, options = {}) {
-  const index = await referenceIndex();
-  const normalized = normalizeReference(query);
   const terms = termsFor(query);
   if (!terms.length) return [];
+  const index = await referenceIndex();
+  const normalized = normalizeReference(query);
   const key = JSON.stringify([query.trim(), version, options.kind, options.family]);
   let ranked = index.queries.get(key);
   if (!ranked) {
@@ -596,10 +630,13 @@ async function referenceSearch(query, version, options = {}) {
       const r = index.searchable[position].reference;
       return versionMatches(r.version, version) && (!options.kind || r.kind === options.kind) && (!options.family || r.family === options.family || r.family?.startsWith(options.family + "/"));
     }).map((position) => {
-      const { reference, titleText } = index.searchable[position];
+      const entry = index.searchable[position];
+      const { reference, titleText } = entry;
       const exact = reference === exactId;
-      const titleTerms = termsFor(titleText);
-      const bodyText = normalizeReference(reference.text);
+      const { titleTerms, bodyText } = entry.ranking ??= {
+        titleTerms: termsFor(titleText),
+        bodyText: normalizeReference(reference.text)
+      };
       const adjacentHits = terms.slice(1).filter((term, i) => bodyText.includes(terms[i] + " " + term)).length;
       const titleHits = terms.filter((term) => titleTerms.includes(term)).length;
       const score = (exact ? 1e4 : 0) + (titleText === normalized ? 2e3 : 0) + (titleText.includes(normalized) ? 400 : 0) + titleHits * 50 + (titleHits === terms.length ? 200 : 0) + (bodyText.includes(normalized) ? 40 : 0) + adjacentHits * 60 + (reference.text.includes('"' + query.trim() + '"') ? 80 : 0) + (reference.kind === "contract" ? 5 : 0) + 1 / (1 + reference.text.length / 1e3);
@@ -764,6 +801,13 @@ async function startWork(ctx, input, panel = openPanel, team = new TeamService(c
       return team.snapshot(requestId);
     }
   );
+  if (state.executionHost === "current_session")
+    return {
+      ...currentSessionHandoff(state),
+      projectContext: projectSummary(ctx),
+      cursor: teamProgressCursor(state),
+      panel: { status: "not_requested" }
+    };
   let display;
   try {
     const opened = await panel(ctx.root), url = new URL(opened.url);
@@ -781,6 +825,7 @@ async function startWork(ctx, input, panel = openPanel, team = new TeamService(c
   return {
     teamId: requestId,
     executionMode: recordedExecutionMode(state),
+    executionHost: state.executionHost ?? "worker",
     browserMode: state.browserMode ?? "codex",
     status: state.status,
     cursor: teamProgressCursor(state),
@@ -832,7 +877,7 @@ async function dispatch(operation, input = {}, signal) {
     let data;
     switch (operation) {
       case "panel.open": {
-        const { openPanel: openPanel2 } = await import("./chunk-3IPVIXDM.mjs");
+        const { openPanel: openPanel2 } = await import("./chunk-ICWYSHJ7.mjs");
         data = await openPanel2(await realpath(root));
         break;
       }
@@ -869,29 +914,29 @@ async function dispatch(operation, input = {}, signal) {
         );
         break;
       case "dependencies.install": {
-        const { ToolchainService } = await import("./chunk-WERKLI3X.mjs");
+        const { ToolchainService } = await import("./chunk-JWX4UQAZ.mjs");
         data = await new ToolchainService().apply(parsed);
         break;
       }
       case "dependencies.uninstall": {
-        const { uninstallTools } = await import("./chunk-P6LUFCQK.mjs");
+        const { uninstallTools } = await import("./chunk-FPOEB42H.mjs");
         data = await uninstallTools(parsed);
         break;
       }
       case "setup":
       case "plugin.install":
       case "plugin.update": {
-        const { setup: setup2 } = await import("./chunk-AXUD52ZD.mjs");
+        const { setup: setup2 } = await import("./chunk-3GSS6SJH.mjs");
         data = await setup2(parsed);
         break;
       }
       case "plugin.validate": {
-        const { validateNative } = await import("./chunk-AXUD52ZD.mjs");
+        const { validateNative } = await import("./chunk-3GSS6SJH.mjs");
         data = await validateNative(text("from"));
         break;
       }
       case "plugin.uninstall": {
-        const { uninstallNative } = await import("./chunk-AXUD52ZD.mjs");
+        const { uninstallNative } = await import("./chunk-3GSS6SJH.mjs");
         data = await uninstallNative(text("home") ?? managedHome(), Boolean(parsed.keepRuntime));
         break;
       }
@@ -966,7 +1011,7 @@ async function dispatch(operation, input = {}, signal) {
             data = await new TeamService(ctx).cancel(text("id"));
             break;
           case "project.inspect":
-            data = await projectInspect(ctx);
+            data = await projectInspect(ctx, parsed.detail);
             break;
           case "metadata.read": {
             const env2 = environment(ctx, text("env"));
@@ -1094,12 +1139,17 @@ async function dispatch(operation, input = {}, signal) {
             data = await tests.auth(ctx, text("env"));
             break;
           case "browser.open": {
-            const { openVerificationBrowser } = await import("./chunk-5F5DCPTG.mjs");
-            data = await openVerificationBrowser(ctx, text("env"));
+            const { openVerificationBrowser } = await import("./chunk-RF4XQO6I.mjs");
+            data = await openVerificationBrowser(
+              ctx,
+              text("env"),
+              void 0,
+              parsed.browserMode
+            );
             break;
           }
           case "jobs.status":
-            data = await new JobService(ctx).status(text("id"));
+            data = await new JobService(ctx).status(text("id"), Number(parsed.waitSeconds), signal);
             break;
           case "jobs.cancel":
             data = await new JobService(ctx).cancel(text("id"));

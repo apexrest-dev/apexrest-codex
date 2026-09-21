@@ -132,6 +132,8 @@ export interface TeamMessage {
   status: 'queued' | 'delivered' | 'not_delivered' | 'outcome_unknown';
 }
 export interface TeamState {
+  executionHost?: 'current_session' | 'worker';
+  sandbox?: 'read-only' | 'workspace-write';
   id: string;
   executionMode?: 'team' | 'single';
   browserMode?: 'codex' | 'external';

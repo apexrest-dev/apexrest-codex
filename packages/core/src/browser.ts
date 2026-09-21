@@ -31,7 +31,12 @@ export function externalBrowserCommand(url: string, platform: NodeJS.Platform = 
   return { executable: 'xdg-open', args: [url] };
 }
 
-export async function openVerificationBrowser(ctx: ProjectContext, name: string, launch = runProcess) {
+export async function openVerificationBrowser(
+  ctx: ProjectContext,
+  name: string,
+  launch = runProcess,
+  browserMode?: BrowserMode,
+) {
   await requireTrust(ctx.root);
   const target = environment(ctx, name);
   const url = allowedOrigin(target.baseUrl, [
@@ -40,7 +45,9 @@ export async function openVerificationBrowser(ctx: ProjectContext, name: string,
   ]).toString();
   const pinned = process.env.APEXREST_TEAM_WORKER === '1' ? process.env.APEXREST_BROWSER_MODE : undefined;
   const mode: BrowserMode =
-    pinned === 'external' || pinned === 'codex' ? pinned : (await workPreferences(ctx.root)).browserMode;
+    pinned === 'external' || pinned === 'codex'
+      ? pinned
+      : (browserMode ?? (await workPreferences(ctx.root)).browserMode);
   const common = {
     browserMode: mode,
     environment: name,

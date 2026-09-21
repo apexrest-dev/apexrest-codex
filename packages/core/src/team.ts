@@ -19,6 +19,21 @@ import { resolveWorkRequest } from './work-preferences.ts';
 
 export const teamActive = new Set(['queued', 'running', 'cancelling']);
 export const teamRuntime = () => path.join(path.dirname(fileURLToPath(import.meta.url)), 'apexrest.mjs');
+export function currentSessionHandoff(state: Pick<TeamState, 'id' | 'browserMode' | 'sandbox' | 'status'>) {
+  return {
+    teamId: state.id,
+    executionMode: 'single' as const,
+    executionHost: 'current_session' as const,
+    browserMode: state.browserMode ?? 'codex',
+    status: state.status,
+    nextAction:
+      state.status !== 'current_session'
+        ? 'This request has ended. Inspect its recorded status; do not resume it automatically.'
+        : 'Implement and verify directly in this Codex chat using its context/model. No new agents, App Server, team polling or automatic panel. ' +
+          (state.sandbox === 'read-only' ? 'This request is read-only; do not edit files. ' : '') +
+          'Keep host permissions and deployment safeguards. This receipt is not completion; report results and handle steering here.',
+  };
+}
 export class TeamService {
   constructor(private ctx: ProjectContext) {}
   async directory(id: string) {
@@ -43,11 +58,13 @@ export class TeamService {
       project: this.ctx.root,
       multiAgentEnabled: request.executionMode === 'team',
     });
-    await writeJson(path.join(root, 'state.json'), {
+    const state: TeamState = {
       id,
       executionMode: request.executionMode,
+      executionHost: request.executionMode === 'single' ? 'current_session' : 'worker',
+      sandbox: request.sandbox,
       browserMode: request.browserMode,
-      status: 'queued',
+      status: request.executionMode === 'single' ? 'current_session' : 'queued',
       phase: 'queued',
       revision: 0,
       updatedAt: new Date().toISOString(),
@@ -57,7 +74,9 @@ export class TeamService {
       diagnostics: [],
       reviews: [],
       qa: [],
-    } satisfies TeamState);
+    };
+    await writeJson(path.join(root, 'state.json'), state);
+    if (state.executionHost === 'current_session') return currentSessionHandoff(state);
     const worker = spawn(process.execPath, [teamRuntime(), '--team-worker', this.ctx.root, id], {
       cwd: this.ctx.root,
       env: process.env,
@@ -82,6 +101,7 @@ export class TeamService {
     }
     return {
       teamId: id,
+      executionHost: 'worker' as const,
       executionMode: request.executionMode,
       browserMode: request.browserMode,
       status: 'queued',

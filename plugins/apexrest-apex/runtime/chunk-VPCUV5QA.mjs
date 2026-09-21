@@ -4,12 +4,12 @@ import {
   resolveWorkRequest,
   teamMessageSchema,
   teamStartSchema
-} from "./chunk-QQNTV455.mjs";
+} from "./chunk-QLRGI23I.mjs";
 import {
   external_exports,
   parse,
   requireTrust
-} from "./chunk-7NOO7SDV.mjs";
+} from "./chunk-2SZCZZ3J.mjs";
 import {
   Fault,
   canonical,
@@ -52,6 +52,16 @@ import { randomUUID } from "node:crypto";
 import { readdir as readdir2 } from "node:fs/promises";
 var teamActive = /* @__PURE__ */ new Set(["queued", "running", "cancelling"]);
 var teamRuntime = () => path2.join(path2.dirname(fileURLToPath(import.meta.url)), "apexrest.mjs");
+function currentSessionHandoff(state) {
+  return {
+    teamId: state.id,
+    executionMode: "single",
+    executionHost: "current_session",
+    browserMode: state.browserMode ?? "codex",
+    status: state.status,
+    nextAction: state.status !== "current_session" ? "This request has ended. Inspect its recorded status; do not resume it automatically." : "Implement and verify directly in this Codex chat using its context/model. No new agents, App Server, team polling or automatic panel. " + (state.sandbox === "read-only" ? "This request is read-only; do not edit files. " : "") + "Keep host permissions and deployment safeguards. This receipt is not completion; report results and handle steering here."
+  };
+}
 var TeamService = class {
   constructor(ctx) {
     this.ctx = ctx;
@@ -79,11 +89,13 @@ var TeamService = class {
       project: this.ctx.root,
       multiAgentEnabled: request.executionMode === "team"
     });
-    await writeJson(path2.join(root, "state.json"), {
+    const state = {
       id,
       executionMode: request.executionMode,
+      executionHost: request.executionMode === "single" ? "current_session" : "worker",
+      sandbox: request.sandbox,
       browserMode: request.browserMode,
-      status: "queued",
+      status: request.executionMode === "single" ? "current_session" : "queued",
       phase: "queued",
       revision: 0,
       updatedAt: (/* @__PURE__ */ new Date()).toISOString(),
@@ -93,7 +105,9 @@ var TeamService = class {
       diagnostics: [],
       reviews: [],
       qa: []
-    });
+    };
+    await writeJson(path2.join(root, "state.json"), state);
+    if (state.executionHost === "current_session") return currentSessionHandoff(state);
     const worker = spawn(process.execPath, [teamRuntime(), "--team-worker", this.ctx.root, id], {
       cwd: this.ctx.root,
       env: process.env,
@@ -108,9 +122,9 @@ var TeamService = class {
       });
       worker.unref();
     } catch {
-      const state = await this.status(id);
+      const state2 = await this.status(id);
       await writeJson(path2.join(root, "state.json"), {
-        ...state,
+        ...state2,
         status: "blocked",
         diagnostics: ["Team worker could not start."]
       });
@@ -118,6 +132,7 @@ var TeamService = class {
     }
     return {
       teamId: id,
+      executionHost: "worker",
       executionMode: request.executionMode,
       browserMode: request.browserMode,
       status: "queued",
@@ -217,5 +232,6 @@ export {
   teamSourceDigest,
   teamActive,
   teamRuntime,
+  currentSessionHandoff,
   TeamService
 };

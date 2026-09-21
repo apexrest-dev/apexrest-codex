@@ -8,7 +8,7 @@ const readerLimit = 32768;
 export const panelResultKey = 'apexrest/panelResult';
 const archives = new Map<string, { artifactId: string; capturedRunId: string }>();
 
-function preview(value: unknown): unknown {
+function preview(value: unknown, depth = 0): unknown {
   if (Array.isArray(value)) return { count: value.length };
   if (!value || typeof value !== 'object') return typeof value === 'string' ? value.slice(0, 400) : value;
   const data = value as Record<string, unknown>;
@@ -26,13 +26,25 @@ function preview(value: unknown): unknown {
     'phase',
     'revision',
     'ok',
+    'operation',
+    'exitCode',
     'summary',
     'configured',
     'trusted',
     'executionMode',
+    'executionHost',
     'browserMode',
     'nextAction',
     'fullReport',
+    'digest',
+    'sourceDigest',
+    'targetDigest',
+    'environment',
+    'expiresAt',
+    'scope',
+    'compiler',
+    'approval',
+    'backupRequired',
   ]) {
     const entry = data[key];
     if (['string', 'number', 'boolean'].includes(typeof entry))
@@ -49,16 +61,44 @@ function preview(value: unknown): unknown {
     'verification',
   ])
     if (Array.isArray(data[key])) result[key + 'Count'] = data[key].length;
-  for (const key of ['result', 'team'])
-    if (data[key] && typeof data[key] === 'object') {
-      const nested = data[key] as Record<string, unknown>;
-      result[key] = Object.fromEntries(
-        ['id', 'ok', 'status', 'phase', 'revision', 'summary']
-          .filter((k) => ['string', 'boolean', 'number'].includes(typeof nested[k]))
-          .map((k) => [k, typeof nested[k] === 'string' ? nested[k].slice(0, 400) : nested[k]]),
+  if (Array.isArray(data.diagnostics))
+    result.diagnostics = data.diagnostics
+      .slice(0, 2)
+      .map((entry) =>
+        entry && typeof entry === 'object'
+          ? Object.fromEntries(
+              ['severity', 'code', 'message', 'file']
+                .filter((key) => typeof entry[key] === 'string')
+                .map((key) => [key, entry[key].slice(0, key === 'message' ? 300 : 120)]),
+            )
+          : String(entry).slice(0, 300),
       );
+  for (const key of ['artifacts', 'nextActions', 'risks'])
+    if (Array.isArray(data[key])) {
+      result[key] = data[key].slice(0, 4).map((entry) => String(entry).slice(0, 200));
+      result[key + 'Omitted'] = Math.max(0, data[key].length - 4);
     }
-  if (data.sources && typeof data.sources === 'object')
+  if (depth < 2)
+    for (const key of ['result', 'team'])
+      if (data[key] && typeof data[key] === 'object') result[key] = preview(data[key], depth + 1);
+  if (data.operation === 'deploy.plan' && data.data && depth < 2) result.data = preview(data.data, depth + 1);
+  const plan = data.scope === 'full-application-import' && typeof data.digest === 'string';
+  if (plan) {
+    const operations = data.operations;
+    if (Array.isArray(operations))
+      result.operationCounts = Object.fromEntries(
+        ['migration', 'package', 'import', 'verify', 'test'].map((kind) => [
+          kind,
+          operations.filter((entry) => entry?.kind === kind).length,
+        ]),
+      );
+    if (data.target && typeof data.target === 'object') {
+      if (JSON.stringify(data.target).length <= 1200) result.target = data.target;
+      else result.targetOmitted = true;
+    }
+    if (data.sources && typeof data.sources === 'object')
+      result.sourceCount = Object.keys(data.sources).length;
+  } else if (data.sources && typeof data.sources === 'object')
     result.sourceCounts = Object.fromEntries(
       Object.entries(data.sources)
         .slice(0, 8)
@@ -117,7 +157,7 @@ export async function toolOutput(original: Result, project?: string) {
       artifacts: artifactId ? [artifactId] : [],
       nextActions: artifactId
         ? [
-            'Read the full result with apexrest_artifact_read using output.artifactId and the same project. Follow nextOffset; do not repeat the operation.',
+            'For omitted details, use apexrest_artifact_read with output.artifactId and the same project. Follow nextOffset as needed; do not repeat the operation.',
           ]
         : [recoveryError!],
       data: {
@@ -134,10 +174,19 @@ export async function toolOutput(original: Result, project?: string) {
     if (JSON.stringify(result).length > inlineLimit) {
       const data = result.data as Record<string, unknown>;
       result.data = Object.fromEntries(
-        ['id', 'jobId', 'teamId', 'cursor', 'terminal', 'output']
+        ['id', 'jobId', 'teamId', 'cursor', 'terminal', 'status', 'ok', 'executionHost', 'output']
           .filter((key) => data[key] !== undefined)
           .map((key) => [key, data[key]]),
       );
+      for (const key of ['result', 'team'])
+        if (data[key] && typeof data[key] === 'object') {
+          const nested = data[key] as Record<string, unknown>;
+          (result.data as Record<string, unknown>)[key] = Object.fromEntries(
+            ['id', 'ok', 'status', 'exitCode', 'operation', 'summary']
+              .filter((field) => ['string', 'number', 'boolean'].includes(typeof nested[field]))
+              .map((field) => [field, nested[field]]),
+          );
+        }
     }
   }
   // UI-only metadata carries the original sanitized panel envelope. Text is
@@ -145,7 +194,7 @@ export async function toolOutput(original: Result, project?: string) {
   // full snapshots here; other consumers can recover the archived text result.
   return {
     isError: !result.ok,
-    content: [{ type: 'text' as const, text: JSON.stringify(result) }],
+    content: [{ type: 'text' as const, text: result === full ? serialized : JSON.stringify(result) }],
     ...(panel ? { _meta: { [panelResultKey]: full } } : {}),
   };
 }

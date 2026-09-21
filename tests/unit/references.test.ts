@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, mkdir, writeFile, rm } from 'node:fs/promises';
+import { mkdtemp, mkdir, writeFile, rm, stat, utimes } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import {
@@ -62,6 +62,7 @@ test('reference cache preserves ordering and bounds and refreshes after replacem
   ]);
 
   await writeFile(file, '{invalid json');
+  assert.deepEqual(await referenceSearch('!!!'), [], 'empty search must not load the corpus');
   await assert.rejects(referenceSearch('keyword'));
   await writeJson(file, entries);
   assert.equal((await referenceSearch('keyword')).length, 3);
@@ -139,4 +140,18 @@ test('ranked lookup returns owning syntax, exact versions, match windows and sta
   assert.equal(production.id, 'owner');
   assert.ok(production.related.includes('query-rule'));
   assert.equal(production.content, entries[12]!.text.slice(2400, 2900));
+
+  // Reuse the same matched entries across distinct queries, then change the corpus
+  // in place without changing its size or mtime. Derived ranking must also refresh.
+  assert.equal((await referenceSearch('chart', '26.1'))[0]?.id, 'owner');
+  const file = path.join(root, 'references/index.json');
+  const before = await stat(file);
+  entries[12]!.text = entries[12]!.text.replace('pageItemsToSubmit', 'otherItemsToFetch');
+  await writeFile(file, JSON.stringify(entries, null, 2) + '\n');
+  await utimes(file, before.atime, before.mtime);
+  assert.equal((await stat(file)).size, before.size);
+  assert.equal((await referenceSearch('pageItemsToSubmit', '26.1')).length, 0);
+  const updated = (await referenceSearch('other items to fetch', '26.1'))[0]!;
+  assert.equal(updated.id, 'owner');
+  assert.match(updated.text, /otherItemsToFetch/);
 });

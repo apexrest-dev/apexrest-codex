@@ -1,0 +1,263 @@
+// Reproducible local transport/worker evidence. No Oracle or model execution.
+import assert from 'node:assert/strict';
+import { randomUUID } from 'node:crypto';
+import { mkdtemp, mkdir, readFile, readdir, realpath, rm, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
+import { spawnSync } from 'node:child_process';
+import { setTimeout as delay } from 'node:timers/promises';
+import { Client } from '@modelcontextprotocol/sdk/client/index.js';
+import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
+import { sourceDigest } from './lib/release.mjs';
+
+const output = process.argv[2] ?? 'docs/evidence/codex-automation-runtime.json';
+const temporary = await mkdtemp(path.join(tmpdir(), 'apexrest-automation-'));
+const project = path.join(await realpath(temporary), 'project');
+const managed = path.join(temporary, 'managed');
+const runtime = path.resolve('dist/runtime');
+const forbidden = path.join(temporary, 'forbidden-execution');
+const guard = path.join(temporary, 'deny-external.mjs');
+const env = {
+  ...process.env,
+  APEXREST_HOME: managed,
+  APEXREST_RESOURCES: path.resolve('dist/resources'),
+  APEXREST_CODEX: guard,
+  APEXREST_SQLCL: guard,
+};
+delete env.APEXREST_TEAM_WORKER;
+delete env.APEXREST_TEAM_ROLE;
+delete env.APEXREST_BROWSER_MODE;
+const evidence = {
+  schemaVersion: 1,
+  timestamp: new Date().toISOString(),
+  sourceDigest: await sourceDigest(),
+  scope:
+    'Built stdio MCP and CLI with a disposable trusted existing-app project and three real local executions of one synthetic unit test. No model turn, Codex App Server, Oracle, application import, or browser verification. Byte sizes describe tool response text, not billed tokens.',
+  node: process.version,
+  platform: process.platform,
+  status: 'running',
+  calls: { cli: 0, listTools: 0, tools: 0, byTool: {} },
+  checks: [],
+};
+const client = new Client({ name: 'codex-automation-verification', version: '1' });
+let connected = false;
+const readJson = async (file) => JSON.parse(await readFile(file, 'utf8'));
+const call = async (name, args = {}, expectedOk = true) => {
+  assert.ok(evidence.calls.tools < 7, 'Runtime verification has a fixed seven-call tool budget.');
+  evidence.calls.tools++;
+  evidence.calls.byTool[name] = (evidence.calls.byTool[name] ?? 0) + 1;
+  const started = performance.now();
+  const response = await client.callTool({ name, arguments: { project, ...args } }, undefined, {
+    timeout: 35000,
+  });
+  assert.equal(response.isError, !expectedOk);
+  assert.equal(response.structuredContent, undefined);
+  const text = response.content.find((item) => item.type === 'text')?.text;
+  assert.equal(typeof text, 'string');
+  const envelope = JSON.parse(text);
+  assert.equal(envelope.ok, expectedOk, envelope.summary);
+  return {
+    envelope,
+    bytes: Buffer.byteLength(text, 'utf8'),
+    elapsedMs: Math.round((performance.now() - started) * 100) / 100,
+  };
+};
+const testFile = path.join(project, 'tests/unit/arithmetic.test.mjs');
+const writeTest = (expected) =>
+  writeFile(
+    testFile,
+    `import test from 'node:test';
+import assert from 'node:assert/strict';
+test('synthetic worker fixture executes nonempty assertions', { timeout: 1500 }, () => {
+  const doubled = [1, 2, 3].map(value => value * 2);
+  assert.deepEqual(doubled, [2, 4, 6]);
+  assert.equal(doubled.reduce((sum, value) => sum + value, 0), ${expected});
+});
+`,
+  );
+const checkJob = async (response, passed) => {
+  const job = response.envelope.data;
+  assert.equal(job.status, 'completed');
+  assert.match(job.jobId ?? job.id, /^[0-9a-f-]{36}$/);
+  assert.equal(job.result.ok, passed);
+  assert.equal(job.result.data.status, passed ? 'passed' : 'failed');
+  assert.equal(job.result.data.tests, 1);
+  assert.equal(job.result.data.failures, passed ? 0 : 1);
+  assert.equal(job.result.data.skipped, 0);
+  const request = await readJson(path.join(project, '.apexrest/jobs', job.jobId ?? job.id, 'request.json'));
+  assert.equal(request.input.waitSeconds, undefined);
+  return {
+    status: job.status,
+    resultOk: job.result.ok,
+    suiteStatus: job.result.data.status,
+    tests: job.result.data.tests,
+    failures: job.result.data.failures,
+    skipped: job.result.data.skipped,
+    resultTextBytes: response.bytes,
+    elapsedMs: response.elapsedMs,
+  };
+};
+
+try {
+  await mkdir(managed);
+  await writeFile(
+    guard,
+    `#!${process.execPath}
+import { writeFileSync } from 'node:fs';
+writeFileSync(${JSON.stringify(forbidden)}, 'Unexpected external tool invocation');
+process.exit(99);
+`,
+    { mode: 0o700 },
+  );
+  evidence.calls.cli++;
+  const initialized = spawnSync(
+    process.execPath,
+    [
+      path.join(runtime, 'apexrest.mjs'),
+      'project',
+      'init',
+      project,
+      '--template',
+      'existing-app',
+      '--alias',
+      'automation-fixture',
+      '--json',
+    ],
+    { env, encoding: 'utf8', timeout: 10000 },
+  );
+  assert.equal(initialized.status, 0, initialized.stderr || initialized.stdout);
+  assert.equal(JSON.parse(initialized.stdout).ok, true);
+  await writeFile(
+    path.join(managed, 'policy.json'),
+    JSON.stringify({ schemaVersion: 1, trustedProjects: [project], grants: [] }),
+  );
+  await client.connect(
+    new StdioClientTransport({
+      command: process.execPath,
+      args: [path.join(runtime, 'mcp.mjs')],
+      env,
+      stderr: 'pipe',
+    }),
+  );
+  connected = true;
+  evidence.calls.listTools++;
+  const catalog = await client.listTools();
+  assert.equal(catalog.tools.length, 24);
+  const longTools = [
+    'apexrest_apex_generate',
+    'apexrest_apex_export',
+    'apexrest_apex_validate',
+    'apexrest_deploy_plan',
+    'apexrest_deploy_apply',
+    'apexrest_test_run',
+  ];
+  for (const name of longTools) {
+    const schema = catalog.tools.find((tool) => tool.name === name)?.inputSchema;
+    assert.ok(schema, name);
+    assert.equal(schema.properties.waitSeconds.type, 'integer');
+    assert.equal(schema.properties.waitSeconds.minimum, 0);
+    assert.equal(schema.properties.waitSeconds.maximum, 30);
+    assert.equal(schema.properties.waitSeconds.default, 25);
+    assert.ok(!schema.required?.includes('waitSeconds'));
+  }
+  evidence.catalog = { tools: 24, longToolsWithOptionalWait: longTools.length, defaultWaitSeconds: 25 };
+  evidence.checks.push('real-stdio-catalog-and-optional-wait-schema');
+
+  await writeTest(12);
+  const success = await call('apexrest_test_run', { suite: 'unit' });
+  assert.equal(success.envelope.data.jobId, success.envelope.data.id);
+  evidence.completedSuccess = { toolCalls: 1, ...(await checkJob(success, true)) };
+  await writeTest(13);
+  const failure = await call('apexrest_test_run', { suite: 'unit' }, false);
+  assert.equal(failure.envelope.data.jobId, failure.envelope.data.id);
+  evidence.completedFailure = { toolCalls: 1, ...(await checkJob(failure, false)) };
+  await writeTest(12);
+  const queued = await call('apexrest_test_run', { suite: 'unit', waitSeconds: 0 });
+  assert.equal(queued.envelope.data.status, 'queued');
+  const waited = await call('apexrest_job_status', { id: queued.envelope.data.jobId, waitSeconds: 25 });
+  assert.equal(waited.envelope.data.id, queued.envelope.data.jobId);
+  evidence.immediateQueueCompatibility = { toolCalls: 2, ...(await checkJob(waited, true)) };
+  assert.equal((await readdir(path.join(project, '.apexrest/jobs'))).length, 3);
+  evidence.checks.push(
+    'completed-success-in-one-call',
+    'nested-failure-in-one-call',
+    'queue-zero-and-existing-job-wait',
+    'exactly-three-workers-and-no-wait-field-in-domain-input',
+  );
+
+  const work = await call('apexrest_work_start', {
+    task: 'Inspect this isolated fixture in the current session.',
+    requestId: randomUUID(),
+  });
+  assert.equal(work.envelope.data.executionHost, 'current_session');
+  assert.equal(work.envelope.data.panel.status, 'not_requested');
+  assert.equal(work.envelope.data.projectContext.projectId, 'automation-fixture');
+  assert.equal(work.envelope.data.projectContext.targetVerified, false);
+  assert.equal(work.envelope.data.projectContext.sources, undefined);
+  evidence.workStart = {
+    toolCalls: 1,
+    executionHost: 'current_session',
+    projectContext: true,
+    targetVerified: false,
+    resultTextBytes: work.bytes,
+  };
+  evidence.checks.push('single-session-handoff-with-bounded-project-context');
+
+  const source = path.join(project, 'src/apex/automation-fixture');
+  await mkdir(source, { recursive: true });
+  await Promise.all(
+    Array.from({ length: 50 }, (_, i) =>
+      writeFile(path.join(source, `page-${i}.apx`), `// synthetic local source ${i}\n`),
+    ),
+  );
+  const summary = await call('apexrest_project_inspect', { detail: 'summary' });
+  const full = await call('apexrest_project_inspect', { detail: 'full' });
+  assert.equal(summary.envelope.data.sources, undefined);
+  assert.equal(summary.envelope.data.output, undefined);
+  assert.equal(summary.envelope.data.targetVerified, false);
+  assert.equal(Object.keys(full.envelope.data.sources.apex).length, 50);
+  assert.ok(Object.values(full.envelope.data.sources.apex).every((digest) => /^[a-f0-9]{64}$/.test(digest)));
+  assert.ok(summary.bytes < full.bytes);
+  evidence.projectInspect = {
+    syntheticSourceFiles: 50,
+    summaryTextBytes: summary.bytes,
+    fullTextBytes: full.bytes,
+    reductionPercent: Math.round((1 - summary.bytes / full.bytes) * 10000) / 100,
+    summaryContainsHashMap: false,
+    fullHashCount: 50,
+    summaryElapsedMs: summary.elapsedMs,
+    fullElapsedMs: full.elapsedMs,
+  };
+  evidence.checks.push('summary-without-source-hashes-versus-full-inventory');
+  assert.equal(await readFile(forbidden, 'utf8').catch(() => null), null);
+  evidence.checks.push('no-codex-app-server-or-sqlcl-execution');
+  assert.equal(evidence.calls.tools, 7);
+  evidence.status = 'passed';
+} catch (error) {
+  evidence.status = 'failed';
+  evidence.failure = String(error).replaceAll(temporary, '<temporary-directory>');
+  process.exitCode = 1;
+} finally {
+  if (connected) await client.close();
+  // On an assertion failure, stop only this fixture's still-active local jobs.
+  const jobsRoot = path.join(project, '.apexrest/jobs');
+  const jobs = await readdir(jobsRoot).catch(() => []);
+  for (const id of jobs) {
+    const stateFile = path.join(jobsRoot, id, 'state.json');
+    let state = await readJson(stateFile).catch(() => null);
+    if (!['queued', 'running'].includes(state?.status)) continue;
+    await writeFile(
+      path.join(jobsRoot, id, 'cancel.json'),
+      JSON.stringify({ requestedAt: new Date().toISOString() }),
+    );
+    const deadline = Date.now() + 5000;
+    while (['queued', 'running'].includes(state?.status) && Date.now() < deadline) {
+      await delay(250);
+      state = await readJson(stateFile).catch(() => null);
+    }
+  }
+  await rm(temporary, { recursive: true, force: true });
+}
+await mkdir(path.dirname(output), { recursive: true });
+await writeFile(output, JSON.stringify(evidence, null, 2) + '\n');
+console.log(JSON.stringify(evidence));

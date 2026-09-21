@@ -39,6 +39,7 @@ async function setup(t: import('node:test').TestContext) {
     diagnostics: [],
   };
   let starts = 0;
+  // Historical worker snapshots keep retry/wait compatibility coverage.
   const fake = {
     directory: team.directory.bind(team),
     snapshot: team.snapshot.bind(team),
@@ -51,6 +52,7 @@ async function setup(t: import('node:test').TestContext) {
       await writeJson(path.join(directory, 'state.json'), state);
       return {
         teamId: id,
+        executionHost: 'worker' as const,
         executionMode: state.executionMode,
         browserMode: state.browserMode,
         status: 'queued',

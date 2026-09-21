@@ -33545,7 +33545,32 @@ async function projectInit(directory, template, alias) {
     ]
   };
 }
-async function projectInspect(ctx) {
+function projectSummary(ctx) {
+  const environments = Object.entries(ctx.config.environments);
+  return {
+    projectId: ctx.config.projectId,
+    root: ctx.root,
+    sourceDirectories: {
+      apex: ctx.config.application.sourceDir,
+      ...ctx.config.database
+    },
+    toolchainLock: ctx.config.toolchain.lockFile,
+    requiredSuites: ctx.config.tests.requiredSuites,
+    environments: environments.slice(0, 8).map(([name, env]) => ({
+      name,
+      kind: env.kind,
+      applicationId: env.applicationId,
+      workspace: env.workspace,
+      parsingSchema: env.parsingSchema
+    })),
+    environmentsOmitted: Math.max(0, environments.length - 8),
+    targetVerified: false
+  };
+}
+async function projectInspect(ctx, detail = "full") {
+  return detail === "summary" ? projectSummary(ctx) : projectInventory(ctx);
+}
+async function projectInventory(ctx) {
   const sources = {};
   for (const [kind, relative] of Object.entries({
     apex: ctx.config.application.sourceDir,
@@ -37077,6 +37102,7 @@ export {
   installSources,
   resourceRoot,
   projectInit,
+  projectSummary,
   projectInspect,
   lockSchema,
   runtimeState,

@@ -3,17 +3,17 @@ import { createRequire as __createRequire } from 'node:module'; const require = 
 import {
   dispatch,
   schemas
-} from "./chunk-YACSH6ON.mjs";
-import "./chunk-OQ4IG3PW.mjs";
+} from "./chunk-XDJEGHUX.mjs";
+import "./chunk-WMJTK7ZB.mjs";
 import {
   executeJob
-} from "./chunk-C64472UB.mjs";
-import "./chunk-YDH22XCZ.mjs";
-import "./chunk-QQNTV455.mjs";
-import "./chunk-NC2FP64H.mjs";
+} from "./chunk-5GOWABKB.mjs";
+import "./chunk-VPCUV5QA.mjs";
+import "./chunk-QLRGI23I.mjs";
+import "./chunk-Z6Y72JVG.mjs";
 import {
   loadProject
-} from "./chunk-7NOO7SDV.mjs";
+} from "./chunk-2SZCZZ3J.mjs";
 import {
   Fault,
   failure
@@ -82,18 +82,22 @@ function help() {
     lines.push(
       "",
       "Single agent by default. Team requires explicit multiAgentEnabled: true in saved Settings.",
-      "--execution-mode team|single selects a reviewed team or one agent that implements and verifies.",
+      "--execution-mode team|single selects reviewed workers or a handoff to your current Codex session (no new agent).",
       "--browser-mode codex|external selects interactive APEX verification; the dashboard stays in Codex.",
-      "--developers 1..3 defaults to 1; edits are serialized in the project.",
-      "--sandbox read-only|workspace-write defaults to workspace-write for developers.",
-      "--timeout-seconds 30..3600 defaults to 900. No interactive approvals are auto-granted.",
+      "--developers 1..3 defaults to 1; team-worker edits are serialized in the project.",
+      "--sandbox read-only|workspace-write constrains workers; a single-session read-only request is passed to the host.",
+      "--timeout-seconds 30..3600 applies to workers (default 900). Single uses host permissions and limits.",
       "The configured project must already be trusted and Codex must be logged in.",
-      "Returns a team ID immediately. Read team status for the result and verification evidence.",
-      "Models and reasoning are selected automatically; there is no manual model option."
+      "Single returns a receipt: continue directly in the current Codex chat, without team polling. Team returns an owned run ID.",
+      "Single retains the current host model; team workers select models and reasoning automatically."
     );
   if (key === "work.start")
     lines.push(
-      "Use --request-id UUID for idempotent task creation; exact retries return the same team and its panel."
+      "Use --request-id UUID for idempotent task creation; exact retries return the same current-session receipt or worker run."
+    );
+  if (key === "jobs.status")
+    lines.push(
+      "Use --wait-seconds 25 to wait for an existing job without repeated status calls (default: immediate)."
     );
   if (key === "team.wait")
     lines.push("Use --cursor HASH --wait-seconds 25 for bounded waiting without heartbeat polling.");
@@ -147,28 +151,28 @@ try {
   else if (argv[0] === "tui" || !argv.length && process.stdin.isTTY && process.stdout.isTTY && process.env.TERM !== "dumb") {
     if (argv.length > 1 && (argv.length !== 3 || argv[1] !== "--project" || !argv[2] || argv[2].startsWith("--")))
       throw new Fault("INVALID_INPUT", "Usage: apexrest tui [--project PATH]", 2);
-    const { runTui } = await import("./chunk-QGCUJO2N.mjs");
+    const { runTui } = await import("./chunk-2VGE5Y5J.mjs");
     await runTui(argv[2] ? { project: argv[2] } : {});
   } else if (!argv.length) help();
   else if (argv[0] === "panel" && argv[1] === "tui") {
     if (argv.length !== 2 && (argv.length !== 4 || argv[2] !== "--project" || !argv[3]))
       throw new Fault("INVALID_INPUT", "Usage: apexrest panel tui [--project PATH]", 2);
-    const { runPanelTui } = await import("./chunk-DL7SRVBA.mjs");
+    const { runPanelTui } = await import("./chunk-WROK6RQH.mjs");
     await runPanelTui(argv[3] ?? process.cwd());
   } else if (argv[0] === "--panel-worker") {
     if (argv.length !== 2 || !argv[1]) throw new Fault("INVALID_INPUT", "Invalid panel worker request.", 2);
-    const { servePanel } = await import("./chunk-3IPVIXDM.mjs");
+    const { servePanel } = await import("./chunk-ICWYSHJ7.mjs");
     await servePanel(argv[1]);
   } else if (argv[0] === "--job-worker") {
     if (argv.length !== 3) throw new Fault("INVALID_INPUT", "Invalid internal job request.", 2);
     await executeJob(await loadProject(argv[1]), argv[2], dispatch);
   } else if (argv[0] === "--team-worker") {
     if (argv.length !== 3) throw new Fault("INVALID_INPUT", "Invalid internal team request.", 2);
-    const { executeTeam } = await import("./chunk-2U3TY6XR.mjs");
+    const { executeTeam } = await import("./chunk-ED2YPDPS.mjs");
     await executeTeam(await loadProject(argv[1]), argv[2]);
   } else if (argv[0] === "mcp") {
     if (argv.length !== 1) throw new Fault("INVALID_INPUT", "mcp accepts no arguments.", 2);
-    const { startMcp } = await import("./chunk-4AKAKZAF.mjs");
+    const { startMcp } = await import("./chunk-YK34QNHH.mjs");
     await startMcp();
   } else {
     const selectedOp = argv[0] === "--version" ? { op: "version", start: 1 } : selected;

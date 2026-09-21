@@ -8,7 +8,7 @@ For direct Oracle access, choose an existing SQLcl saved connection from the sel
 
 Single-agent execution is the default. Multi-agent work runs only after the user explicitly selects **Agent team** in **Settings → Defaults for new work** and saves it (`multiAgentEnabled: true`). A launch override cannot enable a team. Choose verification browser (`codex` or `external`) in the same settings. See [mode settings](work-modes.md). Independent review/QA descriptions below apply only to enabled team mode; screenshots from September 17 show the earlier panel.
 
-[APEX work from chat](chat-workflow.md) automatically opens the selected team view; the web task form is optional. Auto routing reasons, cumulative token breakdowns and the task time limit appear on the team cards. Cached input and reasoning output are subsets, not extra tokens or a price estimate.
+[APEX work from chat](chat-workflow.md) uses the existing Codex session in single mode; it does not start another agent or automatically open the panel. For explicitly enabled teams it opens the team view; the web task form is optional. Auto routing reasons, cumulative token breakdowns and the task time limit appear on team cards only; the plugin does not independently meter or control the current chat. Cached input and reasoning output are subsets, not extra tokens or a price estimate.
 
 For a complete walkthrough with actual screenshots, see [Agent workflow: from task to reviewed result](agent-workflow.md).
 
@@ -41,7 +41,7 @@ Refresh runs every two seconds while the view is visible. The saved SQLcl connec
 apexrest panel action --project /absolute/application --action '{"kind":"validate"}' --json
 ```
 
-Supported kinds: `preferences`, `sqlcl`, `connection`, `saved-connections`, `start`, `message`, `cancel-team`, `cancel-job`, `validate`, `test`, `browser`, `plan`. The `saved-connections` action reads the selected SQLcl installation's saved names. Only the local browser form accepts an ORDS password; MCP connection actions exclude that field. New implementations use the selected single-agent or reviewed-team mode. The panel cannot submit review approvals, grant trust or apply a deployment directly. An authorized import still uses the existing [deploy workflow](deployment-safety.md). An expired heartbeat or a lost mutation response is not success; reconcile recorded state before retrying. Cancellation does not undo changes.
+Supported kinds: `preferences`, `sqlcl`, `connection`, `saved-connections`, `start`, `message`, `cancel-team`, `cancel-job`, `validate`, `test`, `browser`, `plan`. The `saved-connections` action reads the selected SQLcl installation's saved names. Only the local browser form accepts an ORDS password; MCP connection actions exclude that field. A single-mode start returns a `current_session` receipt for work in the existing Codex chat, not a background task or completion result. Explicitly enabled team starts launch the reviewed workflow. The panel cannot submit review approvals, grant trust or apply a deployment directly. An authorized import still uses the existing [deploy workflow](deployment-safety.md). An expired heartbeat or a lost mutation response is not success; reconcile recorded state before retrying. Cancellation does not undo changes.
 
 ## Pokémon identities
 

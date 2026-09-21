@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "asOf": "2026-09-21",
-  "release": "0.3.0-beta.1",
+  "release": "0.4.0-beta.1",
   "overall": "partial-local-beta",
   "statusSemantics": {
     "implemented": "Executable code exists; does not imply live verification.",
@@ -246,7 +246,11 @@
       "criterion": "An agent cannot authorize production by setting `approved=true` itself",
       "implementation": "implemented",
       "verification": "partial",
-      "evidence": ["packages/core/src/config.ts", "packages/core/src/deploy.ts", "tests/unit/core.test.ts"],
+      "evidence": [
+        "packages/core/src/config.ts",
+        "packages/core/src/deploy.ts",
+        "tests/unit/core.test.ts"
+      ],
       "blocker": "Strict schema and missing production authority rejection tested. Protected-runner signature/approval integration is not configured."
     },
     {
@@ -375,7 +379,10 @@
       "criterion": "Stable release is blocked without required native-host and Oracle integration evidence",
       "implementation": "implemented",
       "verification": "passed",
-      "evidence": ["scripts/check-release-readiness.mjs", "dist/releases/release-readiness.json"],
+      "evidence": [
+        "scripts/check-release-readiness.mjs",
+        "dist/releases/release-readiness.json"
+      ],
       "blocker": null
     },
     {
@@ -426,7 +433,10 @@
       "criterion": "A sandbox labelled supported actually provisions the stack and preserves data during ordinary `down`",
       "implementation": "unsupported",
       "verification": "not_applicable",
-      "evidence": ["packages/core/src/sandbox.ts", "toolchains/compatibility.json"],
+      "evidence": [
+        "packages/core/src/sandbox.ts",
+        "toolchains/compatibility.json"
+      ],
       "blocker": "No supported sandbox claim. Legitimate complete Linux DB/APEX/ORDS/utPLSQL provisioning tuple is not implemented or verified."
     },
     {
@@ -468,7 +478,7 @@
     },
     {
       "id": "A31",
-      "criterion": "Codex chat starts a single agent by default or an explicitly enabled reviewed team and selected in-app panel, uses automatic supported model routing and returns a digest-checked terminal result through bounded waiting",
+      "criterion": "Codex chat executes single work in the current user session without a new agent or polling; explicitly enabled teams retain in-app panels, automatic model routing and digest-checked results through bounded waiting",
       "implementation": "implemented",
       "verification": "partial",
       "evidence": [
@@ -481,7 +491,8 @@
         "tests/unit/team-models.test.ts",
         "docs/evidence/team-auto-native.json",
         "docs/evidence/chat-auto-discovery-native.json",
-        "docs/evidence/chat-auto-local.json"
+        "docs/evidence/chat-auto-local.json",
+        "docs/evidence/current-session-local.json"
       ],
       "blocker": "Actual local Codex task and host-opened in-app panel verified separately from implicit skill-selection consistency. Windows, closed-host callback/recovery, alternative live model catalogs and task-matched efficiency benchmarks remain unverified. No global chat interceptor or hard token-spend cap."
     },
@@ -511,7 +522,7 @@
     },
     {
       "id": "A33",
-      "criterion": "Single agent is the default across settings, legacy configuration, CLI/MCP and worker dispatch; multi-agent work requires explicit Settings opt-in, with bounded repeated context and waiting responses",
+      "criterion": "Single mode reuses the current Codex session across chat, CLI/MCP and panel handoffs with no new agent or App Server; queued legacy single requests cannot dispatch workers, while teams require explicit Settings opt-in",
       "implementation": "implemented",
       "verification": "partial",
       "evidence": [
@@ -524,9 +535,48 @@
         "docs/evidence/single-default-local.json",
         "docs/evidence/single-default-runtime.json",
         "docs/evidence/single-default-checks.json",
-        "docs/evidence/single-default-codex-browser.json"
+        "docs/evidence/single-default-codex-browser.json",
+        "tests/unit/current-session.test.ts",
+        "docs/evidence/current-session-local.json"
       ],
       "blocker": "Local unit/protocol, built CLI/MCP and panel checks only. This revision does not rerun native Codex model sessions or Oracle tasks and does not establish billed-token savings."
+    },
+    {
+      "id": "A34",
+      "criterion": "Reduce plugin instruction/catalog context, reuse fresh reference normalization and wait for existing jobs within one bounded MCP call without changing authorization, outcomes or effective input constraints",
+      "implementation": "implemented",
+      "verification": "partial",
+      "evidence": [
+        "docs/optimization-review.md",
+        "docs/optimization-review.uk.md",
+        "docs/evidence/plugin-efficiency-local.json",
+        "docs/evidence/plugin-context-local.json",
+        "docs/evidence/reference-ranking-cache-local.json",
+        "tests/unit/jobs-wait.test.ts",
+        "tests/unit/references.test.ts",
+        "tests/contracts/mcp.test.mjs",
+        "scripts/benchmark-plugin-context.mjs"
+      ],
+      "blocker": "Local byte and retrieval measurements plus isolated runtime tests only. End-to-end native APEX task latency, Oracle performance and billed-token savings remain unmeasured."
+    },
+    {
+      "id": "A35",
+      "criterion": "Codex-only deterministic orchestration returns completed jobs in one bounded call, batches scoped metadata with one target verification, and reuses concise project context while preserving real outcomes and recovery",
+      "implementation": "implemented",
+      "verification": "partial",
+      "evidence": [
+        "docs/codex-automation.md",
+        "docs/codex-automation.uk.md",
+        "docs/evidence/codex-automation-local.json",
+        "docs/evidence/codex-automation-runtime.json",
+        "scripts/verify-codex-automation.mjs",
+        "tests/unit/job-tools.test.ts",
+        "tests/unit/metadata-batch.test.ts",
+        "tests/unit/project-summary.test.ts",
+        "tests/unit/mcp-output.test.ts",
+        "tests/contracts/mcp.test.mjs"
+      ],
+      "blocker": "Local stdio MCP, CLI, synthetic nonempty test workers and mocked metadata adapter only. Native Codex end-to-end task latency, Oracle execution and billed-token savings are unmeasured."
     }
   ],
   "amendments": [

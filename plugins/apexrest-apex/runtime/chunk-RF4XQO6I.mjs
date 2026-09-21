@@ -3,8 +3,8 @@ import {
   browserInstructions,
   externalBrowserCommand,
   openVerificationBrowser
-} from "./chunk-QQNTV455.mjs";
-import "./chunk-7NOO7SDV.mjs";
+} from "./chunk-QLRGI23I.mjs";
+import "./chunk-2SZCZZ3J.mjs";
 import "./chunk-IPU64TJI.mjs";
 export {
   browserInstructions,

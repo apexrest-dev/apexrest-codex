@@ -4,7 +4,7 @@ English | [Українська](team.uk.md)
 
 Single-agent execution is the default. Multi-agent work runs only after the user explicitly selects **Agent team** in **Settings → Defaults for new work** and saves it (`multiAgentEnabled: true`). A launch override cannot enable a team. Choose verification browser (`codex` or `external`) in the same settings. See [mode settings](work-modes.md). Independent review/QA descriptions below apply only to enabled team mode; screenshots from September 17 show the earlier panel.
 
-New implementation requests use [APEX work from chat](chat-workflow.md): Codex starts the selected run, opens its panel and returns the result in the originating conversation. [Auto routing](chat-workflow.md#auto-models) selects supported models and reasoning for each scheduled turn without a manual selector.
+New implementation requests use [APEX work from chat](chat-workflow.md). Single mode uses the existing Codex chat directly, without another agent, App Server launch, panel autostart, model routing or team wait. Its `current_session` response and compatibility `teamId` record the request; they do not certify completed work. The current host controls model, approvals and sandbox. The lifecycle and controls below apply to explicitly enabled teams: Codex opens their panel and returns the result to the originating conversation. [Auto routing](chat-workflow.md#auto-models) selects supported models and reasoning for each scheduled team turn.
 
 For a complete walkthrough with actual screenshots, see [Agent workflow: from task to reviewed result](agent-workflow.md).
 
@@ -22,17 +22,19 @@ The digest includes untracked files and configuration, excluding `.git`, `.apexr
 
 | MCP tool | CLI | Purpose |
 | --- | --- | --- |
-| `apexrest_team_start` | `team start` | Start the saved mode (single by default); return immediately with a run ID |
+| `apexrest_team_start` | `team start` | Resolve the saved mode: a current-session receipt for single, or a run ID for an enabled team |
 | `apexrest_team_status` | `team status` | Read phase, roles, messages, review decisions and result |
 | `apexrest_team_message` | `team message` | Queue a user correction; invalidate a completion based on earlier input |
 | `apexrest_team_cancel` | `team cancel` | Request interruption; never claim rollback |
 
 ```sh
-apexrest team start --project /absolute/project --task "Add the requested APEX page" --developers 2 --json
+apexrest team start --project /absolute/project --task "Add the requested APEX page" --execution-mode team --developers 2 --json
 apexrest team status TEAM_ID --project /absolute/project --json
 apexrest team message TEAM_ID "Also verify empty results" --project /absolute/project --json
 apexrest team cancel TEAM_ID --project /absolute/project --json
 ```
+
+These commands assume that the user already enabled team mode in Settings. A launch flag cannot enable it. Team status/message/cancel controls do not steer or stop the current Codex chat.
 
 The configured project must already be trusted. The Codex executable and login must work. The default developer sandbox is `workspace-write`; `--sandbox read-only` supports analysis-only work. The default time limit is 900 seconds, configurable from 30 to 3600. Models and reasoning use Auto routing as described below; there is no manual model selector. Background work uses the account's normal Codex capacity.
 

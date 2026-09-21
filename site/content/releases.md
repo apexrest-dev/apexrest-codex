@@ -2,18 +2,20 @@
 
 English | [Українська](releases.uk.md)
 
-This minor beta is a local, unpublished candidate. Updating its version does not create a Git tag, GitHub release or npm publication.
+This 0.4 minor beta is distributed through the source repository. The authorized commit/push does not create a Git tag, GitHub release or npm publication.
 
 ## Changes
 
-- Default to one agent. Enable teams explicitly in Settings; older saved defaults do not count as opt-in, and existing runs keep their recorded mode.
-- Return three reference search results by default, support explicit pagination and avoid treating alternative APEXlang process types as required dependencies.
-- Bound peer summaries, reuse unchanged context and record completed tool activity once.
-- Return compact MCP summaries with paged access to full details while preserving operation outcomes. Keep automatic result archives outside project sources and full panel snapshots in UI metadata. Enforce UTF-8 payload budgets in local checks.
+- Single mode uses the existing Codex chat without a separate agent or automatic panel startup. Enable teams explicitly in Settings; older saved defaults do not count as opt-in, and existing runs keep their recorded mode.
+- Six long MCP tools start once and wait for completion in the same call, with a default of 25 seconds. Keep the same job ID for later status; propagate terminal failures as MCP errors with their diagnostics and artifacts.
+- Batch up to eight scoped metadata reads with one target check; include compact project context in single work and offer summary inspection without source hashing or Oracle calls.
+- Shorten skills and tool descriptions, cache reference normalization and keep compact output with paged access to details. Preserve deployment-plan safety information, target identity, authorization, backups, drift and unknown-outcome checks.
 
 See the [release notes](../../docs/release-notes.md) for the full scope and [execution settings](../../docs/work-modes.md) for single-agent and team behavior. Existing [ORDS functionality](../../docs/ords.md) remains available. Smaller payloads do not establish billed-token savings.
 
 ## Existing verification
+
+[Version-specific local checks](../../docs/evidence/minor-040-local.json) track this build. The [automation analysis](../../docs/codex-automation.md) distinguishes mechanical execution from Codex reasoning. Earlier response-byte measurements and native/Oracle reports retain their original build identity; a minor-version change does not rerun them.
 
 [Connected evidence](../../docs/evidence/ords-connected.json) records one unchanged APEXlang round trip with all 21 files matching byte for byte, a real checksum-verified SQL backup and a separate matching native MCP export. [Settings evidence](../../docs/evidence/connection-settings-local.json) covers the built panel and Codex in-app actions with synthetic credentials; [native discovery](../../docs/evidence/connection-settings-native.json) checks the real local SQLcl name list without a database login. The reports retain their original versions and source digests, rather than claiming new connected runs for this minor beta.
 

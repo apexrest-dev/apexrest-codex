@@ -2,6 +2,15 @@
 
 English | [Українська](CHANGELOG.uk.md)
 
+## 0.4.0-beta.1 — minor beta
+
+- Run single work directly in the user's current Codex session without a child agent, App Server startup or automatic panel. Reviewed teams remain an explicit opt-in.
+- Let six long MCP tools start once and wait for completion in the same call. Preserve the job identity, propagate terminal failure to the MCP error result and retain diagnostics, run IDs and artifacts.
+- Batch up to eight scoped metadata reads with one target verification; return compact project context without source hashing or Oracle access when full inspection is unnecessary.
+- Shorten skills and tool descriptions, reuse reference normalization and preserve bounded output with recoverable details and deployment-plan safety information.
+
+The product remains exclusive to Codex desktop and CLI. Deployment authorization, target identity, backups, drift checks and unknown-outcome safeguards remain enforced. See [version-specific local verification](docs/evidence/minor-040-local.json) and [release notes](docs/release-notes.md). Earlier reports retain their versions and source digests; this minor release does not establish new Oracle/native task coverage or billed-token savings. The authorized commit/push does not create a Git tag, GitHub release or npm publication; stable qualification remains open.
+
 ## 0.3.0-beta.1 — local minor beta (unpublished)
 
 - Use one agent by default. Teams require an explicit Settings opt-in; legacy defaults do not grant that opt-in, and existing runs retain their recorded mode.

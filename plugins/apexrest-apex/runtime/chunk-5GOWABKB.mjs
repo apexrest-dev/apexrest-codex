@@ -2,17 +2,17 @@ import { createRequire as __createRequire } from 'node:module'; const require = 
 import {
   TeamService,
   teamRuntime
-} from "./chunk-YDH22XCZ.mjs";
+} from "./chunk-VPCUV5QA.mjs";
 import {
   openVerificationBrowser,
   recordedExecutionMode,
   teamStartSchema,
   workPreferences,
   workPreferencesSchema
-} from "./chunk-QQNTV455.mjs";
+} from "./chunk-QLRGI23I.mjs";
 import {
   VERSION
-} from "./chunk-NC2FP64H.mjs";
+} from "./chunk-Z6Y72JVG.mjs";
 import {
   OracleAdapter,
   configureConnection,
@@ -30,7 +30,7 @@ import {
   savedConnectionName,
   sqlclConfig,
   sqlclConfigSchema
-} from "./chunk-7NOO7SDV.mjs";
+} from "./chunk-2SZCZZ3J.mjs";
 import {
   Fault,
   contained,
@@ -95,6 +95,7 @@ var publicPanelActionSchema = panelActionSchema.extend({
 import path from "node:path";
 import { spawn } from "node:child_process";
 import { randomUUID } from "node:crypto";
+import { setTimeout as delay } from "node:timers/promises";
 var JobService = class {
   constructor(ctx) {
     this.ctx = ctx;
@@ -133,20 +134,29 @@ var JobService = class {
     return {
       jobId: id,
       status: "queued",
-      nextAction: "Poll job status; cancellation does not imply database rollback."
+      nextAction: "Wait for this job with apexrest_job_status and waitSeconds:25; never rerun the operation to fetch results. Cancellation does not imply database rollback."
     };
   }
-  async status(id) {
+  async status(id, waitSeconds = 0, signal) {
     parse(external_exports.uuid(), id);
+    parse(external_exports.number().int().min(0).max(30), waitSeconds);
     const root = await contained(this.ctx.root, ".apexrest/jobs/" + id);
-    const state = await readJson(path.join(root, "state.json"));
-    if (["queued", "running"].includes(state.status) && Date.parse(state.updatedAt) + 6e4 < Date.now())
-      return {
-        ...state,
-        status: "outcome_unknown",
-        nextAction: "Worker heartbeat expired. Reconcile target before retrying."
-      };
-    return state;
+    const deadline = Date.now() + waitSeconds * 1e3;
+    for (; ; ) {
+      const state = await readJson(path.join(root, "state.json"));
+      if (!["queued", "running"].includes(state.status)) return state;
+      if (Date.parse(state.updatedAt) + 6e4 < Date.now())
+        return {
+          ...state,
+          status: "outcome_unknown",
+          nextAction: "Worker heartbeat expired. Reconcile target before retrying."
+        };
+      const remaining = deadline - Date.now();
+      if (remaining <= 0 || signal?.aborted) return state;
+      await delay(Math.min(250, remaining), void 0, { signal }).catch((error) => {
+        if (!signal?.aborted) throw error;
+      });
+    }
   }
   async cancel(id) {
     await requireTrust(this.ctx.root);

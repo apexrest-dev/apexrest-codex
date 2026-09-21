@@ -3,19 +3,19 @@ import {
   dispatch,
   schemas,
   toolCatalog
-} from "./chunk-YACSH6ON.mjs";
+} from "./chunk-XDJEGHUX.mjs";
 import {
   panelDocument
-} from "./chunk-OQ4IG3PW.mjs";
+} from "./chunk-WMJTK7ZB.mjs";
 import {
   JobService
-} from "./chunk-C64472UB.mjs";
+} from "./chunk-5GOWABKB.mjs";
 import {
   ArtifactService
-} from "./chunk-QQNTV455.mjs";
+} from "./chunk-QLRGI23I.mjs";
 import {
   VERSION
-} from "./chunk-NC2FP64H.mjs";
+} from "./chunk-Z6Y72JVG.mjs";
 import {
   AjvJsonSchemaValidator,
   CallToolRequestSchema,
@@ -49,7 +49,7 @@ import {
   parse,
   safeParse,
   serializeMessage
-} from "./chunk-7NOO7SDV.mjs";
+} from "./chunk-2SZCZZ3J.mjs";
 import {
   Fault,
   failure,
@@ -719,7 +719,7 @@ var inlineLimit = 8192;
 var readerLimit = 32768;
 var panelResultKey = "apexrest/panelResult";
 var archives = /* @__PURE__ */ new Map();
-function preview(value) {
+function preview(value, depth = 0) {
   if (Array.isArray(value)) return { count: value.length };
   if (!value || typeof value !== "object") return typeof value === "string" ? value.slice(0, 400) : value;
   const data = value;
@@ -737,13 +737,25 @@ function preview(value) {
     "phase",
     "revision",
     "ok",
+    "operation",
+    "exitCode",
     "summary",
     "configured",
     "trusted",
     "executionMode",
+    "executionHost",
     "browserMode",
     "nextAction",
-    "fullReport"
+    "fullReport",
+    "digest",
+    "sourceDigest",
+    "targetDigest",
+    "environment",
+    "expiresAt",
+    "scope",
+    "compiler",
+    "approval",
+    "backupRequired"
   ]) {
     const entry = data[key];
     if (["string", "number", "boolean"].includes(typeof entry))
@@ -760,14 +772,39 @@ function preview(value) {
     "verification"
   ])
     if (Array.isArray(data[key])) result[key + "Count"] = data[key].length;
-  for (const key of ["result", "team"])
-    if (data[key] && typeof data[key] === "object") {
-      const nested = data[key];
-      result[key] = Object.fromEntries(
-        ["id", "ok", "status", "phase", "revision", "summary"].filter((k) => ["string", "boolean", "number"].includes(typeof nested[k])).map((k) => [k, typeof nested[k] === "string" ? nested[k].slice(0, 400) : nested[k]])
-      );
+  if (Array.isArray(data.diagnostics))
+    result.diagnostics = data.diagnostics.slice(0, 2).map(
+      (entry) => entry && typeof entry === "object" ? Object.fromEntries(
+        ["severity", "code", "message", "file"].filter((key) => typeof entry[key] === "string").map((key) => [key, entry[key].slice(0, key === "message" ? 300 : 120)])
+      ) : String(entry).slice(0, 300)
+    );
+  for (const key of ["artifacts", "nextActions", "risks"])
+    if (Array.isArray(data[key])) {
+      result[key] = data[key].slice(0, 4).map((entry) => String(entry).slice(0, 200));
+      result[key + "Omitted"] = Math.max(0, data[key].length - 4);
     }
-  if (data.sources && typeof data.sources === "object")
+  if (depth < 2) {
+    for (const key of ["result", "team"])
+      if (data[key] && typeof data[key] === "object") result[key] = preview(data[key], depth + 1);
+  }
+  if (data.operation === "deploy.plan" && data.data && depth < 2) result.data = preview(data.data, depth + 1);
+  const plan = data.scope === "full-application-import" && typeof data.digest === "string";
+  if (plan) {
+    const operations = data.operations;
+    if (Array.isArray(operations))
+      result.operationCounts = Object.fromEntries(
+        ["migration", "package", "import", "verify", "test"].map((kind) => [
+          kind,
+          operations.filter((entry) => entry?.kind === kind).length
+        ])
+      );
+    if (data.target && typeof data.target === "object") {
+      if (JSON.stringify(data.target).length <= 1200) result.target = data.target;
+      else result.targetOmitted = true;
+    }
+    if (data.sources && typeof data.sources === "object")
+      result.sourceCount = Object.keys(data.sources).length;
+  } else if (data.sources && typeof data.sources === "object")
     result.sourceCounts = Object.fromEntries(
       Object.entries(data.sources).slice(0, 8).map(([key, files]) => [
         key.slice(0, 80),
@@ -814,7 +851,7 @@ async function toolOutput(original, project) {
       diagnostics: full.diagnostics.slice(0, 5).map((d) => ({ severity: d.severity, code: d.code.slice(0, 100), message: d.message.slice(0, 400) })),
       artifacts: artifactId ? [artifactId] : [],
       nextActions: artifactId ? [
-        "Read the full result with apexrest_artifact_read using output.artifactId and the same project. Follow nextOffset; do not repeat the operation."
+        "For omitted details, use apexrest_artifact_read with output.artifactId and the same project. Follow nextOffset as needed; do not repeat the operation."
       ] : [recoveryError],
       data: {
         ...preview(full.data),
@@ -830,15 +867,101 @@ async function toolOutput(original, project) {
     if (JSON.stringify(result).length > inlineLimit) {
       const data = result.data;
       result.data = Object.fromEntries(
-        ["id", "jobId", "teamId", "cursor", "terminal", "output"].filter((key) => data[key] !== void 0).map((key) => [key, data[key]])
+        ["id", "jobId", "teamId", "cursor", "terminal", "status", "ok", "executionHost", "output"].filter((key) => data[key] !== void 0).map((key) => [key, data[key]])
       );
+      for (const key of ["result", "team"])
+        if (data[key] && typeof data[key] === "object") {
+          const nested = data[key];
+          result.data[key] = Object.fromEntries(
+            ["id", "ok", "status", "exitCode", "operation", "summary"].filter((field) => ["string", "number", "boolean"].includes(typeof nested[field])).map((field) => [field, nested[field]])
+          );
+        }
     }
   }
   return {
     isError: !result.ok,
-    content: [{ type: "text", text: JSON.stringify(result) }],
+    content: [{ type: "text", text: result === full ? serialized : JSON.stringify(result) }],
     ...panel ? { _meta: { [panelResultKey]: full } } : {}
   };
+}
+
+// packages/mcp/src/job-tools.ts
+var jobWaitSeconds = external_exports.number().int().min(0).max(30).default(25).describe("Wait for the result or return the existing jobId; default 25 seconds, 0 queues immediately.");
+var completedResultSchema = external_exports.object({
+  schemaVersion: external_exports.literal(1),
+  ok: external_exports.boolean(),
+  operation: external_exports.string(),
+  status: external_exports.string(),
+  runId: external_exports.string(),
+  summary: external_exports.string(),
+  diagnostics: external_exports.array(
+    external_exports.object({
+      severity: external_exports.enum(["error", "warning", "info"]),
+      code: external_exports.string(),
+      message: external_exports.string(),
+      file: external_exports.string().optional()
+    }).transform(({ file, ...diagnostic }) => ({ ...diagnostic, ...file !== void 0 ? { file } : {} }))
+  ),
+  artifacts: external_exports.array(external_exports.string()),
+  nextActions: external_exports.array(external_exports.string()),
+  data: external_exports.unknown().optional(),
+  exitCode: external_exports.union([
+    external_exports.literal(0),
+    external_exports.literal(1),
+    external_exports.literal(2),
+    external_exports.literal(3),
+    external_exports.literal(4),
+    external_exports.literal(5),
+    external_exports.literal(6)
+  ])
+});
+function jobToolResult(operation, job) {
+  if (job.status === "completed") {
+    const nested = completedResultSchema.safeParse(job.result);
+    if (nested.success && nested.data.operation === operation) return { ...nested.data, data: job };
+  }
+  const nextActions = typeof job.nextAction === "string" ? [job.nextAction] : ["Read apexrest_job_status with this jobId; inspect the existing operation before any retry."];
+  if (job.status === "queued" || job.status === "running")
+    return {
+      ...success(operation, job, `Job ${job.status}; use the existing jobId to retrieve its result.`),
+      status: job.status,
+      nextActions
+    };
+  const status = job.status === "failed" || job.status === "cancelled" ? job.status : "outcome_unknown";
+  const result = failure(
+    operation,
+    new Fault(
+      status === "failed" ? "JOB_FAILED" : status === "cancelled" ? "CANCELLED" : "JOB_OUTCOME_UNKNOWN",
+      status === "outcome_unknown" ? "The job outcome is unknown. Inspect its existing record; do not repeat the operation." : `Job ${status}. Inspect the existing operation record.`,
+      status === "failed" ? 1 : 6,
+      status
+    )
+  );
+  return { ...result, nextActions, data: job };
+}
+async function runJobTool(jobs, operation, input, runtime, signal) {
+  const { waitSeconds: requestedWait, ...domainInput } = input;
+  const waitSeconds = parse(jobWaitSeconds, requestedWait);
+  if (signal?.aborted)
+    throw new Fault("CANCELLED", "Request cancelled before starting a job.", 6, "cancelled");
+  const started = await jobs.start(operation, domainInput, runtime);
+  if (waitSeconds === 0) return started;
+  try {
+    const state = await jobs.status(started.jobId, waitSeconds, signal);
+    const { nextAction, ...receipt } = started;
+    return {
+      ...receipt,
+      ...state,
+      jobId: started.jobId,
+      ...["queued", "running"].includes(state.status) ? { nextAction } : {}
+    };
+  } catch {
+    return {
+      ...started,
+      status: "outcome_unknown",
+      nextAction: "Read apexrest_job_status with this jobId; do not repeat the operation. No cancellation or rollback is confirmed."
+    };
+  }
 }
 
 // packages/mcp/src/server.ts
@@ -846,16 +969,12 @@ var panelUri = "ui://apexrest/development-panel.html";
 var absoluteProject = external_exports.string().min(1).max(4096).refine(
   (value) => path.isAbsolute(value) && (process.platform !== "win32" || /^(?:[A-Za-z]:[\\/]|[\\/]{2}[^\\/]+[\\/][^\\/]+)/.test(value)),
   "Provide the absolute project directory containing apexrest.json; the plugin runs from its installation directory."
-).describe(
-  "Absolute path to the project directory containing apexrest.json. The plugin working directory is its installation directory, not the current Codex project."
-);
+).describe("Absolute project directory containing apexrest.json; never the plugin cache.");
 var mcpSchemas = /* @__PURE__ */ new Map();
-for (const { operation } of toolCatalog) {
+for (const { operation, long } of toolCatalog) {
   const schema = schemas[operation];
-  mcpSchemas.set(
-    operation,
-    "project" in schema.shape ? schema.extend({ project: operation === "doctor" ? absoluteProject.optional() : absoluteProject }) : schema
-  );
+  const transportSchema = "project" in schema.shape ? schema.extend({ project: operation === "doctor" ? absoluteProject.optional() : absoluteProject }) : schema;
+  mcpSchemas.set(operation, long ? transportSchema.extend({ waitSeconds: jobWaitSeconds }) : transportSchema);
 }
 async function startMcp() {
   const exposed = toolCatalog.filter(
@@ -896,7 +1015,7 @@ async function startMcp() {
         name: t.name,
         description: t.description,
         ...t.operation === "panel.open" ? { _meta: { ui: { resourceUri: panelUri } } } : {},
-        inputSchema: external_exports.toJSONSchema(mcpSchemas.get(t.operation), { target: "draft-7" }),
+        inputSchema: external_exports.toJSONSchema(mcpSchemas.get(t.operation), { target: "draft-7", io: "input" }),
         annotations: {
           readOnlyHint: t.readOnly,
           destructiveHint: t.destructive ?? !t.readOnly,
@@ -922,12 +1041,14 @@ async function startMcp() {
       if (!tool) throw new Fault("UNKNOWN_TOOL", "Tool is not in the catalog.", 2);
       const input = parse(mcpSchemas.get(tool.operation), request.params.arguments ?? {});
       project = typeof input.project === "string" ? input.project : void 0;
-      result = tool.long ? success(
+      result = tool.long ? jobToolResult(
         tool.operation,
-        await new JobService(await loadProject(String(input.project))).start(
+        await runJobTool(
+          new JobService(await loadProject(String(input.project))),
           tool.operation,
           input,
-          path.join(path.dirname(fileURLToPath(import.meta.url)), "apexrest.mjs")
+          path.join(path.dirname(fileURLToPath(import.meta.url)), "apexrest.mjs"),
+          extra.signal
         )
       ) : await dispatch(tool.operation, input, extra.signal);
     } catch (e) {

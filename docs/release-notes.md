@@ -1,16 +1,33 @@
-# 0.3.0-beta.1 — minor beta
+# 0.4.0-beta.1 — minor beta
 
 English | [Українська](release-notes.uk.md)
 
-The 2026-09-21 minor update reduces repeated context and tool output while preserving task results, required checks and deployment safeguards.
+The 2026-09-21 minor update keeps single work in the current Codex chat and moves routine orchestration into program code. The plugin remains exclusive to Codex desktop and CLI.
 
 ## Changes
+
+- Single mode uses the user's existing session without a child agent, App Server startup or automatic panel. Teams with independent reviews require explicit opt-in.
+- Six long MCP operations start once and wait up to 25 seconds by default (`waitSeconds: 0–30`). Completed failures propagate as MCP errors while retaining the job ID, diagnostics and artifacts; ending the wait does not cancel or replay the job.
+- `metadata_read` accepts up to eight scoped requests, validates the whole batch before SQL and verifies the target once. Single work includes compact project context; `project_inspect` offers `detail: "summary"` without source hashing or Oracle calls, with full inspection still the default.
+- Shorter skills/tool descriptions, cached reference normalization and compact recoverable output reduce repeated context. Deployment-plan safety details and existing authorization, identity, backup, drift and unknown-outcome safeguards remain intact.
+
+## Verification and publication
+
+[Version-specific local checks](evidence/minor-040-local.json) track this minor beta. The preceding [automation checks](evidence/codex-automation-local.json) passed 253 tests; its [runtime record](evidence/codex-automation-runtime.json) covers local CLI/MCP behavior and synthetic response sizes. Those reports keep their original build versions and source digests. They do not establish new native task, Oracle/application-browser or billed-token evidence. See the [automation analysis](codex-automation.md) and [remaining gates](next-actions.md).
+
+The authorized commit and push update `main`. They do not create a Git tag, GitHub release or npm publication. This remains a beta; stable qualification is separate.
+
+## 0.3.0-beta.1 — 2026-09-21
+
+The 2026-09-21 minor update reduces repeated context and tool output while preserving task results, required checks and deployment safeguards.
+
+### Changes
 
 - Use one agent by default; teams require explicit Settings opt-in with `multiAgentEnabled: true`. Persistent role sessions reuse task/plan context, receive relevant updates and stop on unchanged missing prerequisites.
 - Return three reference matches by default, retain pagination and load only the selected application-process scenario and required contracts. Original Oracle reference texts remain intact.
 - Return bounded MCP previews with paged result recovery, preserving operation status and polling cursors. The embedded panel receives complete data through UI metadata and initializes after its controls exist; legacy response formats remain supported.
 
-## Verification and publication
+### Verification and publication
 
 [Token-optimization checks](evidence/token-optimization-local.json) and [native discovery](evidence/token-optimization-native.json) document the preceding `0.2.0-beta.1` build. Verification for `0.3.0-beta.1` is tracked separately in the [local build record](evidence/minor-update-030.json) and [native record](evidence/minor-update-030-native.json). Payload-byte measurements do not establish billed-token savings or new Oracle coverage.
 

@@ -4,12 +4,26 @@ import type { Environment } from './config.ts';
 import type { Connection } from './connections.ts';
 import { OracleAdapter } from './oracle.ts';
 import { Fault } from './result.ts';
+const metadataOffset = z.number().int().min(0).max(100000);
+const metadataLimit = z.number().int().min(1).max(100);
 export const metadataRequest = z.strictObject({
   kind: z.enum(['objects', 'columns', 'constraints', 'signatures', 'applications', 'pages']),
   schema: identifier,
   name: identifier.optional(),
-  offset: z.number().int().min(0).max(100000).default(0),
-  limit: z.number().int().min(1).max(100).default(30),
+  offset: metadataOffset.default(0),
+  limit: metadataLimit.default(30),
+});
+const metadataRequests = z.array(metadataRequest).min(1).max(8);
+const metadataBatchRequest = z.strictObject({ requests: metadataRequests });
+// A plain object remains extendable by project/env in the MCP schema. Runtime
+// validation below requires exactly one request form before any Oracle call.
+export const metadataInputSchema = z.strictObject({
+  kind: metadataRequest.shape.kind.optional(),
+  schema: metadataRequest.shape.schema.optional(),
+  name: metadataRequest.shape.name,
+  offset: metadataOffset.optional(),
+  limit: metadataLimit.optional(),
+  requests: metadataRequests.optional(),
 });
 const queries = {
   objects:
@@ -31,28 +45,41 @@ export async function metadataRead(
   connection: Connection,
   value: unknown,
 ) {
-  const r = parse(metadataRequest, value);
-  if (r.schema !== env.parsingSchema)
-    throw new Fault('SCHEMA_DENIED', 'Metadata is restricted to the configured parsing schema.', 4);
-  if (['columns', 'constraints', 'signatures'].includes(r.kind) && !r.name)
-    throw new Fault('OBJECT_REQUIRED', 'Select a specific object first.', 2);
+  const input = parse(z.union([metadataRequest, metadataBatchRequest]), value);
+  const batch = 'requests' in input;
+  const requests = batch ? input.requests : [input];
+  for (const r of requests) {
+    if (r.schema !== env.parsingSchema)
+      throw new Fault('SCHEMA_DENIED', 'Metadata is restricted to the configured parsing schema.', 4);
+    if (['columns', 'constraints', 'signatures'].includes(r.kind) && !r.name)
+      throw new Fault('OBJECT_REQUIRED', 'Select a specific object first.', 2);
+  }
   await adapter.verifyTarget(env, connection);
-  const rows = await adapter.jsonQuery(
-    queries[r.kind] + ' offset :p_offset rows fetch next :p_limit rows only',
-    connection,
-    {
-      p_owner: r.schema,
-      p_name: r.name ?? '',
-      p_app_id: env.applicationId,
-      p_workspace: env.workspace,
-      p_offset: r.offset,
-      p_limit: r.limit,
-    },
-  );
-  return {
-    dataClassification: 'untrusted_database_content',
-    rows,
-    offset: r.offset,
-    nextOffset: rows.length === r.limit ? r.offset + r.limit : null,
+  const read = async (r: z.infer<typeof metadataRequest>) => {
+    const rows = await adapter.jsonQuery(
+      queries[r.kind] + ' offset :p_offset rows fetch next :p_limit rows only',
+      connection,
+      {
+        p_owner: r.schema,
+        p_name: r.name ?? '',
+        p_app_id: env.applicationId,
+        p_workspace: env.workspace,
+        p_offset: r.offset,
+        p_limit: r.limit,
+      },
+    );
+    return {
+      dataClassification: 'untrusted_database_content',
+      rows,
+      offset: r.offset,
+      nextOffset: rows.length === r.limit ? r.offset + r.limit : null,
+    };
   };
+  if (!batch) return read(input);
+  const results = [];
+  // Preserve order and backend compatibility without concurrent SQLcl sessions.
+  // Any failure rejects the operation; do not fabricate a partial success.
+  for (const [index, r] of requests.entries())
+    results.push({ index, kind: r.kind, ...(r.name ? { name: r.name } : {}), ...(await read(r)) });
+  return { results, targetVerifiedOnce: true };
 }

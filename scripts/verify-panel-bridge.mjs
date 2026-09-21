@@ -115,6 +115,35 @@ try {
             ) {
               snapshot.preferences = message.params.arguments.action.settings;
               send({ id: message.id, result: wrap({ status: 'saved' }) });
+            } else if (
+              message.params.name === 'apexrest_panel_action' &&
+              message.params.arguments.action?.kind === 'start' &&
+              message.params.arguments.action.request.executionMode === 'single'
+            ) {
+              const request = message.params.arguments.action.request;
+              snapshot.task = request.task;
+              snapshot.team = {
+                id: '00000000-0000-4000-8000-000000000001',
+                executionMode: 'single',
+                executionHost: 'current_session',
+                browserMode: request.browserMode,
+                sandbox: request.sandbox,
+                status: 'current_session',
+                phase: 'queued',
+                revision: 0,
+                updatedAt: snapshot.updatedAt,
+                members: [],
+                messages: [],
+                reviews: [],
+                qa: [],
+                diagnostics: [],
+                result: '',
+              };
+              snapshot.teams = [snapshot.team];
+              send({
+                id: message.id,
+                result: wrap({ teamId: snapshot.team.id, executionHost: 'current_session' }),
+              });
             } else send({ id: message.id, error: { code: -32601, message: 'Unexpected fixture action' } });
           }
         });
@@ -143,9 +172,39 @@ try {
       assert.equal(actions.length, 1);
       assert.equal(actions[0].arguments.action.settings.executionMode, 'team');
       assert.ok(calls.every((call) => call.arguments.project === '/fixture/embedded-panel'));
+      await panel.locator('#new-task').click();
+      await panel.locator('#task-execution-mode').selectOption('single');
+      const task = 'Inspect this fixture in the current Codex chat without starting another agent.';
+      await panel.locator('#task').fill(task);
+      await panel.locator('#task-form button[type=submit]').click();
+      await expect(panel.locator('#notice')).toHaveText(
+        'Continue this task in your current Codex chat. No background agent was started.',
+      );
+      await expect(panel.locator('#team-live')).toContainText('Current Codex session');
+      await expect(panel.locator('#team-live .task-summary')).toHaveText(task);
+      await expect(panel.locator('#team-live')).toContainText('not a completed result');
+      await expect(panel.locator('.agent')).toHaveCount(0);
+      await expect(panel.locator('.step')).toHaveCount(0);
+      await expect(panel.locator('#message-form button[type=submit]')).toBeDisabled();
+      await expect(panel.locator('#cancel-team')).toBeDisabled();
+      const starts = await page.evaluate(() =>
+        window.fixtureCalls.filter(
+          (call) => call.name === 'apexrest_panel_action' && call.arguments.action.kind === 'start',
+        ),
+      );
+      assert.equal(starts.length, 1);
+      assert.equal(starts[0].arguments.action.request.executionMode, 'single');
+      assert.equal(starts[0].arguments.action.request.task, task);
+      assert.equal(starts[0].arguments.project, '/fixture/embedded-panel');
       assert.deepEqual(errors, []);
       assert.deepEqual(requests, []);
-      checks.push({ mode, rendering: 'passed', preferencesAction: 'passed', localOnly: true });
+      checks.push({
+        mode,
+        rendering: 'passed',
+        preferencesAction: 'passed',
+        currentSessionHandoff: 'passed',
+        localOnly: true,
+      });
     } catch (error) {
       throw new Error(`Bridge mode: ${mode}; page errors: ${JSON.stringify(errors)}`, { cause: error });
     } finally {

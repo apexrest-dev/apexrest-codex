@@ -69,18 +69,22 @@ function help() {
     lines.push(
       '',
       'Single agent by default. Team requires explicit multiAgentEnabled: true in saved Settings.',
-      '--execution-mode team|single selects a reviewed team or one agent that implements and verifies.',
+      '--execution-mode team|single selects reviewed workers or a handoff to your current Codex session (no new agent).',
       '--browser-mode codex|external selects interactive APEX verification; the dashboard stays in Codex.',
-      '--developers 1..3 defaults to 1; edits are serialized in the project.',
-      '--sandbox read-only|workspace-write defaults to workspace-write for developers.',
-      '--timeout-seconds 30..3600 defaults to 900. No interactive approvals are auto-granted.',
+      '--developers 1..3 defaults to 1; team-worker edits are serialized in the project.',
+      '--sandbox read-only|workspace-write constrains workers; a single-session read-only request is passed to the host.',
+      '--timeout-seconds 30..3600 applies to workers (default 900). Single uses host permissions and limits.',
       'The configured project must already be trusted and Codex must be logged in.',
-      'Returns a team ID immediately. Read team status for the result and verification evidence.',
-      'Models and reasoning are selected automatically; there is no manual model option.',
+      'Single returns a receipt: continue directly in the current Codex chat, without team polling. Team returns an owned run ID.',
+      'Single retains the current host model; team workers select models and reasoning automatically.',
     );
   if (key === 'work.start')
     lines.push(
-      'Use --request-id UUID for idempotent task creation; exact retries return the same team and its panel.',
+      'Use --request-id UUID for idempotent task creation; exact retries return the same current-session receipt or worker run.',
+    );
+  if (key === 'jobs.status')
+    lines.push(
+      'Use --wait-seconds 25 to wait for an existing job without repeated status calls (default: immediate).',
     );
   if (key === 'team.wait')
     lines.push('Use --cursor HASH --wait-seconds 25 for bounded waiting without heartbeat polling.');

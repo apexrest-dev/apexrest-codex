@@ -238,7 +238,7 @@
         view("team");
       }
       notice(
-        ["sqlcl", "connection", "preferences"].includes(action.kind) ? "Settings saved for future runs." : action.kind === "message" ? "Task update queued for the active workflow." : action.kind.startsWith("cancel") ? "Stop requested. Existing changes are not rolled back." : "Operation accepted. Follow its actual status below."
+        result.executionHost === "current_session" ? "Continue this task in your current Codex chat. No background agent was started." : ["sqlcl", "connection", "preferences"].includes(action.kind) ? "Settings saved for future runs." : action.kind === "message" ? "Task update queued for the active workflow." : action.kind.startsWith("cancel") ? "Stop requested. Existing changes are not rolled back." : "Operation accepted. Follow its actual status below."
       );
       if (action.kind === "message") input("message").value = "";
       if (action.kind === "preferences") preferencesDirty = false;
@@ -268,6 +268,16 @@
     }
     const head = node("div", "section-heading");
     if (data.task) box.append(node("p", "task-summary", data.task));
+    if (team.executionHost === "current_session") {
+      box.append(
+        node(
+          "p",
+          "",
+          "Continue in your current Codex chat. This is a task receipt, not a completed result. Progress, verification, steering and cancellation stay in that conversation."
+        )
+      );
+      return card("Current Codex session", box);
+    }
     head.append(node("h3", "", "Revision " + team.revision), badge(team.status));
     box.append(head);
     if (team.modelPolicy)
@@ -794,7 +804,7 @@
     input(prefix + "-developers").disabled = single;
     if (prefix === "task")
       input("task-developers").value = single ? "1" : String(snapshot?.preferences.developers ?? 1);
-    $(prefix + "-workflow-note").textContent = single ? "Single agent is the default: one agent plans, implements and verifies. Enable Agent team explicitly in Settings and save to allow multi-agent runs." : "Plan \u2192 developers \u2192 manager review \u2192 independent QA \u2192 final manager review. Reviewers remain read only.";
+    $(prefix + "-workflow-note").textContent = single ? "Single agent uses your current Codex chat. No new agent starts. Continue tasks and view results in that conversation." : "Plan \u2192 developers \u2192 manager review \u2192 independent QA \u2192 final manager review. Reviewers remain read only.";
   }
   for (const prefix of ["default", "task"])
     input(prefix + "-execution-mode").onchange = () => modeControls(prefix);

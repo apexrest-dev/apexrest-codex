@@ -179,7 +179,7 @@ export async function dispatch(operation: string, input: Record<string, unknown>
             data = await new TeamService(ctx).cancel(text('id'));
             break;
           case 'project.inspect':
-            data = await projectInspect(ctx);
+            data = await projectInspect(ctx, parsed.detail as 'full' | 'summary');
             break;
           case 'metadata.read': {
             const env = environment(ctx, text('env'));
@@ -312,11 +312,16 @@ export async function dispatch(operation: string, input: Record<string, unknown>
             break;
           case 'browser.open': {
             const { openVerificationBrowser } = await import('./browser.ts');
-            data = await openVerificationBrowser(ctx, text('env'));
+            data = await openVerificationBrowser(
+              ctx,
+              text('env'),
+              undefined,
+              parsed.browserMode as 'codex' | 'external' | undefined,
+            );
             break;
           }
           case 'jobs.status':
-            data = await new JobService(ctx).status(text('id'));
+            data = await new JobService(ctx).status(text('id'), Number(parsed.waitSeconds), signal);
             break;
           case 'jobs.cancel':
             data = await new JobService(ctx).cancel(text('id'));

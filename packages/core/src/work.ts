@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { canonical, hash, contained, exists, readJson, writeJson, withLock } from './fs.ts';
 import { parse, requireTrust, type ProjectContext } from './config.ts';
 import { Fault, redact } from './result.ts';
-import { TeamService, teamActive } from './team.ts';
+import { TeamService, teamActive, currentSessionHandoff } from './team.ts';
 import {
   teamStartSchema,
   queuedWorkSchema,
@@ -16,6 +16,7 @@ import {
 } from './team-schema.ts';
 import { resolveWorkRequest } from './work-preferences.ts';
 import { openPanel } from './panel-server.ts';
+import { projectSummary } from './project.ts';
 
 export function teamProgressCursor(
   state: Pick<TeamState, 'status' | 'phase' | 'revision' | 'members' | 'reviews' | 'qa' | 'verification'>,
@@ -79,6 +80,13 @@ export async function startWork(
       return team.snapshot(requestId);
     },
   );
+  if (state.executionHost === 'current_session')
+    return {
+      ...currentSessionHandoff(state),
+      projectContext: projectSummary(ctx),
+      cursor: teamProgressCursor(state),
+      panel: { status: 'not_requested' } as { status: string; url?: string; message?: string },
+    };
   let display: { status: string; url?: string; message?: string };
   try {
     const opened = await panel(ctx.root),
@@ -98,6 +106,7 @@ export async function startWork(
   return {
     teamId: requestId,
     executionMode: recordedExecutionMode(state),
+    executionHost: state.executionHost ?? 'worker',
     browserMode: state.browserMode ?? 'codex',
     status: state.status,
     cursor: teamProgressCursor(state),

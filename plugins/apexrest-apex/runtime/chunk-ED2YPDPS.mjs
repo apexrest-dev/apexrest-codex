@@ -6,7 +6,7 @@ import {
   TeamService,
   teamRuntime,
   teamSourceDigest
-} from "./chunk-YDH22XCZ.mjs";
+} from "./chunk-VPCUV5QA.mjs";
 import {
   browserInstructions,
   planningSchema,
@@ -14,12 +14,12 @@ import {
   queuedWorkSchema,
   recordedExecutionMode,
   routedReviewSchema
-} from "./chunk-QQNTV455.mjs";
+} from "./chunk-QLRGI23I.mjs";
 import {
   external_exports,
   parse,
   requireTrust
-} from "./chunk-7NOO7SDV.mjs";
+} from "./chunk-2SZCZZ3J.mjs";
 import {
   Fault,
   contained,
@@ -492,6 +492,21 @@ async function executeTeam(ctx, id, connect = connectCodex) {
     const single = request.executionMode === "single";
     state.executionMode = request.executionMode;
     state.browserMode = request.browserMode;
+    if (single) {
+      state.executionHost = "current_session";
+      state.sandbox = request.sandbox;
+      state.result = "";
+      return withLock(path.join(root, "control.lock"), async () => {
+        const cancelled = await exists(path.join(root, "cancel.json"));
+        state.status = cancelled ? "cancelled" : "current_session";
+        state.updatedAt = (/* @__PURE__ */ new Date()).toISOString();
+        state.diagnostics.push(
+          cancelled ? "Task cancellation requested. Existing changes are not rolled back." : "Continue implementation and verification in the original Codex chat."
+        );
+        await writeJson(path.join(root, "state.json"), state);
+        return state;
+      });
+    }
     let client, disconnected = false, activeMember;
     let taskRevision = 0;
     const briefing = taskBriefing(request.task, root);

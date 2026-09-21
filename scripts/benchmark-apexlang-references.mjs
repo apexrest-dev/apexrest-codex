@@ -23,6 +23,8 @@ if (process.argv[2] === '--child') {
   }
   const quality = [];
   const unversionedQuality = [];
+  const responses = createHash('sha256');
+  const variedStart = performance.now();
   for (const fixture of fixtures) {
     const found = await implementation.referenceSearch(fixture.query, '26.1', {
       kind: fixture.kind,
@@ -32,6 +34,7 @@ if (process.argv[2] === '--child') {
       kind: fixture.kind,
       limit: 3,
     });
+    responses.update(JSON.stringify([found, unversioned]));
     const label =
       unversioned[0]?.title ?? unversioned[0]?.text.match(/^<([^>]+)>/)?.[1] ?? unversioned[0]?.id;
     unversionedQuality.push({
@@ -51,6 +54,8 @@ if (process.argv[2] === '--child') {
     JSON.stringify({
       coldSearchMs,
       repeatedMedianMs: median(samples.slice(10)),
+      variedSearchMs: performance.now() - variedStart,
+      responseSha256: responses.digest('hex'),
       quality,
       unversionedQuality,
     }),
@@ -71,6 +76,9 @@ if (process.argv[2] === '--child') {
       platform: 'node',
       format: 'esm',
       target: 'node24',
+      banner: {
+        js: "import { createRequire } from 'node:module'; const require = createRequire(import.meta.url);",
+      },
     });
     const variants = [{ name: 'current', module, resources: path.resolve('resources') }];
     if (process.argv[3] && process.argv[4])
@@ -100,6 +108,8 @@ if (process.argv[2] === '--child') {
           .digest('hex'),
         coldSearchMedianMs: median(samples.map((s) => s.coldSearchMs)),
         repeatedSearchMedianMs: median(samples.map((s) => s.repeatedMedianMs)),
+        variedSearchMedianMs: median(samples.map((s) => s.variedSearchMs)),
+        responseSha256: samples[0].responseSha256,
         samples: samples.map(({ quality, unversionedQuality, ...timings }) => timings),
         quality: samples[0].quality,
         unversionedQuality: samples[0].unversionedQuality,
@@ -115,7 +125,7 @@ if (process.argv[2] === '--child') {
           schemaVersion: 1,
           timestamp: new Date().toISOString(),
           scope:
-            'Local deterministic retrieval only. Seven fresh processes, 100 repeated requests per process, warm filesystem. Baseline uses the previous corpus and API; current uses expanded corpus and kind/version filters. Does not measure Codex generation success, Oracle compilation or native-host performance.',
+            'Local retrieval only. Seven fresh processes, 100 repeated requests and 24 varied fixture requests per process, warm filesystem. SHA-256 records corpus, modules and complete fixture responses for comparison. Does not measure Codex generation success, token billing, Oracle compilation or native-host performance.',
           platform: process.platform,
           arch: process.arch,
           node: process.version,
@@ -137,6 +147,7 @@ if (process.argv[2] === '--child') {
             {
               coldMs: value.coldSearchMedianMs,
               warmMs: value.repeatedSearchMedianMs,
+              variedMs: value.variedSearchMedianMs,
               top1: value.top1Passes,
               cases: fixtures.length,
             },

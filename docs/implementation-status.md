@@ -1,6 +1,34 @@
-# Implementation status — beta 0.3.0-beta.1
+# Implementation status — beta 0.4.0-beta.1
 
 English | [Українська](implementation-status.uk.md)
+
+## Minor update 0.4.0-beta.1 — 2026-09-21
+
+This beta combines current-session single work without a child agent, six MCP job waits, bounded metadata batches, compact project inspection and output, shorter instructions and cached reference normalization. Codex desktop and CLI remain the only plugin hosts. Explicit team opt-in, deployment authorization and target/backup/drift/unknown-outcome safeguards are preserved. See [release notes](release-notes.md) and the [version-specific local record](evidence/minor-040-local.json).
+
+Earlier checks below keep their original versions, source digests and scope; the preceding automation revision passed 253 tests. A version bump does not establish new Oracle, native task, application-browser or billing evidence. The authorized Git commit/push updates `main` without a tag, GitHub release or npm publication; stable qualification remains open.
+
+## Programmatic automation for Codex — 2026-09-21
+
+The [automation analysis](codex-automation.md) maps all 24 MCP tools to programmatic work and Codex reasoning. Implemented: six long MCP tools start once and wait up to 25 seconds by default (`waitSeconds: 0–30`), bounded metadata batches validate every request before SQL and verify the target once, single work receives compact project context without source reads or Oracle access, and bounded output preserves actionable nested failures and plan safety details. `project.inspect` adds optional `detail: "summary"`; full inspection remains the default. Waiting cancellation does not cancel or replay a database job. Explicit team opt-in and deployment safeguards are preserved.
+
+[Local validation](evidence/codex-automation-local.json) for `0.3.0-beta.1+codex.20260921193125` passed 217 unit, 22 contract and 14 packaging tests (253 total), typecheck and lint. [Built CLI/stdio MCP checks](evidence/codex-automation-runtime.json) confirmed all 24 tools, six default 25-second waits, one-call success and nested failure, and `current_session`. For 50 synthetic files, summary/full response text measured 659/4,494 UTF-8 bytes (-85.34%). No new claim of native task speed, billed-token savings, Oracle execution or application-browser correctness follows from these local checks. This remains a Codex-only plugin with current-chat single execution and optional App Server teams; no unverified host attachment or browser API is introduced.
+
+## Plugin context and reference optimization — 2026-09-21
+
+Implemented in `0.3.0-beta.1+codex.20260921165734`: shorter skills/tool descriptions, optional defaulted input fields, one serialization of normal MCP output, and lazy reference-normalization caching. All 24 tools, effective input constraints, authorization and deployment safeguards are preserved. Optional `jobs.status.waitSeconds` accepts 0–30; use 25 for long operations to wait within one MCP call. The default remains immediate status.
+
+[Context evidence](evidence/plugin-context-local.json): the aggregate source of 13 `SKILL.md` files fell from 42,003 to 31,789 bytes (-24.32%); the tool catalog fell from 24,966 to 22,499 bytes (-9.88%). These are bytes, not tokens or billing; all 13 skills are not necessarily loaded for a task. [Reference evidence](evidence/reference-ranking-cache-local.json): the median for 24 varied searches fell from 12.93 to 3.09 ms across seven fresh processes, with identical full-response SHA-256 and 12/12 fixture results in versioned and unversioned searches. Cold and identical repeated searches are essentially unchanged.
+
+Verified: focused reference tests pass, including freshness after an in-place same-size rewrite with restored mtime. [Local validation](evidence/plugin-efficiency-local.json) passed 194 unit, 22 contract and 14 packaging tests, typecheck, lint, 46 documentation pairs, the 30-page site build and plugin sync/integrity checks. The local plugin was reinstalled; all 246 installed file hashes match the checked bundle. Built CLI/MCP current-session responses and a one-call worker wait were verified. Native end-to-end task latency, Oracle speed and billed-token savings remain unverified. See the [optimization review](optimization-review.md) for scope and evidence.
+
+## Single mode in the existing Codex session — 2026-09-21
+
+Implemented: new single requests resolve to `executionHost: current_session` / `status: current_session` and continue in the user's existing chat, without a background agent, App Server, automatic panel, model routing, extra planning turn or team wait. `teamId` is a compatibility receipt only. The host controls model, approvals and sandbox; the plugin provides no independent chat token telemetry, timeout enforcement or digest-bound completion. Saved verification-browser preferences and deployment safeguards remain applicable. Team execution is unchanged.
+
+[Local verification](evidence/current-session-local.json) passed 188 unit, 22 contract and 14 packaging tests, typecheck, lint, 46 documentation pairs, the 30-page site, plugin integrity and a fresh build. Built CLI and local stdio MCP checks confirmed `current_session` and idempotent retries. A synthetic panel bridge in Chrome rendered the current-session receipt with an empty agent roster for all three response encodings. The local plugin was reinstalled as `0.3.0-beta.1+codex.20260921164648`; start a new Codex task to load its updated tools and instructions.
+
+Native desktop execution of an actual task, Oracle/application-browser verification and matched-task token/latency comparisons remain unverified. The synthetic bridge is local UI evidence, not a native desktop task. Earlier single-agent reports below describe the previous separate-session implementation and do not verify this change.
 
 ## Minor update 0.3.0-beta.1 — 2026-09-21
 

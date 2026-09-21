@@ -2,9 +2,9 @@
 
 English | [Українська](versions.uk.md)
 
-Local, unpublished minor beta {{version}} targets Node 24 LTS, SQLcl 26.1.2.132.1334, Java 21 and APEX 26.1+. ORDS APEXlang operations require a JDK 21+ containing `jdk.compiler`; SQLcl's managed JRE alone is insufficient for the Java bridge. Local generated MMD: 26.1.0+3102. Playwright is pinned at 1.63.0 with its matching browser revisions.
+Minor beta {{version}}, distributed through the source repository, targets Node 24 LTS, SQLcl 26.1.2.132.1334, Java 21 and APEX 26.1+. ORDS APEXlang operations require a JDK 21+ containing `jdk.compiler`; SQLcl's managed JRE alone is insufficient for the Java bridge. Local generated MMD: 26.1.0+3102. Playwright is pinned at 1.63.0 with its matching browser revisions.
 
-This minor version defaults to one agent and requires an explicit Settings opt-in for teams. It reduces repeated context through smaller reference searches, bounded peer summaries and compact MCP results with recoverable details. Existing ORDS HTTP(S) transport, plugin-level connection settings and APEXlang import/export remain available. Payload budgets measure UTF-8 bytes; they do not establish billed-token savings. See [release notes](../../docs/release-notes.md).
+Single mode uses the existing Codex session and its model and permissions; it does not start another agent or automatically open the panel. Teams require an explicit Settings opt-in. Six long MCP operations wait within one call; bounded metadata batches, summary inspection, shorter instructions and cached reference normalization reduce routine exchanges and context. Compact results retain diagnostics, artifact access and deployment safety information. Existing ORDS HTTP(S) transport, plugin-level connection settings and APEXlang import/export remain available. Payload budgets measure UTF-8 bytes; they do not establish billed-token savings. See [release notes](../../docs/release-notes.md) and [version-specific local checks](../../docs/evidence/minor-040-local.json). No Git tag or registry publication is implied.
 
 - macOS arm64: local native host, client setup and compiler checks completed.
 - Linux x64: locked client artifacts and installer code; hosted quality gates are configured, while native client and Oracle integration remain unverified.

@@ -109,7 +109,41 @@ export async function projectInit(
     ],
   };
 }
-export async function projectInspect(ctx: ProjectContext) {
+export function projectSummary(ctx: ProjectContext) {
+  const environments = Object.entries(ctx.config.environments);
+  return {
+    projectId: ctx.config.projectId,
+    root: ctx.root,
+    sourceDirectories: {
+      apex: ctx.config.application.sourceDir,
+      ...ctx.config.database,
+    },
+    toolchainLock: ctx.config.toolchain.lockFile,
+    requiredSuites: ctx.config.tests.requiredSuites,
+    environments: environments.slice(0, 8).map(([name, env]) => ({
+      name,
+      kind: env.kind,
+      applicationId: env.applicationId,
+      workspace: env.workspace,
+      parsingSchema: env.parsingSchema,
+    })),
+    environmentsOmitted: Math.max(0, environments.length - 8),
+    targetVerified: false,
+  };
+}
+export function projectInspect(ctx: ProjectContext, detail?: 'full'): ReturnType<typeof projectInventory>;
+export function projectInspect(
+  ctx: ProjectContext,
+  detail: 'summary',
+): Promise<ReturnType<typeof projectSummary>>;
+export function projectInspect(
+  ctx: ProjectContext,
+  detail: 'full' | 'summary',
+): Promise<Awaited<ReturnType<typeof projectInventory>> | ReturnType<typeof projectSummary>>;
+export async function projectInspect(ctx: ProjectContext, detail: 'full' | 'summary' = 'full') {
+  return detail === 'summary' ? projectSummary(ctx) : projectInventory(ctx);
+}
+async function projectInventory(ctx: ProjectContext) {
   const sources: Record<string, unknown> = {};
   for (const [kind, relative] of Object.entries({
     apex: ctx.config.application.sourceDir,

@@ -182,8 +182,7 @@
       }
     },
     "required": [
-      "id",
-      "waitSeconds"
+      "id"
     ],
     "additionalProperties": false
   },
@@ -714,17 +713,6 @@
         "type": "boolean"
       }
     },
-    "required": [
-      "yes",
-      "nonInteractive",
-      "offline",
-      "dryRun",
-      "acceptOracleLicense",
-      "skipBrowser",
-      "installOsDeps",
-      "scope",
-      "nativeOnly"
-    ],
     "additionalProperties": false
   },
   "dependencies.install": {
@@ -766,15 +754,6 @@
         "type": "boolean"
       }
     },
-    "required": [
-      "yes",
-      "nonInteractive",
-      "offline",
-      "dryRun",
-      "acceptOracleLicense",
-      "skipBrowser",
-      "installOsDeps"
-    ],
     "additionalProperties": false
   },
   "dependencies.uninstall": {
@@ -793,10 +772,6 @@
         "type": "boolean"
       }
     },
-    "required": [
-      "dryRun",
-      "yes"
-    ],
     "additionalProperties": false
   },
   "plugin.validate": {
@@ -879,17 +854,6 @@
         "type": "boolean"
       }
     },
-    "required": [
-      "yes",
-      "nonInteractive",
-      "offline",
-      "dryRun",
-      "acceptOracleLicense",
-      "skipBrowser",
-      "installOsDeps",
-      "scope",
-      "nativeOnly"
-    ],
     "additionalProperties": false
   },
   "plugin.update": {
@@ -959,16 +923,7 @@
       }
     },
     "required": [
-      "yes",
-      "nonInteractive",
-      "offline",
-      "dryRun",
-      "acceptOracleLicense",
-      "skipBrowser",
-      "installOsDeps",
-      "scope",
-      "version",
-      "nativeOnly"
+      "version"
     ],
     "additionalProperties": false
   },
@@ -989,9 +944,6 @@
         "type": "boolean"
       }
     },
-    "required": [
-      "keepRuntime"
-    ],
     "additionalProperties": false
   },
   "project.init": {
@@ -1022,8 +974,7 @@
       }
     },
     "required": [
-      "directory",
-      "template"
+      "directory"
     ],
     "additionalProperties": false
   },
@@ -1060,6 +1011,14 @@
         "type": "string",
         "minLength": 1,
         "maxLength": 4096
+      },
+      "detail": {
+        "default": "full",
+        "type": "string",
+        "enum": [
+          "full",
+          "summary"
+        ]
       }
     },
     "additionalProperties": false
@@ -1119,9 +1078,6 @@
         "type": "boolean"
       }
     },
-    "required": [
-      "saved"
-    ],
     "additionalProperties": false
   },
   "connection.test": {
@@ -1145,8 +1101,7 @@
       }
     },
     "required": [
-      "name",
-      "saved"
+      "name"
     ],
     "additionalProperties": false
   },
@@ -1202,16 +1157,14 @@
         "maximum": 10000
       },
       "limit": {
-        "default": 8,
+        "default": 3,
         "type": "integer",
         "minimum": 1,
         "maximum": 8
       }
     },
     "required": [
-      "query",
-      "offset",
-      "limit"
+      "query"
     ],
     "additionalProperties": false
   },
@@ -1237,9 +1190,7 @@
       }
     },
     "required": [
-      "id",
-      "offset",
-      "limit"
+      "id"
     ],
     "additionalProperties": false
   },
@@ -1257,8 +1208,7 @@
       }
     },
     "required": [
-      "version",
-      "dryRun"
+      "version"
     ],
     "additionalProperties": false
   },
@@ -1286,16 +1236,60 @@
         "pattern": "^[A-Za-z][A-Za-z0-9_$#]{0,127}$"
       },
       "offset": {
-        "default": 0,
         "type": "integer",
         "minimum": 0,
         "maximum": 100000
       },
       "limit": {
-        "default": 30,
         "type": "integer",
         "minimum": 1,
         "maximum": 100
+      },
+      "requests": {
+        "minItems": 1,
+        "maxItems": 8,
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "enum": [
+                "objects",
+                "columns",
+                "constraints",
+                "signatures",
+                "applications",
+                "pages"
+              ]
+            },
+            "schema": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_$#]{0,127}$"
+            },
+            "name": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_$#]{0,127}$"
+            },
+            "offset": {
+              "default": 0,
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100000
+            },
+            "limit": {
+              "default": 30,
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            }
+          },
+          "required": [
+            "kind",
+            "schema"
+          ],
+          "additionalProperties": false
+        }
       },
       "project": {
         "type": "string",
@@ -1308,10 +1302,6 @@
       }
     },
     "required": [
-      "kind",
-      "schema",
-      "offset",
-      "limit",
       "env"
     ],
     "additionalProperties": false
@@ -1545,8 +1535,7 @@
       }
     },
     "required": [
-      "suite",
-      "headed"
+      "suite"
     ],
     "additionalProperties": false
   },
@@ -1601,6 +1590,13 @@
       "env": {
         "type": "string",
         "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,100}$"
+      },
+      "browserMode": {
+        "type": "string",
+        "enum": [
+          "codex",
+          "external"
+        ]
       }
     },
     "required": [
@@ -1621,6 +1617,12 @@
         "type": "string",
         "format": "uuid",
         "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+      },
+      "waitSeconds": {
+        "default": 0,
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 30
       }
     },
     "required": [
@@ -1676,9 +1678,7 @@
       }
     },
     "required": [
-      "id",
-      "offset",
-      "limit"
+      "id"
     ],
     "additionalProperties": false
   },

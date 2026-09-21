@@ -48,7 +48,9 @@ test('All functions menu covers the operation catalog within the native plugin p
   const root = 'dist/codex-compat/plugins/apexrest-apex';
   const menu = await readFile(root + '/skills/apexrest-menu/SKILL.md', 'utf8');
   const operations = JSON.parse(await readFile(root + '/resources/schemas/operations.schema.json', 'utf8'));
-  const indexed = new Set([...menu.matchAll(/`([a-z]+(?:\.[a-z-]+)?)`/g)].map((match) => match[1]));
+  assert.ok(menu.includes('(references/cli-catalog.md)'));
+  const inventory = await readFile(root + '/skills/apexrest-menu/references/cli-catalog.md', 'utf8');
+  const indexed = new Set([...inventory.matchAll(/`([a-z]+(?:\.[a-z-]+)?)`/g)].map((match) => match[1]));
   for (const operation of Object.keys(operations)) assert.ok(indexed.has(operation), operation);
   const manifest = JSON.parse(await readFile(root + '/.codex-plugin/plugin.json', 'utf8'));
   const prompts = manifest.interface.defaultPrompt;

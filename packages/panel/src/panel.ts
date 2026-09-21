@@ -277,20 +277,22 @@ async function act(action: PanelAction) {
   busy = true;
   controls();
   try {
-    const result = (await api(action)) as { teamId?: string };
+    const result = (await api(action)) as { teamId?: string; executionHost?: string };
     if (action.kind === 'start' && result.teamId) {
       chosenTeam = result.teamId;
       $<HTMLDialogElement>('task-dialog').close();
       view('team');
     }
     notice(
-      ['sqlcl', 'connection', 'preferences'].includes(action.kind)
-        ? 'Settings saved for future runs.'
-        : action.kind === 'message'
-          ? 'Task update queued for the active workflow.'
-          : action.kind.startsWith('cancel')
-            ? 'Stop requested. Existing changes are not rolled back.'
-            : 'Operation accepted. Follow its actual status below.',
+      result.executionHost === 'current_session'
+        ? 'Continue this task in your current Codex chat. No background agent was started.'
+        : ['sqlcl', 'connection', 'preferences'].includes(action.kind)
+          ? 'Settings saved for future runs.'
+          : action.kind === 'message'
+            ? 'Task update queued for the active workflow.'
+            : action.kind.startsWith('cancel')
+              ? 'Stop requested. Existing changes are not rolled back.'
+              : 'Operation accepted. Follow its actual status below.',
     );
     if (action.kind === 'message') input('message').value = '';
     if (action.kind === 'preferences') preferencesDirty = false;
@@ -322,6 +324,16 @@ function pipeline(data: PanelSnapshot) {
   }
   const head = node('div', 'section-heading');
   if (data.task) box.append(node('p', 'task-summary', data.task));
+  if (team.executionHost === 'current_session') {
+    box.append(
+      node(
+        'p',
+        '',
+        'Continue in your current Codex chat. This is a task receipt, not a completed result. Progress, verification, steering and cancellation stay in that conversation.',
+      ),
+    );
+    return card('Current Codex session', box);
+  }
   head.append(node('h3', '', 'Revision ' + team.revision), badge(team.status));
   box.append(head);
   if (team.modelPolicy)
@@ -911,7 +923,7 @@ function modeControls(prefix: string) {
   if (prefix === 'task')
     input('task-developers').value = single ? '1' : String(snapshot?.preferences.developers ?? 1);
   $(prefix + '-workflow-note').textContent = single
-    ? 'Single agent is the default: one agent plans, implements and verifies. Enable Agent team explicitly in Settings and save to allow multi-agent runs.'
+    ? 'Single agent uses your current Codex chat. No new agent starts. Continue tasks and view results in that conversation.'
     : 'Plan → developers → manager review → independent QA → final manager review. Reviewers remain read only.';
 }
 for (const prefix of ['default', 'task'])

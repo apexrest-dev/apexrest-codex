@@ -1,7 +1,7 @@
 interface:
   display_name: "APEX work from chat"
-  short_description: "Run one agent or a team with a live dashboard"
-  default_prompt: "Use $apexrest-work to complete my Oracle APEX change, open the agent panel and use my saved execution and browser settings, and report the result here."
+  short_description: "Work in this Codex session or an enabled reviewed team"
+  default_prompt: "Use $apexrest-work to complete my Oracle APEX change using my saved execution and browser settings. In single mode work directly in this Codex session; report actual results here."
 
 policy:
   allow_implicit_invocation: true

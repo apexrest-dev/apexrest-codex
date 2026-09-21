@@ -3,7 +3,7 @@ name: apexrest-test
 description: Run real SQL, API and authenticated APEX browser tests and interpret required-suite gates.
 ---
 
-Pass the absolute workspace `project` path on project-scoped MCP calls. The native server starts in its installed plugin directory, which is not the user project.
+Pass the user's absolute workspace as `project` on project-scoped calls.
 Check the applicable framework, exact target, mutation authorization when tests write, auth freshness and allowed origins. For CRUD changes, use dedicated synthetic run-specific records with cleanup and assert CRUD plus negative validation. API suites exist only for real endpoints. Login is interactive outside chat, without trace/video capture. Required absent/empty/skipped/blocked suites fail. Distinguish unit mocks, local compiler runs and actual connected integration.
 
 ## Application-only verification scope

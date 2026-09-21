@@ -32,7 +32,7 @@ export const references: Reference[] = [
   },
   {
     id: 'deployment-safety',
-    version: '0.3.0-beta.1',
+    version: '0.4.0-beta.1',
     source: 'docs/adr/007-clean-apex-deployment.md',
     text: 'Use an explicit environment. Plans bind source hashes and target identity. Recheck drift, acquire local coordination by default and create an export backup before writes. Clean APEX deployment needs no service tables. Local runners must share one managed home; independent machines need external serialization or explicitly selected database coordination. DDL cannot be generally rolled back. Interrupted writes require reconciliation. Production requires an external approval boundary.',
   },
@@ -53,7 +53,12 @@ function indexReferences(upstream: Reference[], file?: string, digest?: string) 
     const symbol = reference.text.match(/^<([^>\n]+)>\s*::=/)?.[1];
     if (symbol) bySymbol.set(symbol, reference.id);
     const title = reference.title ?? symbol ?? reference.id;
-    return { reference, title, titleText: normalize(title) };
+    return {
+      reference,
+      title,
+      titleText: normalize(title),
+      ranking: undefined as { titleTerms: string[]; bodyText: string } | undefined,
+    };
   });
   let pendingPostings: Promise<Record<string, number[]>> | undefined;
   const postings = () =>
@@ -145,10 +150,10 @@ function snippet(text: string, query: string, terms: string[]) {
   };
 }
 export async function referenceSearch(query: string, version?: string, options: SearchOptions = {}) {
-  const index = await referenceIndex();
-  const normalized = normalize(query);
   const terms = termsFor(query);
   if (!terms.length) return [];
+  const index = await referenceIndex();
+  const normalized = normalize(query);
   const key = JSON.stringify([query.trim(), version, options.kind, options.family]);
   let ranked = index.queries.get(key);
   if (!ranked) {
@@ -172,10 +177,15 @@ export async function referenceSearch(query: string, version?: string, options: 
         );
       })
       .map((position) => {
-        const { reference, titleText } = index.searchable[position]!;
+        const entry = index.searchable[position]!;
+        const { reference, titleText } = entry;
         const exact = reference === exactId;
-        const titleTerms = termsFor(titleText);
-        const bodyText = normalize(reference.text);
+        // Normalize only matched entries, once per corpus revision. Different queries and
+        // filters share this work; referenceIndex invalidates it together with the corpus.
+        const { titleTerms, bodyText } = (entry.ranking ??= {
+          titleTerms: termsFor(titleText),
+          bodyText: normalize(reference.text),
+        });
         const adjacentHits = terms
           .slice(1)
           .filter((term, i) => bodyText.includes(terms[i] + ' ' + term)).length;

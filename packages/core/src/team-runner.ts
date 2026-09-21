@@ -96,6 +96,26 @@ export async function executeTeam(ctx: ProjectContext, id: string, connect = con
     const single = request.executionMode === 'single';
     state.executionMode = request.executionMode;
     state.browserMode = request.browserMode;
+    // Stale queued requests can still reach this entry point through an older
+    // CLI. Single mode belongs to the originating chat, never an owned worker.
+    // Historical single records stay readable without replaying the old pipeline below.
+    if (single) {
+      state.executionHost = 'current_session';
+      state.sandbox = request.sandbox;
+      state.result = '';
+      return withLock(path.join(root, 'control.lock'), async () => {
+        const cancelled = await exists(path.join(root, 'cancel.json'));
+        state.status = cancelled ? 'cancelled' : 'current_session';
+        state.updatedAt = new Date().toISOString();
+        state.diagnostics.push(
+          cancelled
+            ? 'Task cancellation requested. Existing changes are not rolled back.'
+            : 'Continue implementation and verification in the original Codex chat.',
+        );
+        await writeJson(path.join(root, 'state.json'), state);
+        return state;
+      });
+    }
     let client: CodexClient | undefined,
       disconnected = false,
       activeMember: TeamMember | undefined;

@@ -529,120 +529,65 @@ test('active cancellation stops the workflow without accepting an approval', asy
   assert.deepEqual(mock.calls, ['manager', 'closed']);
 });
 
-async function preparedSingle(t: import('node:test').TestContext) {
-  const f = await prepared(t);
-  await writeJson(path.join(f.root, 'request.json'), {
-    task: 'Implement a fixture change.',
-    executionMode: 'single',
-    browserMode: 'external',
-    developers: 3,
-    timeoutSeconds: 30,
+for (const executionMode of ['single', undefined] as const) {
+  test(`${executionMode ?? 'legacy omitted'} mode returns to the current chat without connecting to Codex`, async (t) => {
+    const { ctx, id, root } = await prepared(t);
+    await writeJson(path.join(root, 'request.json'), {
+      task: 'Implement a fixture change.',
+      ...(executionMode ? { executionMode } : {}),
+      browserMode: 'external',
+      sandbox: 'read-only',
+      developers: 3,
+      timeoutSeconds: 30,
+    });
+    let connections = 0;
+    const connect: typeof connectCodex = async () => {
+      connections++;
+      throw new Error('Single mode must not start Codex App Server.');
+    };
+    const result = await executeTeam(ctx, id, connect);
+    assert.equal(connections, 0);
+    assert.equal(result.status, 'current_session');
+    assert.equal(result.executionHost, 'current_session');
+    assert.equal(result.executionMode, 'single');
+    assert.equal(result.browserMode, 'external');
+    assert.equal(result.sandbox, 'read-only');
+    assert.equal(result.result, '');
+    assert.equal(result.members.length, 0);
+    assert.equal(result.reviews.length, 0);
+    assert.equal(result.qa.length, 0);
+    assert.equal(result.verification, undefined);
+    assert.equal(result.completedDigest, undefined);
+    assert.equal(result.approvedDigest, undefined);
+    assert.match(result.diagnostics.join(' '), /original Codex chat/);
+    assert.equal((await new TeamService(ctx).status(id)).status, 'current_session');
+    await assert.rejects(executeTeam(ctx, id, connect), { code: 'TEAM_ALREADY_STARTED' });
+    assert.equal(connections, 0);
   });
-  return f;
 }
 
-test('single mode creates exactly one session for planning, implementation and verification with full activity', async (t) => {
-  const { ctx, id } = await preparedSingle(t);
-  const mock = protocol();
-  const result = await executeTeam(ctx, id, mock.connect);
-  assert.equal(result.status, 'completed');
-  assert.equal(mock.starts.length, 1);
-  assert.deepEqual(mock.calls, ['single', 'single', 'single', 'closed']);
-  assert.equal(result.members.length, 1);
-  assert.equal(result.members[0]?.tokenUsage?.totalTokens, 100);
-  assert.equal(result.executionMode, 'single');
-  assert.equal(result.browserMode, 'external');
-  assert.equal(result.reviews.length, 0);
-  assert.equal(result.qa.length, 0);
-  assert.equal(result.verification?.[0]?.digest, result.completedDigest);
-  assert.equal(result.approvedDigest, undefined);
-  assert.ok(result.observations?.length);
-  assert.match(
-    String(mock.starts[0]?.developerInstructions),
-    /Interactive APEX verification browser: external/,
-  );
-  assert.deepEqual(
-    (mock.starts[0]?.dynamicTools as { name: string }[]).map((t) => t.name),
-    ['team_context'],
-  );
-  assert.equal((mock.starts[0]?.config as RpcObject)['agents.enabled'], false);
-  await writeFile(path.join(ctx.root, 'new-source.txt'), 'changed');
-  assert.equal((await new TeamService(ctx).snapshot(id)).status, 'result_stale');
-});
-
-test('single verification failures cannot complete and repairs keep the same session', async (t) => {
-  const { ctx, id } = await preparedSingle(t);
-  const mock = protocol({ qaFail: true });
-  const result = await executeTeam(ctx, id, mock.connect);
-  assert.equal(result.status, 'verification_failed');
-  assert.equal(result.revision, 3);
-  assert.equal(mock.starts.length, 1);
-  assert.equal(result.completedDigest, undefined);
-});
-
-test('single mode reports unavailable checks without pretending an independent QA pass', async (t) => {
-  const { ctx, id } = await preparedSingle(t);
-  const result = await executeTeam(ctx, id, protocol({ prerequisite: true }).connect);
-  assert.equal(result.status, 'blocked');
-  assert.equal(result.verification?.[0]?.report.checks[0]?.status, 'not_run');
-  assert.equal(result.completedDigest, undefined);
-});
-
-test('single mode includes late user steering in a fresh revision and delivers it to the sole agent', async (t) => {
-  const { ctx, id } = await preparedSingle(t);
-  let sent = false;
-  const mock = protocol({
-    taskUpdate: async () => {
-      if (!sent) {
-        sent = true;
-        await new TeamService(ctx).message(id, 'Also check empty input.');
-      }
-    },
+test('queued single cancellation stays cancelled without connecting or handing off work', async (t) => {
+  const { ctx, id, root } = await prepared(t);
+  await writeJson(path.join(root, 'request.json'), { task: 'Check fixture', executionMode: 'single' });
+  await new TeamService(ctx).cancel(id);
+  let connections = 0;
+  const result = await executeTeam(ctx, id, async () => {
+    connections++;
+    throw new Error('Cancelled single work must not connect to Codex.');
   });
-  const result = await executeTeam(ctx, id, mock.connect);
-  assert.equal(result.status, 'completed');
-  assert.equal(result.revision, 2);
-  assert.equal(result.messages[0]?.to, 'developer-1');
-  assert.equal(result.messages[0]?.status, 'delivered');
-  assert.equal(mock.starts.length, 1);
-});
-
-test('single mode refuses source drift during verification and honours active cancellation', async (t) => {
-  const { ctx, id } = await preparedSingle(t);
-  let revision = 0;
-  const result = await executeTeam(
-    ctx,
-    id,
-    protocol({ sourceEdit: () => writeFile(path.join(ctx.root, 'drift.txt'), String(++revision)) }).connect,
-  );
-  assert.equal(result.status, 'verification_failed');
-  assert.equal(result.completedDigest, undefined);
-});
-
-test('single active cancellation prevents completion', async (t) => {
-  const { ctx, id } = await preparedSingle(t);
-  const result = await executeTeam(
-    ctx,
-    id,
-    protocol({
-      cancelActive: async () => {
-        await new TeamService(ctx).cancel(id);
-      },
-    }).connect,
-  );
+  assert.equal(connections, 0);
   assert.equal(result.status, 'cancelled');
-  assert.equal(result.completedDigest, undefined);
-});
-
-test('single malformed verification blocks completion', async (t) => {
-  const { ctx, id } = await preparedSingle(t);
-  const result = await executeTeam(ctx, id, protocol({ malformed: true }).connect);
-  assert.equal(result.status, 'blocked');
-  assert.equal(result.completedDigest, undefined);
+  assert.equal(result.executionHost, 'current_session');
+  assert.equal(result.sandbox, 'workspace-write');
+  assert.equal(result.result, '');
+  assert.equal(result.members.length, 0);
+  assert.match(result.diagnostics.join(' '), /cancellation requested/);
+  assert.doesNotMatch(result.diagnostics.join(' '), /Continue implementation/);
+  assert.equal((await new TeamService(ctx).status(id)).status, 'cancelled');
 });
 
 test('native turn failures retain a redacted diagnostic for the dashboard', async (t) => {
-  const { ctx, id } = await preparedSingle(t);
+  const { ctx, id } = await prepared(t);
   const result = await executeTeam(ctx, id, protocol({ failedTurn: true }).connect);
   assert.equal(result.status, 'blocked');
   assert.match(result.diagnostics.join(' '), /Fixture protocol error/);
@@ -650,19 +595,8 @@ test('native turn failures retain a redacted diagnostic for the dashboard', asyn
   assert.ok(result.observations?.some((o) => o.kind === 'turnError'));
 });
 
-test('queued legacy defaults launch one agent and unproven explicit team queues cannot dispatch sessions', async (t) => {
+test('unproven explicit team queues cannot dispatch sessions', async (t) => {
   const { ctx, id, root } = await prepared(t);
-  await writeJson(path.join(root, 'request.json'), {
-    task: 'Check fixture',
-    developers: 3,
-    timeoutSeconds: 30,
-  });
-  const mock = protocol();
-  assert.equal((await executeTeam(ctx, id, mock.connect)).status, 'completed');
-  assert.equal(mock.starts.length, 1);
-  assert.deepEqual(mock.calls, ['single', 'single', 'single', 'closed']);
-  const before = (await readJson(path.join(root, 'state.json'))) as TeamState;
-  await writeJson(path.join(root, 'state.json'), { ...before, status: 'queued', members: [] });
   await writeJson(path.join(root, 'request.json'), { task: 'Check fixture', executionMode: 'team' });
   const denied = protocol();
   const result = await executeTeam(ctx, id, denied.connect);
@@ -672,14 +606,17 @@ test('queued legacy defaults launch one agent and unproven explicit team queues 
 });
 
 test('persistent sessions receive the assignment only once while live updates and review gates remain', async (t) => {
-  const { ctx, id, root } = await preparedSingle(t);
+  const { ctx, id, root } = await prepared(t);
   const task = 'UNIQUE_FULL_TASK_CONSTRAINTS';
-  await writeJson(path.join(root, 'request.json'), { task, timeoutSeconds: 30 });
+  await writeJson(path.join(root, 'request.json'), {
+    ...((await readJson(path.join(root, 'request.json'))) as Record<string, unknown>),
+    task,
+  });
   const mock = protocol({ qaFail: true });
-  assert.equal((await executeTeam(ctx, id, mock.connect)).status, 'verification_failed');
+  assert.equal((await executeTeam(ctx, id, mock.connect)).status, 'review_failed');
   const prompts = mock.turnRequests.map((r) => JSON.stringify(r.input));
-  assert.equal(prompts.filter((text) => text.includes(task)).length, 1);
-  assert.equal(prompts.length, 7);
+  assert.equal(prompts.filter((text) => text.includes(task)).length, mock.starts.length);
+  assert.ok(prompts.length > mock.starts.length);
   assert.ok(prompts.every((text) => text.includes('request.json') && text.includes('plan.json')));
   assert.ok(prompts.slice(3).some((text) => text.includes('Required repairs')));
 });

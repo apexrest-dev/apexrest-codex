@@ -6,7 +6,7 @@ Single-agent execution is the default. Multi-agent work runs only after the user
 
 After explicit multi-agent opt-in, APEXREST runs an implementation through separate Codex sessions for a project manager, developers and independent QA. The runtime creates the roles and enforces the review order. The manager assigns work and reviews it; the developer cannot approve their own implementation, and a manager approval cannot turn failed QA into success.
 
-This guide covers the complete user flow in **Codex desktop and Codex CLI**: opening the panel, starting a task, following the agents, changing a requirement, handling a failed check and moving an accepted change into the authorized APEX deployment workflow. The shorter [team API reference](team.md), [panel reference](panel.md) and [Codex source audit](codex-integration.md) describe the individual interfaces.
+This guide covers the enabled team flow in **Codex desktop and Codex CLI**: opening the panel, starting a task, following the agents, changing a requirement, handling a failed check and moving an accepted change into the authorized APEX deployment workflow. The shorter [team API reference](team.md), [panel reference](panel.md) and [Codex source audit](codex-integration.md) describe the individual interfaces.
 
 ![Five mandatory stages: Mewtwo plans, developers implement, Mewtwo reviews code, Squirtle verifies, and Mewtwo reviews QA. Repairs repeat the development and review cycle.](assets/agent-workflow.svg)
 
@@ -16,7 +16,7 @@ Install the plugin using [Getting started](getting-started.md), sign in to Codex
 
 For Oracle work, configure the reviewed Java/SQLcl toolchain, locally saved connections and explicit environment identities. The [configuration guide](configuration.md) covers workspace, parsing schema, application ID, source paths, toolchain locks and required test suites. Keep passwords out of tasks and screenshots.
 
-For a new implementation, describe the change in Codex chat. The automatically discoverable `$apexrest-work` skill starts the selected single agent or explicitly enabled team, opens its panel and brings the reviewed result back to this chat; no web form is required. See [Chat workflow and Auto models](chat-workflow.md).
+For a new implementation, describe the change in Codex chat. The `$apexrest-work` skill performs single-mode work directly in the existing session, using its model and permissions without another agent or automatic panel startup. For explicitly enabled teams, it starts the reviewed workflow and opens the panel. Both paths report their actual results in this chat; no web form is required. See [Chat workflow and Auto models](chat-workflow.md).
 
 To inspect a panel separately in Codex desktop, invoke `$apexrest-panel`. The skill opens the private local panel in the Codex in-app browser. `$apexrest-menu` describes the panel and lists **Reviewed development team** among its workflows. A direct `$apexrest-team` request starts the same configured workflow without requiring the panel to be open.
 
@@ -31,7 +31,7 @@ The panel TUI uses `1`–`4` or left/right to select a view, up/down or page key
 
 ## 2. Choose settings and describe the task
 
-In **Settings**, inspect the effective project configuration and choose defaults for future teams. **New task** opens a form with the task, developer count, developer permissions and time limit. State the expected behavior, files or pages in scope, acceptance checks and the identified environment if database work is intended. Starting the form launches a background team and returns its identifier; it is not a completed result.
+In **Settings**, inspect the effective project configuration and choose defaults for future teams. **New task** opens a form with the task, developer count, developer permissions and time limit. State the expected behavior, files or pages in scope, acceptance checks and the identified environment if database work is intended. With team mode explicitly enabled, starting the form launches a background team and returns its identifier; it is not a completed result. Single mode returns a `current_session` receipt and directs work to the existing Codex chat.
 
 | Setting | Behavior |
 | --- | --- |
@@ -157,7 +157,7 @@ The panel has no direct **Apply**, **Approve review** or **Grant trust** button.
 
 The panel's local server validates Host/Origin, serves a fixed asset allowlist and requires a private session capability for data and actions. It closes after one hour without authorized requests. Keep the local capability URL and session file private; opening a panel does not grant deployment authority.
 
-The open-source Codex audit found an internal agent registry, but no public plugin RPC for that private registry. APEXREST uses supported App Server session orchestration. The verified desktop surface is the **in-app browser**, not a custom persistent sidebar or status-line extension. An MCP UI resource is advertised and contract-checked; embedded rendering in the desktop host remains unverified.
+The open-source Codex audit found an internal agent registry, but no public plugin RPC for that private registry. Team mode uses supported App Server session orchestration; single mode continues in the existing Codex chat. The verified desktop surface is the **in-app browser**, not a custom persistent sidebar or status-line extension. An MCP UI resource is advertised and contract-checked; embedded rendering in the desktop host remains unverified.
 
 | Evidence | Established scope |
 | --- | --- |

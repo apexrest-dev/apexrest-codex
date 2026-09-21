@@ -14,7 +14,7 @@ import {
   runtimeState,
   sqlLiteral,
   sqlclToken
-} from "./chunk-7NOO7SDV.mjs";
+} from "./chunk-2SZCZZ3J.mjs";
 import {
   Fault,
   artifactPage,
@@ -1255,7 +1255,7 @@ function externalBrowserCommand(url, platform = process.platform) {
     };
   return { executable: "xdg-open", args: [url] };
 }
-async function openVerificationBrowser(ctx, name, launch = runProcess) {
+async function openVerificationBrowser(ctx, name, launch = runProcess, browserMode) {
   await requireTrust(ctx.root);
   const target = environment(ctx, name);
   const url = allowedOrigin(target.baseUrl, [
@@ -1263,7 +1263,7 @@ async function openVerificationBrowser(ctx, name, launch = runProcess) {
     ...target.allowedOrigins
   ]).toString();
   const pinned = process.env.APEXREST_TEAM_WORKER === "1" ? process.env.APEXREST_BROWSER_MODE : void 0;
-  const mode = pinned === "external" || pinned === "codex" ? pinned : (await workPreferences(ctx.root)).browserMode;
+  const mode = pinned === "external" || pinned === "codex" ? pinned : browserMode ?? (await workPreferences(ctx.root)).browserMode;
   const common = {
     browserMode: mode,
     environment: name,

@@ -9,7 +9,7 @@ import { toolOutput, panelResultKey } from '../../packages/mcp/src/output.ts';
 import { writeJson } from '../../packages/core/src/fs.ts';
 
 async function isolated(t: import('node:test').TestContext) {
-  const { ctx } = await fixture();
+  const { ctx, plan } = await fixture();
   const before = process.env.APEXREST_HOME;
   process.env.APEXREST_HOME = path.join(ctx.root, 'managed');
   t.after(async () => {
@@ -17,7 +17,7 @@ async function isolated(t: import('node:test').TestContext) {
     else process.env.APEXREST_HOME = before;
     await rm(ctx.root, { recursive: true, force: true });
   });
-  return { ctx };
+  return { ctx, plan };
 }
 
 test('large source results retain their outcome and can be reconstructed through artifact windows', async (t) => {
@@ -172,4 +172,71 @@ test('untrusted large source keys and nested summaries cannot bypass the aggrega
     }),
   );
   assert.ok(result.content[0]!.text.length < 8192);
+});
+
+test('compacted job failures retain actionable nested diagnostics without exposing secrets', async (t) => {
+  const { ctx } = await isolated(t);
+  const failed = failure(
+    'apex.validate',
+    new Fault('COMPILER_FAILURE', 'Unknown item in page 10; password=private', 1),
+  );
+  failed.artifacts = ['compiler-report'];
+  failed.nextActions = ['Repair the item reference before importing.'];
+  failed.data = { log: 'x'.repeat(40000) };
+  const transported = JSON.parse(
+    (
+      await toolOutput(
+        success('jobs.status', {
+          jobId: 'known-job',
+          status: 'completed',
+          result: failed,
+        }),
+        ctx.root,
+      )
+    ).content[0]!.text,
+  );
+  assert.equal(transported.data.result.ok, false);
+  assert.equal(transported.data.result.exitCode, 1);
+  assert.equal(transported.data.result.diagnostics[0].code, 'COMPILER_FAILURE');
+  assert.match(transported.data.result.diagnostics[0].message, /page 10/);
+  assert.deepEqual(transported.data.result.artifacts, ['compiler-report']);
+  assert.deepEqual(transported.data.result.nextActions, failed.nextActions);
+  assert.doesNotMatch(JSON.stringify(transported), /password=private/);
+  assert.ok(JSON.stringify(transported).length < 3000);
+  assert.ok(transported.data.output.artifactId);
+});
+
+test('large plan previews preserve safety fields, source counts and operation counts', async (t) => {
+  const { ctx, plan } = await isolated(t);
+  const largePlan = {
+    ...plan,
+    sources: Object.fromEntries(Array.from({ length: 300 }, (_, i) => ['page-' + i, 'a'.repeat(64)])),
+    risks: ['destructive-or-privileged-sql'],
+    backupRequired: true,
+    target: { workspace: 'FIXTURE', application: 123 },
+  };
+  const transported = JSON.parse(
+    (
+      await toolOutput(
+        success('jobs.status', {
+          jobId: 'plan-job',
+          status: 'completed',
+          result: success('deploy.plan', largePlan),
+        }),
+        ctx.root,
+      )
+    ).content[0]!.text,
+  );
+  const summary = transported.data.result.data;
+  assert.equal(summary.digest, plan.digest);
+  assert.equal(summary.targetDigest, plan.targetDigest);
+  assert.equal(summary.environment, 'dev');
+  assert.equal(summary.backupRequired, true);
+  assert.equal(summary.approval, 'external-policy-required');
+  assert.deepEqual(summary.risks, largePlan.risks);
+  assert.deepEqual(summary.target, largePlan.target);
+  assert.equal(summary.sourceCount, 300);
+  assert.equal(summary.operationCounts.import, 1);
+  assert.equal(summary.sources, undefined);
+  assert.ok(JSON.stringify(transported).length < 4000);
 });

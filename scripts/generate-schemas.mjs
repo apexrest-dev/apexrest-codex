@@ -4,7 +4,7 @@ import { spawnSync } from 'node:child_process';
 await mkdir('.apexrest/schema-build', { recursive: true });
 await build({
   stdin: {
-    contents: `import {z} from 'zod';import {projectSchema,policySchema} from './packages/core/src/config.ts';import{deployPlanSchema}from'./packages/core/src/deploy.ts';import{schemas}from'./packages/core/src/operations.ts';import{lockSchema}from'./packages/installer/src/toolchain.ts';console.log(JSON.stringify({project: z.toJSONSchema(projectSchema), policy:z.toJSONSchema(policySchema), 'deploy-plan':z.toJSONSchema(deployPlanSchema), 'toolchain-lock':z.toJSONSchema(lockSchema), operations:Object.fromEntries(Object.entries(schemas).map(([k,s])=>[k,z.toJSONSchema(s)]))}));`,
+    contents: `import {z} from 'zod';import {projectSchema,policySchema} from './packages/core/src/config.ts';import{deployPlanSchema}from'./packages/core/src/deploy.ts';import{schemas}from'./packages/core/src/operations.ts';import{lockSchema}from'./packages/installer/src/toolchain.ts';console.log(JSON.stringify({project: z.toJSONSchema(projectSchema), policy:z.toJSONSchema(policySchema), 'deploy-plan':z.toJSONSchema(deployPlanSchema), 'toolchain-lock':z.toJSONSchema(lockSchema), operations:Object.fromEntries(Object.entries(schemas).map(([k,s])=>[k,z.toJSONSchema(s,{io:'input'})]))}));`,
     resolveDir: process.cwd(),
   },
   outfile: '.apexrest/schema-build/generate.mjs',

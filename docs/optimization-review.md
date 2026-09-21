@@ -1,8 +1,20 @@
-# Plugin optimization review — 2026-09-12
+# Plugin optimization review
 
 English | [Українська](optimization-review.uk.md)
 
-This report records the earlier runtime experiment. The subsequent [Codex APEXlang optimization](apexlang-optimization.md) expands the reference corpus and changes ranking; its measurements and limitations are separate.
+## Smaller context and faster reference lookup — 2026-09-21
+
+Revision `0.3.0-beta.1+codex.20260921165734` shortens skill instructions and MCP descriptions, makes defaulted input fields optional in the advertised schema, serializes normal MCP output once, and caches reference normalization across different searches. The same 24 tools, effective input constraints, authorization and deployment safeguards remain in place. `jobs.status` accepts optional `waitSeconds` from 0 to 30: use 25 for long operations to wait inside one MCP call; omitted/0 retains immediate status.
+
+| Local measurement | Before | After |
+| --- | ---: | ---: |
+| Aggregate source of all 13 `SKILL.md` files | 42,003 bytes | 31,789 bytes (-24.32%) |
+| Serialized 24-tool catalog | 24,966 bytes | 22,499 bytes (-9.88%) |
+| 24 varied reference searches, median of seven fresh processes | 12.93 ms | 3.09 ms |
+
+[Context evidence](evidence/plugin-context-local.json) measures bytes, not tokens or billing; the skill total does not imply all skills load into each task. [Reference evidence](evidence/reference-ranking-cache-local.json) records identical full-response SHA-256 values and 12/12 fixture results before/after, with and without a version filter. Cold and identical repeated searches are essentially unchanged. Cache invalidation tests pass, including an in-place same-size corpus rewrite with restored mtime. [Local validation](evidence/plugin-efficiency-local.json) passed 194 unit, 22 contract and 14 packaging tests, typecheck, lint, 46 documentation pairs, the 30-page site build and plugin sync/integrity checks. The local plugin was reinstalled; all 246 installed file hashes match the checked bundle. Built CLI/MCP current-session responses and a one-call worker wait were verified. Native task latency, Oracle speed and billed-token savings remain unmeasured.
+
+The sections below record the earlier 2026-09-12 runtime experiment. The subsequent [Codex APEXlang optimization](apexlang-optimization.md) expands the reference corpus and changes ranking; its measurements and limitations are separate.
 
 Reviewed runtime startup, MCP responses, references and skills, installer downloads, package construction, source inventories, deployment checks, background jobs and test execution. Implemented changes target measured repeated work and peak memory use. The original build specification remains unchanged.
 

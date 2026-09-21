@@ -4,7 +4,6 @@ import path from 'node:path';
 import { spawnSync, spawn } from 'node:child_process';
 import { cp, mkdtemp, mkdir, realpath, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { setTimeout as delay } from 'node:timers/promises';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 const runtime = path.resolve('dist/runtime');
@@ -45,6 +44,25 @@ test('real stdio MCP initialize/list/call, CLI parity and bounded catalog', asyn
   await client.connect(transport);
   const catalog = await client.listTools();
   assert.equal(catalog.tools.length, 24);
+  const jobSchema = catalog.tools.find((tool) => tool.name === 'apexrest_job_status').inputSchema;
+  assert.equal(jobSchema.properties.waitSeconds.default, 0);
+  assert.ok(!jobSchema.required.includes('waitSeconds'));
+  for (const tool of catalog.tools.filter((tool) =>
+    [
+      'apexrest_apex_generate',
+      'apexrest_apex_export',
+      'apexrest_apex_validate',
+      'apexrest_deploy_plan',
+      'apexrest_deploy_apply',
+      'apexrest_test_run',
+    ].includes(tool.name),
+  )) {
+    assert.equal(tool.inputSchema.properties.waitSeconds.default, 25);
+    assert.ok(!tool.inputSchema.required.includes('waitSeconds'));
+  }
+  const searchSchema = catalog.tools.find((tool) => tool.name === 'apexrest_reference_search').inputSchema;
+  assert.ok(!searchSchema.required.includes('limit'));
+  assert.ok(!searchSchema.required.includes('offset'));
   for (const name of ['apexrest_work_start', 'apexrest_team_start']) {
     const properties = catalog.tools.find((tool) => tool.name === name).inputSchema.properties;
     assert.equal(properties.executionMode.default, undefined);
@@ -139,7 +157,7 @@ test('MCP project tools require an explicit absolute path before dispatch or job
       assert.equal(tool.inputSchema.properties.project, undefined);
       continue;
     }
-    assert.match(tool.inputSchema.properties.project.description, /Absolute path.*installation directory/);
+    assert.match(tool.inputSchema.properties.project.description, /Absolute project.*plugin cache/);
     if (tool.name === 'apexrest_doctor') {
       assert.ok(!tool.inputSchema.required?.includes('project'));
     } else {
@@ -246,23 +264,11 @@ for (const profile of ['codex-compat'])
             .content[0].text,
         );
         assert.equal(queued.ok, true);
-        const deadline = Date.now() + 10000;
-        let state;
-        do {
-          await delay(50);
-          state = JSON.parse(
-            (
-              await client.callTool({
-                name: 'apexrest_job_status',
-                arguments: { project, id: queued.data.jobId },
-              })
-            ).content[0].text,
-          );
-          assert.equal(state.ok, true);
-        } while (['queued', 'running'].includes(state.data.status) && Date.now() < deadline);
-        assert.equal(state.data.status, 'completed');
-        assert.equal(state.data.result.ok, true, JSON.stringify(state.data.result));
-        assert.equal(state.data.result.data.tests, 1);
+        // Codex receives the completed operation in the original tool call.
+        assert.ok(queued.data.jobId);
+        assert.equal(queued.data.status, 'completed');
+        assert.equal(queued.data.result.ok, true, JSON.stringify(queued.data.result));
+        assert.equal(queued.data.result.data.tests, 1);
       } finally {
         await client.close();
       }
