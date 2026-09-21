@@ -14,9 +14,10 @@ import {
   runtimeState,
   sqlLiteral,
   sqlclToken
-} from "./chunk-TM25I7KG.mjs";
+} from "./chunk-7NOO7SDV.mjs";
 import {
   Fault,
+  artifactPage,
   atomicWrite,
   canonical,
   contained,
@@ -25,33 +26,46 @@ import {
   inventory,
   readJson,
   redact,
+  sanitized,
   withLock,
   writeJson
-} from "./chunk-MJC6ZMRG.mjs";
+} from "./chunk-IPU64TJI.mjs";
 
 // packages/core/src/testing.ts
 import path4 from "node:path";
 import { spawn } from "node:child_process";
-import { mkdir as mkdir2, readFile as readFile3, cp as cp2, chmod } from "node:fs/promises";
+import { mkdir as mkdir3, readFile as readFile3, cp as cp2, chmod } from "node:fs/promises";
 import { randomUUID as randomUUID3 } from "node:crypto";
 
 // packages/core/src/artifacts.ts
 import path from "node:path";
 import { randomUUID } from "node:crypto";
-import { readFile, readdir, rm } from "node:fs/promises";
+import { readFile, readdir, rm, mkdir } from "node:fs/promises";
 var ArtifactService = class {
   constructor(ctx) {
     this.ctx = ctx;
   }
   ctx;
   async save(content, kind) {
-    const id = randomUUID(), directory = await contained(this.ctx.root, this.ctx.config.artifacts.directory);
-    const sanitized = redact(content);
-    await atomicWrite(path.join(directory, id + ".txt"), sanitized);
+    return this.persist(redact(content), kind, "text");
+  }
+  async saveJson(value, kind) {
+    return this.persist(JSON.stringify(sanitized(value)), kind, "json");
+  }
+  async resultDirectory(create = false) {
+    const home = managedHome();
+    if (create) await mkdir(home, { recursive: true, mode: 448 });
+    if (!await exists(home)) return null;
+    return contained(home, path.join("results", hash(this.ctx.root)));
+  }
+  async persist(content, kind, format) {
+    const id = randomUUID(), directory = format === "json" ? await this.resultDirectory(true) : await contained(this.ctx.root, this.ctx.config.artifacts.directory);
+    await atomicWrite(path.join(directory, id + ".txt"), content);
     await writeJson(path.join(directory, id + ".json"), {
       id,
       kind,
-      sha256: hash(sanitized),
+      sha256: hash(content),
+      format,
       createdAt: (/* @__PURE__ */ new Date()).toISOString(),
       expiresAt: new Date(Date.now() + this.ctx.config.artifacts.retentionDays * 864e5).toISOString(),
       classification: "private-sanitized-text"
@@ -62,7 +76,8 @@ var ArtifactService = class {
     parse(external_exports.uuid(), id);
     parse(external_exports.number().int().min(0).max(1e7), offset);
     parse(external_exports.number().int().min(1).max(16384), limit);
-    const directory = await contained(this.ctx.root, this.ctx.config.artifacts.directory);
+    const results = await this.resultDirectory();
+    const directory = results && await exists(path.join(results, id + ".json")) ? results : await contained(this.ctx.root, this.ctx.config.artifacts.directory);
     const metadata = await readJson(await contained(directory, id + ".json"));
     if (Date.parse(metadata.expiresAt) < Date.now())
       throw new Fault("ARTIFACT_EXPIRED", "Artifact retention has expired.", 3);
@@ -75,34 +90,33 @@ var ArtifactService = class {
     const content = await readFile(await contained(directory, id + ".txt"), "utf8");
     if (hash(content) !== metadata.sha256)
       throw new Fault("ARTIFACT_CHANGED", "Artifact integrity check failed.", 5);
-    return {
-      id,
-      offset,
-      content: redact(content.slice(offset, offset + limit)),
-      nextOffset: offset + limit < content.length ? offset + limit : null,
-      dataClassification: "untrusted_operation_output"
-    };
+    return artifactPage(content, metadata.format ?? "text", id, offset, limit);
   }
   async prune() {
-    const directory = await contained(this.ctx.root, this.ctx.config.artifacts.directory);
+    const directories = [
+      await contained(this.ctx.root, this.ctx.config.artifacts.directory),
+      await this.resultDirectory()
+    ];
     let removed = 0;
-    if (!await exists(directory)) return { removed };
-    for (const file of await readdir(directory))
-      if (/^[a-f0-9-]{36}\.json$/.test(file)) {
-        const metadata = await readJson(path.join(directory, file));
-        if (Date.parse(metadata.expiresAt) < Date.now()) {
-          await rm(path.join(directory, file));
-          await rm(path.join(directory, file.replace(".json", ".txt")), { force: true });
-          removed++;
+    for (const directory of directories) {
+      if (!directory || !await exists(directory)) continue;
+      for (const file of await readdir(directory))
+        if (/^[a-f0-9-]{36}\.json$/.test(file)) {
+          const metadata = await readJson(path.join(directory, file));
+          if (Date.parse(metadata.expiresAt) < Date.now()) {
+            await rm(path.join(directory, file));
+            await rm(path.join(directory, file.replace(".json", ".txt")), { force: true });
+            removed++;
+          }
         }
-      }
+    }
     return { removed };
   }
 };
 
 // packages/core/src/deploy.ts
 import path3 from "node:path";
-import { readFile as readFile2, mkdir, cp, open } from "node:fs/promises";
+import { readFile as readFile2, mkdir as mkdir2, cp, open } from "node:fs/promises";
 import { randomUUID as randomUUID2, verify } from "node:crypto";
 
 // packages/core/src/deployment-control.ts
@@ -601,7 +615,7 @@ end;
     if (signal?.aborted)
       throw new Fault("CANCELLED", "Deployment cancelled before lease acquisition.", 6, "cancelled");
     const runId = randomUUID2(), runs = path3.join(ctx.root, ".apexrest/deployments"), runDir = path3.join(runs, runId);
-    await mkdir(runDir, { recursive: true, mode: 448 });
+    await mkdir2(runDir, { recursive: true, mode: 448 });
     let state = "planned", writeStarted = false;
     const controller = new AbortController();
     const abort = () => controller.abort();
@@ -648,7 +662,7 @@ end;
       if (plan.backupRequired) {
         const backup = await this.oracle.exportApplication(env, readConnection, "SQL");
         const backupId = randomUUID2(), directory = path3.join(ctx.root, ".apexrest/backups", backupId);
-        await mkdir(directory, { recursive: true, mode: 448 });
+        await mkdir2(directory, { recursive: true, mode: 448 });
         await cp(backup.directory, path3.join(directory, "application"), { recursive: true });
         const files = await inventory(path3.join(directory, "application"));
         if (!Object.keys(files).length || hash(canonical(files)) !== backup.digest)
@@ -667,10 +681,10 @@ end;
       if ((await this.fingerprint(env, readConnection)).fingerprint !== plan.fingerprint)
         throw new Fault("TARGET_DRIFT", "Target changed during backup.", 5);
       const snapshot = path3.join(runDir, "snapshot");
-      await mkdir(snapshot);
+      await mkdir2(snapshot);
       for (const [file, sha] of Object.entries(plan.sources)) {
         const source = await contained(ctx.root, file), destination = await contained(snapshot, file);
-        await mkdir(path3.dirname(destination), { recursive: true });
+        await mkdir2(path3.dirname(destination), { recursive: true });
         await cp(source, destination);
         if (hash(await readFile2(destination)) !== sha)
           throw new Fault("SOURCE_DRIFT", "Source changed while freezing deployment.", 5);
@@ -998,7 +1012,7 @@ end;
           diagnostic: "Run apexrest setup to install pinned Playwright and Chromium."
         };
       const runId = randomUUID3(), runnerRoot = path4.resolve(state.playwright, "../../../.."), run = path4.join(runnerRoot, "runs", runId);
-      await mkdir2(run, { recursive: true, mode: 448 });
+      await mkdir3(run, { recursive: true, mode: 448 });
       await cp2(dir, path4.join(run, "tests"), { recursive: true });
       await cp2(path4.join(resourceRoot(), "testkit"), path4.join(run, "testkit"), { recursive: true });
       const auth = path4.join(ctx.root, ".apexrest/auth", envName, "state.json"), authMeta = auth + ".meta.json";
@@ -1096,7 +1110,7 @@ end;
         4
       );
     const destination = path4.join(ctx.root, ".apexrest/auth", name, "state.json");
-    await mkdir2(path4.dirname(destination), { recursive: true, mode: 448 });
+    await mkdir3(path4.dirname(destination), { recursive: true, mode: 448 });
     const helper = path4.join(path4.resolve(state.playwright, "../../../.."), "auth.mjs");
     await cp2(path4.join(resourceRoot(), "playwright/auth.mjs"), helper);
     const code = await new Promise((resolve, reject) => {

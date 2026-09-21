@@ -10,7 +10,7 @@ import {
   readJson,
   withLock,
   writeJson
-} from "./chunk-MJC6ZMRG.mjs";
+} from "./chunk-IPU64TJI.mjs";
 export {
   atomicWrite,
   canonical,

@@ -6,11 +6,12 @@ This minor beta is a local, unpublished candidate. Updating its version does not
 
 ## Changes
 
-- Add **Direct Oracle listener / ORDS HTTP(S)** transport selection, with schema URL and existing database username/password stored locally at plugin level.
-- Implement ORDS APEXlang export/adoption and import, SQL backup export and restore. Use the Oracle compiler and one REST request for import state; preserve Oracle metadata and binary export files alongside existing deployment safeguards.
-- Clarify the **Database username** and **Database password** fields. Add a direct-mode saved SQLcl connection selector with refresh/retry states; preserve direct mappings and ORDS credentials when switching transport.
+- Default to one agent. Enable teams explicitly in Settings; older saved defaults do not count as opt-in, and existing runs keep their recorded mode.
+- Return three reference search results by default, support explicit pagination and avoid treating alternative APEXlang process types as required dependencies.
+- Bound peer summaries, reuse unchanged context and record completed tool activity once.
+- Return compact MCP summaries with paged access to full details while preserving operation outcomes. Keep automatic result archives outside project sources and full panel snapshots in UI metadata. Enforce UTF-8 payload budgets in local checks.
 
-See the [release notes](../../docs/release-notes.md) for the full scope and [ORDS guide](../../docs/ords.md) for setup.
+See the [release notes](../../docs/release-notes.md) for the full scope and [execution settings](../../docs/work-modes.md) for single-agent and team behavior. Existing [ORDS functionality](../../docs/ords.md) remains available. Smaller payloads do not establish billed-token savings.
 
 ## Existing verification
 

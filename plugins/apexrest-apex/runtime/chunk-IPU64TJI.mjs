@@ -59,6 +59,26 @@ var Fault = class extends Error {
   exitCode;
   status;
 };
+var safeArtifactPages = /* @__PURE__ */ new WeakSet();
+function artifactPage(content, format, id, offset, limit) {
+  const safe = format === "json" ? JSON.stringify(sanitized(JSON.parse(content))) : redact(content);
+  let count = Math.min(limit, Math.max(0, safe.length - offset));
+  const create = () => ({
+    id,
+    offset,
+    content: safe.slice(offset, offset + count),
+    nextOffset: offset + count < safe.length ? offset + count : null,
+    dataClassification: "untrusted_operation_output"
+  });
+  let page = create();
+  while (JSON.stringify(page).length > 24e3 && count > 1) {
+    count = Math.floor(count / 2);
+    page = create();
+  }
+  Object.freeze(page);
+  safeArtifactPages.add(page);
+  return page;
+}
 function redact(value) {
   return value.replace(
     /("(?:password|passwd|pwd|token|secret|authorization|cookie|set-cookie|wallet_location)"\s*:\s*)"(?:[^"\\]|\\.)*"/gi,
@@ -69,6 +89,7 @@ function redact(value) {
   ).replace(/\bBearer\s+[\w.\-+/=]+/gi, "Bearer [REDACTED]");
 }
 function sanitized(value) {
+  if (value && typeof value === "object" && safeArtifactPages.has(value)) return value;
   if (typeof value === "string") return redact(value);
   if (Array.isArray(value)) return value.map(sanitized);
   if (value && typeof value === "object")
@@ -252,6 +273,7 @@ export {
   __export,
   __toESM,
   Fault,
+  artifactPage,
   redact,
   sanitized,
   success,

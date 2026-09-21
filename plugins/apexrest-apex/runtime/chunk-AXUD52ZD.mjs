@@ -1,7 +1,7 @@
 import { createRequire as __createRequire } from 'node:module'; const require = __createRequire(import.meta.url);
 import {
   VERSION
-} from "./chunk-G26NEU3N.mjs";
+} from "./chunk-NC2FP64H.mjs";
 import {
   Client,
   StdioClientTransport,
@@ -27,7 +27,7 @@ import {
   resourceRoot,
   runProcess,
   runtimeState
-} from "./chunk-TM25I7KG.mjs";
+} from "./chunk-7NOO7SDV.mjs";
 import {
   Fault,
   __commonJS,
@@ -41,7 +41,7 @@ import {
   readJson,
   withLock,
   writeJson
-} from "./chunk-MJC6ZMRG.mjs";
+} from "./chunk-IPU64TJI.mjs";
 
 // node_modules/ajv/dist/vocabularies/dynamic/dynamicAnchor.js
 var require_dynamicAnchor = __commonJS({

@@ -1,0 +1,175 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { rm, readdir } from 'node:fs/promises';
+import path from 'node:path';
+import { fixture } from '../fixtures/project.ts';
+import { ArtifactService } from '../../packages/core/src/artifacts.ts';
+import { success, failure, Fault, sanitized } from '../../packages/core/src/result.ts';
+import { toolOutput, panelResultKey } from '../../packages/mcp/src/output.ts';
+import { writeJson } from '../../packages/core/src/fs.ts';
+
+async function isolated(t: import('node:test').TestContext) {
+  const { ctx } = await fixture();
+  const before = process.env.APEXREST_HOME;
+  process.env.APEXREST_HOME = path.join(ctx.root, 'managed');
+  t.after(async () => {
+    if (before === undefined) delete process.env.APEXREST_HOME;
+    else process.env.APEXREST_HOME = before;
+    await rm(ctx.root, { recursive: true, force: true });
+  });
+  return { ctx };
+}
+
+test('large source results retain their outcome and can be reconstructed through artifact windows', async (t) => {
+  const { ctx } = await isolated(t);
+  const files = Object.fromEntries(Array.from({ length: 1000 }, (_, i) => [`page-${i}.apx`, 'a'.repeat(64)]));
+  const original = success('project.inspect', { projectId: 'fixture', sources: { apex: files } });
+  const response = await toolOutput(original, ctx.root);
+  const compact = JSON.parse(response.content[0]!.text);
+  assert.equal(response.isError, false);
+  assert.equal(compact.status, original.status);
+  assert.equal(compact.runId, original.runId);
+  assert.equal(compact.data.sourceCounts.apex, 1000);
+  assert.ok(response.content[0]!.text.length < 2000);
+  assert.equal(compact.artifacts[0], compact.data.output.artifactId);
+  const reader = new ArtifactService(ctx);
+  let offset: number | null = 0,
+    text = '';
+  while (offset !== null) {
+    const page = await reader.read(compact.data.output.artifactId, offset, 4096);
+    text += page.content;
+    offset = page.nextOffset;
+  }
+  assert.deepEqual(JSON.parse(text), original);
+});
+
+test('large failed and unknown operations retain failures even when output archival is unavailable', async () => {
+  for (const status of ['failed', 'outcome_unknown']) {
+    const original = failure('deploy.apply', new Fault('FIXTURE', 'detail '.repeat(6000), 6, status));
+    const response = await toolOutput(original);
+    const compact = JSON.parse(response.content[0]!.text);
+    assert.equal(response.isError, true);
+    assert.equal(compact.status, status);
+    assert.equal(compact.exitCode, 6);
+    assert.equal(compact.diagnostics[0].code, 'FIXTURE');
+    assert.equal(compact.data.output.recovery, 'unavailable');
+    assert.match(compact.nextActions[0], /do not rerun/);
+    assert.ok(response.content[0]!.text.length < 2000);
+  }
+});
+
+test('nested job failure remains visible while full panel state is carried only in UI metadata', async (t) => {
+  const { ctx } = await isolated(t);
+  const job = {
+    status: 'completed',
+    result: { ok: false, status: 'failed', summary: 'Compiler failed', data: 'x'.repeat(40000) },
+  };
+  const jobResponse = JSON.parse((await toolOutput(success('jobs.status', job), ctx.root)).content[0]!.text);
+  assert.equal(jobResponse.data.status, 'completed');
+  assert.equal(jobResponse.data.result.ok, false);
+  assert.equal(jobResponse.data.result.status, 'failed');
+  const full = success('panel.status', { project: ctx.root, jobs: [job], password: 'private-value' });
+  const panel = await toolOutput(full, ctx.root);
+  assert.equal('structuredContent' in panel, false);
+  assert.deepEqual(panel._meta?.[panelResultKey], sanitized(full));
+  assert.doesNotMatch(JSON.stringify(panel), /private-value/);
+  assert.ok(panel.content[0]!.text.length < 2000);
+});
+
+test('large team wait responses keep polling controls and the nested team outcome', async (t) => {
+  const { ctx } = await isolated(t);
+  const response = await toolOutput(
+    success('team.wait', {
+      cursor: 'fixture-progress-2',
+      terminal: true,
+      team: { id: 'team-fixture', status: 'blocked', reports: ['x'.repeat(40000)] },
+    }),
+    ctx.root,
+  );
+  const compact = JSON.parse(response.content[0]!.text);
+  assert.equal(compact.data.output.compacted, true);
+  assert.equal(compact.data.cursor, 'fixture-progress-2');
+  assert.equal(compact.data.terminal, true);
+  assert.equal(compact.data.team.id, 'team-fixture');
+  assert.equal(compact.data.team.status, 'blocked');
+});
+
+test('JSON artifacts redact before pagination without corrupting quotes or split secret fields', async (t) => {
+  const { ctx } = await isolated(t);
+  const service = new ArtifactService(ctx);
+  const original = {
+    password: 'sensitive',
+    text: 'password=hidden',
+    rows: Array.from({ length: 50 }, () => ({
+      note: 'line\nquote " and slash \\',
+      authorization: 'Bearer private',
+    })),
+  };
+  const id = await service.saveJson(original, 'mcp-result');
+  let offset: number | null = 0,
+    content = '';
+  while (offset !== null) {
+    const page = await service.read(id, offset, 37);
+    const transported = JSON.parse(
+      (await toolOutput(success('artifacts.read', page), ctx.root)).content[0]!.text,
+    ).data;
+    content += transported.content;
+    offset = transported.nextOffset;
+  }
+  assert.deepEqual(JSON.parse(content), sanitized(original));
+  assert.doesNotMatch(content, /sensitive|hidden|Bearer private/);
+});
+
+test('automatic archives ignore source directories and repeated stable panel polls reuse a capture', async (t) => {
+  const { ctx } = await isolated(t);
+  ctx.config.artifacts.directory = ctx.config.database.migrationsDir;
+  await writeJson(path.join(ctx.root, 'apexrest.json'), ctx.config);
+  const data = {
+    project: ctx.root,
+    jobs: Array.from({ length: 20 }, () => ({ status: 'failed', summary: 'x'.repeat(1000) })),
+  };
+  const first = JSON.parse(
+    (await toolOutput(success('panel.status', { ...data, updatedAt: 'first' }), ctx.root)).content[0]!.text,
+  );
+  const second = JSON.parse(
+    (await toolOutput(success('panel.status', { ...data, updatedAt: 'second' }), ctx.root)).content[0]!.text,
+  );
+  assert.equal(first.data.output.artifactId, second.data.output.artifactId);
+  assert.equal(first.data.output.capturedRunId, second.data.output.capturedRunId);
+  const sources = await readdir(path.join(ctx.root, ctx.config.database.migrationsDir)).catch(() => []);
+  assert.deepEqual(sources, []);
+  assert.match((await new ArtifactService(ctx).read(first.data.output.artifactId)).content, /failed/);
+});
+
+test('escaped artifact pages shrink without creating another archive or losing the cursor', async (t) => {
+  const { ctx } = await isolated(t);
+  const service = new ArtifactService(ctx);
+  const id = await service.save('\u0000'.repeat(18000), 'fixture');
+  let offset: number | null = 0,
+    content = '';
+  while (offset !== null) {
+    const result = await toolOutput(
+      success('artifacts.read', await service.read(id, offset, 16384)),
+      ctx.root,
+    );
+    assert.ok(result.content[0]!.text.length < 32768);
+    const page = JSON.parse(result.content[0]!.text).data;
+    assert.equal(page.output, undefined);
+    assert.equal(page.id, id);
+    content += page.content;
+    offset = page.nextOffset;
+  }
+  assert.equal(content, '\u0000'.repeat(18000));
+});
+
+test('untrusted large source keys and nested summaries cannot bypass the aggregate preview limit', async () => {
+  const result = await toolOutput(
+    success('project.inspect', {
+      sources: Object.fromEntries(
+        Array.from({ length: 1000 }, (_, i) => ['long-key-' + i + 'x'.repeat(1000), {}]),
+      ),
+      result: { summary: { text: 'x'.repeat(50000) } },
+    }),
+  );
+  assert.ok(result.content[0]!.text.length < 8192);
+});

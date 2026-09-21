@@ -2,17 +2,17 @@ import { createRequire as __createRequire } from 'node:module'; const require = 
 import {
   TeamService,
   teamRuntime
-} from "./chunk-H36DRKRO.mjs";
+} from "./chunk-YDH22XCZ.mjs";
 import {
   openVerificationBrowser,
   recordedExecutionMode,
   teamStartSchema,
   workPreferences,
   workPreferencesSchema
-} from "./chunk-RFT5ELVI.mjs";
+} from "./chunk-QQNTV455.mjs";
 import {
   VERSION
-} from "./chunk-G26NEU3N.mjs";
+} from "./chunk-NC2FP64H.mjs";
 import {
   OracleAdapter,
   configureConnection,
@@ -30,7 +30,7 @@ import {
   savedConnectionName,
   sqlclConfig,
   sqlclConfigSchema
-} from "./chunk-TM25I7KG.mjs";
+} from "./chunk-7NOO7SDV.mjs";
 import {
   Fault,
   contained,
@@ -38,7 +38,7 @@ import {
   readJson,
   sanitized,
   writeJson
-} from "./chunk-MJC6ZMRG.mjs";
+} from "./chunk-IPU64TJI.mjs";
 
 // packages/core/src/panel-schema.ts
 var panelPreferencesSchema = external_exports.strictObject({

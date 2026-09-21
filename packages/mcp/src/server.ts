@@ -18,6 +18,7 @@ import { failure, success, Fault } from '../../core/src/result.ts';
 import { parse, loadProject } from '../../core/src/config.ts';
 import { JobService } from '../../core/src/jobs.ts';
 import { panelDocument } from '../../core/src/panel-server.ts';
+import { toolOutput } from './output.ts';
 const panelUri = 'ui://apexrest/development-panel.html';
 
 const absoluteProject = z
@@ -120,9 +121,11 @@ export async function startMcp() {
   server.setRequestHandler(CallToolRequestSchema, async (request, extra) => {
     const tool = exposed.find((t) => t.name === request.params.name);
     let result;
+    let project: string | undefined;
     try {
       if (!tool) throw new Fault('UNKNOWN_TOOL', 'Tool is not in the catalog.', 2);
       const input = parse(mcpSchemas.get(tool.operation)!, request.params.arguments ?? {});
+      project = typeof input.project === 'string' ? input.project : undefined;
       result = tool.long
         ? success(
             tool.operation,
@@ -136,19 +139,7 @@ export async function startMcp() {
     } catch (e) {
       result = failure(tool?.operation ?? 'unknown', e);
     }
-    let text = JSON.stringify(result);
-    if (text.length > 32768) {
-      result = failure(
-        tool?.operation ?? 'unknown',
-        new Fault('OUTPUT_LIMIT', 'Use a smaller page/range or the artifact reader.', 1),
-      );
-      text = JSON.stringify(result);
-    }
-    return {
-      isError: !result.ok,
-      content: [{ type: 'text', text }],
-      ...(tool?.operation.startsWith('panel.') ? { structuredContent: result } : {}),
-    };
+    return toolOutput(result, project);
   });
   await server.connect(new StdioServerTransport());
 }

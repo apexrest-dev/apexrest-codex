@@ -10,6 +10,6 @@ import "./chunk-QQNTV455.mjs";
 import "./chunk-NC2FP64H.mjs";
 import "./chunk-7NOO7SDV.mjs";
 import "./chunk-IPU64TJI.mjs";
-
-// packages/mcp/src/main.ts
-await startMcp();
+export {
+  startMcp
+};

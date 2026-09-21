@@ -2,14 +2,14 @@ import { createRequire as __createRequire } from 'node:module'; const require = 
 import {
   PanelService,
   panelActionSchema
-} from "./chunk-MOMUL4AV.mjs";
+} from "./chunk-C64472UB.mjs";
 import {
   teamRuntime
-} from "./chunk-H36DRKRO.mjs";
+} from "./chunk-YDH22XCZ.mjs";
 import {
   parse,
   resourceRoot
-} from "./chunk-TM25I7KG.mjs";
+} from "./chunk-7NOO7SDV.mjs";
 import {
   Fault,
   contained,
@@ -18,7 +18,7 @@ import {
   readJson,
   withLock,
   writeJson
-} from "./chunk-MJC6ZMRG.mjs";
+} from "./chunk-IPU64TJI.mjs";
 
 // packages/core/src/panel-server.ts
 import path from "node:path";
@@ -36,10 +36,7 @@ async function panelDocument() {
   const [html, css, js] = await Promise.all(
     ["index.html", "panel.css", "panel.js"].map((file) => readFile(path.join(root, file), "utf8"))
   );
-  return html.replace('<link rel="stylesheet" href="/panel.css">', "<style>" + css + "</style>").replace(
-    '<script src="/panel.js" defer></script>',
-    "<script>" + js.replaceAll("</script", "<\\/script") + "</script>"
-  );
+  return html.replace('<link rel="stylesheet" href="/panel.css">', () => "<style>" + css + "</style>").replace('<script src="/panel.js" defer></script>', "").replace("</body>", () => "<script>" + js.replaceAll("</script", "<\\/script") + "</script>\n</body>");
 }
 async function startPanelServer(root, idleMs = 36e5) {
   const token = randomBytes(32).toString("hex");

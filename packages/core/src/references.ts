@@ -32,7 +32,7 @@ export const references: Reference[] = [
   },
   {
     id: 'deployment-safety',
-    version: '0.2.0-beta.1',
+    version: '0.3.0-beta.1',
     source: 'docs/adr/007-clean-apex-deployment.md',
     text: 'Use an explicit environment. Plans bind source hashes and target identity. Recheck drift, acquire local coordination by default and create an export backup before writes. Clean APEX deployment needs no service tables. Local runners must share one managed home; independent machines need external serialization or explicitly selected database coordination. DDL cannot be generally rolled back. Interrupted writes require reconciliation. Production requires an external approval boundary.',
   },
@@ -200,7 +200,8 @@ export async function referenceSearch(query: string, version?: string, options: 
     index.queries.set(key, ranked);
   }
   const offset = options.offset ?? 0;
-  return ranked.slice(offset, offset + (options.limit ?? 8)).map((position) => {
+  const limit = options.limit ?? 3;
+  return ranked.slice(offset, offset + limit).map((position) => {
     const { reference: r, title } = index.searchable[position]!;
     return {
       id: r.id,
@@ -212,7 +213,7 @@ export async function referenceSearch(query: string, version?: string, options: 
       ...snippet(r.text, query, terms),
       requires: r.requires ?? [],
       totalMatches: ranked.length,
-      nextResultOffset: offset + (options.limit ?? 8) < ranked.length ? offset + (options.limit ?? 8) : null,
+      nextResultOffset: offset + limit < ranked.length ? offset + limit : null,
     };
   });
 }
@@ -243,6 +244,7 @@ export async function referenceRead(id: string, offset: number, limit: number) {
     requires: item.requires ?? [],
     related: related.slice(0, 16),
     relatedCount: related.length,
+    relatedOmittedCount: Math.max(0, related.length - 16),
     classification: 'vendor-reference-data',
   };
 }

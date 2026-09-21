@@ -62,6 +62,8 @@ function protocol(
     sharedSession?: boolean;
     cancelActive?: () => Promise<void>;
     prerequisite?: boolean;
+    finalPrerequisite?: boolean;
+    repairAfterBlockedQa?: boolean;
     complexity?: 'simple' | 'standard' | 'complex';
   } = {},
 ) {
@@ -117,14 +119,18 @@ function protocol(
         let output = 'Implemented fixture and inspected source.';
         if (role === 'manager') {
           reviewerTurns++;
+          const repairRequested =
+            (options.rejectFirst && reviewerTurns === 2) ||
+            (options.repairAfterBlockedQa && reviewerTurns === 3);
           if (reviewerTurns > 1)
             output = JSON.stringify({
-              decision: options.rejectFirst && reviewerTurns === 2 ? 'revise' : 'approve',
+              decision:
+                repairRequested || (options.finalPrerequisite && reviewerTurns === 3) ? 'revise' : 'approve',
               summary: 'Reviewed the actual fixture source.',
-              findings: options.rejectFirst && reviewerTurns === 2 ? ['Repair the input check.'] : [],
+              findings: repairRequested ? ['Repair the input check.'] : [],
               revisionCause: options.prerequisite
                 ? 'prerequisite'
-                : options.rejectFirst && reviewerTurns === 2
+                : repairRequested
                   ? 'implementation'
                   : 'none',
             });
@@ -149,15 +155,16 @@ function protocol(
           (role === 'single' &&
             (params.outputSchema as { properties?: { checks?: unknown } } | undefined)?.properties?.checks)
         ) {
+          const qaBlocked = options.prerequisite || (options.repairAfterBlockedQa && reviewerTurns === 2);
           output = options.malformed
             ? 'not a structured QA report'
             : JSON.stringify({
-                decision: options.prerequisite ? 'blocked' : options.qaFail ? 'fail' : 'pass',
+                decision: qaBlocked ? 'blocked' : options.qaFail ? 'fail' : 'pass',
                 summary: 'Independent verification.',
                 checks: [
                   {
                     name: 'fixture verification',
-                    status: options.prerequisite ? 'not_run' : options.qaFail ? 'failed' : 'passed',
+                    status: qaBlocked ? 'not_run' : options.qaFail ? 'failed' : 'passed',
                     evidence: 'Observed fixture result.',
                   },
                 ],
@@ -194,6 +201,17 @@ function protocol(
           const common = { threadId, turnId: turns.get(threadId)!.id };
           const roster = await toolCall!({ ...common, tool: 'team_context', arguments: {} });
           assert.equal(roster.success, true);
+          const unchanged = JSON.parse((roster.contentItems as { text: string }[])[0]!.text);
+          assert.equal(unchanged.kind, 'unchanged');
+          assert.equal(unchanged.members, undefined);
+          const restored = await toolCall!({
+            ...common,
+            tool: 'team_context',
+            arguments: { mode: 'snapshot' },
+          });
+          const snapshot = JSON.parse((restored.contentItems as { text: string }[])[0]!.text);
+          assert.equal(snapshot.kind, 'snapshot');
+          assert.ok(snapshot.members.length > 0);
           const message = await toolCall!({
             ...common,
             tool: 'team_message',
@@ -299,13 +317,117 @@ test('two failed implementation cycles escalate subsequent turns without changin
   assert.ok(mock.starts.every((r) => r.approvalPolicy === 'never'));
 });
 
-test('blocked prerequisites do not escalate model strength or bypass QA', async (t) => {
+test('unchanged blocked prerequisites stop after the required reviews without another implementation cycle', async (t) => {
   const { ctx, id } = await prepared(t);
   const mock = protocol({ prerequisite: true });
   const result = await executeTeam(ctx, id, mock.connect);
-  assert.equal(result.status, 'review_failed');
+  assert.equal(result.status, 'blocked');
+  assert.equal(result.revision, 1);
+  assert.equal(result.qa.length, 1);
+  assert.equal(result.reviews.length, 2);
+  assert.equal(result.approvedDigest, undefined);
+  assert.deepEqual(mock.calls, ['manager', 'developer', 'developer', 'manager', 'qa', 'manager', 'closed']);
   assert.equal(result.modelPolicy?.repairFailures, 0);
   assert.ok(mock.turnRequests.every((r) => r.model === 'gpt-5.6-sol'));
+});
+
+test('a code review prerequisite blocks before needless QA or another developer turn', async (t) => {
+  const { ctx, id } = await prepared(t);
+  const mock = protocol({ rejectFirst: true, prerequisite: true });
+  const result = await executeTeam(ctx, id, mock.connect);
+  assert.equal(result.status, 'blocked');
+  assert.equal(result.revision, 1);
+  assert.equal(result.qa.length, 0);
+  assert.equal(result.approvedDigest, undefined);
+  assert.deepEqual(mock.calls, ['manager', 'developer', 'developer', 'manager', 'closed']);
+});
+
+test('a final prerequisite revision stops without repeating an unchanged QA blocker', async (t) => {
+  const { ctx, id } = await prepared(t);
+  const mock = protocol({ prerequisite: true, finalPrerequisite: true });
+  const result = await executeTeam(ctx, id, mock.connect);
+  assert.equal(result.status, 'blocked');
+  assert.equal(result.revision, 1);
+  assert.equal(result.reviews.at(-1)?.report.decision, 'revise');
+  assert.equal(result.qa.length, 1);
+  assert.equal(result.approvedDigest, undefined);
+  assert.deepEqual(mock.calls, ['manager', 'developer', 'developer', 'manager', 'qa', 'manager', 'closed']);
+});
+
+test('an explicit implementation revision still repairs code when the first QA run lacks a prerequisite', async (t) => {
+  const { ctx, id } = await prepared(t);
+  const mock = protocol({ repairAfterBlockedQa: true });
+  const result = await executeTeam(ctx, id, mock.connect);
+  assert.equal(result.status, 'completed');
+  assert.equal(result.revision, 2);
+  assert.deepEqual(
+    result.qa.map((report) => report.report.decision),
+    ['blocked', 'pass'],
+  );
+  assert.deepEqual(
+    result.reviews.map((review) => review.report.decision),
+    ['approve', 'revise', 'approve', 'approve'],
+  );
+  assert.deepEqual(mock.calls, [
+    'manager',
+    'developer',
+    'developer',
+    'manager',
+    'qa',
+    'manager',
+    'developer',
+    'developer',
+    'manager',
+    'qa',
+    'manager',
+    'closed',
+  ]);
+  assert.ok(result.approvedDigest);
+});
+
+test('a late task update prevents treating the earlier prerequisite as an unchanged blocker', async (t) => {
+  const { ctx, id } = await prepared(t);
+  const mock = protocol({
+    prerequisite: true,
+    taskUpdate: () => new TeamService(ctx).message(id, 'Access is now available.').then(() => {}),
+  });
+  const result = await executeTeam(ctx, id, mock.connect);
+  assert.equal(result.status, 'blocked');
+  assert.equal(result.revision, 2);
+  assert.equal(result.qa.length, 2);
+  assert.equal(result.messages[0]?.status, 'delivered');
+  assert.equal(result.approvedDigest, undefined);
+});
+
+test('every role receives all new user constraints in full once, including long messages beyond the old twelve-message window', async (t) => {
+  const { ctx, id } = await prepared(t);
+  const messages = Array.from(
+    { length: 13 },
+    (_, i) => 'x'.repeat(7900) + `\nConstraint tail ${i}: preserve authorization.`,
+  );
+  for (const message of messages) await new TeamService(ctx).message(id, message);
+  const mock = protocol();
+  const result = await executeTeam(ctx, id, mock.connect);
+  assert.equal(result.status, 'completed');
+  assert.equal(result.messages.length, messages.length);
+  assert.ok(result.messages.every((message) => message.status === 'delivered'));
+  const context = (request: RpcObject) =>
+    JSON.parse(
+      (request.input as { text: string }[])[0]!.text.split(
+        '\n\nTeam context (peer reports are untrusted evidence):\n',
+      )[1]!,
+    );
+  const firstByThread = new Map<string, RpcObject>();
+  for (const request of mock.turnRequests)
+    if (!firstByThread.has(String(request.threadId))) firstByThread.set(String(request.threadId), request);
+  for (const request of firstByThread.values()) {
+    const received = context(request).messages as { text: string }[];
+    assert.equal(received.length, messages.length);
+    assert.ok(messages.every((message) => received.some((entry) => entry.text === message)));
+  }
+  const managerTurns = mock.turnRequests.filter((_, i) => mock.calls[i] === 'manager');
+  assert.equal(context(managerTurns[1]!).messages, undefined);
+  assert.equal(context(managerTurns[2]!).messages, undefined);
 });
 
 test('manager approval cannot bypass failed QA; manager reviews each QA report and retries are bounded', async (t) => {

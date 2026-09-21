@@ -133,7 +133,7 @@
     if (message.method === "ui/notifications/tool-input" && typeof message.params?.arguments?.project === "string")
       bridgeProject = message.params.arguments.project;
     if (message.method === "ui/notifications/tool-result") {
-      const result = message.params?.structuredContent;
+      const result = message.params?._meta?.["apexrest/panelResult"] ?? message.params?.structuredContent;
       if (typeof result?.data?.project === "string") bridgeProject = result.data.project;
       if (bridgeProject) void refresh();
     }
@@ -150,7 +150,7 @@
           ...action ? { action } : chosenTeam ? { team: chosenTeam } : {}
         }
       });
-      const envelope = response2.structuredContent ?? JSON.parse(response2.content?.find((c) => c.type === "text")?.text ?? "{}");
+      const envelope = response2._meta?.["apexrest/panelResult"] ?? response2.structuredContent ?? JSON.parse(response2.content?.find((c) => c.type === "text")?.text ?? "{}");
       if (!envelope.ok) throw new Error(envelope.summary ?? "Codex rejected this panel action.");
       return envelope.data;
     }

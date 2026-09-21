@@ -127,7 +127,7 @@ window.addEventListener('message', (event) => {
   )
     bridgeProject = message.params.arguments.project;
   if (message.method === 'ui/notifications/tool-result') {
-    const result = message.params?.structuredContent;
+    const result = message.params?._meta?.['apexrest/panelResult'] ?? message.params?.structuredContent;
     if (typeof result?.data?.project === 'string') bridgeProject = result.data.project;
     if (bridgeProject) void refresh();
   }
@@ -144,10 +144,12 @@ async function api(action?: PanelAction): Promise<unknown> {
         ...(action ? { action } : chosenTeam ? { team: chosenTeam } : {}),
       },
     })) as {
+      _meta?: { 'apexrest/panelResult'?: { ok: boolean; summary: string; data: unknown } };
       structuredContent?: { ok: boolean; summary: string; data: unknown };
       content?: { type: string; text?: string }[];
     };
     const envelope =
+      response._meta?.['apexrest/panelResult'] ??
       response.structuredContent ??
       JSON.parse(response.content?.find((c) => c.type === 'text')?.text ?? '{}');
     if (!envelope.ok) throw new Error(envelope.summary ?? 'Codex rejected this panel action.');

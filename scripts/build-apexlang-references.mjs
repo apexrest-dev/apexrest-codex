@@ -63,10 +63,16 @@ const records = Object.entries(sourceFiles)
       .map((match) => resolve(match[1]))
       .filter((target) => target !== file && sourceFiles[target] !== undefined);
     const imports = text.match(/^imports:\s*\n((?:\s+-[^\n]*\n)+)/m)?.[1] ?? '';
+    const imported = [...imports.matchAll(/-\s+(\S+)/g)].map((match) =>
+      resolve(match[1].endsWith('.md') ? match[1] : match[1] + '.md'),
+    );
+    // Reviewed metadata for the pinned snapshot: this common file lists alternative
+    // execution-point scenarios. Its index requires selecting just one scenario.
+    // Keep Oracle's original text intact and expose those alternatives as related.
+    const alternatives =
+      file === 'templates/shared-components/app-processes/app-processes._common.md' ? imported : [];
     const required = [
-      ...[...imports.matchAll(/-\s+(\S+)/g)].map((match) =>
-        resolve(match[1].endsWith('.md') ? match[1] : match[1] + '.md'),
-      ),
+      ...imported.filter((target) => !alternatives.includes(target)),
       ...(/\._index\.md$/.test(file)
         ? [`${dir}/${stem}._common.md`]
         : kind === 'template'
@@ -85,7 +91,7 @@ const records = Object.entries(sourceFiles)
           required.filter((target) => target !== file && sourceFiles[target] !== undefined).map(idFor),
         ),
       ],
-      related: [...new Set(linked.map(idFor))],
+      related: [...new Set([...linked, ...alternatives].map(idFor))],
       sha256: sha256(text),
       text,
     };

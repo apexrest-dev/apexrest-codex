@@ -24,7 +24,11 @@ test('pinned corpus retains complete documents, resolvable contracts, grammar an
   assert.equal(ids.size, entries.length);
   for (const entry of entries) {
     assert.ok(entry.id.length <= 200, entry.id);
-    if (entry.sha256) assert.equal(digest(entry.text), entry.sha256, entry.id);
+    if (entry.sha256) {
+      assert.equal(digest(entry.text), entry.sha256, entry.id);
+      const sourceFile = entry.source.split('/apex/apexlang/')[1];
+      assert.equal(entry.sha256, snapshot.sourceFiles[sourceFile!], entry.id);
+    }
     for (const link of [...(entry.requires ?? []), ...(entry.related ?? [])]) assert.ok(ids.has(link), link);
   }
   for (const id of ['oracle-form-example', 'oracle-report-example', 'oracle-dashboard-example'])
@@ -39,6 +43,30 @@ test('pinned corpus retains complete documents, resolvable contracts, grammar an
     .map(({ text }) => text)
     .join('');
   assert.equal(digest(grammar), snapshot.sourceFiles['assets/grammar/apexlang.ebnf']);
+});
+
+test('an application-process scenario requires its contracts without loading alternative execution points', async () => {
+  const entries = JSON.parse(
+    await readFile(path.join(corpusRoot, 'references/index.json'), 'utf8'),
+  ) as Reference[];
+  const byId = new Map(entries.map((entry) => [entry.id, entry]));
+  const prefix = 'oracle:templates/shared-components/app-processes/app-processes.';
+  const selected = prefix + 'ajax-callback';
+  const visited = new Set<string>();
+  const visit = (id: string) => {
+    if (visited.has(id)) return;
+    visited.add(id);
+    for (const required of byId.get(id)!.requires ?? []) visit(required);
+  };
+  visit(selected);
+  assert.deepEqual([...visited].sort(), [selected, prefix + '_index', prefix + '_common'].sort());
+  const common = byId.get(prefix + '_common')!;
+  const alternatives = entries.filter(
+    (entry) => entry.family === 'shared-components/app-processes' && entry.kind === 'template',
+  );
+  assert.equal(alternatives.length, 10);
+  for (const alternative of alternatives) assert.ok(common.related?.includes(alternative.id), alternative.id);
+  assert.match(common.text, /imports:\n  - app-processes.before-header.md/);
 });
 
 test('real Oracle retrieval covers properties, component families and dependency traversal with and without accelerator', async (t) => {
@@ -62,6 +90,13 @@ test('real Oracle retrieval covers properties, component families and dependency
     assert.ok(found[0]?.title.includes(entry.expected), entry.query);
     if (entry.kind === 'grammar') assert.ok(found[0]!.text.includes(entry.query), entry.query);
     assert.ok(JSON.stringify(found).length < 8000);
+    const defaults = await referenceSearch(entry.query, '26.1', { kind: entry.kind });
+    const expanded = await referenceSearch(entry.query, '26.1', { kind: entry.kind, limit: 8 });
+    assert.deepEqual(defaults, found);
+    assert.deepEqual(
+      defaults.map(({ id }) => id),
+      expanded.slice(0, 3).map(({ id }) => id),
+    );
     results.push(found);
   }
   const chart = await referenceRead('oracle:templates/region-components/chart/chart.bar', 0, 8192);
@@ -69,6 +104,13 @@ test('real Oracle retrieval covers properties, component families and dependency
   assert.ok(chart.requires.some((id) => id.endsWith('chart._axis._common')));
   const page = await referenceRead('oracle:templates/page-examples/form-page/form-page._index', 0, 4096);
   assert.ok(page.requires.some((id) => id.endsWith('form-page._common')));
+  const map = await referenceRead('oracle:templates/region-components/map/map._index', 0, 8192);
+  assert.equal(map.related.length, 16);
+  assert.equal(map.relatedCount, 22);
+  assert.equal(map.relatedOmittedCount, 6);
+  assert.equal(map.nextOffset, null);
+  assert.match(map.content, /map\.layer\.heat-map\.md/);
+  assert.equal(page.relatedOmittedCount, 0);
   await cp(path.join(corpusRoot, 'references'), path.join(root, 'references'), { recursive: true });
   await writeFile(path.join(root, 'references/search.json'), '{invalid accelerator');
   process.env.APEXREST_RESOURCES = root;

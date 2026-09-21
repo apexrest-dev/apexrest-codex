@@ -2,6 +2,15 @@
 
 English | [Українська](CHANGELOG.uk.md)
 
+## 0.3.0-beta.1 — local minor beta (unpublished)
+
+- Use one agent by default. Teams require an explicit Settings opt-in; legacy defaults do not grant that opt-in, and existing runs retain their recorded mode.
+- Return three reference search results by default, with explicit pagination for more. Keep alternative APEXlang process types separate from required dependencies.
+- Bound peer summaries and reuse unchanged context; avoid storing tool activity twice when the completed item arrives.
+- Keep large MCP results compact while preserving success, failure and unknown outcomes. Store recoverable details outside project sources, preserve JSON pagination and deliver complete panel snapshots through UI metadata. Add UTF-8 payload budgets and repair the local optimization benchmark.
+
+These changes retain the existing deployment safeguards and ORDS functionality. Historical Oracle evidence keeps its original version and scope; this entry claims no new connected verification or measured billing reduction. This candidate has no Git tag, GitHub release or npm publication. See [release notes](docs/release-notes.md) and [remaining gates](docs/next-actions.md).
+
 ## 0.2.0-beta.1 — local minor beta (unpublished)
 
 - Add plugin-wide **Direct Oracle listener / ORDS HTTP(S)** selection for SQL access when the database listener is unavailable. Store ORDS schema URL, database username and password locally at plugin level, with independent read/deploy references.

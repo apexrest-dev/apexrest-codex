@@ -6,7 +6,7 @@ import {
   reportedTokenUsage,
   type TeamModel,
 } from '../../packages/core/src/team-models.ts';
-import { compactTeamContext } from '../../packages/core/src/team-context.ts';
+import { compactTeamContext, TeamContextDelivery } from '../../packages/core/src/team-context.ts';
 import { teamStartSchema, type TeamState } from '../../packages/core/src/team-schema.ts';
 
 const model = (name: string, efforts = ['low', 'medium', 'high']): TeamModel => ({
@@ -146,4 +146,114 @@ test('turn context omits repeated raw tool transcripts and provides full evidenc
   assert.ok(!JSON.stringify(context).includes('raw-output'));
   assert.ok(JSON.stringify(context).length < 3500);
   assert.match(context.evidenceNote, /Independently inspect/);
+});
+
+const contextFixture = (): TeamState => ({
+  id: 'fixture',
+  status: 'running',
+  phase: 'qa',
+  revision: 1,
+  updatedAt: '',
+  result: '',
+  diagnostics: [],
+  messages: [],
+  reviews: [],
+  qa: [],
+  members: ['manager', 'developer-1', 'qa'].map((role) => ({
+    role: role as 'manager' | 'developer-1' | 'qa',
+    threadId: role,
+    sessionId: role,
+    status: 'completed',
+    result: 'r'.repeat(16000),
+  })),
+});
+
+test('context deltas retain complete new messages per role and allow explicit retrieval without replaying summaries', () => {
+  const state = contextFixture(),
+    delivery = new TeamContextDelivery(),
+    fullReport = '/project/state.json';
+  const text = 'x'.repeat(7900) + ' Preserve the final user restriction.';
+  state.messages.push({ id: 'user-update', from: 'user', to: 'manager', text, status: 'queued' });
+  state.messages.push({
+    id: 'private-peer',
+    from: 'manager',
+    to: 'developer-1',
+    text: 'Private assignment.',
+    status: 'queued',
+  });
+  const first = delivery.read(state, 'qa', fullReport);
+  assert.deepEqual(first.messageIds, ['user-update']);
+  assert.equal(first.context.messages?.[0]?.text, text);
+  assert.equal(first.context.messages?.[0]?.reference, '/messages/0');
+  state.messages[0]!.status = 'delivered';
+  state.members[2]!.status = 'inProgress';
+  state.members[2]!.totalTokens = 1000;
+  const unchanged = delivery.read(state, 'qa', fullReport);
+  assert.equal(unchanged.context.kind, 'unchanged');
+  assert.equal(unchanged.context.cursor, first.context.cursor);
+  assert.equal(unchanged.context.messages, undefined);
+  assert.ok(JSON.stringify(unchanged.context).length < 300);
+  const restored = delivery.read(state, 'qa', fullReport, 'snapshot');
+  assert.equal(restored.context.kind, 'snapshot');
+  assert.equal(restored.context.messages, undefined);
+  assert.equal(restored.context.messageIndex?.[0]?.id, 'user-update');
+  assert.equal(delivery.message(state, 'qa', 'user-update', fullReport).message.text, text);
+  assert.throws(() => delivery.message(state, 'qa', 'private-peer', fullReport), /unavailable/);
+  assert.deepEqual(delivery.read(state, 'manager', fullReport).messageIds, ['user-update']);
+  state.messages.push({
+    id: 'new-update',
+    from: 'user',
+    to: 'manager',
+    text: 'New scope.',
+    status: 'queued',
+  });
+  const update = delivery.read(state, 'qa', fullReport);
+  assert.deepEqual(update.messageIds, ['new-update']);
+  assert.equal(update.context.kind, 'changes');
+});
+
+test('rich report summaries stay bounded, expose every omission and emit each appended report once', () => {
+  const state = contextFixture(),
+    delivery = new TeamContextDelivery(),
+    fullReport = '/project/state.json';
+  state.reviews = Array.from({ length: 4 }, (_, revision) => ({
+    revision,
+    phase: 'code_review',
+    digest: 'source',
+    report: {
+      decision: 'revise',
+      summary: 's'.repeat(800),
+      findings: Array.from({ length: 20 }, () => 'f'.repeat(300)),
+    },
+  }));
+  state.qa = [
+    {
+      revision: 1,
+      digest: 'source',
+      report: {
+        decision: 'fail',
+        summary: 's'.repeat(800),
+        checks: Array.from({ length: 20 }, () => ({
+          name: 'n'.repeat(160),
+          status: 'failed',
+          evidence: 'e'.repeat(300),
+        })),
+      },
+    },
+  ];
+  const compact = compactTeamContext(state, 'qa', fullReport);
+  assert.ok(JSON.stringify(compact).length < 8000);
+  assert.equal(compact.omitted.reviews, 2);
+  assert.equal(compact.reviews[0]?.reference, '/reviews/2/report');
+  assert.equal(compact.reviews[0]?.omittedFindings, 17);
+  assert.equal(compact.reviews[0]?.truncatedFindings, true);
+  assert.equal(compact.qa[0]?.omittedChecks, 16);
+  assert.equal(compact.qa[0]?.checks[0]?.truncated, true);
+  delivery.read(state, 'qa', fullReport);
+  state.reviews.push({ ...state.reviews[3]!, revision: 2 });
+  const changed = delivery.read(state, 'qa', fullReport).context as Record<string, unknown>;
+  assert.equal((changed.reviews as { reference: string }[]).length, 1);
+  assert.equal((changed.reviews as { reference: string }[])[0]?.reference, '/reviews/4/report');
+  assert.equal(changed.qa, undefined);
+  assert.equal(delivery.read(state, 'qa', fullReport).context.kind, 'unchanged');
 });

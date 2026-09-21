@@ -36,9 +36,17 @@ test('reference cache preserves ordering and bounds and refreshes after replacem
   const results = await Promise.all(Array.from({ length: 4 }, () => referenceSearch('keyword', 'fixture')));
   assert.ok(
     results.every(
-      (result) => result.length === 8 && result[0]?.id === 'fixture-0' && result[0]?.text.length === 1200,
+      (result) => result.length === 3 && result[0]?.id === 'fixture-0' && result[0]?.text.length === 1200,
     ),
   );
+  const expanded = await referenceSearch('keyword', 'fixture', { limit: 8 });
+  assert.equal(expanded.length, 8);
+  assert.deepEqual(
+    results[0]!.map(({ id }) => id),
+    expanded.slice(0, 3).map(({ id }) => id),
+  );
+  assert.equal(results[0]![0]!.nextResultOffset, 3);
+  assert.equal(expanded[0]!.nextResultOffset, 8);
   const page = await referenceRead('fixture-9', 7, 10);
   assert.equal(page.content, entries[9]!.text.slice(7, 17));
   assert.equal(page.nextOffset, 17);
@@ -56,11 +64,11 @@ test('reference cache preserves ordering and bounds and refreshes after replacem
   await writeFile(file, '{invalid json');
   await assert.rejects(referenceSearch('keyword'));
   await writeJson(file, entries);
-  assert.equal((await referenceSearch('keyword')).length, 8);
+  assert.equal((await referenceSearch('keyword')).length, 3);
   await rm(file);
   assert.deepEqual(await referenceSearch('keyword'), []);
   await writeJson(file, entries);
-  assert.equal((await referenceSearch('keyword')).length, 8);
+  assert.equal((await referenceSearch('keyword')).length, 3);
 
   const other = path.join(root, 'other');
   await mkdir(other);

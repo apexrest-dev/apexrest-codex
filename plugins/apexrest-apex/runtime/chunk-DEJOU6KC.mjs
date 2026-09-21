@@ -3,16 +3,19 @@ import {
   dispatch,
   schemas,
   toolCatalog
-} from "./chunk-64BPKYVU.mjs";
+} from "./chunk-YACSH6ON.mjs";
 import {
   panelDocument
-} from "./chunk-5VARQ3I7.mjs";
+} from "./chunk-OQ4IG3PW.mjs";
 import {
   JobService
-} from "./chunk-MOMUL4AV.mjs";
+} from "./chunk-C64472UB.mjs";
+import {
+  ArtifactService
+} from "./chunk-QQNTV455.mjs";
 import {
   VERSION
-} from "./chunk-G26NEU3N.mjs";
+} from "./chunk-NC2FP64H.mjs";
 import {
   AjvJsonSchemaValidator,
   CallToolRequestSchema,
@@ -46,12 +49,14 @@ import {
   parse,
   safeParse,
   serializeMessage
-} from "./chunk-TM25I7KG.mjs";
+} from "./chunk-7NOO7SDV.mjs";
 import {
   Fault,
   failure,
+  hash,
+  sanitized,
   success
-} from "./chunk-MJC6ZMRG.mjs";
+} from "./chunk-IPU64TJI.mjs";
 
 // node_modules/@modelcontextprotocol/sdk/dist/esm/experimental/tasks/server.js
 var ExperimentalServerTasks = class {
@@ -708,6 +713,135 @@ var StdioServerTransport = class {
 // packages/mcp/src/server.ts
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+
+// packages/mcp/src/output.ts
+var inlineLimit = 8192;
+var readerLimit = 32768;
+var panelResultKey = "apexrest/panelResult";
+var archives = /* @__PURE__ */ new Map();
+function preview(value) {
+  if (Array.isArray(value)) return { count: value.length };
+  if (!value || typeof value !== "object") return typeof value === "string" ? value.slice(0, 400) : value;
+  const data = value;
+  const result = {};
+  for (const key of [
+    "id",
+    "jobId",
+    "teamId",
+    "cursor",
+    "terminal",
+    "projectId",
+    "project",
+    "root",
+    "status",
+    "phase",
+    "revision",
+    "ok",
+    "summary",
+    "configured",
+    "trusted",
+    "executionMode",
+    "browserMode",
+    "nextAction",
+    "fullReport"
+  ]) {
+    const entry = data[key];
+    if (["string", "number", "boolean"].includes(typeof entry))
+      result[key] = typeof entry === "string" ? entry.slice(0, 400) : entry;
+  }
+  for (const key of [
+    "jobs",
+    "teams",
+    "deployments",
+    "diagnostics",
+    "artifacts",
+    "reviews",
+    "qa",
+    "verification"
+  ])
+    if (Array.isArray(data[key])) result[key + "Count"] = data[key].length;
+  for (const key of ["result", "team"])
+    if (data[key] && typeof data[key] === "object") {
+      const nested = data[key];
+      result[key] = Object.fromEntries(
+        ["id", "ok", "status", "phase", "revision", "summary"].filter((k) => ["string", "boolean", "number"].includes(typeof nested[k])).map((k) => [k, typeof nested[k] === "string" ? nested[k].slice(0, 400) : nested[k]])
+      );
+    }
+  if (data.sources && typeof data.sources === "object")
+    result.sourceCounts = Object.fromEntries(
+      Object.entries(data.sources).slice(0, 8).map(([key, files]) => [
+        key.slice(0, 80),
+        files && typeof files === "object" ? Object.keys(files).length : null
+      ])
+    );
+  return result;
+}
+async function toolOutput(original, project) {
+  const full = sanitized(original);
+  const serialized = JSON.stringify(full);
+  const panel = full.operation.startsWith("panel.");
+  const reader = ["docs.read", "artifacts.read"].includes(full.operation);
+  let result = full;
+  if (serialized.length > (reader ? readerLimit : inlineLimit)) {
+    let artifactId;
+    let capturedRunId;
+    let recoveryError;
+    try {
+      if (!project) throw new Error("No project is available for a local result artifact.");
+      const service = new ArtifactService(await loadProject(project));
+      const stable = { ...full, runId: "" };
+      if (full.operation === "panel.status" && full.data && typeof full.data === "object")
+        stable.data = { ...full.data, updatedAt: "" };
+      const key = hash(project + JSON.stringify(stable));
+      const cached = archives.get(key);
+      if (cached && await service.read(cached.artifactId, 0, 1).then(
+        () => true,
+        () => false
+      )) {
+        ({ artifactId, capturedRunId } = cached);
+      } else {
+        artifactId = await service.saveJson(full, "mcp-result");
+        capturedRunId = full.runId;
+        archives.set(key, { artifactId, capturedRunId });
+        if (archives.size > 32) archives.delete(archives.keys().next().value);
+      }
+    } catch {
+      recoveryError = "The complete result could not be archived. Inspect the existing local operation record; do not rerun a completed operation.";
+    }
+    result = {
+      ...full,
+      summary: full.summary.slice(0, 600),
+      diagnostics: full.diagnostics.slice(0, 5).map((d) => ({ severity: d.severity, code: d.code.slice(0, 100), message: d.message.slice(0, 400) })),
+      artifacts: artifactId ? [artifactId] : [],
+      nextActions: artifactId ? [
+        "Read the full result with apexrest_artifact_read using output.artifactId and the same project. Follow nextOffset; do not repeat the operation."
+      ] : [recoveryError],
+      data: {
+        ...preview(full.data),
+        output: {
+          compacted: true,
+          characters: serialized.length,
+          diagnosticsCount: full.diagnostics.length,
+          artifactsCount: full.artifacts.length,
+          ...artifactId ? { artifactId, capturedRunId } : { recovery: "unavailable" }
+        }
+      }
+    };
+    if (JSON.stringify(result).length > inlineLimit) {
+      const data = result.data;
+      result.data = Object.fromEntries(
+        ["id", "jobId", "teamId", "cursor", "terminal", "output"].filter((key) => data[key] !== void 0).map((key) => [key, data[key]])
+      );
+    }
+  }
+  return {
+    isError: !result.ok,
+    content: [{ type: "text", text: JSON.stringify(result) }],
+    ...panel ? { _meta: { [panelResultKey]: full } } : {}
+  };
+}
+
+// packages/mcp/src/server.ts
 var panelUri = "ui://apexrest/development-panel.html";
 var absoluteProject = external_exports.string().min(1).max(4096).refine(
   (value) => path.isAbsolute(value) && (process.platform !== "win32" || /^(?:[A-Za-z]:[\\/]|[\\/]{2}[^\\/]+[\\/][^\\/]+)/.test(value)),
@@ -783,9 +917,11 @@ async function startMcp() {
   server.setRequestHandler(CallToolRequestSchema, async (request, extra) => {
     const tool = exposed.find((t) => t.name === request.params.name);
     let result;
+    let project;
     try {
       if (!tool) throw new Fault("UNKNOWN_TOOL", "Tool is not in the catalog.", 2);
       const input = parse(mcpSchemas.get(tool.operation), request.params.arguments ?? {});
+      project = typeof input.project === "string" ? input.project : void 0;
       result = tool.long ? success(
         tool.operation,
         await new JobService(await loadProject(String(input.project))).start(
@@ -797,19 +933,7 @@ async function startMcp() {
     } catch (e) {
       result = failure(tool?.operation ?? "unknown", e);
     }
-    let text = JSON.stringify(result);
-    if (text.length > 32768) {
-      result = failure(
-        tool?.operation ?? "unknown",
-        new Fault("OUTPUT_LIMIT", "Use a smaller page/range or the artifact reader.", 1)
-      );
-      text = JSON.stringify(result);
-    }
-    return {
-      isError: !result.ok,
-      content: [{ type: "text", text }],
-      ...tool?.operation.startsWith("panel.") ? { structuredContent: result } : {}
-    };
+    return toolOutput(result, project);
   });
   await server.connect(new StdioServerTransport());
 }

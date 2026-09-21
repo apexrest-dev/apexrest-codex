@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "commit": "b0afa3bfd7c7e3547458d7fe52649ab1b59706b7",
   "archiveSha256": "e74a9d1479f2d5bf9276fe2cc408e136b05cea9cf0419cb4d5e92750cf52ce9e",
-  "indexSha256": "d74d6768e1ba88921c2916c49a6b50fd327da7d47cd10952fade426d5a5b94c2",
+  "indexSha256": "34c07b513a1811b113ab243c63413bce39d5dcb0839210a6a2a084c59d572532",
   "scope": "Oracle grammar, component templates and selected SQL/page/component syntax guidance. No vendor agent orchestration or deployment policy is adopted.",
   "records": 5509,
   "sourceFiles": {

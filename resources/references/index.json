@@ -52586,18 +52586,7 @@
     "title": "shared-components/app-processes/app-processes._common",
     "kind": "contract",
     "family": "shared-components/app-processes",
-    "requires": [
-      "oracle:templates/shared-components/app-processes/app-processes.before-header",
-      "oracle:templates/shared-components/app-processes/app-processes.after-header",
-      "oracle:templates/shared-components/app-processes/app-processes.before-regions",
-      "oracle:templates/shared-components/app-processes/app-processes.after-regions",
-      "oracle:templates/shared-components/app-processes/app-processes.after-footer",
-      "oracle:templates/shared-components/app-processes/app-processes.after-submit",
-      "oracle:templates/shared-components/app-processes/app-processes.processing",
-      "oracle:templates/shared-components/app-processes/app-processes.after-authentication",
-      "oracle:templates/shared-components/app-processes/app-processes.ajax-callback",
-      "oracle:templates/shared-components/app-processes/app-processes.new-session"
-    ],
+    "requires": [],
     "related": [
       "oracle:templates/shared-components/app-processes/app-processes.before-header",
       "oracle:templates/shared-components/app-processes/app-processes.after-header",

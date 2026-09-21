@@ -4,12 +4,12 @@ import {
   resolveWorkRequest,
   teamMessageSchema,
   teamStartSchema
-} from "./chunk-RFT5ELVI.mjs";
+} from "./chunk-QQNTV455.mjs";
 import {
   external_exports,
   parse,
   requireTrust
-} from "./chunk-TM25I7KG.mjs";
+} from "./chunk-7NOO7SDV.mjs";
 import {
   Fault,
   canonical,
@@ -20,7 +20,7 @@ import {
   readJson,
   withLock,
   writeJson
-} from "./chunk-MJC6ZMRG.mjs";
+} from "./chunk-IPU64TJI.mjs";
 
 // packages/core/src/team-source.ts
 import path from "node:path";

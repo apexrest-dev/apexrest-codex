@@ -4,7 +4,7 @@ English | [Українська](versions.uk.md)
 
 Local, unpublished minor beta {{version}} targets Node 24 LTS, SQLcl 26.1.2.132.1334, Java 21 and APEX 26.1+. ORDS APEXlang operations require a JDK 21+ containing `jdk.compiler`; SQLcl's managed JRE alone is insufficient for the Java bridge. Local generated MMD: 26.1.0+3102. Playwright is pinned at 1.63.0 with its matching browser revisions.
 
-This minor version adds ORDS HTTP(S) transport, plugin-level endpoint/database credentials, APEXlang import/export and SQL backup/restore paths, plus clearer credential labels and a saved SQLcl connection selector for direct access. Switching transport preserves both mappings. See [release notes](../../docs/release-notes.md).
+This minor version defaults to one agent and requires an explicit Settings opt-in for teams. It reduces repeated context through smaller reference searches, bounded peer summaries and compact MCP results with recoverable details. Existing ORDS HTTP(S) transport, plugin-level connection settings and APEXlang import/export remain available. Payload budgets measure UTF-8 bytes; they do not establish billed-token savings. See [release notes](../../docs/release-notes.md).
 
 - macOS arm64: local native host, client setup and compiler checks completed.
 - Linux x64: locked client artifacts and installer code; hosted quality gates are configured, while native client and Oracle integration remain unverified.

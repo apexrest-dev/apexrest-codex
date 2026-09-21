@@ -1,6 +1,14 @@
-# Implementation status — beta 0.2.0-beta.1
+# Implementation status — beta 0.3.0-beta.1
 
 English | [Українська](implementation-status.uk.md)
+
+## Minor update 0.3.0-beta.1 — 2026-09-21
+
+This minor beta combines single-agent defaults with explicit team opt-in, smaller role context, focused reference retrieval and bounded, recoverable MCP results. Local Codex builds append a `+codex.<timestamp>` cache suffix to `0.3.0-beta.1`. Version-specific verification is tracked in the [local build record](evidence/minor-update-030.json) and [isolated native record](evidence/minor-update-030-native.json). The earlier token-optimization, single-default and ORDS evidence below retains its original build identity and scope; it does not certify a rerun for this version.
+
+No Git tag is created by this update. A commit and push to `main` does not publish the npm package; registry publication remains pending. See the [release notes](release-notes.md).
+
+Verification of this combined build passed 189 unit tests, 22 contract tests, 26 installer tests and 14 packaging tests, plus typecheck, lint, 46 documentation pairs, the 30-page site, the embedded-panel bridge and isolated native installation with exact MCP calls. The release dry run built ten artifacts and retained `stableReady: false`; no new Oracle or billing evidence is claimed.
 
 ## Single by default and bounded context — 2026-09-21
 
@@ -11,6 +19,14 @@ The task and plan are sent once per persistent role session, with durable file p
 [Reproducible local measurements](evidence/single-default-runtime.json) compare UTF-8 payload bytes for a fixed synthetic assignment: 42,553 → 12,432 bytes across three turns (70.78% less), or 103,837 → 13,128 across seven turns (87.36% less). An unchanged wait response shrank from 5,223 to 344 bytes (93.41%). Assignment measurements exclude prompts, reports and retained host history; these are not tokenizer counts or Codex billing savings.
 
 [Final checks](evidence/single-default-checks.json): 173 unit tests, 19 contract tests, 14 packaging tests, typecheck, lint, 46 documentation pairs and the 30-page site build. Verification covers unit/protocol regressions, built CLI and local stdio MCP rejection of unenabled teams, and actual settings persistence with desktop/mobile Playwright rendering. [Codex in-app observations](evidence/single-default-codex-browser.json) separately check selection, save/reload and launch-form enablement. No model sessions were spawned for this change, and no database was contacted or modified. Native model execution, Oracle and billing comparisons remain unverified for this revision; earlier native reports retain their original scope. The build specification is unchanged. See [execution settings](work-modes.md).
+
+## Token context optimization — 2026-09-21
+
+Team work now stops on unchanged missing prerequisites after checking task/source identity, sends context changes per role, preserves complete new user messages, and links to full repair evidence. Independent manager/QA checks remain required in team mode. Local protocol fixtures reduce the one-developer blocked path from 13 turns to 5; an unchanged rich context response falls from 48,993 to 155 bytes. These are synthetic turns and payload bytes, not native token savings.
+
+Reference search defaults to three results with explicit pagination retained. AJAX callback dependencies now include only the selected scenario and its contracts (three documents instead of twelve); all 5,509 original Oracle texts are preserved. Related-reference reads identify omitted links. The optimization benchmark runs against the current catalog and enforces UTF-8 catalog/response budgets.
+
+Large MCP results return a bounded preview and a paged JSON artifact while preserving operation status. Automatic result archives use the private managed home under `results/<project-root-hash>`, outside project-configured source/artifact paths; stable repeated responses reuse their capture. Artifact pages preserve sanitized JSON across chunk boundaries and shrink for JSON escaping. Full panel data travels in UI metadata, with legacy response support. The embedded resource now executes its script after the DOM exists. Local verification passed 179 unit tests, 22 contract tests and the real built resource in a synthetic Chrome host bridge. The Codex in-app browser also showed all 12 fixture operations and complete expanded diagnostics through that bridge. Build, packaging and native discovery checks are recorded in [local evidence](evidence/token-optimization-local.json) and [isolated native verification](evidence/token-optimization-native.json); no Oracle/application import or task-matched billing experiment follows from these checks.
 
 ## Codex Cloud documentation — 2026-09-19
 

@@ -16,7 +16,7 @@ import {
   redact,
   withLock,
   writeJson
-} from "./chunk-MJC6ZMRG.mjs";
+} from "./chunk-IPU64TJI.mjs";
 
 // node_modules/ajv/dist/compile/codegen/code.js
 var require_code = __commonJS({
@@ -33419,7 +33419,7 @@ end;
       await this.requireMutationSupport();
       const stage = await this.stage();
       const input2 = path5.join(stage, "restore.sql");
-      await (await import("./chunk-COQR3B5N.mjs")).atomicWrite(input2, setup + await readFile2(file2, "utf8"));
+      await (await import("./chunk-ARMO5ZAQ.mjs")).atomicWrite(input2, setup + await readFile2(file2, "utf8"));
       return this.ordsBridge({ operation: "script", input: input2 }, connection, signal, stage);
     }
     return this.session(setup + `@${sqlclToken(file2)}`, connection, true, signal);

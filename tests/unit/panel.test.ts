@@ -214,6 +214,8 @@ test('bundled MCP panel contains its own assets and all five named agents have d
   const html = await panelDocument();
   assert.ok(!html.includes('src="/panel.js"'));
   assert.ok(!html.includes('href="/panel.css"'));
+  assert.ok(html.indexOf('<script>') > html.indexOf('id="task-form"'));
+  assert.ok(html.indexOf('<script>') < html.indexOf('</body>'));
   assert.match(html, /data:image\/png;base64/);
   assert.equal(new Set(Object.values(teamIdentities).map((i) => i.name)).size, 5);
 });

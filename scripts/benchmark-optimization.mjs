@@ -10,6 +10,12 @@ import { build } from 'esbuild';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import { sha256 } from './lib/release.mjs';
+import {
+  catalogByteBudget,
+  catalogFootprint,
+  responseCases,
+  responseFootprint,
+} from './lib/mcp-footprint.mjs';
 
 const self = fileURLToPath(import.meta.url);
 const median = (values) => [...values].sort((a, b) => a - b)[Math.floor(values.length / 2)];
@@ -66,6 +72,12 @@ if (process.argv[2] === '--download-worker') {
     arch: process.arch,
     scope: 'local synthetic benchmark; no Oracle or native-host evidence',
     method: 'Warm filesystem; fresh CLI/MCP processes. Medians are descriptive, not performance gates.',
+    payloadMeasurement:
+      'UTF-8 bytes of JSON-serialized MCP results, excluding transport framing. Not model tokens, native-host context or billed usage.',
+    payloadBudgets: {
+      catalogBytes: catalogByteBudget,
+      ...Object.fromEntries(responseCases.map(({ id, maxBytes }) => [id, maxBytes])),
+    },
   };
   try {
     const runtimeFiles = (await readdir(runtime)).filter((file) => file.endsWith('.mjs')).sort();
@@ -102,27 +114,35 @@ if (process.argv[2] === '--download-worker') {
         await client.connect(transport);
         const catalog = await client.listTools();
         const firstCatalogMs = performance.now() - started;
-        assert.equal(catalog.tools.length, 14);
+        const catalogMetrics = catalogFootprint(catalog);
         const listed = performance.now();
         for (let n = 0; n < 20; n++) assert.deepEqual(await client.listTools(), catalog);
         const repeatedListMs = (performance.now() - listed) / 20;
-        const call = () =>
-          client.callTool({ name: 'apexrest_reference_search', arguments: { query: 'validate' } });
+        const call = () => client.callTool(responseCases[0].request);
         const cold = performance.now();
-        const reference = JSON.parse((await call()).content[0].text);
+        const referenceResponse = await call();
+        const reference = JSON.parse(referenceResponse.content[0].text);
         const firstReferenceMs = performance.now() - cold;
         assert.equal(reference.ok, true);
         const warm = performance.now();
         for (let n = 0; n < 20; n++)
           assert.deepEqual(JSON.parse((await call()).content[0].text).data, reference.data);
+        const repeatedReferenceMs = (performance.now() - warm) / 20;
+        const responses = {
+          [responseCases[0].id]: responseFootprint(referenceResponse, responseCases[0]),
+        };
+        for (const sample of responseCases.slice(1))
+          responses[sample.id] = responseFootprint(await client.callTool(sample.request), sample);
         report.mcp.push({
           firstCatalogMs,
           repeatedListMs,
           firstReferenceMs,
-          repeatedReferenceMs: (performance.now() - warm) / 20,
-          catalogBytes: Buffer.byteLength(JSON.stringify(catalog)),
-          catalogSha256: sha256(JSON.stringify(catalog)),
+          repeatedReferenceMs,
+          catalogToolCount: catalogMetrics.toolCount,
+          catalogBytes: catalogMetrics.bytes,
+          catalogSha256: catalogMetrics.sha256,
           referenceSha256: sha256(JSON.stringify(reference.data)),
+          responses,
         });
       } finally {
         await client.close();

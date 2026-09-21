@@ -35,12 +35,13 @@ export async function panelDocument() {
   const [html, css, js] = await Promise.all(
     ['index.html', 'panel.css', 'panel.js'].map((file) => readFile(path.join(root, file), 'utf8')),
   );
-  return html!
-    .replace('<link rel="stylesheet" href="/panel.css">', '<style>' + css + '</style>')
-    .replace(
-      '<script src="/panel.js" defer></script>',
-      '<script>' + js!.replaceAll('</script', '<\\/script') + '</script>',
-    );
+  return (
+    html!
+      .replace('<link rel="stylesheet" href="/panel.css">', () => '<style>' + css + '</style>')
+      .replace('<script src="/panel.js" defer></script>', '')
+      // Inline scripts do not honor defer; initialize only after all controls exist.
+      .replace('</body>', () => '<script>' + js!.replaceAll('</script', '<\\/script') + '</script>\n</body>')
+  );
 }
 export async function startPanelServer(root: string, idleMs = 3600000) {
   const token = randomBytes(32).toString('hex');

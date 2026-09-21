@@ -101,7 +101,7 @@ export const schemas = {
     kind: z.enum(['grammar', 'template', 'contract', 'guide']).optional(),
     family: z.string().min(1).max(200).optional(),
     offset: z.number().int().min(0).max(10000).default(0),
-    limit: z.number().int().min(1).max(8).default(8),
+    limit: z.number().int().min(1).max(8).default(3),
   }),
   'docs.read': z.strictObject({
     id: z.string().max(200),
