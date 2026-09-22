@@ -8,6 +8,7 @@ import { OracleAdapter } from '../../packages/core/src/oracle.ts';
 import type { Environment, ProjectContext } from '../../packages/core/src/config.ts';
 import type { ProcessRequest, ProcessResult } from '../../packages/core/src/process.ts';
 
+const javaExecutableName = process.platform === 'win32' ? 'java.exe' : 'java';
 const completed = (stdout = 'APEXREST_ORDS_COMPLETE'): ProcessResult => ({
   code: 0,
   stdout,
@@ -48,7 +49,7 @@ test('ORDS bridge runner keeps credentials off argv/artifacts and requires a com
     root,
     undefined,
     withJdk(async (request) => {
-      assert.equal(request.executable, '/fixture/java/bin/java');
+      assert.equal(request.executable, path.join(settings.javaHome, 'bin', javaExecutableName));
       assert.equal(request.args.includes(credentials.password), false);
       assert.equal(JSON.stringify(request.env).includes(credentials.password), false);
       assert.deepEqual(JSON.parse(request.input!), credentials);
@@ -145,13 +146,13 @@ test('ORDS helper detects compiler support and falls back from a managed JRE wit
       assert.deepEqual(request.args, ['--list-modules']);
       assert.equal(request.input, undefined);
       return completed(
-        request.executable === '/fixture/jre/bin/java'
+        request.executable === path.join('/fixture/jre', 'bin', javaExecutableName)
           ? 'java.base@21.0.1\njava.compiler@21.0.1\n'
           : 'java.base@25.0.2\njava.compiler@25.0.2\njdk.compiler@25.0.2\n',
       );
     },
   );
-  assert.equal(selected.executable, process.platform === 'win32' ? 'java.exe' : 'java');
+  assert.equal(selected.executable, javaExecutableName);
   assert.equal(selected.javaHome, undefined);
   assert.equal(calls[1]!.env!.JAVA_HOME, undefined, 'PATH lookup must not inherit the JRE selection');
   await assert.rejects(

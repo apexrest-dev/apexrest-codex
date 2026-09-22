@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "timestamp": "2026-09-22T16:47:31.534Z",
+  "timestamp": "2026-09-22T16:51:33.590Z",
   "package": "apexrest",
   "version": "0.5.0-beta.1",
   "registry": "https://registry.npmjs.org/",
   "tag": "beta",
-  "status": "prepared",
+  "status": "awaiting-browser-authentication",
   "authorization": "User explicitly requested commit, push and npm publication for the prepared minor beta.",
   "distTagsBefore": {
     "beta": "0.4.0-beta.1",
@@ -32,5 +32,23 @@
     "packagingTests": 14,
     "precedingRuntimeEvidence": "docs/evidence/minor-050-local.json",
     "precedingNativeEvidence": "docs/evidence/minor-050-native.json"
+  },
+  "sourceCommit": "495601e9d68fe98b410d6c2846d70695200bf2af",
+  "git": {
+    "branch": "main",
+    "remote": "https://github.com/apexrest-dev/apexrest-codex",
+    "verifiedRemoteCommit": "495601e9d68fe98b410d6c2846d70695200bf2af"
+  },
+  "authentication": {
+    "method": "npm browser WebAuthn / existing passkey",
+    "status": "user-presence-required",
+    "credentialsRecorded": false
+  },
+  "ci": {
+    "initialRun": "https://github.com/apexrest-dev/apexrest-codex/actions/runs/35756495094",
+    "ubuntu": "passed",
+    "macos": "passed",
+    "windows": "failed due to two POSIX-only Java fixture comparisons in tests/unit/ords-adapter.test.ts",
+    "fixScope": "Platform-aware test fixtures only; npm payload is unchanged."
   }
 }
