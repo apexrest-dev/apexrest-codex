@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "oracleSkills": {
     "repository": "https://github.com/oracle/skills",
-    "commit": "b0afa3bfd7c7e3547458d7fe52649ab1b59706b7",
+    "commit": "b94ccf4dec34b27859c2378fa71ba2bad884f2fe",
     "license": "UPL-1.0",
     "mode": "reviewed grammar and examples; no upstream executable or global skill sync",
-    "indexSha256": "f4760713f17acc913e13a99da8b7dd7ccab34f3c54ec73afe3af63e58fcceb11"
+    "indexSha256": "958d789e5f05c273bb6b6b0cc22cf8e52bb78fa7532ef2353fdd2c8689d2fb0e"
   },
   "schemas": {
     "plugin.schema.json": "0a4aad95ce337878ad38802ebf0daa3fde76abe3f65400c86bcbb1ec0b3ab883",

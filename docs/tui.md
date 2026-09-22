@@ -22,7 +22,7 @@ Project creation, deployment, tests, full reference-document lookup, diagnostics
 
 ## APEXlang dashboard
 
-The home screen also lists supported APEXlang items and components in a table. The current Oracle bundle, `26.1@b0afa3b`, covers **99 types in 9 groups**, including **23 page items**. Groups include page items, regions, buttons, business logic, shared components, template components, page layouts, page examples and workspace components. Names and document counts come from the local reference bundle; no network, SQLcl or database connection is needed.
+The home screen also lists supported APEXlang items and components in a table. The current Oracle bundle, `26.1@b94ccf4`, covers **99 types in 9 groups**, including **23 page items**. Groups include page items, regions, buttons, business logic, shared components, template components, page layouts, page examples and workspace components. Names and document counts come from the local reference bundle; no network, SQLcl or database connection is needed.
 
 Press **Tab** to move from actions to the catalogue. Type a name or group, such as `select-list`, `chart` or `shared components`. Up/Down, Page Up/Page Down and Home/End move the selection. Enter in the catalogue runs no action. Esc clears the search or returns focus to actions; Tab switches panels while preserving both searches. Ctrl+R reloads the local catalogue if it is unavailable.
 

@@ -1,25 +1,24 @@
-# Local release {{version}}
+# Release {{version}}
 
 English | [Українська](releases.uk.md)
 
-This 0.4 minor beta is distributed through the source repository. The authorized commit/push does not create a Git tag, GitHub release or npm publication.
+This 0.5 minor beta targets `apexrest@0.5.0-beta.1` on the npm `beta` channel. The [publication record](../../docs/evidence/npm-050-publication.json) tracks publication status and registry verification. The `latest` channel remains on `0.4.0-beta.1`; no Git tag or GitHub release is part of this update.
 
 ## Changes
 
-- Single mode uses the existing Codex chat without a separate agent or automatic panel startup. Enable teams explicitly in Settings; older saved defaults do not count as opt-in, and existing runs keep their recorded mode.
-- Six long MCP tools start once and wait for completion in the same call, with a default of 25 seconds. Keep the same job ID for later status; propagate terminal failures as MCP errors with their diagnostics and artifacts.
-- Batch up to eight scoped metadata reads with one target check; include compact project context in single work and offer summary inspection without source hashing or Oracle calls.
-- Shorten skills and tool descriptions, cache reference normalization and keep compact output with paged access to details. Preserve deployment-plan safety information, target identity, authorization, backups, drift and unknown-outcome checks.
+- Refresh the pinned Oracle APEXlang references and plugin skills from Oracle's September 21 release notes and the upstream snapshot merged on September 22.
+- Cover Media List, Comments and Metric Card report/partial workflows; Smart Filters and Search; and the expanded Cards and Region Display Selector contracts.
+- Keep the reviewed APEX 26.1 compiler baseline and preserve source, validation and deployment safeguards.
 
-See the [release notes](../../docs/release-notes.md) for the full scope and [execution settings](../../docs/work-modes.md) for single-agent and team behavior. Existing [ORDS functionality](../../docs/ords.md) remains available. Smaller payloads do not establish billed-token savings.
+See the [release notes](../../docs/release-notes.md) for the full scope and verification. Existing [single-agent and team behavior](../../docs/work-modes.md), [bounded automation](../../docs/codex-automation.md) and [ORDS functionality](../../docs/ords.md) remain available.
 
 ## Existing verification
 
-[Version-specific local checks](../../docs/evidence/minor-040-local.json) track this build. The [automation analysis](../../docs/codex-automation.md) distinguishes mechanical execution from Codex reasoning. Earlier response-byte measurements and native/Oracle reports retain their original build identity; a minor-version change does not rerun them.
+[Earlier 0.4 local checks](../../docs/evidence/minor-040-local.json) retain their original build identity. The [automation analysis](../../docs/codex-automation.md) distinguishes mechanical execution from Codex reasoning. Earlier response-byte measurements and native/Oracle reports retain their original scope; a minor-version change does not rerun them or establish billed-token savings.
 
 [Connected evidence](../../docs/evidence/ords-connected.json) records one unchanged APEXlang round trip with all 21 files matching byte for byte, a real checksum-verified SQL backup and a separate matching native MCP export. [Settings evidence](../../docs/evidence/connection-settings-local.json) covers the built panel and Codex in-app actions with synthetic credentials; [native discovery](../../docs/evidence/connection-settings-native.json) checks the real local SQLcl name list without a database login. The reports retain their original versions and source digests, rather than claiming new connected runs for this minor beta.
 
-Changed imports, broader component/static-file/MMD variants, SQL restore, interrupted-response recovery and Windows remain unverified. Application browser verification was deferred. This local beta is not qualified for a stable release.
+Changed imports, broader component/static-file/MMD variants, SQL restore, interrupted-response recovery and Windows remain unverified. Application browser verification was deferred. This beta is not qualified for a stable release.
 
 ## Local artifacts
 

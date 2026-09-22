@@ -10,6 +10,8 @@ Check the applicable framework, exact target, mutation authorization when tests 
 
 For a page/dashboard change without database migrations, stored-code changes or new APIs, validate with the Oracle compiler, reconcile its real read-only SQL queries and inspect the deployed page in the selected verification browser. Include filters, navigation, empty/error states and responsive layout when relevant. Do not require synthetic CRUD or installation of utPLSQL for this scope.
 
+For Smart Filters/Search or Region Display Selector changes, use the relevant [component contract notes](../apexrest-apexlang/references/component-contracts.md) to select source-scope, refresh, export, navigation and remembered-selection checks. Run only scenarios applicable to the requested behavior; compiler success alone cannot verify them.
+
 Choose applicable required suites when establishing a project profile. Preserve existing requirements unless the user authorizes a scope change. When the user explicitly approves source-query and in-app checks for an application-only task, use an isolated profile with no unrelated automated suites if needed. Preserve the original profile and historical failures; record that no automated suites ran and report the actual source/browser checks separately. Do not make this the default for database, CRUD, API, production or full plugin integration work, and do not claim the broader acceptance matrix passed.
 
 ## In-app browser verification

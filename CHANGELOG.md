@@ -2,6 +2,14 @@
 
 English | [Українська](CHANGELOG.uk.md)
 
+## 0.5.0-beta.1 — minor beta
+
+- Refresh the pinned Oracle APEXlang references and plugin skills from Oracle's September 21 release notes and the upstream snapshot merged on September 22.
+- Cover Media List, Comments and Metric Card report/partial workflows; Smart Filters and Search; and the expanded Cards and Region Display Selector contracts.
+- Preserve the reviewed APEX 26.1 compiler baseline and the existing source-preservation, validation and deployment safeguards.
+
+The npm release target is `apexrest@0.5.0-beta.1` on the `beta` channel; the [publication record](docs/evidence/npm-050-publication.json) tracks publication status and registry verification. No Git tag or GitHub release is part of this update. Earlier verification reports retain their original versions and scope; refreshing references does not establish new Oracle or native-host coverage. See the [release notes](docs/release-notes.md) for this update and its verification.
+
 ## 0.4.0-beta.1 — minor beta
 
 - Run single work directly in the user's current Codex session without a child agent, App Server startup or automatic panel. Reviewed teams remain an explicit opt-in.

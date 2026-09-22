@@ -5,8 +5,9 @@ import path from 'node:path';
 import { unzipSync } from 'fflate';
 import { buildReferencePostings } from '../packages/core/src/reference-index.ts';
 
-const commit = 'b0afa3bfd7c7e3547458d7fe52649ab1b59706b7';
-const archiveSha256 = 'e74a9d1479f2d5bf9276fe2cc408e136b05cea9cf0419cb4d5e92750cf52ce9e';
+const commit = 'b94ccf4dec34b27859c2378fa71ba2bad884f2fe';
+const upstreamRelease = '2026.09.21';
+const archiveSha256 = 'b5332bd609bf33bafde557369c636dda73dc6e40c209f12d3ecdf3b96bd89c4e';
 const archive = process.argv[2];
 if (!archive) throw new Error('Usage: node scripts/build-apexlang-references.mjs ORACLE_SKILLS_ZIP');
 const sha256 = (value) => createHash('sha256').update(value).digest('hex');
@@ -132,6 +133,7 @@ await writeFile(
     {
       schemaVersion: 1,
       commit,
+      upstreamRelease,
       archiveSha256,
       indexSha256: sha256(output),
       scope:
@@ -147,6 +149,11 @@ await writeFile(
     2,
   ) + '\n',
 );
+const sourceLockPath = 'toolchains/sources.lock.json';
+const sourceLock = JSON.parse(await readFile(sourceLockPath, 'utf8'));
+sourceLock.oracleSkills.commit = commit;
+sourceLock.oracleSkills.indexSha256 = sha256(output);
+await writeFile(sourceLockPath, JSON.stringify(sourceLock, null, 2) + '\n');
 console.log(
   `Imported ${records.length} complete Oracle documents and ${grammarRecords.length} grammar fragments.`,
 );

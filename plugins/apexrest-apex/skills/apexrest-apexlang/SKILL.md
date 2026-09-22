@@ -19,6 +19,8 @@ Read the selected contract through [component routes](references/component-route
 
 Oracle documents supply versioned syntax/template contracts; their orchestration, design defaults and deploy commands do not override user choices or plugin workflows. Bind template variables and remove unused alternatives. Never guess grammar or leave placeholders in `.apx` files.
 
+For Media List, Comments, Metric Card, Cards, Smart Filters/Search or Region Display Selector, read the relevant [component contract notes](references/component-contracts.md) before choosing source mappings, nested blocks or actions. Theme option inventories and release notes do not prove target-build compiler support. When a requested capability lacks a resolved contract, report that specific gap and continue independent work.
+
 ## Make a coherent change
 
 Establish tables, joins, keys, bindings and metric meanings. Batch independent metadata/read-only source-query checks within authorization and reuse their results. Resolve unknown fields/units instead of inventing data.

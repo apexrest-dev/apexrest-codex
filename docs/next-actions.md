@@ -2,6 +2,10 @@
 
 English | [Українська](next-actions.uk.md)
 
+## Oracle skills 0.5.0-beta.1 follow-up — 2026-09-22
+
+Use the refreshed `26.1@b94ccf4` component routes and preserve [version-specific local evidence](evidence/minor-050-local.json). Compile and verify each newly used component workflow on its authorized target; upstream release notes and local retrieval tests do not replace source-query and application-browser checks. Publication of `apexrest@0.5.0-beta.1` under `beta` is authorized; the [npm record](evidence/npm-050-publication.json) tracks publication and registry-install verification. Preserve the `latest` tag and historical `0.4.0-beta.1` evidence.
+
 ## npm publication follow-up — 2026-09-22
 
 Publication and registry-install verification are complete for `apexrest@0.4.0-beta.1`. Use `npm install apexrest` locally or `npm install -g apexrest` globally; both tags `latest` and `beta` currently select this beta. Keep the package name and lockfile synchronized in future releases. The repository manifest and lockfile use the published name; no Git tag was created. Existing stable-release and platform verification work remains open.

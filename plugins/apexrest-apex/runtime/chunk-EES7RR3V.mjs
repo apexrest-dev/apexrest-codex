@@ -1,14 +1,14 @@
 import { createRequire as __createRequire } from 'node:module'; const require = __createRequire(import.meta.url);
 import {
   openPanel
-} from "./chunk-WMJTK7ZB.mjs";
+} from "./chunk-4YG2AJYM.mjs";
 import {
   JobService,
   PanelService,
   panelActionSchema,
   panelReadSchema,
   publicPanelActionSchema
-} from "./chunk-5GOWABKB.mjs";
+} from "./chunk-OIK5PIV3.mjs";
 import {
   TeamService,
   currentSessionHandoff,
@@ -30,7 +30,7 @@ import {
 } from "./chunk-QLRGI23I.mjs";
 import {
   VERSION
-} from "./chunk-Z6Y72JVG.mjs";
+} from "./chunk-AOZ4CKYZ.mjs";
 import {
   OracleAdapter,
   configureConnection,
@@ -513,7 +513,7 @@ var references = [
   },
   {
     id: "deployment-safety",
-    version: "0.4.0-beta.1",
+    version: "0.5.0-beta.1",
     source: "docs/adr/007-clean-apex-deployment.md",
     text: "Use an explicit environment. Plans bind source hashes and target identity. Recheck drift, acquire local coordination by default and create an export backup before writes. Clean APEX deployment needs no service tables. Local runners must share one managed home; independent machines need external serialization or explicitly selected database coordination. DDL cannot be generally rolled back. Interrupted writes require reconciliation. Production requires an external approval boundary."
   }
@@ -877,7 +877,7 @@ async function dispatch(operation, input = {}, signal) {
     let data;
     switch (operation) {
       case "panel.open": {
-        const { openPanel: openPanel2 } = await import("./chunk-ICWYSHJ7.mjs");
+        const { openPanel: openPanel2 } = await import("./chunk-F62JTWRM.mjs");
         data = await openPanel2(await realpath(root));
         break;
       }
@@ -926,17 +926,17 @@ async function dispatch(operation, input = {}, signal) {
       case "setup":
       case "plugin.install":
       case "plugin.update": {
-        const { setup: setup2 } = await import("./chunk-3GSS6SJH.mjs");
+        const { setup: setup2 } = await import("./chunk-L6AYPZ54.mjs");
         data = await setup2(parsed);
         break;
       }
       case "plugin.validate": {
-        const { validateNative } = await import("./chunk-3GSS6SJH.mjs");
+        const { validateNative } = await import("./chunk-L6AYPZ54.mjs");
         data = await validateNative(text("from"));
         break;
       }
       case "plugin.uninstall": {
-        const { uninstallNative } = await import("./chunk-3GSS6SJH.mjs");
+        const { uninstallNative } = await import("./chunk-L6AYPZ54.mjs");
         data = await uninstallNative(text("home") ?? managedHome(), Boolean(parsed.keepRuntime));
         break;
       }

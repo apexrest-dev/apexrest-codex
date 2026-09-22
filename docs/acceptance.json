@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "asOf": "2026-09-21",
-  "release": "0.4.0-beta.1",
+  "asOf": "2026-09-22",
+  "release": "0.5.0-beta.1",
   "overall": "partial-local-beta",
   "statusSemantics": {
     "implemented": "Executable code exists; does not imply live verification.",

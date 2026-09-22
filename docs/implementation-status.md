@@ -1,6 +1,12 @@
-# Implementation status — beta 0.4.0-beta.1
+# Implementation status — beta 0.5.0-beta.1
 
 English | [Українська](implementation-status.uk.md)
+
+## Oracle skills refresh 0.5.0-beta.1 — 2026-09-22
+
+Implemented: the pinned Oracle APEXlang Skills `2026.09.21` snapshot (`b94ccf4`) adds 21 documents and updates 30, yielding 658 full documents and 4,872 unchanged grammar fragments. Skill routes and guidance cover Media List, Comments, Metric Card, Smart Filters/Search, Cards and Region Display Selector. The runtime still loads references offline and on demand; Oracle orchestration, deployment policy and validator implementation are not adopted.
+
+Passed [local checks](evidence/minor-050-local.json): 217 unit, 22 contract and 14 packaging tests, typecheck, lint, 47 documentation language pairs, the 30-page site build and plugin integrity. [Retrieval](evidence/minor-050-retrieval.json) returns the expected first result in 18/18 cases with and without a version filter. [Isolated native verification](evidence/minor-050-native.json) confirms skill/MCP discovery and retrieval from the new snapshot without updating the user installation. New workflow validation against a live target and application-browser behavior remain unverified. The user authorized publication of `apexrest@0.5.0-beta.1` under the `beta` tag; the [npm record](evidence/npm-050-publication.json) tracks its actual status. The earlier npm record below describes `0.4.0-beta.1`. See [release notes](release-notes.md).
 
 ## npm publication — 2026-09-22
 

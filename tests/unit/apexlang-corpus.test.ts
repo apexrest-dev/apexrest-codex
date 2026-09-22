@@ -16,6 +16,9 @@ test('pinned corpus retains complete documents, resolvable contracts, grammar an
     await readFile(path.join(corpusRoot, 'references/oracle-snapshot.json'), 'utf8'),
   );
   const search = JSON.parse(await readFile(path.join(corpusRoot, 'references/search.json'), 'utf8'));
+  const sourceLock = JSON.parse(await readFile('toolchains/sources.lock.json', 'utf8'));
+  assert.equal(sourceLock.oracleSkills.commit, snapshot.commit);
+  assert.equal(sourceLock.oracleSkills.indexSha256, snapshot.indexSha256);
   assert.equal(digest(raw), snapshot.indexSha256);
   assert.equal(search.indexSha256, snapshot.indexSha256);
   assert.deepEqual(search.postings, { ...buildReferencePostings(entries) });

@@ -16,7 +16,7 @@ APEXREST connects native Codex skills and MCP tools to Oracle SQLcl. Generate AP
 
 ![APEXREST connects a Codex request to APEXlang source, a verified deployment plan, Oracle APEX and runtime checks.](docs/assets/overview.svg)
 
-> **Beta: `0.4.0-beta.1`.** Single mode uses your current Codex session; teams require explicit Settings opt-in. Programmatic job waiting, metadata batches, concise project summaries and focused reference retrieval reduce repeated model/tool exchanges; see the [release notes](docs/release-notes.md). Existing Oracle template compilation, unchanged ORDS application round-trip and native Codex installation evidence retains its recorded scope and version. Stable release readiness is still blocked by the remaining integration, recovery and platform checks. Independent APEXREST tooling; not an official Oracle or OpenAI product.
+> **Beta: `0.5.0-beta.1`.** Single mode uses your current Codex session; teams require explicit Settings opt-in. Programmatic job waiting, metadata batches, concise project summaries and focused reference retrieval reduce repeated model/tool exchanges; see the [release notes](docs/release-notes.md). Existing Oracle template compilation, unchanged ORDS application round-trip and native Codex installation evidence retains its recorded scope and version. Stable release readiness is still blocked by the remaining integration, recovery and platform checks. Independent APEXREST tooling; not an official Oracle or OpenAI product.
 
 Describe the implementation in Codex chat: `$apexrest-work` uses the existing session directly in single mode, without another agent or automatic panel startup. The current host controls its model and permissions. Explicitly enabled teams retain separate sessions, Auto model routing and the in-app panel; results return to the same conversation. See [chat workflow and Auto models](docs/chat-workflow.md). The team retains separate developers, mandatory manager code review, independent QA and final manager review. See [team APIs and review gates](docs/team.md) and the [Codex source audit](docs/codex-integration.md).
 
@@ -75,12 +75,12 @@ _Illustrative overview, with the setup and verification limits described above._
 
 ## Install from npm
 
-Use Node 24 LTS (supported range: Node 24–26). The public [apexrest package](https://www.npmjs.com/package/apexrest) is currently `0.4.0-beta.1`; `latest` and `beta` both select this beta version.
+Use Node 24 LTS (supported range: Node 24–26). This release targets [apexrest](https://www.npmjs.com/package/apexrest) `0.5.0-beta.1` on the npm `beta` channel. See the [publication record](docs/evidence/npm-050-publication.json) for publication status and registry verification. The `latest` channel remains on `0.4.0-beta.1`.
 
 Install the CLI globally and check its version:
 
 ```sh
-npm install -g apexrest
+npm install -g apexrest@beta
 apexrest --version
 apexrest
 ```
@@ -90,12 +90,12 @@ The last command opens the terminal menu. Choose **Install tools** for missing d
 For a project-local installation:
 
 ```sh
-npm install apexrest
+npm install apexrest@beta
 npx apexrest --version
 npx apexrest
 ```
 
-To pin this release, use `npm install -g apexrest@0.4.0-beta.1`. The repository installation below remains available.
+To pin this version, use `npm install -g apexrest@0.5.0-beta.1`. The repository installation below remains available.
 
 ## Install with the terminal menu
 

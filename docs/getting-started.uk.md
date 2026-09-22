@@ -25,12 +25,12 @@
 
 ## Встановлення з npm
 
-Використовуйте Node 24 LTS (підтримуваний діапазон: Node 24–26). Публічний [пакет apexrest](https://www.npmjs.com/package/apexrest) наразі має версію `0.4.0-beta.1`; теги `latest` і `beta` обирають цю бета-версію.
+Використовуйте Node 24 LTS (підтримуваний діапазон: Node 24–26). Ціль цього випуску — [пакет apexrest](https://www.npmjs.com/package/apexrest) `0.5.0-beta.1` у каналі npm `beta`. Статус публікації та перевірку реєстру наведено в [записі публікації](evidence/npm-050-publication.json). Канал `latest` залишається на `0.4.0-beta.1`.
 
 Встановіть CLI глобально та перевірте версію:
 
 ```sh
-npm install -g apexrest
+npm install -g apexrest@beta
 apexrest --version
 apexrest
 ```
@@ -40,12 +40,12 @@ apexrest
 Для локального встановлення в проєкті:
 
 ```sh
-npm install apexrest
+npm install apexrest@beta
 npx apexrest --version
 npx apexrest
 ```
 
-Щоб зафіксувати цей випуск, використовуйте `npm install -g apexrest@0.4.0-beta.1`. Наведене нижче встановлення з репозиторію також доступне.
+Щоб зафіксувати цю версію, використовуйте `npm install -g apexrest@0.5.0-beta.1`. Наведене нижче встановлення з репозиторію також доступне.
 
 ## Встановлення через термінал
 

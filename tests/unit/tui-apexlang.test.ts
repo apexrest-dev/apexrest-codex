@@ -16,7 +16,7 @@ const file = 'resources/references/index.json';
 test('dashboard lists actual Oracle families, combining nested chart references and excluding scaffolding', async () => {
   const source = JSON.parse(await readFile(file, 'utf8'));
   const catalogue = await loadApexlangCatalogue(file);
-  assert.equal(catalogue.version, '26.1@b0afa3b');
+  assert.equal(catalogue.version, '26.1@b94ccf4');
   assert.equal(catalogue.items.filter((item) => item.group === 'Page items').length, 23);
   assert.equal(new Set(catalogue.items.map((item) => item.family)).size, catalogue.items.length);
   for (const item of catalogue.items) {

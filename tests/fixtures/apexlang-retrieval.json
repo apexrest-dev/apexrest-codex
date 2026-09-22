@@ -20,5 +20,11 @@
   { "query": "popup lov", "kind": "contract", "expected": "popup-lov._index" },
   { "query": "validations not null", "kind": "template", "expected": "validations.item" },
   { "query": "cards media", "kind": "template", "expected": "cards.standard" },
-  { "query": "date picker", "kind": "contract", "expected": "date-picker._index" }
+  { "query": "date picker", "kind": "contract", "expected": "date-picker._index" },
+  { "query": "media list", "kind": "contract", "expected": "media-list._index" },
+  { "query": "comments", "kind": "contract", "expected": "comments._index" },
+  { "query": "metric card", "kind": "contract", "expected": "metric-card._index" },
+  { "query": "smart filter search", "kind": "contract", "expected": "smart-filter-search._index" },
+  { "query": "region display selector", "kind": "contract", "expected": "region-display-selector._index" },
+  { "query": "cards refresh after dialog", "kind": "template", "expected": "cards.refresh-after-dialog" }
 ]

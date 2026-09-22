@@ -1,7 +1,7 @@
 import { createRequire as __createRequire } from 'node:module'; const require = __createRequire(import.meta.url);
 import {
   VERSION
-} from "./chunk-Z6Y72JVG.mjs";
+} from "./chunk-AOZ4CKYZ.mjs";
 import {
   Client,
   StdioClientTransport,

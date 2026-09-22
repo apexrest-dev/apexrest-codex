@@ -8,7 +8,7 @@ APEXREST targets Codex exclusively. The build emits the native `codex-compat` pa
 
 The APEXlang skill routes Codex directly to the relevant component family, then its required contracts and selected scenario. A bundled, compiler-checked chart/cards/filter composition provides a small starting point when that pattern fits. The original Oracle documents remain data; their orchestration and deployment instructions do not replace APEXREST workflows or user authorization.
 
-The pinned Oracle snapshot contains **637 complete template/syntax documents and 4,872 grammar fragments**. Stable legacy IDs remain valid. A reproducible offline builder verifies the archive hash, preserves original text and grammar boundaries, resolves contract dependencies and generates a search accelerator. It does not download documentation during Codex startup or normal lookup.
+The pinned Oracle snapshot `26.1@b94ccf4` contains **658 complete template/syntax documents and 4,872 grammar fragments**, for 5,530 records. It reflects the changes documented in the September 21 Oracle release notes and the [upstream snapshot merged on September 22](https://github.com/oracle/skills/tree/b94ccf4dec34b27859c2378fa71ba2bad884f2fe/apex/apexlang): 21 added documents and 30 updated existing documents, with no removals or grammar changes. Stable legacy IDs remain valid. A reproducible offline builder verifies the archive hash, preserves original text and grammar boundaries, resolves contract dependencies and generates a search accelerator. It does not download documentation during Codex startup or normal lookup.
 
 Search ranks exact IDs, owning productions, titles and adjacent query terms before incidental mentions. It handles camelCase and separated words, returns a window around the match, supports family/kind filters and bounded result pagination. `version: "26.1"` includes the pinned 26.1 snapshot; an explicit snapshot must match exactly. `grammar:series-source-property` supports direct reading. Documents expose `requires` and bounded `related` IDs without automatically expanding their content.
 
@@ -16,25 +16,27 @@ The runtime caches the corpus and up to 64 query rankings. File identity/size/ti
 
 ## Measurements and limits
 
-[Retrieval evidence](evidence/apexlang-retrieval.json) records seven fresh processes and 100 repeated lookups per process on macOS arm64 with a warm filesystem. The fixed twelve-case set covers properties, charts, grids, items, validations, dynamic actions and LOVs. The baseline uses the previous corpus/API; the current version adds documents and filters. The report separately records relevance without a version filter so the old release-selector bug does not conceal that comparison.
+[Earlier retrieval evidence](evidence/apexlang-retrieval.json) records seven fresh processes and 100 repeated lookups per process on macOS arm64 with a warm filesystem. It retains its original corpus and build identity; the table below describes that historical comparison. The fixed twelve-case set covers properties, charts, grids, items, validations, dynamic actions and LOVs. Its baseline uses the earlier corpus/API; the measured update adds documents and filters. The report separately records relevance without a version filter so the old release-selector bug does not conceal that comparison.
 
-| Local measurement | Previous implementation | Current implementation |
+| Local measurement | Previous implementation | Measured update |
 | --- | ---: | ---: |
 | First lookup, median | 6.74 ms | 47.14 ms |
 | Repeated lookup, median | 0.427 ms | 0.029 ms |
 
-Current expected-first-result coverage: 12/12 selected retrieval cases. This is a deterministic regression set, not an unseen model-generation benchmark.
+Recorded expected-first-result coverage: 12/12 selected retrieval cases. This is a deterministic regression set, not an unseen model-generation benchmark.
 
 Repeated local lookups are substantially faster; first lookup is slower because the corpus and index are larger. These measurements establish retrieval performance and expected first-result coverage for this fixture set. They do not establish a percentage improvement in model-generated applications, total task duration or native-host context tokens. The skill body and selected references still consume context when Codex reads them.
 
+The [0.5 retrieval run](evidence/minor-050-retrieval.json) separately records the refreshed `26.1@b94ccf4` corpus and the expanded 18-case fixture. Its local results do not extend the historical comparison or establish Oracle, application-browser or billed-token evidence.
+
 ## Verification and reproduction
 
-[Native Codex evidence](evidence/apexlang-codex.json) checks discovery and read-only retrieval in a disposable Codex 0.154.0 profile on macOS arm64. It does not update the user's installed plugin. [Oracle evidence](evidence/apexlang-compiler.json) records real offline SQLcl compilation of the blank app, CRM and the filtered chart/cards fixture with unchanged MMD. The fixture was corrected for required chart axes and filename/alias agreement before the final passing run. SQL was not executed and application/browser behavior was not tested.
+[Earlier native Codex evidence](evidence/apexlang-codex.json) checks discovery and read-only retrieval in a disposable Codex 0.154.0 profile on macOS arm64. It does not update the user's installed plugin. [Earlier Oracle evidence](evidence/apexlang-compiler.json) records real offline SQLcl compilation of the blank app, CRM and the filtered chart/cards fixture with unchanged MMD. These reports retain their original corpus and build identity. The fixture was corrected for required chart axes and filename/alias agreement before the final passing run. SQL was not executed and application/browser behavior was not tested.
 
 ```sh
 npm run typecheck
-npm run test:unit
 npm run build
+npm run test:unit
 npm run test:contracts
 node scripts/benchmark-apexlang-references.mjs docs/evidence/apexlang-retrieval.json
 node scripts/verify-apexlang-patterns.mjs docs/evidence/apexlang-compiler.json
