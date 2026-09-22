@@ -2,6 +2,10 @@
 
 English | [Українська](next-actions.uk.md)
 
+## npm publication follow-up — 2026-09-22
+
+Publication and registry-install verification are complete for `apexrest@0.4.0-beta.1`. Use `npm install apexrest` locally or `npm install -g apexrest` globally; both tags `latest` and `beta` currently select this beta. Keep the package name and lockfile synchronized in future releases. The repository manifest and lockfile use the published name; no Git tag was created. Existing stable-release and platform verification work remains open.
+
 ## Minor beta 0.4.0-beta.1 — 2026-09-21
 
 Track this version's checks in [minor-beta local evidence](evidence/minor-040-local.json). Preserve the earlier 253-test automation report with its original build identity. After loading the updated plugin in a new Codex task, verify current-session edits and compare matched tasks using actual host counters; Oracle and application-browser checks remain separately authorized work. The authorized commit/push targets `main`; no Git tag, GitHub release or npm publication is part of it. Keep existing deployment safeguards and stable-release gates intact. See [release notes](release-notes.md).

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "version": "0.4.0-beta.1",
-  "sourceDigest": "671c687c050ec23eebe4061c81a7e1c218a7765ac6e7d3a71a5bc42469c20c4a",
+  "sourceDigest": "e673f82ed07edb41cc95952d80974e39bff489b90aa7e818daa5edc6928e7030",
   "files": {
     ".codex-plugin/plugin.json": "38153834dd5d79e0102abc6f17249cafdcb99d8a7144296ad2dd229a75b53ea0",
     ".mcp.json": "5a43389fcbf012a31301fe61bca4f643eef2ec0ff71dd53b502687a1753263b7",

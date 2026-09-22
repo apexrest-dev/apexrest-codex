@@ -73,6 +73,30 @@ The [Cloud setup guide](docs/codex-cloud.md) covers **CLI + ORDS**. The complete
 
 _Illustrative overview, with the setup and verification limits described above._
 
+## Install from npm
+
+Use Node 24 LTS (supported range: Node 24–26). The public [apexrest package](https://www.npmjs.com/package/apexrest) is currently `0.4.0-beta.1`; `latest` and `beta` both select this beta version.
+
+Install the CLI globally and check its version:
+
+```sh
+npm install -g apexrest
+apexrest --version
+apexrest
+```
+
+The last command opens the terminal menu. Choose **Install tools** for missing dependencies, then **Install plugin** to register APEXREST in Codex. npm installs the CLI and bundled resources; plugin registration is a separate menu action.
+
+For a project-local installation:
+
+```sh
+npm install apexrest
+npx apexrest --version
+npx apexrest
+```
+
+To pin this release, use `npm install -g apexrest@0.4.0-beta.1`. The repository installation below remains available.
+
 ## Install with the terminal menu
 
 With Git and Node 24 LTS available, open the bundled TUI from the repository. **Install plugin** also requires a Codex CLI with native plugin support.

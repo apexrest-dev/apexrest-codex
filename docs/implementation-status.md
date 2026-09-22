@@ -2,6 +2,10 @@
 
 English | [Українська](implementation-status.uk.md)
 
+## npm publication — 2026-09-22
+
+Published `apexrest@0.4.0-beta.1` publicly to npm after explicit user authorization of the unscoped name. The manifest and lockfile now use `apexrest`. Both `latest` and `beta` resolve to this beta version. Registry integrity matches the reviewed 461-file archive: `sha512-Wv9hDXgd7Ixydz1SldRYS2wbmMk02urDDW3HVqy/TBqO22biFnoO0fsfzRLwDRntPcn36Kb22Nipx24zY+tmEQ==`. Build, typecheck, lint, unit and contract checks passed before the naming change; the package was rebuilt and all 14 packaging checks passed again afterward. Local and global registry installations in isolated temporary prefixes both returned version `0.4.0-beta.1` on Node `v25.9.0`. The prior browser approval blocker is resolved. No stable qualification, Oracle or native-host evidence is implied.
+
 ## Minor update 0.4.0-beta.1 — 2026-09-21
 
 This beta combines current-session single work without a child agent, six MCP job waits, bounded metadata batches, compact project inspection and output, shorter instructions and cached reference normalization. Codex desktop and CLI remain the only plugin hosts. Explicit team opt-in, deployment authorization and target/backup/drift/unknown-outcome safeguards are preserved. See [release notes](release-notes.md) and the [version-specific local record](evidence/minor-040-local.json).

@@ -23,6 +23,30 @@ For a cloud task, follow [Run APEXREST in Codex Cloud](codex-cloud.md). It provi
 
 An existing clean APEX installation is enough for ordinary deployment. Service tables, utPLSQL and a provisioned sandbox are not blanket prerequisites for an application-only import. Source installation does not include Oracle binaries, browser credentials or a database account.
 
+## Install from npm
+
+Use Node 24 LTS (supported range: Node 24–26). The public [apexrest package](https://www.npmjs.com/package/apexrest) is currently `0.4.0-beta.1`; `latest` and `beta` both select this beta version.
+
+Install the CLI globally and check its version:
+
+```sh
+npm install -g apexrest
+apexrest --version
+apexrest
+```
+
+The last command opens the terminal menu. Choose **Install tools** for missing dependencies, then **Install plugin** to register APEXREST in Codex. npm installs the CLI and bundled resources; plugin registration is a separate menu action.
+
+For a project-local installation:
+
+```sh
+npm install apexrest
+npx apexrest --version
+npx apexrest
+```
+
+To pin this release, use `npm install -g apexrest@0.4.0-beta.1`. The repository installation below remains available.
+
 ## Install with the terminal menu
 
 With Git and Node 24 LTS on PATH, open the TUI without a local build:
