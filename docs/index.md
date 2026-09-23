@@ -4,13 +4,13 @@ English | [Українська](index.uk.md)
 
 ![APEXREST pencil and ruler symbol](assets/apexrest-logo.svg)
 
-APEXREST is a native Codex plugin for Oracle APEX development, controlled imports and verification. The current version is a beta with separate implementation and evidence records; documentation does not certify the remaining release gates.
+APEXREST is a native Codex plugin for Oracle APEX development, controlled imports and verification. Install the published `apexrest@0.5.0` release from npm with `npm install -g apexrest`, then open `apexrest` to install tools and register the plugin. [Implementation and evidence records](implementation-status.md) track the remaining release qualification checks separately.
 
 ## Start here
 
 | Goal                                                         | Guide                                                     |
 | ------------------------------------------------------------ | --------------------------------------------------------- |
-| Install the repository plugin and connect a target           | [Getting started](getting-started.md)                     |
+| Install from npm or the repository and connect a target      | [Getting started](getting-started.md)                     |
 | Run the CLI in a Cloud container with ORDS                  | [Codex Cloud](codex-cloud.md)                             |
 | Run a reviewed agent task and understand the panel           | [Full agent workflow with screenshots](agent-workflow.md) |
 | Install/remove tools and test connections in the terminal    | [Terminal interface](tui.md)                              |

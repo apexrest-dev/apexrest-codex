@@ -2,6 +2,10 @@
 
 English | [Українська](next-actions.uk.md)
 
+## npm installation documentation follow-up — 2026-09-23
+
+Use the [npm instructions](getting-started.md#install-from-npm) for the published `latest` channel. Keep README, getting started and site commands aligned with registry tags in future releases. The documentation update is local; publishing the website or refreshing the README bundled with an npm release remains a separate release action. Existing platform and Oracle verification work below remains open.
+
 ## Stable 0.5.0 follow-up — 2026-09-23
 
 Publication of `apexrest@0.5.0` as npm `latest`, removal of the `beta` dist-tag, registry-integrity verification and an isolated `apexrest@latest` installation are complete; see the [0.5.0 npm record](evidence/npm-050-stable-publication.json). The former beta remains installable by exact version. Complete the source-bound native Linux/Windows, Oracle integration, recovery and authenticated application checks required by `npm run check-release-readiness`; do not infer those results from npm distribution.
@@ -56,7 +60,7 @@ SQLcl CLI / official MCP selection is implemented and checked locally, including
 
 The [2026-09-16 skill review](evidence/skill-review-local.json) found no confirmed instruction defects. The next skill-quality check remains a fixed set of complete authoring tasks followed by authorized connected SQL/import and browser verification; passing local retrieval, packaging and offline compiler checks does not close those gaps.
 
-The user authorized npm publication. The beta archive is prepared and its CLI installation was checked. Complete npm login with an account authorized for `@apexrest`, verify scope access, publish the reviewed archive with public access and the `beta` tag, then verify registry metadata and installation from the registry. Publication is currently blocked by `ENEEDAUTH`. The stale local Codex marketplace registration was repaired for the verified panel bundle, as recorded below.
+The earlier scoped-package publication blocker is historical. The published package is now `apexrest`; the [0.5.0 publication record](evidence/npm-050-stable-publication.json) supersedes that pending action. Preserve the original [package-preparation evidence](implementation-status.md#npm-package-preparation) with its original scope. The stale local Codex marketplace registration was repaired for the verified panel bundle, as recorded below.
 
 The [APEXlang TUI dashboard](tui.md#apexlang-dashboard) is implemented and locally verified: bundled catalogue, search, scrolling, focus switching and adaptive table. Next verify macOS/Windows terminals. Documented type counts do not establish support for every compiler variant; retain separate actual Oracle evidence for that. See the [local report](evidence/tui-apexlang-dashboard-local.json).
 

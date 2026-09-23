@@ -2,6 +2,12 @@
 
 English | [Українська](implementation-status.uk.md)
 
+## npm installation documentation — 2026-09-23
+
+README, getting started and the site now use `npm install -g apexrest` or project-local `npm install apexrest`. They distinguish the npm CLI from Codex plugin registration and the optional managed launcher. Current site descriptions and generated version labels reflect `0.5.0`; historical evidence keeps its original version and scope.
+
+Verified: a fresh read-only registry query returned `latest: 0.5.0`, no `beta` tag and Node `>=24 <27`. Passed: 47 documentation language pairs with link checks, the 30-page local site build, 14 packaging tests, site-builder formatting and repository plugin integrity/fresh-build checks. The earlier [registry installation evidence](evidence/npm-050-stable-publication.json) remains separate; this documentation update does not rerun installation, native-host or Oracle checks.
+
 ## Stable release 0.5.0 — 2026-09-23
 
 The package, workspace modules and native plugin use `0.5.0`; the Oracle APEXlang snapshot and behavior match the reviewed `0.5.0-beta.1` update. Published `apexrest@0.5.0` as npm `latest` and removed the `beta` dist-tag. The [version-specific publication record](evidence/npm-050-stable-publication.json) confirms matching registry integrity, an isolated registry installation and green Linux, macOS and Windows CI. Earlier beta evidence retains its original version and scope. The stable release-readiness gate remains blocked by missing source-bound native-platform and Oracle integration evidence; publication does not mark those checks as passed.

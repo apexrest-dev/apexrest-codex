@@ -2,9 +2,9 @@
 
 English | [Українська](getting-started.uk.md)
 
-Start with the terminal menu to install tools and the plugin, then configure a direct SQLcl or ORDS HTTP(S) connection. The repository includes the built runtime, so these steps need no TypeScript build or `npm ci`. Direct installation through the Codex CLI is also documented below.
+Install the CLI from npm, open its terminal menu to install tools and the plugin, then configure a direct SQLcl or ORDS HTTP(S) connection. The npm package includes the built runtime, so no Git checkout, TypeScript build or `npm ci` is needed. Repository installation and direct registration through the Codex CLI are also documented below.
 
-The current distribution is beta. Native-host evidence is specific to the tested Codex and platform combination; [stable release gates](next-actions.md) remain open.
+The current npm release is `0.5.0` on `latest`. Native-host evidence is specific to the tested Codex and platform combination; the remaining [release qualification checks](next-actions.md) stay open.
 
 ## Codex Cloud
 
@@ -25,12 +25,12 @@ An existing clean APEX installation is enough for ordinary deployment. Service t
 
 ## Install from npm
 
-Use Node 24 LTS (supported range: Node 24–26). [apexrest](https://www.npmjs.com/package/apexrest) `0.5.0` is published as npm `latest`. See the [publication record](evidence/npm-050-stable-publication.json) for registry verification. The earlier beta remains installable by exact version.
+Use Node 24 LTS (supported range: Node 24–26). [apexrest](https://www.npmjs.com/package/apexrest) `0.5.0` is published as npm `latest`. The commands below install that channel. See the [publication record](evidence/npm-050-stable-publication.json) for registry verification.
 
 Install the CLI globally and check its version:
 
 ```sh
-npm install -g apexrest@beta
+npm install -g apexrest
 apexrest --version
 apexrest
 ```
@@ -40,12 +40,12 @@ The last command opens the terminal menu. Choose **Install tools** for missing d
 For a project-local installation:
 
 ```sh
-npm install apexrest@beta
+npm install apexrest
 npx apexrest --version
 npx apexrest
 ```
 
-To pin this version, use `npm install -g apexrest@0.5.0`. The repository installation below remains available.
+To pin this version, use `npm install -g apexrest@0.5.0`. The `beta` tag has been removed; the earlier beta remains available as `apexrest@0.5.0-beta.1`. The repository installation below remains available.
 
 ## Install with the terminal menu
 
@@ -231,6 +231,8 @@ For a page or dashboard, reconcile relevant read-only source queries and inspect
 
 ## Use the CLI
 
+Global npm installation provides the `apexrest` command through npm's global `bin` directory on macOS/Linux or its global prefix on Windows; keep that directory on `PATH`. For a project-local installation, use `npx apexrest` from that project. The managed launcher described below is optional for npm users.
+
 Run `apexrest` or `apexrest tui` for the APEXREST logo and seven actions: tool/plugin installation and removal, plus saved SQLcl connection listing/testing. Categories and other workflows are absent from the TUI. See [the terminal guide](tui.md) for controls, direct execution and verification scope. CLI `connection list --saved` and `connection test NAME --saved` access the SQLcl store directly; without `--saved`, existing APEXREST reference behavior is preserved. Explicit commands retain their scripting behavior.
 
 Direct installation with `codex plugin add` exposes the plugin to Codex but does not create the managed `apexrest` launcher. A reviewed source checkout can run its checked-in CLI directly with Node 24:
@@ -302,4 +304,4 @@ Remove the marketplace only when you no longer need its entries. Start a new Cod
 
 ## Next steps
 
-Read [deployment safety](deployment-safety.md) before operating a target, [security](../SECURITY.md) before sharing artifacts and the [verification status](implementation-status.md) before selecting this beta for a production workflow. The [documentation index](index.md) links the complete guides and evidence.
+Read [deployment safety](deployment-safety.md) before operating a target, [security](../SECURITY.md) before sharing artifacts and the [verification status](implementation-status.md) before selecting this release for a production workflow. The [documentation index](index.md) links the complete guides and evidence.

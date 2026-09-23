@@ -75,12 +75,12 @@ _Illustrative overview, with the setup and verification limits described above._
 
 ## Install from npm
 
-Use Node 24 LTS (supported range: Node 24–26). This release targets [apexrest](https://www.npmjs.com/package/apexrest) `0.5.0` as npm `latest`. See the [publication record](docs/evidence/npm-050-stable-publication.json) for its actual status and registry verification. The earlier beta remains installable by exact version.
+Use Node 24 LTS (supported range: Node 24–26). [apexrest](https://www.npmjs.com/package/apexrest) `0.5.0` is published as npm `latest`. The commands below install that channel. See the [publication record](docs/evidence/npm-050-stable-publication.json) for registry verification.
 
 Install the CLI globally and check its version:
 
 ```sh
-npm install -g apexrest@beta
+npm install -g apexrest
 apexrest --version
 apexrest
 ```
@@ -90,12 +90,12 @@ The last command opens the terminal menu. Choose **Install tools** for missing d
 For a project-local installation:
 
 ```sh
-npm install apexrest@beta
+npm install apexrest
 npx apexrest --version
 npx apexrest
 ```
 
-To pin this version, use `npm install -g apexrest@0.5.0`. The repository installation below remains available.
+To pin this version, use `npm install -g apexrest@0.5.0`. The `beta` tag has been removed; the earlier beta remains available as `apexrest@0.5.0-beta.1`. npm includes the built runtime, so no Git checkout or local build is needed. The repository installation below remains available.
 
 ## Install with the terminal menu
 

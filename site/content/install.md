@@ -2,11 +2,31 @@
 
 English | [Українська](install.uk.md)
 
-Open the terminal menu, install client tools and the Codex plugin, then test a saved SQLcl connection. The [APEXREST repository](https://github.com/apexrest-dev/apexrest-codex) includes a built bundle; ordinary installation requires no TypeScript build.
+Install the APEXREST CLI from npm, open its terminal menu, install client tools and the Codex plugin, then test a saved SQLcl connection. The npm package includes a built bundle; ordinary installation requires no TypeScript build.
 
 ## 1. Open the terminal menu
 
-You need Git and Node.js 24 LTS on PATH. Plugin installation also requires a Codex CLI with native plugin support.
+Use Node.js 24 LTS on PATH (supported range: Node 24–26). Plugin installation also requires a Codex CLI with native plugin support.
+
+```sh
+npm install -g apexrest
+apexrest --version
+apexrest
+```
+
+The default npm tag, `latest`, selects `0.5.0`; see the [publication record](../../docs/evidence/npm-050-stable-publication.json). To pin this version, use `npm install -g apexrest@0.5.0`. The `beta` tag has been removed; the earlier beta remains available as `apexrest@0.5.0-beta.1`.
+
+For a project-local CLI installation, run these commands from the project directory:
+
+```sh
+npm install apexrest
+npx apexrest --version
+npx apexrest
+```
+
+npm installs the CLI and bundled resources. Register the Codex plugin separately through **Install plugin** in step 2; project-local npm installation does not create a project-only Codex plugin registration.
+
+Alternatively, use Git to open the built CLI from the [source repository](https://github.com/apexrest-dev/apexrest-codex):
 
 ```sh
 git clone https://github.com/apexrest-dev/apexrest-codex.git
@@ -14,7 +34,7 @@ cd apexrest-codex
 node plugins/apexrest-apex/runtime/apexrest.mjs
 ```
 
-If you already have a checkout, run the last command from it. The APEXREST logo appears with seven actions: **Install tools**, **Uninstall tools**, **Install plugin**, **Uninstall plugin**, **List saved SQLcl connections** and **Test saved SQLcl connection**.
+If you already have a checkout, run the last command from it. All routes open the same menu. The APEXREST logo appears with seven actions: **Install tools**, **Uninstall tools**, **Install plugin**, **Uninstall plugin**, **List saved SQLcl connections** and **Test saved SQLcl connection**.
 
 **SQLcl mode: CLI / MCP** saves the Oracle execution backend: SQLcl CLI or the official SQLcl MCP server (`sql -mcp`). This separate TUI action does not change plugin registration. See [SQLcl modes](../../docs/tui.md#sqlcl-mode-cli-or-mcp).
 
@@ -30,7 +50,7 @@ There are no **Preview only** or **Approve changes** toggles in the TUI: Enter o
 
 ## 3. Add the launcher
 
-Managed plugin installation creates the launcher. For the default directory on macOS/Linux:
+Global npm installation already provides the `apexrest` command; skip this step when it is available. For a project-local npm installation, use `npx apexrest` from that project. Managed plugin installation also creates a launcher. To use that launcher from the default directory on macOS/Linux:
 
 ```sh
 export PATH="$HOME/.apexrest/bin:$PATH"
@@ -77,6 +97,14 @@ Use the [Cloud setup guide](../../docs/codex-cloud.md) for a repository-backed c
 In the TUI, choose **Uninstall tools** or **Uninstall plugin**, review the action and press Enter. If removing both, uninstall tools first: removing plugin files removes the code targeted by the managed launcher. **Keep plugin files** retains that code after unregistering the plugin.
 
 Projects, backups, saved connections, cache and external runtimes are preserved. Node.js needed by the launcher or a recorded installation is also retained. Direct Codex installations use the Codex removal commands in the [removal guide](../../docs/getting-started.md#remove-the-repository-plugin).
+
+To remove the globally installed npm CLI after any desired tool/plugin removal:
+
+```sh
+npm uninstall -g apexrest
+```
+
+For a project-local installation, run `npm uninstall apexrest` from that project. npm removal does not unregister the Codex plugin or remove managed tools; those are separate actions above.
 
 ## Builds and verification scope
 

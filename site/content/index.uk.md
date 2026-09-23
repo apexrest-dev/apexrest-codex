@@ -4,9 +4,11 @@
 
 APEXREST поєднує код застосунку, компіляцію Oracle, контрольовані імпорти й перевірку виконання в одному нативному плагіні Codex.
 
-**Відкритий код · Apache-2.0 · Бета {{version}}**
+**Відкритий код · Apache-2.0 · Версія {{version}}**
 
 [Встановити в Codex](install.uk.md) · [Початок роботи](../../docs/getting-started.uk.md) · [Переглянути код](https://github.com/apexrest-dev/apexrest-codex)
+
+Встановіть CLI командою `npm install -g apexrest`, потім запустіть `apexrest`, щоб встановити інструменти й зареєструвати плагін Codex. npm `latest` — це `0.5.0`; [запис публікації](../../docs/evidence/npm-050-stable-publication.json) підтверджує встановлення з реєстру.
 
 ![APEXREST поєднує Codex із нативним кодом APEX, валідацією Oracle, контрольованим розгортанням і перевіркою](../../docs/assets/overview.uk.svg)
 

@@ -2,7 +2,7 @@
 
 English | [Українська](releases.uk.md)
 
-The 0.5 release targets `apexrest@0.5.0` as npm `latest`, with the `beta` dist-tag removed. The [publication record](../../docs/evidence/npm-050-stable-publication.json) tracks the actual registry status and verification. The earlier `0.5.0-beta.1` remains available by exact version; no Git tag or GitHub release is part of this update.
+Published `apexrest@0.5.0` as npm `latest` and removed the `beta` dist-tag. The [publication record](../../docs/evidence/npm-050-stable-publication.json) confirms the registry status and installation verification. Install it with `npm install -g apexrest`; the earlier `0.5.0-beta.1` remains available by exact version. No Git tag or GitHub release is part of this update.
 
 ## Changes
 
