@@ -2,28 +2,19 @@
 
 English | [Українська](releases.uk.md)
 
-Published `apexrest@0.5.0` as npm `latest` and removed the `beta` dist-tag. The [publication record](../../docs/evidence/npm-050-stable-publication.json) confirms the registry status and installation verification. Install it with `npm install -g apexrest`; the earlier `0.5.0-beta.1` remains available by exact version. No Git tag or GitHub release is part of this update.
+Release 1.0.0 performs APEX work directly in your current Codex conversation. The plugin provides 18 MCP tools and 12 skills for Oracle/APEX work. Codex owns the conversation and collaboration; the plugin provides deterministic operations, settings and recoverable jobs.
 
 ## Changes
 
-- Refresh the pinned Oracle APEXlang references and plugin skills from Oracle's September 21 release notes and the upstream snapshot merged on September 22.
-- Cover Media List, Comments and Metric Card report/partial workflows; Smart Filters and Search; and the expanded Cards and Region Display Selector contracts.
-- Keep the reviewed APEX 26.1 compiler baseline and preserve source, validation and deployment safeguards.
+- Remove plugin-owned model sessions, role routing, task-start APIs and their panel controls.
+- Keep Oracle/APEX operations, SQLcl and ORDS connections, validation, deployment safeguards, tests and browser verification guidance.
+- Keep bounded output, lazy reference retrieval, metadata batching and one-call job waiting.
+- Simplify the documentation and panel around current-session work.
 
-See the [release notes](../../docs/release-notes.md) for the full scope and verification. Existing [single-agent and team behavior](../../docs/work-modes.md), [bounded automation](../../docs/codex-automation.md) and [ORDS functionality](../../docs/ords.md) remain available.
+See [release notes](../../docs/release-notes.md) and [local release evidence](../../docs/evidence/current-session-100-local.json) for exact changes, verification and distribution status. Install with `npm install -g apexrest`, or pin `apexrest@1.0.0`.
 
-## Existing verification
+## Evidence and distribution
 
-[Earlier 0.4 local checks](../../docs/evidence/minor-040-local.json) retain their original build identity. The [automation analysis](../../docs/codex-automation.md) distinguishes mechanical execution from Codex reasoning. Earlier response-byte measurements and native/Oracle reports retain their original scope; a minor-version change does not rerun them or establish billed-token savings.
+Current local checks and historical native/Oracle reports have separate source identities. [Earlier connected evidence](../../docs/evidence/ords-connected.json) verifies one unchanged APEXlang round trip and a checksum-verified SQL backup; it is not a new connected run of 1.0.0. Changed imports, restore, interrupted-response recovery and broader platform/application checks retain their [documented limits](../../docs/next-actions.md).
 
-[Connected evidence](../../docs/evidence/ords-connected.json) records one unchanged APEXlang round trip with all 21 files matching byte for byte, a real checksum-verified SQL backup and a separate matching native MCP export. [Settings evidence](../../docs/evidence/connection-settings-local.json) covers the built panel and Codex in-app actions with synthetic credentials; [native discovery](../../docs/evidence/connection-settings-native.json) checks the real local SQLcl name list without a database login. The reports retain their original versions and source digests, rather than claiming new connected runs for `0.5.0`.
-
-Changed imports, broader component/static-file/MMD variants, SQL restore, interrupted-response recovery and Windows remain unverified. Application browser verification was deferred. The stable release-readiness gate remains blocked.
-
-## Local artifacts
-
-This build produces native ZIPs, platform runtime ZIPs, bootstraps, checksums, a CycloneDX SBOM, provenance and a static site ZIP. Runtime ZIPs contain APEXREST JavaScript and permitted dependency notices; Oracle binaries are downloaded separately after consent.
-
-The generated `releases/manifest.json` binds installer and native artifact versions/checksums. The full local manifest and release-readiness report are in `dist/releases/`. Unsigned local artifacts are not a published GitHub release.
-
-The repository marketplace supports installation from source control today. Stable release qualification separately requires source-bound native-host evidence on each target platform and the remaining Oracle, utPLSQL and authenticated application test evidence. Local tests do not replace those broader release gates. Dry run never creates tags, releases or npm packages.
+npm installation, canonical GitHub source, signed release artifacts and website deployment are distinct outcomes. Local ZIPs, checksums, SBOM and provenance do not imply publication. Use the release record to identify what actually completed.

@@ -76,24 +76,6 @@ test('nested job failure remains visible while full panel state is carried only 
   assert.ok(panel.content[0]!.text.length < 2000);
 });
 
-test('large team wait responses keep polling controls and the nested team outcome', async (t) => {
-  const { ctx } = await isolated(t);
-  const response = await toolOutput(
-    success('team.wait', {
-      cursor: 'fixture-progress-2',
-      terminal: true,
-      team: { id: 'team-fixture', status: 'blocked', reports: ['x'.repeat(40000)] },
-    }),
-    ctx.root,
-  );
-  const compact = JSON.parse(response.content[0]!.text);
-  assert.equal(compact.data.output.compacted, true);
-  assert.equal(compact.data.cursor, 'fixture-progress-2');
-  assert.equal(compact.data.terminal, true);
-  assert.equal(compact.data.team.id, 'team-fixture');
-  assert.equal(compact.data.team.status, 'blocked');
-});
-
 test('JSON artifacts redact before pagination without corrupting quotes or split secret fields', async (t) => {
   const { ctx } = await isolated(t);
   const service = new ArtifactService(ctx);

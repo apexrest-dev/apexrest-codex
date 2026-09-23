@@ -30,16 +30,16 @@ Select your application repository in Codex Cloud environment settings. Select *
 
 Set the following environment variables. Replace every target placeholder with values supplied for your development/test environment:
 
-| Variable | Value or purpose |
-| --- | --- |
-| `CODEX_CLOUD` | `1`; explicit opt-in to this example's Linux setup. |
+| Variable                         | Value or purpose                                                                                                 |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `CODEX_CLOUD`                    | `1`; explicit opt-in to this example's Linux setup.                                                              |
 | `APEXREST_ACCEPT_ORACLE_LICENSE` | `1` only after accepting the [Oracle terms](https://www.oracle.com/downloads/licenses/oracle-free-license.html). |
-| `APEXREST_PERSIST_CREDENTIALS` | `1` only if you authorize the credential retention described below. |
-| `APEXREST_ORDS_URL` | Schema URL, for example `https://ords.example.invalid/ords/app_user/`. |
-| `APEXREST_ORDS_USERNAME` | Database username, for example `app_user`; the schema alias may differ. |
-| `APEXREST_CONNECTION_REF` | A local reference name, for example `cloud-dev` (the default). |
-| `APEXREST_EXPECTED_SCHEMA` | Optional exact expected parsing schema from the identity check. |
-| `APEXREST_EXPECTED_SERVICE` | Optional exact expected database service from the identity check. |
+| `APEXREST_PERSIST_CREDENTIALS`   | `1` only if you authorize the credential retention described below.                                              |
+| `APEXREST_ORDS_URL`              | Schema URL, for example `https://ords.example.invalid/ords/app_user/`.                                           |
+| `APEXREST_ORDS_USERNAME`         | Database username, for example `app_user`; the schema alias may differ.                                          |
+| `APEXREST_CONNECTION_REF`        | A local reference name, for example `cloud-dev` (the default).                                                   |
+| `APEXREST_EXPECTED_SCHEMA`       | Optional exact expected parsing schema from the identity check.                                                  |
+| `APEXREST_EXPECTED_SERVICE`      | Optional exact expected database service from the identity check.                                                |
 
 Add **`APEXREST_ORDS_PASSWORD` as a Secret**, not a normal environment variable or repository file. The account must already have authorized access to REST-Enabled SQL on that ORDS schema. Use the schema URL, not an APEX application URL or the `/_/sql` endpoint; see [ORDS configuration](ords.md).
 
@@ -113,18 +113,18 @@ Before application work, configure the target in `apexrest.json`, including work
 
 The example keeps local deployment history under `APEXREST_HOME`. Cloud caches are not durable backup storage or cross-container coordination: preserve private backups/history outside an expiring container and serialize runners before authorizing deployments. Do not reset away an unresolved operation's records or silently start fresh history against the same schema.
 
-Browser dependencies are skipped. Browser checks require separately configured tools, authentication and actual observations. The CLI bootstrap does not establish that `$apexrest-work`, App Server teams, the in-app dashboard or automatic skill/MCP discovery work in Cloud. Use the launcher for the documented flow and report unavailable checks explicitly.
+Browser dependencies are skipped. Browser checks require separately configured tools, authentication and actual observations. The CLI bootstrap does not establish that `$apexrest-work`, the in-app dashboard or automatic skill/MCP discovery work in Cloud. Use the launcher for the documented flow and report unavailable checks explicitly.
 
 ## Troubleshooting
 
-| Symptom | Action |
-| --- | --- |
-| Setup exits with “Skipping Cloud setup” | Set `CODEX_CLOUD=1` in environment settings. |
-| Unsupported Node or no JDK compiler | Select Node 24 and JDK 21, then rerun setup. |
-| Pinned checkout/runtime/credentials missing after resume | Rerun setup with the Secret; maintenance cannot reconstruct an uncached environment. |
-| HTTP 401/403 or failed identity check | Verify the account, REST-Enabled SQL access, schema URL, expected identity and agent POST allowlist. |
-| Java timeout or certificate error | Check proxy/CA settings and run maintenance; do not disable TLS. |
-| CLI works but no plugin tools or panel appear | Native Cloud integration is not installed or verified by this example; continue through the CLI. |
+| Symptom                                                  | Action                                                                                               |
+| -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| Setup exits with “Skipping Cloud setup”                  | Set `CODEX_CLOUD=1` in environment settings.                                                         |
+| Unsupported Node or no JDK compiler                      | Select Node 24 and JDK 21, then rerun setup.                                                         |
+| Pinned checkout/runtime/credentials missing after resume | Rerun setup with the Secret; maintenance cannot reconstruct an uncached environment.                 |
+| HTTP 401/403 or failed identity check                    | Verify the account, REST-Enabled SQL access, schema URL, expected identity and agent POST allowlist. |
+| Java timeout or certificate error                        | Check proxy/CA settings and run maintenance; do not disable TLS.                                     |
+| CLI works but no plugin tools or panel appear            | Native Cloud integration is not installed or verified by this example; continue through the CLI.     |
 
 ## Verification scope
 

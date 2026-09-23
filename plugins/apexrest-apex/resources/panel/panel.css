@@ -341,71 +341,6 @@ header .subtle {
   color: var(--yellow);
   border-color: #494231;
 }
-.steps {
-  display: flex;
-  margin: 5px 0 15px;
-  gap: 7px;
-}
-.step {
-  flex: 1;
-  padding-top: 12px;
-  border-top: 3px solid var(--line);
-  font-size: 10px;
-  color: var(--muted);
-  line-height: 1.5;
-}
-.step.done {
-  border-color: var(--accent);
-}
-.step.active {
-  border-color: var(--blue);
-  color: var(--text);
-}
-.agents {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
-  gap: 12px;
-}
-.agent {
-  background: var(--bg);
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 16px;
-  min-width: 0;
-}
-.agent-title {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 18px;
-}
-.role-icon {
-  display: inline-grid;
-  place-items: center;
-  width: 28px;
-  height: 28px;
-  border: 1px solid var(--line);
-  border-radius: 50%;
-  font-size: 11px;
-  color: var(--accent);
-  margin-right: 8px;
-}
-.agent-action {
-  font-size: 12px;
-  line-height: 1.6;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
-  min-height: 40px;
-  margin: 13px 0;
-}
-.agent-meta {
-  font-size: 10px;
-  color: var(--muted);
-  display: grid;
-  gap: 5px;
-  overflow-wrap: anywhere;
-}
 .empty {
   padding: 27px 12px;
   color: var(--muted);
@@ -434,47 +369,19 @@ header .subtle {
 dl {
   margin: 0;
 }
-.activity {
-  border-left: 1px solid var(--line);
-  padding: 0 0 18px 18px;
-  margin-left: 5px;
-  position: relative;
-}
-.activity:before {
-  content: '';
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--muted);
-  position: absolute;
-  left: -4px;
-  top: 5px;
-}
-.activity .subtle {
-  font-size: 10px;
-}
-.activity p {
-  font-size: 12px;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
-  margin-top: 6px;
-}
-.activity:last-child {
-  padding-bottom: 0;
-}
-.review {
+.journal-entry {
   padding: 15px 0;
   border-bottom: 1px solid var(--line);
 }
-.review:last-child {
+.journal-entry:last-child {
   border: 0;
 }
-.review p {
+.journal-entry p {
   font-size: 12px;
   margin-top: 9px;
   white-space: pre-wrap;
 }
-.review ul {
+.journal-entry ul {
   font-size: 12px;
   padding-left: 18px;
   line-height: 1.7;
@@ -529,28 +436,6 @@ td p {
 .actions button {
   min-height: 39px;
 }
-.form-footer {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin-top: 15px;
-}
-.form-footer p {
-  flex: 1;
-  min-width: 180px;
-}
-.inline-label {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  margin: 0;
-  max-width: 360px;
-}
-.inline-label select {
-  max-width: 290px;
-}
 .notice {
   padding: 13px 16px;
   border: 1px solid var(--line);
@@ -598,22 +483,6 @@ footer {
 footer span:last-child {
   margin-left: auto;
 }
-dialog {
-  border: 1px solid var(--line);
-  background: var(--surface);
-  color: var(--text);
-  border-radius: 14px;
-  padding: 25px;
-  width: min(650px, calc(100vw - 36px));
-  box-shadow: 0 20px 90px #0008;
-}
-dialog::backdrop {
-  background: #0008;
-  backdrop-filter: blur(3px);
-}
-dialog .primary {
-  margin-top: 17px;
-}
 body[data-disconnected='true'] main {
   opacity: 0.78;
 }
@@ -641,9 +510,6 @@ body[data-disconnected='true'] main {
   }
   .metric .value {
     font-size: 19px;
-  }
-  .agents {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 @media (max-width: 650px) {
@@ -704,21 +570,9 @@ body[data-disconnected='true'] main {
   .card {
     padding: 17px;
   }
-  .steps {
-    flex-wrap: wrap;
-  }
-  .step {
-    flex-basis: 28%;
-  }
-  .agents {
-    grid-template-columns: 1fr;
-  }
   .section-heading {
     align-items: flex-start;
     flex-wrap: wrap;
-  }
-  .form-footer {
-    justify-content: flex-start;
   }
   footer {
     font-size: 8px;
@@ -768,38 +622,6 @@ body[data-disconnected='true'] main {
     scroll-behavior: auto !important;
   }
 }
-.avatar {
-  width: 64px;
-  height: 64px;
-  object-fit: contain;
-  image-rendering: pixelated;
-  flex-shrink: 0;
-}
-.agent-title {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.agent-title h3 {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 4px;
-}
-.agent-title small {
-  font-size: 11px;
-  font-weight: 500;
-}
 .brand-mark img {
   display: block;
-}
-.task-summary {
-  font-size: 13px;
-  line-height: 1.6;
-  white-space: pre-wrap;
-  border-left: 2px solid var(--accent);
-  padding-left: 14px;
-  margin: 0 0 22px;
-  max-height: 150px;
-  overflow: auto;
 }

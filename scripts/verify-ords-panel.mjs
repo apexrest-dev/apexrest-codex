@@ -11,9 +11,13 @@ import { chromium, expect } from '@playwright/test';
 import { sourceDigest } from './lib/release.mjs';
 
 const keepPanel = process.argv.includes('--keep-panel');
-const reportFile = process.argv.includes('--connections')
-  ? 'docs/evidence/connection-settings-local.json'
-  : 'docs/evidence/ords-panel-local.json';
+const outputIndex = process.argv.indexOf('--output');
+const reportFile =
+  outputIndex >= 0
+    ? process.argv[outputIndex + 1]
+    : process.argv.includes('--connections')
+      ? 'docs/evidence/connection-settings-local.json'
+      : 'docs/evidence/ords-panel-local.json';
 const directory = await realpath(await mkdtemp(path.join(tmpdir(), 'apexrest-ords-panel-')));
 const project = path.join(directory, 'project');
 const home = path.join(directory, 'managed');

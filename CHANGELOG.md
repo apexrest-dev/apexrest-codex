@@ -2,6 +2,18 @@
 
 English | [Українська](CHANGELOG.uk.md)
 
+## 1.0.0 — current-session release
+
+- Work directly in the open Codex conversation; remove plugin-owned model sessions, task registration, role routing, team tools/skill and panel controls.
+- Keep 18 MCP tools and 12 focused skills, Oracle/APEX operations, SQLcl/ORDS, bounded references, recoverable jobs and deployment/test safeguards.
+- Simplify the bilingual guides and site; preserve the original specification and past JSON evidence as historical input.
+
+See [release notes](docs/release-notes.md) and [current local evidence](docs/evidence/current-session-100-local.json) for validation and distribution status.
+
+## Historical entries
+
+The entries below describe earlier releases. Their removed features are not available in 1.0.0; publication statements refer to the date/version recorded.
+
 ## 0.5.0 — stable release
 
 - Promote the reviewed `0.5.0-beta.1` code and pinned Oracle APEXlang reference snapshot to package and plugin version `0.5.0`; no new component behavior is claimed.
@@ -18,7 +30,6 @@ The npm release target is `apexrest@0.5.0-beta.1` on the `beta` channel; the [pu
 
 ## 0.4.0-beta.1 — minor beta
 
-- Run single work directly in the user's current Codex session without a child agent, App Server startup or automatic panel. Reviewed teams remain an explicit opt-in.
 - Let six long MCP tools start once and wait for completion in the same call. Preserve the job identity, propagate terminal failure to the MCP error result and retain diagnostics, run IDs and artifacts.
 - Batch up to eight scoped metadata reads with one target verification; return compact project context without source hashing or Oracle access when full inspection is unnecessary.
 - Shorten skills and tool descriptions, reuse reference normalization and preserve bounded output with recoverable details and deployment-plan safety information.
@@ -27,9 +38,7 @@ The product remains exclusive to Codex desktop and CLI. Deployment authorization
 
 ## 0.3.0-beta.1 — local minor beta (unpublished)
 
-- Use one agent by default. Teams require an explicit Settings opt-in; legacy defaults do not grant that opt-in, and existing runs retain their recorded mode.
 - Return three reference search results by default, with explicit pagination for more. Keep alternative APEXlang process types separate from required dependencies.
-- Bound peer summaries and reuse unchanged context; avoid storing tool activity twice when the completed item arrives.
 - Keep large MCP results compact while preserving success, failure and unknown outcomes. Store recoverable details outside project sources, preserve JSON pagination and deliver complete panel snapshots through UI metadata. Add UTF-8 payload budgets and repair the local optimization benchmark.
 
 These changes retain the existing deployment safeguards and ORDS functionality. Historical Oracle evidence keeps its original version and scope; this entry claims no new connected verification or measured billing reduction. This candidate has no Git tag, GitHub release or npm publication. See [release notes](docs/release-notes.md) and [remaining gates](docs/next-actions.md).

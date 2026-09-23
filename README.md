@@ -16,23 +16,13 @@ APEXREST connects native Codex skills and MCP tools to Oracle SQLcl. Generate AP
 
 ![APEXREST connects a Codex request to APEXlang source, a verified deployment plan, Oracle APEX and runtime checks.](docs/assets/overview.svg)
 
-> **Stable release: `0.5.0`.** Single mode uses your current Codex session; teams require explicit Settings opt-in. Programmatic job waiting, metadata batches, concise project summaries and focused reference retrieval reduce repeated model/tool exchanges; see the [release notes](docs/release-notes.md). Existing Oracle template compilation, unchanged ORDS application round-trip and native Codex installation evidence retains its recorded scope and version. Further integration, recovery and platform checks remain open in the release-readiness report. Independent APEXREST tooling; not an official Oracle or OpenAI product.
+> **Stable release: `1.0.0`.** Work directly in your current Codex session with 18 MCP tools and 12 focused skills. Codex owns the conversation and its execution; APEXREST handles Oracle/APEX operations. Programmatic job waiting, metadata batches, concise project inspection and focused references reduce routine tool exchanges. See [release notes](docs/release-notes.md) for changes and evidence limits. Independent tooling; not an official Oracle or OpenAI product.
 
-Describe the implementation in Codex chat: `$apexrest-work` uses the existing session directly in single mode, without another agent or automatic panel startup. The current host controls its model and permissions. Explicitly enabled teams retain separate sessions, Auto model routing and the in-app panel; results return to the same conversation. See [chat workflow and Auto models](docs/chat-workflow.md). The team retains separate developers, mandatory manager code review, independent QA and final manager review. See [team APIs and review gates](docs/team.md) and the [Codex source audit](docs/codex-integration.md).
-
-Single agent is the default; teams require explicit opt-in in Settings. See [execution settings](docs/work-modes.md).
-
-Settings offer **Single agent / Agent team** and **Codex in-app browser / External system browser** for APEX verification. Single mode works in the current chat; the dashboard remains available on request. [Settings and verification boundaries](docs/work-modes.md).
+Describe the change in Codex chat or use `$apexrest-work`. Implementation starts in the same context without a plugin startup call. See the [chat workflow](docs/chat-workflow.md) and [Codex integration](docs/codex-integration.md). Choose **Codex in-app browser / External system browser** for APEX verification in Settings.
 
 **Settings → Database network transport** selects **Direct Oracle listener** or **ORDS HTTP(S)** for new operations across projects. Direct mode offers a picker of your saved SQLcl connections. ORDS uses your existing database username and password with the schema's ORDS URL when the listener, commonly on port 1521, is unavailable. Its connection settings and password stay in private plugin-level local files; enter the password in the local dashboard or through CLI `--password-file`. ORDS uses SQLcl CLI and supports the APEXlang import/export workflow. Switching back preserves both connection mappings. See [SQL through ORDS](docs/ords.md) for setup and verification limits.
 
-Open `$apexrest-panel` for live project settings, Pokémon agent activity, mandatory reviews, QA and APEX operations inside Codex. The console view is `apexrest panel tui`. See the [development panel](docs/panel.md).
-
-Read the [complete agent workflow with screenshots](docs/agent-workflow.md): task setup, Pokémon roles, mandatory reviews, QA, repair cycles and authorized APEX delivery.
-
-![Actual Codex panel with Mewtwo, Pikachu, Charmander and Squirtle after a reviewed local coding task.](docs/assets/panel-agent-team.jpg)
-
-_Actual Codex in-app browser capture. This isolated coding example verifies team execution; it does not represent an Oracle import._
+Open `$apexrest-panel` for project and connection settings, actual Oracle/APEX jobs and diagnostics inside Codex. The console view is `apexrest panel tui`. See the [development panel](docs/panel.md).
 
 ## ORDS SQL: a path to Codex Cloud
 
@@ -46,11 +36,11 @@ connect -orest app_user@https://example.com/ords/app_user/
 
 The `-orest` option selects the REST connection. Replace the example account and schema URL with your authorized target; REST-Enabled SQL must be enabled. The account still needs database credentials and the permissions required for the requested work. See [SQL through ORDS](docs/ords.md).
 
-| | Local mode | Codex Cloud setup |
-| --- | --- | --- |
-| Where tasks run | On your computer; it must stay on while agents work. | In a hosted container; your home computer can be off. |
-| Tools and dependencies | Installed and maintained on your computer. | Prepared through reusable setup and maintenance scripts. |
-| Database access | Direct Oracle connection or ORDS HTTP(S). | The documented setup uses an authorized ORDS endpoint over HTTPS. |
+|                        | Local mode                                              | Codex Cloud setup                                                 |
+| ---------------------- | ------------------------------------------------------- | ----------------------------------------------------------------- |
+| Where tasks run        | On your computer; it must stay on while operations run. | In a hosted container; your home computer can be off.             |
+| Tools and dependencies | Installed and maintained on your computer.              | Prepared through reusable setup and maintenance scripts.          |
+| Database access        | Direct Oracle connection or ORDS HTTP(S).               | The documented setup uses an authorized ORDS endpoint over HTTPS. |
 
 ### Delegate from your phone
 
@@ -58,24 +48,11 @@ After configuring [Codex's native Slack integration](https://learn.chatgpt.com/d
 
 The **ChatGPT mobile app's [Remote mode](https://learn.chatgpt.com/docs/remote)** connects to a computer that must remain awake and online. It has a different execution requirement from a Cloud task.
 
-### An agent-team workflow to configure and verify
-
-With the Cloud environment, database access and applicable tests configured, the intended workflow is:
-
-1. A developer agent prepares the APEX application changes.
-2. A reviewer checks the code.
-3. An independent QA agent runs the configured tests.
-4. You review the result before an authorized deployment.
-
-The [Cloud setup guide](docs/codex-cloud.md) covers **CLI + ORDS**. The complete agent-team workflow in Codex Cloud still needs end-to-end verification; the guide does not establish native Cloud plugin/MCP discovery or panel support. Existing local team and Oracle evidence retains its documented scope.
-
-![APEXREST concept: a browser or Slack on a phone delegates to Codex Cloud, whose CLI reaches Oracle through ORDS HTTPS; local and Cloud execution are compared, and the agent-team workflow still needs configuration and verification.](docs/assets/ords-codex-cloud.png)
-
-_Illustrative overview, with the setup and verification limits described above._
+The [Cloud setup guide](docs/codex-cloud.md) covers CLI + ORDS in a configured container. It does not establish native Cloud plugin/MCP discovery or panel support. Local and connected evidence retains its recorded version and scope.
 
 ## Install from npm
 
-Use Node 24 LTS (supported range: Node 24–26). [apexrest](https://www.npmjs.com/package/apexrest) `0.5.0` is published as npm `latest`. The commands below install that channel. See the [publication record](docs/evidence/npm-050-stable-publication.json) for registry verification.
+Use Node 24 LTS (supported range: Node 24–26). Install [apexrest](https://www.npmjs.com/package/apexrest) from npm. The stable release version is `1.0.0`; the commands below use `latest`. See [release notes](docs/release-notes.md) for distribution and verification status.
 
 Install the CLI globally and check its version:
 
@@ -95,7 +72,7 @@ npx apexrest --version
 npx apexrest
 ```
 
-To pin this version, use `npm install -g apexrest@0.5.0`. The `beta` tag has been removed; the earlier beta remains available as `apexrest@0.5.0-beta.1`. npm includes the built runtime, so no Git checkout or local build is needed. The repository installation below remains available.
+To pin this version, use `npm install -g apexrest@1.0.0`. npm includes the built runtime, so no Git checkout or local build is needed. The repository installation below remains available.
 
 ## Install with the terminal menu
 

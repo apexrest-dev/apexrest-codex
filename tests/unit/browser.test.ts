@@ -6,7 +6,7 @@ import { fixture } from '../fixtures/project.ts';
 import { writeJson } from '../../packages/core/src/fs.ts';
 import { openVerificationBrowser, externalBrowserCommand } from '../../packages/core/src/browser.ts';
 import { PanelService } from '../../packages/core/src/panel.ts';
-import { resolveWorkRequest } from '../../packages/core/src/work-preferences.ts';
+import { browserPreferences } from '../../packages/core/src/browser-preferences.ts';
 
 async function setup(t: import('node:test').TestContext) {
   const { ctx } = await fixture();
@@ -26,19 +26,18 @@ async function setup(t: import('node:test').TestContext) {
   return { ctx, panel: new PanelService(ctx.root) };
 }
 
-test('legacy preferences retain defaults and saved modes drive all request resolution', async (t) => {
+test('browser preferences default to Codex and ignore obsolete execution settings', async (t) => {
   const { ctx, panel } = await setup(t);
-  assert.equal((await panel.preferences()).executionMode, 'single');
-  assert.equal((await panel.preferences()).browserMode, 'codex');
-  await panel.act({
-    kind: 'preferences',
-    settings: { executionMode: 'single', browserMode: 'external', developers: 3 },
+  assert.deepEqual(await browserPreferences(ctx.root), { browserMode: 'codex' });
+  await writeJson(path.join(ctx.root, '.apexrest/panel/preferences.json'), {
+    executionMode: 'team',
+    multiAgentEnabled: true,
+    developers: 3,
+    browserMode: 'external',
   });
-  const request = await resolveWorkRequest(ctx.root, { task: 'Check the source.' });
-  assert.equal(request.executionMode, 'single');
-  assert.equal(request.browserMode, 'external');
-  assert.equal(request.developers, 1);
-  assert.equal((await panel.snapshot()).preferences.browserMode, 'external');
+  assert.deepEqual(await panel.preferences(), { browserMode: 'external' });
+  await panel.act({ kind: 'preferences', settings: { browserMode: 'codex' } });
+  assert.deepEqual((await panel.snapshot()).preferences, { browserMode: 'codex' });
 });
 
 test('Codex browser route requires a host action and never launches a system browser or claims verification', async (t) => {
@@ -76,20 +75,17 @@ test('external browser selection dispatches the exact configured target and repo
   );
 });
 
-test('browser mode is pinned for active workers and invalid targets are never launched', async (t) => {
+test('explicit browser selection takes precedence and invalid targets are never launched', async (t) => {
   const { ctx, panel } = await setup(t);
-  const worker = process.env.APEXREST_TEAM_WORKER,
-    mode = process.env.APEXREST_BROWSER_MODE;
-  process.env.APEXREST_TEAM_WORKER = '1';
-  process.env.APEXREST_BROWSER_MODE = 'codex';
-  t.after(() => {
-    if (worker === undefined) delete process.env.APEXREST_TEAM_WORKER;
-    else process.env.APEXREST_TEAM_WORKER = worker;
-    if (mode === undefined) delete process.env.APEXREST_BROWSER_MODE;
-    else process.env.APEXREST_BROWSER_MODE = mode;
-  });
   await panel.act({ kind: 'preferences', settings: { browserMode: 'external' } });
-  const result = await openVerificationBrowser(ctx, 'dev');
+  const result = await openVerificationBrowser(
+    ctx,
+    'dev',
+    async () => {
+      throw new Error('Unexpected external launch');
+    },
+    'codex',
+  );
   assert.equal(result.browserMode, 'codex');
   ctx.config.environments.dev!.baseUrl = 'file:///etc/passwd';
   await assert.rejects(openVerificationBrowser(ctx, 'dev'), { code: 'ORIGIN_DENIED' });

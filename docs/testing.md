@@ -20,7 +20,7 @@ Build with `npm run build` before checks that consume `dist/`. The [implementati
 
 ## Native host and Oracle checks
 
-`npm run test:native-codex` installs the package outside the checkout into an isolated Codex profile and exercises real discovery, tool calls and lifecycle operations. A successful direct MCP connection alone does not establish native-host installation.
+`npm run test:repository-plugin` installs the bundled plugin into an isolated Codex profile and checks registration plus installed CLI/stdio MCP behavior. This does not invoke a model or prove desktop rendering or native tool discovery inside a conversation; those observations require a real host session.
 
 `node scripts/oracle-smoke.mjs` runs generation and validation with installed SQLcl, without connecting to a database. It records real compiler and MMD output for the blank and CRM templates. It does not establish a successful database import.
 

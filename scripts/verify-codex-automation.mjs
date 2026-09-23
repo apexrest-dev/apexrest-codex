@@ -1,6 +1,5 @@
 // Reproducible local transport/worker evidence. No Oracle or model execution.
 import assert from 'node:assert/strict';
-import { randomUUID } from 'node:crypto';
 import { mkdtemp, mkdir, readFile, readdir, realpath, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
@@ -10,7 +9,7 @@ import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import { sourceDigest } from './lib/release.mjs';
 
-const output = process.argv[2] ?? 'docs/evidence/codex-automation-runtime.json';
+const output = process.argv[2] ?? 'docs/evidence/current-session-100-runtime.json';
 const temporary = await mkdtemp(path.join(tmpdir(), 'apexrest-automation-'));
 const project = path.join(await realpath(temporary), 'project');
 const managed = path.join(temporary, 'managed');
@@ -24,8 +23,6 @@ const env = {
   APEXREST_CODEX: guard,
   APEXREST_SQLCL: guard,
 };
-delete env.APEXREST_TEAM_WORKER;
-delete env.APEXREST_TEAM_ROLE;
 delete env.APEXREST_BROWSER_MODE;
 const evidence = {
   schemaVersion: 1,
@@ -43,7 +40,7 @@ const client = new Client({ name: 'codex-automation-verification', version: '1' 
 let connected = false;
 const readJson = async (file) => JSON.parse(await readFile(file, 'utf8'));
 const call = async (name, args = {}, expectedOk = true) => {
-  assert.ok(evidence.calls.tools < 7, 'Runtime verification has a fixed seven-call tool budget.');
+  assert.ok(evidence.calls.tools < 6, 'Runtime verification has a fixed six-call tool budget.');
   evidence.calls.tools++;
   evidence.calls.byTool[name] = (evidence.calls.byTool[name] ?? 0) + 1;
   const started = performance.now();
@@ -142,7 +139,7 @@ process.exit(99);
   connected = true;
   evidence.calls.listTools++;
   const catalog = await client.listTools();
-  assert.equal(catalog.tools.length, 24);
+  assert.equal(catalog.tools.length, 18);
   const longTools = [
     'apexrest_apex_generate',
     'apexrest_apex_export',
@@ -160,7 +157,9 @@ process.exit(99);
     assert.equal(schema.properties.waitSeconds.default, 25);
     assert.ok(!schema.required?.includes('waitSeconds'));
   }
-  evidence.catalog = { tools: 24, longToolsWithOptionalWait: longTools.length, defaultWaitSeconds: 25 };
+  assert.ok(catalog.tools.every((tool) => !/^apexrest_(team|work)_/.test(tool.name)));
+  evidence.checks.push('no-agent-start-or-orchestration-tools');
+  evidence.catalog = { tools: 18, longToolsWithOptionalWait: longTools.length, defaultWaitSeconds: 25 };
   evidence.checks.push('real-stdio-catalog-and-optional-wait-schema');
 
   await writeTest(12);
@@ -184,24 +183,6 @@ process.exit(99);
     'queue-zero-and-existing-job-wait',
     'exactly-three-workers-and-no-wait-field-in-domain-input',
   );
-
-  const work = await call('apexrest_work_start', {
-    task: 'Inspect this isolated fixture in the current session.',
-    requestId: randomUUID(),
-  });
-  assert.equal(work.envelope.data.executionHost, 'current_session');
-  assert.equal(work.envelope.data.panel.status, 'not_requested');
-  assert.equal(work.envelope.data.projectContext.projectId, 'automation-fixture');
-  assert.equal(work.envelope.data.projectContext.targetVerified, false);
-  assert.equal(work.envelope.data.projectContext.sources, undefined);
-  evidence.workStart = {
-    toolCalls: 1,
-    executionHost: 'current_session',
-    projectContext: true,
-    targetVerified: false,
-    resultTextBytes: work.bytes,
-  };
-  evidence.checks.push('single-session-handoff-with-bounded-project-context');
 
   const source = path.join(project, 'src/apex/automation-fixture');
   await mkdir(source, { recursive: true });
@@ -231,7 +212,7 @@ process.exit(99);
   evidence.checks.push('summary-without-source-hashes-versus-full-inventory');
   assert.equal(await readFile(forbidden, 'utf8').catch(() => null), null);
   evidence.checks.push('no-codex-app-server-or-sqlcl-execution');
-  assert.equal(evidence.calls.tools, 7);
+  assert.equal(evidence.calls.tools, 6);
   evidence.status = 'passed';
 } catch (error) {
   evidence.status = 'failed';

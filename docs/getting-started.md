@@ -4,7 +4,7 @@ English | [Українська](getting-started.uk.md)
 
 Install the CLI from npm, open its terminal menu to install tools and the plugin, then configure a direct SQLcl or ORDS HTTP(S) connection. The npm package includes the built runtime, so no Git checkout, TypeScript build or `npm ci` is needed. Repository installation and direct registration through the Codex CLI are also documented below.
 
-The current npm release is `0.5.0` on `latest`. Native-host evidence is specific to the tested Codex and platform combination; the remaining [release qualification checks](next-actions.md) stay open.
+The release version is `1.0.0`; [release notes](release-notes.md) track npm distribution separately. Native-host evidence is specific to the tested Codex and platform combination; the remaining [release qualification checks](next-actions.md) stay open.
 
 ## Codex Cloud
 
@@ -25,7 +25,7 @@ An existing clean APEX installation is enough for ordinary deployment. Service t
 
 ## Install from npm
 
-Use Node 24 LTS (supported range: Node 24–26). [apexrest](https://www.npmjs.com/package/apexrest) `0.5.0` is published as npm `latest`. The commands below install that channel. See the [publication record](evidence/npm-050-stable-publication.json) for registry verification.
+Use Node 24 LTS (supported range: Node 24–26). Install [apexrest](https://www.npmjs.com/package/apexrest) from npm. The stable release version is `1.0.0`; the commands below use `latest`. See [release notes](release-notes.md) for distribution and verification status.
 
 Install the CLI globally and check its version:
 
@@ -45,7 +45,7 @@ npx apexrest --version
 npx apexrest
 ```
 
-To pin this version, use `npm install -g apexrest@0.5.0`. The `beta` tag has been removed; the earlier beta remains available as `apexrest@0.5.0-beta.1`. The repository installation below remains available.
+To pin this version, use `npm install -g apexrest@1.0.0`. The repository installation below remains available.
 
 ## Install with the terminal menu
 
@@ -111,20 +111,20 @@ To find the installed plugin in the desktop app, open **Plugins**, review the **
 
 The conversational menu routes to every workflow below. Each workflow also has its own readable skill label and starter prompt:
 
-| Menu entry                | Functions                                                                     |
-| ------------------------- | ----------------------------------------------------------------------------- |
-| Reviewed development team | Fixed developer, manager code review, independent QA and final manager review |
-| Install dependencies      | Java, SQLcl, Node.js, Playwright and Chromium; preview and offline options    |
-| Setup and connections     | Toolchain diagnostics, local connection references and plugin maintenance     |
-| Projects                  | Create, adopt and inspect projects                                            |
-| APEX applications         | Generate, edit, export, validate and compare applications; Oracle references  |
-| Database and PL/SQL       | Read metadata, design schema changes and plan migrations                      |
-| Deployment and recovery   | Plan, authorized import, status and restore planning                          |
-| Tests and browser checks  | Configured suites, browser authentication, reports and in-app verification    |
-| Diagnostics and jobs      | Troubleshoot failures, inspect/cancel jobs and read artifacts                 |
-| Review changes            | Source preservation, deployment risk, security and release evidence           |
+| Menu entry               | Functions                                                                    |
+| ------------------------ | ---------------------------------------------------------------------------- |
+| APEX work                | Implement and verify a change directly in the current Codex chat             |
+| Install dependencies     | Java, SQLcl, Node.js, Playwright and Chromium; preview and offline options   |
+| Setup and connections    | Toolchain diagnostics, local connection references and plugin maintenance    |
+| Projects                 | Create, adopt and inspect projects                                           |
+| APEX applications        | Generate, edit, export, validate and compare applications; Oracle references |
+| Database and PL/SQL      | Read metadata, design schema changes and plan migrations                     |
+| Deployment and recovery  | Plan, authorized import, status and restore planning                         |
+| Tests and browser checks | Configured suites, browser authentication, reports and in-app verification   |
+| Diagnostics and jobs     | Troubleshoot failures, inspect/cancel jobs and read artifacts                |
+| Review changes           | Source preservation, deployment risk, security and release evidence          |
 
-Open `$apexrest-panel` for the live development panel, or `$apexrest-team` to start the reviewed workflow directly. The [complete agent guide](agent-workflow.md) explains settings, roles, communication, repair loops and delivery with actual screenshots.
+Open `$apexrest-panel` for project settings and actual Oracle/APEX operations. Use `$apexrest-work` to implement changes directly in the [current chat](chat-workflow.md).
 
 The All functions entry includes the complete CLI operation index. Unsupported sandbox provisioning is explicitly marked unavailable. Opening the menu does not execute its actions. Codex supports up to three plugin-level starter prompts; the full menu and per-skill entries provide access to every workflow. Start a new Codex task after updating the plugin to load the new menu metadata.
 
@@ -169,7 +169,7 @@ apexrest setup --native-only --dry-run --json
 apexrest setup --native-only --yes --json
 ```
 
-`--native-only` omits tool downloads from both preview and apply. The update retains the previous plugin files and backs up the Codex configuration. A foreign, remote or ambiguous marketplace stays blocked with `MARKETPLACE_OWNERSHIP_CONFLICT`; the diagnostic identifies its root and Codex profile. Review that registration or select another profile through `--codex-home`. If an interrupted update leaves an unknown result, review its saved transition record before retrying. See [registration status](implementation-status.md#existing-local-plugin-registration) for verification scope.
+`--native-only` omits tool downloads from both preview and apply. The update retains the previous plugin files and backs up the Codex configuration. A foreign, remote or ambiguous marketplace stays blocked with `MARKETPLACE_OWNERSHIP_CONFLICT`; the diagnostic identifies its root and Codex profile. Review that registration or select another profile through `--codex-home`. If an interrupted update leaves an unknown result, review its saved transition record before retrying. See [registration status](evidence/setup-registration-local.json) for verification scope.
 
 The local packaging command generates unsigned beta artifacts and reports readiness. It does not publish or certify a stable release.
 

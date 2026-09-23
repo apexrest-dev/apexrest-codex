@@ -1,4 +1,0 @@
-interface:
-  display_name: "Development agents"
-  short_description: "Use the current session or a team with mandatory reviews"
-  default_prompt: "Use $apexrest-team. Complete my Oracle APEX task using my saved execution mode."

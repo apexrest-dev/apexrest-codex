@@ -1,6 +1,6 @@
 import { environment, requireTrust, type ProjectContext } from './config.ts';
 import { allowedOrigin } from './testing.ts';
-import { workPreferences } from './work-preferences.ts';
+import { browserPreferences } from './browser-preferences.ts';
 import { runProcess } from './process.ts';
 import { Fault } from './result.ts';
 
@@ -43,11 +43,7 @@ export async function openVerificationBrowser(
     new URL(target.baseUrl).origin,
     ...target.allowedOrigins,
   ]).toString();
-  const pinned = process.env.APEXREST_TEAM_WORKER === '1' ? process.env.APEXREST_BROWSER_MODE : undefined;
-  const mode: BrowserMode =
-    pinned === 'external' || pinned === 'codex'
-      ? pinned
-      : (browserMode ?? (await workPreferences(ctx.root)).browserMode);
+  const mode: BrowserMode = browserMode ?? (await browserPreferences(ctx.root)).browserMode;
   const common = {
     browserMode: mode,
     environment: name,

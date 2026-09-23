@@ -1,4 +1,5 @@
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { readdir, realpath, stat } from 'node:fs/promises';
 import { randomUUID } from 'node:crypto';
 import { z } from 'zod';
@@ -7,11 +8,9 @@ import { loadProject, parse, policy, requireTrust } from './config.ts';
 import { sanitized, Fault } from './result.ts';
 import { sqlclConfig, configureSqlcl } from './sqlcl-config.ts';
 import { connections, configureConnection } from './connections.ts';
-import { TeamService, teamRuntime } from './team.ts';
 import { JobService } from './jobs.ts';
 import { panelActionSchema, type PanelAction } from './panel-schema.ts';
-import { workPreferences } from './work-preferences.ts';
-import { recordedExecutionMode } from './team-schema.ts';
+import { browserPreferences } from './browser-preferences.ts';
 import { openVerificationBrowser } from './browser.ts';
 import { VERSION } from './version.ts';
 import { runProcess } from './process.ts';
@@ -25,7 +24,7 @@ export class PanelService {
     private oracle: Pick<OracleAdapter, 'savedConnections'> = new OracleAdapter(),
   ) {}
   async preferences() {
-    return workPreferences(this.root);
+    return browserPreferences(this.root);
   }
   private async records(folder: string) {
     const base = await contained(this.root, '.apexrest/' + folder);
@@ -70,46 +69,20 @@ export class PanelService {
         }),
     );
   }
-  async snapshot(selectedTeam?: string) {
+  async snapshot() {
     this.root = await realpath(this.root);
-    if (selectedTeam) parse(z.uuid(), selectedTeam);
     const ctx = await loadProject(this.root).catch((error: unknown) => {
       if (error instanceof Fault && error.code === 'PROJECT_NOT_CONFIGURED') return null;
       throw error;
     });
-    const [prefs, sqlcl, refs, security, teamRecords, jobRecords, deploymentRecords] = await Promise.all([
+    const [prefs, sqlcl, refs, security, jobRecords, deploymentRecords] = await Promise.all([
       this.preferences(),
       sqlclConfig(),
       connections(),
       policy(),
-      this.records('teams'),
       this.records('jobs'),
       this.records('deployments'),
     ]);
-    const teams = teamRecords
-      .map((row) => ({
-        id: String(row.id),
-        status: String(row.status),
-        phase: String(row.phase ?? 'unknown'),
-        revision: Number(row.revision ?? 0),
-        updatedAt: String(row.updatedAt ?? ''),
-        members: Array.isArray(row.members) ? row.members.length : 0,
-        executionMode: recordedExecutionMode(row),
-      }))
-      .map((row) =>
-        ['queued', 'running'].includes(row.status) && Date.parse(row.updatedAt) + 60000 < Date.now()
-          ? { ...row, status: 'outcome_unknown' }
-          : row,
-      );
-    const chosen =
-      selectedTeam ?? teams.find((t) => ['running', 'queued'].includes(t.status))?.id ?? teams[0]?.id;
-    const team = ctx && chosen ? await new TeamService(ctx).snapshot(chosen) : null;
-    const assignment =
-      ctx && chosen
-        ? ((await readJson(await contained(this.root, '.apexrest/teams/' + chosen + '/request.json')).catch(
-            () => null,
-          )) as { task?: string } | null)
-        : null;
     const jobs = await Promise.all(
       jobRecords.map(async (row) => {
         const state = ctx ? ((await new JobService(ctx).status(String(row.id))) as Row) : row;
@@ -162,9 +135,6 @@ export class PanelService {
       preferences: prefs,
       connections: refs,
       toolchain,
-      teams,
-      team,
-      task: typeof assignment?.task === 'string' ? assignment.task.slice(0, 2000) : null,
       jobs,
       deployments,
       changes,
@@ -182,17 +152,8 @@ export class PanelService {
     if (action.kind === 'saved-connections') return this.oracle.savedConnections();
     if (action.kind === 'preferences') {
       const settings = { ...(await this.preferences()), ...action.settings };
-      if (!settings.multiAgentEnabled) {
-        if (action.settings.executionMode === 'team')
-          throw new Fault(
-            'MULTI_AGENT_DISABLED',
-            'Explicitly enable multiAgentEnabled in Settings to select a team.',
-            2,
-          );
-        settings.executionMode = 'single';
-      }
       await writeJson(await contained(this.root, '.apexrest/panel/preferences.json'), settings);
-      return { saved: true, appliesTo: 'new-teams' };
+      return { saved: true, appliesTo: 'browser-verification' };
     }
     if (action.kind === 'sqlcl') {
       return configureSqlcl(
@@ -202,12 +163,8 @@ export class PanelService {
       );
     }
     if (action.kind === 'connection') return configureConnection(action.name, action);
-    const ctx = await loadProject(this.root),
-      team = new TeamService(ctx);
-    if (action.kind === 'start') return team.start({ ...action.request, project: this.root });
+    const ctx = await loadProject(this.root);
     if (action.kind === 'browser') return openVerificationBrowser(ctx, action.env);
-    if (action.kind === 'message') return team.message(action.id, action.message);
-    if (action.kind === 'cancel-team') return team.cancel(action.id);
     if (action.kind === 'cancel-job') return new JobService(ctx).cancel(action.id);
     const operation =
       action.kind === 'validate' ? 'apex.validate' : action.kind === 'plan' ? 'deploy.plan' : 'test.run';
@@ -217,7 +174,11 @@ export class PanelService {
         : action.kind === 'test'
           ? { suite: action.suite, ...(action.env ? { env: action.env } : {}) }
           : {};
-    return new JobService(ctx).start(operation, input, teamRuntime());
+    return new JobService(ctx).start(
+      operation,
+      input,
+      path.join(path.dirname(fileURLToPath(import.meta.url)), 'apexrest.mjs'),
+    );
   }
 }
 export type PanelSnapshot = Awaited<ReturnType<PanelService['snapshot']>>;

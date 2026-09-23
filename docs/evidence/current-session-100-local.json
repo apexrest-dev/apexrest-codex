@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "timestamp": "2026-09-23T19:11:49.690Z",
+  "version": "1.0.0",
+  "status": "passed",
+  "sourceDigest": "f5c6119aa8c71884fac0d452d29b9336b2b7471d4e40481e08b137bc261fb23a",
+  "scope": "Current-session refactor: local CLI/MCP, real Codex in-app panel with isolated synthetic settings, browser fixtures, and package checks. Original build specification preserved; no live Oracle changes.",
+  "checks": {
+    "typecheck": "passed",
+    "lint": "passed",
+    "unitTests": 168,
+    "contractTests": 23,
+    "installerTests": 26,
+    "packagingTests": 14,
+    "totalTests": 231,
+    "documentationPairs": 44,
+    "sitePages": 30,
+    "pluginIntegrity": "passed",
+    "pluginManifest": "passed",
+    "skillsValidated": 12,
+    "repositoryPluginSmoke": "passed",
+    "releaseDryRunArtifacts": 10,
+    "tarballCleanLocalAndGlobalInstalls": {
+      "status": "passed",
+      "local": true,
+      "global": true,
+      "version": "1.0.0",
+      "tools": 18,
+      "skills": 12
+    }
+  },
+  "evidence": {
+    "deterministicRuntime": "current-session-100-runtime.json",
+    "contextComparison": "current-session-100-context.json",
+    "panelSettings": "current-session-100-panel.json",
+    "panelBridge": "current-session-100-bridge.json",
+    "actualCodexPanel": "current-session-100-codex-panel.json"
+  },
+  "package": {
+    "name": "apexrest",
+    "version": "1.0.0",
+    "filename": "apexrest-1.0.0.tgz",
+    "bytes": 2586817,
+    "unpackedBytes": 17135364,
+    "files": 440,
+    "integrity": "sha512-gUU8M9Ch6lIShoc5OgWQml1Tl6UmR0PGoUhwBkloRn5soTYXDlu+l9lBQPoCmFwwuHbKTZsNPHoqlffSN2KaWA==",
+    "shasum": "0727a8856e884d7d06cfd59904dccc4d94bb5854"
+  },
+  "qualification": {
+    "signedFullReleaseReady": false,
+    "nativePlatformAndLiveOracleMatrix": "not established for this source; historical evidence remains separately scoped",
+    "measurements": "UTF-8 bytes and tool/skill counts, not billed tokens or model latency"
+  },
+  "publication": "pending; registry evidence must be recorded separately after actual publication"
+}

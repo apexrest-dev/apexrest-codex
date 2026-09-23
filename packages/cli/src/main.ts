@@ -16,12 +16,6 @@ const positional: Record<string, string[]> = {
   'jobs.status': ['id'],
   'jobs.cancel': ['id'],
   'artifacts.read': ['id'],
-  'team.start': ['task'],
-  'work.start': ['task'],
-  'team.wait': ['id'],
-  'team.status': ['id'],
-  'team.message': ['id', 'message'],
-  'team.cancel': ['id'],
 };
 function operationFrom(args: string[]) {
   const first = args[0];
@@ -62,32 +56,13 @@ function help() {
   if (key === 'panel.action')
     lines.push(
       '',
-      'Pass --action as one JSON object. Supported kinds: preferences, sqlcl, connection, start, message, cancel-team, cancel-job, validate, test, browser, plan.',
+      'Pass --action as one JSON object. Supported kinds: preferences, sqlcl, connection, cancel-job, validate, test, browser, plan.',
       'Example: apexrest panel action --action \'{"kind":"validate"}\' --project PATH --json',
-    );
-  if (key === 'team.start' || key === 'work.start')
-    lines.push(
-      '',
-      'Single agent by default. Team requires explicit multiAgentEnabled: true in saved Settings.',
-      '--execution-mode team|single selects reviewed workers or a handoff to your current Codex session (no new agent).',
-      '--browser-mode codex|external selects interactive APEX verification; the dashboard stays in Codex.',
-      '--developers 1..3 defaults to 1; team-worker edits are serialized in the project.',
-      '--sandbox read-only|workspace-write constrains workers; a single-session read-only request is passed to the host.',
-      '--timeout-seconds 30..3600 applies to workers (default 900). Single uses host permissions and limits.',
-      'The configured project must already be trusted and Codex must be logged in.',
-      'Single returns a receipt: continue directly in the current Codex chat, without team polling. Team returns an owned run ID.',
-      'Single retains the current host model; team workers select models and reasoning automatically.',
-    );
-  if (key === 'work.start')
-    lines.push(
-      'Use --request-id UUID for idempotent task creation; exact retries return the same current-session receipt or worker run.',
     );
   if (key === 'jobs.status')
     lines.push(
       'Use --wait-seconds 25 to wait for an existing job without repeated status calls (default: immediate).',
     );
-  if (key === 'team.wait')
-    lines.push('Use --cursor HASH --wait-seconds 25 for bounded waiting without heartbeat polling.');
   if (key === 'dependencies.install')
     lines.push(
       '',
@@ -159,10 +134,6 @@ try {
   } else if (argv[0] === '--job-worker') {
     if (argv.length !== 3) throw new Fault('INVALID_INPUT', 'Invalid internal job request.', 2);
     await executeJob(await loadProject(argv[1]!), argv[2]!, dispatch);
-  } else if (argv[0] === '--team-worker') {
-    if (argv.length !== 3) throw new Fault('INVALID_INPUT', 'Invalid internal team request.', 2);
-    const { executeTeam } = await import('../../core/src/team-runner.ts');
-    await executeTeam(await loadProject(argv[1]!), argv[2]!);
   } else if (argv[0] === 'mcp') {
     if (argv.length !== 1) throw new Fault('INVALID_INPUT', 'mcp accepts no arguments.', 2);
     const { startMcp } = await import('../../mcp/src/server.ts');
@@ -186,7 +157,7 @@ try {
       'headed',
       'saved',
     ]);
-    const numbers = new Set(['appId', 'offset', 'limit', 'developers', 'timeoutSeconds', 'waitSeconds']);
+    const numbers = new Set(['appId', 'offset', 'limit', 'waitSeconds']);
     let index = 0;
     for (let i = selectedOp.start; i < argv.length; i++) {
       const token = argv[i]!;

@@ -1,6 +1,6 @@
 {
   "name": "apexrest",
-  "version": "0.5.0",
+  "version": "1.0.0",
   "files": [
     "dist/runtime/",
     "dist/resources/",
@@ -40,7 +40,6 @@
     "test:packaging": "node --test tests/packaging/*.test.mjs",
     "test:installers": "node scripts/test.mjs installers",
     "test:integration": "node scripts/integration.mjs",
-    "test:native-codex": "node scripts/native-smoke.mjs",
     "site:build": "node scripts/build-site.mjs",
     "release:dry-run": "node scripts/package-release.mjs",
     "check-release-readiness": "node scripts/check-release-readiness.mjs",

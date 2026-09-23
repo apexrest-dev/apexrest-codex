@@ -3,7 +3,7 @@ name: apexrest-apexlang
 description: Create or edit Oracle APEXlang (.apx) using pinned Oracle references and compiler validation. Excludes Salesforce Apex.
 ---
 
-For a new implementation task, follow [work routing](../apexrest-work/SKILL.md) once. Current-session work and assigned team members continue here without restarting orchestration. Pass the user's absolute workspace as `project` on project-scoped calls.
+Pass the user's absolute workspace as `project` on project-scoped calls.
 
 ## Reuse first
 

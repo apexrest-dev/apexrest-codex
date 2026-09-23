@@ -1,4 +1,5 @@
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { createServer } from 'node:http';
 import { randomBytes, timingSafeEqual } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
@@ -10,7 +11,6 @@ import { panelActionSchema } from './panel-schema.ts';
 import { parse } from './config.ts';
 import { Fault, failure } from './result.ts';
 import { resourceRoot } from './project.ts';
-import { teamRuntime } from './team.ts';
 
 interface PanelSession {
   port: number;
@@ -88,7 +88,7 @@ export async function startPanelServer(root: string, idleMs = 3600000) {
         return;
       }
       if (req.method === 'GET' && url.pathname === '/api/status') {
-        json(200, await service.snapshot(url.searchParams.get('team') ?? undefined));
+        json(200, await service.snapshot());
         return;
       }
       if (req.method === 'POST' && url.pathname === '/api/action') {
@@ -173,13 +173,17 @@ export async function openPanel(root: string) {
   return withLock(await contained(root, '.apexrest/panel/start.lock'), async () => {
     let session = await read();
     if (!session) {
-      const worker = spawn(process.execPath, [teamRuntime(), '--panel-worker', root], {
-        cwd: root,
-        env: process.env,
-        detached: true,
-        stdio: 'ignore',
-        windowsHide: true,
-      });
+      const worker = spawn(
+        process.execPath,
+        [path.join(path.dirname(fileURLToPath(import.meta.url)), 'apexrest.mjs'), '--panel-worker', root],
+        {
+          cwd: root,
+          env: process.env,
+          detached: true,
+          stdio: 'ignore',
+          windowsHide: true,
+        },
+      );
       await new Promise<void>((resolve, reject) => {
         worker.once('spawn', resolve);
         worker.once('error', reject);

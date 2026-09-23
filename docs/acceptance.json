@@ -1,13 +1,14 @@
 {
   "schemaVersion": 1,
   "asOf": "2026-09-23",
-  "release": "0.5.0",
+  "release": "1.0.0",
   "overall": "partial-local",
   "statusSemantics": {
     "implemented": "Executable code exists; does not imply live verification.",
     "passed": "Specified local evidence passed; platform/scope limits remain explicit.",
     "partial": "Only part of criterion or verification matrix is covered.",
-    "blocked": "External target/access or unimplemented dependent fixture prevents verification."
+    "blocked": "External target/access or unimplemented dependent fixture prevents verification.",
+    "retired": "Removed from current product scope by the 2026-09-23 current-session requirement; historical evidence is not current verification."
   },
   "criteria": [
     {
@@ -31,7 +32,6 @@
       "implementation": "implemented",
       "verification": "passed",
       "evidence": [
-        "scripts/native-smoke.mjs",
         "docs/evidence/native-codex-compat.json",
         "docs/evidence/native-repository.json",
         "docs/evidence/apexlang-codex.json",
@@ -45,7 +45,6 @@
       "implementation": "implemented",
       "verification": "passed",
       "evidence": [
-        "scripts/native-smoke.mjs",
         "docs/evidence/native-codex-compat.json",
         "docs/evidence/native-repository.json",
         "docs/evidence/apexlang-codex.json"
@@ -246,11 +245,7 @@
       "criterion": "An agent cannot authorize production by setting `approved=true` itself",
       "implementation": "implemented",
       "verification": "partial",
-      "evidence": [
-        "packages/core/src/config.ts",
-        "packages/core/src/deploy.ts",
-        "tests/unit/core.test.ts"
-      ],
+      "evidence": ["packages/core/src/config.ts", "packages/core/src/deploy.ts", "tests/unit/core.test.ts"],
       "blocker": "Strict schema and missing production authority rejection tested. Protected-runner signature/approval integration is not configured."
     },
     {
@@ -376,13 +371,10 @@
     },
     {
       "id": "A25",
-      "criterion": "Stable release is blocked without required native-host and Oracle integration evidence",
+      "criterion": "Broad native-platform and Oracle integration qualification remains blocked when required source-bound evidence is missing; npm distribution is recorded separately",
       "implementation": "implemented",
       "verification": "passed",
-      "evidence": [
-        "scripts/check-release-readiness.mjs",
-        "dist/releases/release-readiness.json"
-      ],
+      "evidence": ["scripts/check-release-readiness.mjs", "dist/releases/release-readiness.json"],
       "blocker": null
     },
     {
@@ -433,68 +425,51 @@
       "criterion": "A sandbox labelled supported actually provisions the stack and preserves data during ordinary `down`",
       "implementation": "unsupported",
       "verification": "not_applicable",
-      "evidence": [
-        "packages/core/src/sandbox.ts",
-        "toolchains/compatibility.json"
-      ],
+      "evidence": ["packages/core/src/sandbox.ts", "toolchains/compatibility.json"],
       "blocker": "No supported sandbox claim. Legitimate complete Linux DB/APEX/ORDS/utPLSQL provisioning tuple is not implemented or verified."
     },
     {
       "id": "A29",
-      "criterion": "When explicitly enabled in Settings, the Codex-only team controller enforces separate developer, manager code review, independent QA and final manager review before completing a team task",
-      "implementation": "implemented",
-      "verification": "partial",
-      "evidence": [
-        "packages/core/src/team-runner.ts",
-        "tests/unit/team.test.ts",
-        "tests/contracts/mcp.test.mjs",
+      "criterion": "Retired: plugin-owned role sessions and mandatory controller reviews",
+      "implementation": "retired",
+      "verification": "not_applicable",
+      "evidence": ["docs/codex-integration.md", "docs/evidence/current-session-100-local.json"],
+      "blocker": null,
+      "historicalCriterion": "When explicitly enabled in Settings, the Codex-only team controller enforces separate developer, manager code review, independent QA and final manager review before completing a team task",
+      "historicalEvidence": [
         "docs/evidence/team-local-checks.json",
         "docs/evidence/team-native-local.json",
         "docs/evidence/team-native-discovery.json",
-        "docs/codex-integration.md",
-        "docs/agent-workflow.md",
-        "docs/agent-workflow.uk.md",
         "docs/evidence/agent-workflow-documentation.json"
-      ],
-      "blocker": "Actual local coding fixture and isolated native discovery only. Oracle team tasks and Windows recovery remain unverified; actual in-app browser panel evidence is tracked in A30. Low-level operations outside a team have no team approval."
+      ]
     },
     {
       "id": "A30",
-      "criterion": "Codex desktop and CLI development panel shows effective settings, live named agents, mandatory reviews, QA and actual APEX operation status",
+      "criterion": "Optional Codex panel shows project/connection settings, browser preference and actual Oracle/APEX jobs without plugin task/session controls",
       "implementation": "implemented",
       "verification": "partial",
       "evidence": [
         "docs/panel.md",
         "packages/core/src/panel.ts",
         "tests/unit/panel.test.ts",
-        "docs/evidence/panel-local-checks.json",
-        "docs/evidence/panel-native-discovery.json",
-        "docs/evidence/panel-team-native.json",
-        "docs/agent-workflow.md",
-        "docs/agent-workflow.uk.md",
-        "docs/evidence/agent-workflow-documentation.json"
+        "docs/evidence/current-session-100-local.json"
       ],
-      "blocker": "Embedded MCP UI renderer, Windows console and connected Oracle deployment observation remain unverified. Desktop evidence is the actual Codex in-app browser."
+      "blocker": "Current local checks are recorded separately from historical desktop observations; no new Oracle deployment observation or broader platform rendering is implied."
     },
     {
       "id": "A31",
-      "criterion": "Codex chat executes single work in the current user session without a new agent or polling; explicitly enabled teams retain in-app panels, automatic model routing and digest-checked results through bounded waiting",
-      "implementation": "implemented",
-      "verification": "partial",
-      "evidence": [
-        "docs/chat-workflow.md",
-        "docs/chat-workflow.uk.md",
-        "packages/core/src/work.ts",
-        "packages/core/src/team-models.ts",
-        "plugins/apexrest-apex/skills/apexrest-work/SKILL.md",
-        "tests/unit/work.test.ts",
-        "tests/unit/team-models.test.ts",
+      "criterion": "Retired: plugin task startup, model routing and team wait lifecycle",
+      "implementation": "retired",
+      "verification": "not_applicable",
+      "evidence": ["docs/codex-integration.md", "docs/evidence/current-session-100-local.json"],
+      "blocker": null,
+      "historicalCriterion": "Codex chat executes single work in the current user session without a new agent or polling; explicitly enabled teams retain in-app panels, automatic model routing and digest-checked results through bounded waiting",
+      "historicalEvidence": [
         "docs/evidence/team-auto-native.json",
         "docs/evidence/chat-auto-discovery-native.json",
         "docs/evidence/chat-auto-local.json",
         "docs/evidence/current-session-local.json"
-      ],
-      "blocker": "Actual local Codex task and host-opened in-app panel verified separately from implicit skill-selection consistency. Windows, closed-host callback/recovery, alternative live model catalogs and task-matched efficiency benchmarks remain unverified. No global chat interceptor or hard token-spend cap."
+      ]
     },
     {
       "id": "A32",
@@ -522,24 +497,19 @@
     },
     {
       "id": "A33",
-      "criterion": "Single mode reuses the current Codex session across chat, CLI/MCP and panel handoffs with no new agent or App Server; queued legacy single requests cannot dispatch workers, while teams require explicit Settings opt-in",
-      "implementation": "implemented",
-      "verification": "partial",
-      "evidence": [
-        "packages/core/src/work-preferences.ts",
-        "packages/core/src/team-context.ts",
-        "tests/unit/work-preferences.test.ts",
-        "tests/unit/work.test.ts",
-        "tests/unit/team.test.ts",
-        "scripts/verify-single-default.mjs",
+      "criterion": "Retired: dual single/team modes and Settings opt-in",
+      "implementation": "retired",
+      "verification": "not_applicable",
+      "evidence": ["docs/codex-integration.md", "docs/evidence/current-session-100-local.json"],
+      "blocker": null,
+      "historicalCriterion": "Single mode reuses the current Codex session across chat, CLI/MCP and panel handoffs with no new agent or App Server; queued legacy single requests cannot dispatch workers, while teams require explicit Settings opt-in",
+      "historicalEvidence": [
         "docs/evidence/single-default-local.json",
         "docs/evidence/single-default-runtime.json",
         "docs/evidence/single-default-checks.json",
         "docs/evidence/single-default-codex-browser.json",
-        "tests/unit/current-session.test.ts",
         "docs/evidence/current-session-local.json"
-      ],
-      "blocker": "Local unit/protocol, built CLI/MCP and panel checks only. This revision does not rerun native Codex model sessions or Oracle tasks and does not establish billed-token savings."
+      ]
     },
     {
       "id": "A34",
@@ -561,7 +531,7 @@
     },
     {
       "id": "A35",
-      "criterion": "Codex-only deterministic orchestration returns completed jobs in one bounded call, batches scoped metadata with one target verification, and reuses concise project context while preserving real outcomes and recovery",
+      "criterion": "Deterministic Oracle/APEX operations return completed jobs in one bounded call, batch scoped metadata with one target verification and provide concise project inspection while preserving outcomes and recovery",
       "implementation": "implemented",
       "verification": "partial",
       "evidence": [
@@ -569,14 +539,27 @@
         "docs/codex-automation.uk.md",
         "docs/evidence/codex-automation-local.json",
         "docs/evidence/codex-automation-runtime.json",
-        "scripts/verify-codex-automation.mjs",
         "tests/unit/job-tools.test.ts",
         "tests/unit/metadata-batch.test.ts",
         "tests/unit/project-summary.test.ts",
         "tests/unit/mcp-output.test.ts",
-        "tests/contracts/mcp.test.mjs"
+        "tests/contracts/mcp.test.mjs",
+        "docs/evidence/current-session-100-local.json"
       ],
       "blocker": "Local stdio MCP, CLI, synthetic nonempty test workers and mocked metadata adapter only. Native Codex end-to-end task latency, Oracle execution and billed-token savings are unmeasured."
+    },
+    {
+      "id": "A36",
+      "criterion": "All APEXREST implementation runs directly in the current Codex conversation; no plugin model-session controller, team/work startup APIs, team skills, model routing or task controls remain in the executable package",
+      "implementation": "implemented",
+      "verification": "partial",
+      "evidence": [
+        "plugins/apexrest-apex/skills/apexrest-work/SKILL.md",
+        "packages/core/src/operations.ts",
+        "packages/mcp/src/server.ts",
+        "docs/evidence/current-session-100-local.json"
+      ],
+      "blocker": "Local source, CLI/MCP/package and UI checks do not establish live Oracle behavior, native task latency or paid-token savings."
     }
   ],
   "amendments": [
@@ -597,8 +580,14 @@
     },
     {
       "date": "2026-09-17",
-      "rule": "Mandatory developer, manager code review, independent QA and final manager review are controller behavior. Target only Codex desktop and CLI and use native Codex extension points.",
-      "source": "docs/team.md"
+      "rule": "Historical controller review requirement; superseded by the 2026-09-23 removal of plugin-owned model-session orchestration.",
+      "source": "docs/evidence/team-local-checks.json",
+      "status": "superseded"
+    },
+    {
+      "date": "2026-09-23",
+      "rule": "Remove plugin-owned model-session orchestration and execute APEX work directly in the user-opened Codex session; retain deterministic Oracle/APEX runtimes and existing domain safeguards. Preserve original build specification and historical evidence without presenting them as current product requirements.",
+      "source": "docs/codex-integration.md"
     }
   ]
 }

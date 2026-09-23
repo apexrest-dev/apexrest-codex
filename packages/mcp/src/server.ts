@@ -47,19 +47,6 @@ for (const { operation, long } of toolCatalog) {
 }
 
 export async function startMcp() {
-  // Internal team sessions receive the domain tools, never another team launcher.
-  // Reviewer sessions receive only read-only tools; local compiler/test execution
-  // stays subject to Codex's read-only sandbox.
-  const exposed = toolCatalog.filter(
-    (t) =>
-      process.env.APEXREST_TEAM_WORKER !== '1' ||
-      (!t.operation.startsWith('team.') &&
-        !t.operation.startsWith('work.') &&
-        !t.operation.startsWith('panel.') &&
-        (process.env.APEXREST_TEAM_ROLE?.startsWith('developer') ||
-          t.readOnly ||
-          t.operation === 'browser.open')),
-  );
   const server = new Server(
     { name: 'apexrest-apex', version: VERSION },
     { capabilities: { tools: {}, resources: {} } },
@@ -70,7 +57,7 @@ export async function startMcp() {
         uri: panelUri,
         name: 'APEXREST development panel',
         mimeType: 'text/html;profile=mcp-app',
-        description: 'Live Codex project settings, agent activity, mandatory reviews and APEX operations.',
+        description: 'Codex project settings and APEX operation status.',
       },
     ],
   }));
@@ -92,7 +79,7 @@ export async function startMcp() {
     ListToolsRequestSchema,
     async () =>
       (catalog ??= {
-        tools: exposed.map((t) => ({
+        tools: toolCatalog.map((t) => ({
           name: t.name,
           description: t.description,
           ...(t.operation === 'panel.open' ? { _meta: { ui: { resourceUri: panelUri } } } : {}),
@@ -117,7 +104,7 @@ export async function startMcp() {
       }),
   );
   server.setRequestHandler(CallToolRequestSchema, async (request, extra) => {
-    const tool = exposed.find((t) => t.name === request.params.name);
+    const tool = toolCatalog.find((t) => t.name === request.params.name);
     let result;
     let project: string | undefined;
     try {

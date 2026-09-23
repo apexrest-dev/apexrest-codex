@@ -3,17 +3,15 @@ import { createRequire as __createRequire } from 'node:module'; const require = 
 import {
   dispatch,
   schemas
-} from "./chunk-TTVGX5LP.mjs";
-import "./chunk-DNJL7OYO.mjs";
+} from "./chunk-RH2GAWUB.mjs";
 import {
   executeJob
-} from "./chunk-XKBZJ36H.mjs";
-import "./chunk-VPCUV5QA.mjs";
-import "./chunk-QLRGI23I.mjs";
-import "./chunk-QDAKHEPF.mjs";
+} from "./chunk-ZT5GTPRX.mjs";
+import "./chunk-63OXIMOF.mjs";
+import "./chunk-3XRCAA5S.mjs";
 import {
   loadProject
-} from "./chunk-2SZCZZ3J.mjs";
+} from "./chunk-RQ2VEV4O.mjs";
 import {
   Fault,
   failure
@@ -30,13 +28,7 @@ var positional = {
   "docs.read": ["id"],
   "jobs.status": ["id"],
   "jobs.cancel": ["id"],
-  "artifacts.read": ["id"],
-  "team.start": ["task"],
-  "work.start": ["task"],
-  "team.wait": ["id"],
-  "team.status": ["id"],
-  "team.message": ["id", "message"],
-  "team.cancel": ["id"]
+  "artifacts.read": ["id"]
 };
 function operationFrom(args) {
   const first = args[0];
@@ -75,32 +67,13 @@ function help() {
   if (key === "panel.action")
     lines.push(
       "",
-      "Pass --action as one JSON object. Supported kinds: preferences, sqlcl, connection, start, message, cancel-team, cancel-job, validate, test, browser, plan.",
+      "Pass --action as one JSON object. Supported kinds: preferences, sqlcl, connection, cancel-job, validate, test, browser, plan.",
       `Example: apexrest panel action --action '{"kind":"validate"}' --project PATH --json`
-    );
-  if (key === "team.start" || key === "work.start")
-    lines.push(
-      "",
-      "Single agent by default. Team requires explicit multiAgentEnabled: true in saved Settings.",
-      "--execution-mode team|single selects reviewed workers or a handoff to your current Codex session (no new agent).",
-      "--browser-mode codex|external selects interactive APEX verification; the dashboard stays in Codex.",
-      "--developers 1..3 defaults to 1; team-worker edits are serialized in the project.",
-      "--sandbox read-only|workspace-write constrains workers; a single-session read-only request is passed to the host.",
-      "--timeout-seconds 30..3600 applies to workers (default 900). Single uses host permissions and limits.",
-      "The configured project must already be trusted and Codex must be logged in.",
-      "Single returns a receipt: continue directly in the current Codex chat, without team polling. Team returns an owned run ID.",
-      "Single retains the current host model; team workers select models and reasoning automatically."
-    );
-  if (key === "work.start")
-    lines.push(
-      "Use --request-id UUID for idempotent task creation; exact retries return the same current-session receipt or worker run."
     );
   if (key === "jobs.status")
     lines.push(
       "Use --wait-seconds 25 to wait for an existing job without repeated status calls (default: immediate)."
     );
-  if (key === "team.wait")
-    lines.push("Use --cursor HASH --wait-seconds 25 for bounded waiting without heartbeat polling.");
   if (key === "dependencies.install")
     lines.push(
       "",
@@ -151,28 +124,24 @@ try {
   else if (argv[0] === "tui" || !argv.length && process.stdin.isTTY && process.stdout.isTTY && process.env.TERM !== "dumb") {
     if (argv.length > 1 && (argv.length !== 3 || argv[1] !== "--project" || !argv[2] || argv[2].startsWith("--")))
       throw new Fault("INVALID_INPUT", "Usage: apexrest tui [--project PATH]", 2);
-    const { runTui } = await import("./chunk-XEK2R5AU.mjs");
+    const { runTui } = await import("./chunk-USLSYTSN.mjs");
     await runTui(argv[2] ? { project: argv[2] } : {});
   } else if (!argv.length) help();
   else if (argv[0] === "panel" && argv[1] === "tui") {
     if (argv.length !== 2 && (argv.length !== 4 || argv[2] !== "--project" || !argv[3]))
       throw new Fault("INVALID_INPUT", "Usage: apexrest panel tui [--project PATH]", 2);
-    const { runPanelTui } = await import("./chunk-QWQVXUVG.mjs");
+    const { runPanelTui } = await import("./chunk-QRHE7HKC.mjs");
     await runPanelTui(argv[3] ?? process.cwd());
   } else if (argv[0] === "--panel-worker") {
     if (argv.length !== 2 || !argv[1]) throw new Fault("INVALID_INPUT", "Invalid panel worker request.", 2);
-    const { servePanel } = await import("./chunk-KJOSAKHX.mjs");
+    const { servePanel } = await import("./chunk-UJEMWBWY.mjs");
     await servePanel(argv[1]);
   } else if (argv[0] === "--job-worker") {
     if (argv.length !== 3) throw new Fault("INVALID_INPUT", "Invalid internal job request.", 2);
     await executeJob(await loadProject(argv[1]), argv[2], dispatch);
-  } else if (argv[0] === "--team-worker") {
-    if (argv.length !== 3) throw new Fault("INVALID_INPUT", "Invalid internal team request.", 2);
-    const { executeTeam } = await import("./chunk-ED2YPDPS.mjs");
-    await executeTeam(await loadProject(argv[1]), argv[2]);
   } else if (argv[0] === "mcp") {
     if (argv.length !== 1) throw new Fault("INVALID_INPUT", "mcp accepts no arguments.", 2);
-    const { startMcp } = await import("./chunk-N5G4ADI7.mjs");
+    const { startMcp } = await import("./chunk-QQAYL7Z4.mjs");
     await startMcp();
   } else {
     const selectedOp = argv[0] === "--version" ? { op: "version", start: 1 } : selected;
@@ -193,7 +162,7 @@ try {
       "headed",
       "saved"
     ]);
-    const numbers = /* @__PURE__ */ new Set(["appId", "offset", "limit", "developers", "timeoutSeconds", "waitSeconds"]);
+    const numbers = /* @__PURE__ */ new Set(["appId", "offset", "limit", "waitSeconds"]);
     let index = 0;
     for (let i = selectedOp.start; i < argv.length; i++) {
       const token = argv[i];

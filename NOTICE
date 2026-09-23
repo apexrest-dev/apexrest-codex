@@ -10,9 +10,3 @@ Oracle-generated blank-app files retain their original headers and MMD metadata.
 Node.js, Java, SQLcl and Chromium are downloaded separately from their vendors.
 No Oracle or Java executable is redistributed in APEXREST packages.
 Bundled dependency license texts and a CycloneDX SBOM accompany each local release.
-
-Pokémon agent avatars: five sprites from PokeAPI/sprites, with pinned source URLs
-and hashes in resources/panel/assets/sources.json. All image contents are
-Copyright The Pokémon Company, as stated by the upstream LICENCE.txt included
-with the assets. These images are not covered by this project's Apache license.
-APEXREST is independent and is not endorsed by The Pokémon Company.

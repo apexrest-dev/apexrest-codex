@@ -8,7 +8,7 @@ APEXREST brings application source, Oracle compilation, controlled imports and r
 
 [Install in Codex](install.md) · [Get started](../../docs/getting-started.md) · [Explore the source](https://github.com/apexrest-dev/apexrest-codex)
 
-Install the CLI with `npm install -g apexrest`, then run `apexrest` to install tools and register the Codex plugin. npm `latest` is `0.5.0`; the [publication record](../../docs/evidence/npm-050-stable-publication.json) confirms registry installation.
+Install the CLI with `npm install -g apexrest`, then run `apexrest` to install tools and register the Codex plugin. Release 1.0.0 runs directly in your current Codex conversation; [release notes](../../docs/release-notes.md) track distribution and evidence.
 
 ![APEXREST connects Codex to native APEX source, Oracle validation, controlled deployment and verification](../../docs/assets/overview.svg)
 

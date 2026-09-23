@@ -1,18 +1,15 @@
 import { emitKeypressEvents } from 'node:readline';
 import { PanelService, type PanelSnapshot } from '../../core/src/panel.ts';
-import { teamLabel } from '../../core/src/team-identity.ts';
 import { Fault } from '../../core/src/result.ts';
 import { clip, wrap, paint } from './tui-view.ts';
 
 export function panelLines(data: PanelSnapshot, tab: number): string[] {
-  const team = data.team;
-  if (tab === 3)
+  if (tab === 2)
     return [
       `Database network: ${data.sqlcl.databaseTransport === 'ords' ? 'ORDS HTTP(S)' : 'Direct Oracle listener'}`,
       `SQLcl execution: ${data.sqlcl.mode.toUpperCase()} · restriction ${data.sqlcl.mcpRestrictLevel}`,
       `Trusted: ${data.trusted} · configured: ${data.configured}`,
-      'Future work defaults: ' + JSON.stringify(data.preferences),
-      'Model selection: Auto (task complexity and implementation repair results; no manual override).',
+      'Verification browser: ' + data.preferences.browserMode,
       ...JSON.stringify(
         {
           project: data.configuration,
@@ -24,7 +21,7 @@ export function panelLines(data: PanelSnapshot, tab: number): string[] {
         2,
       ).split('\n'),
     ];
-  if (tab === 2)
+  if (tab === 1)
     return [
       'APEX OPERATIONS',
       ...data.jobs.flatMap((job) => [`${job.operation} · ${job.status}`, job.summary]),
@@ -36,81 +33,22 @@ export function panelLines(data: PanelSnapshot, tab: number): string[] {
       'Commands: apexrest apex validate · apexrest test unit · apexrest deploy plan --env NAME --out PATH',
       'Existing project trust and deployment authorization remain required.',
     ];
-  const lines = [
-    team
-      ? `${team.executionMode === 'single' ? 'SINGLE AGENT' : 'TEAM'} · ${team.status} · ${team.phase} · revision ${team.revision}`
-      : 'No team yet. Use apexrest team start "Task" in Codex.',
+  return [
+    'CURRENT CODEX SESSION',
+    'Describe changes and review results in your open Codex conversation.',
+    'This panel runs APEX operations and manages project settings.',
     '',
+    `Application: ${data.configuration?.application.alias ?? 'Not configured'}`,
+    `Source: ${data.configuration?.application.sourceDir ?? 'Not configured'}`,
+    'Environments: ' + (Object.keys(data.configuration?.environments ?? {}).join(', ') || 'None configured'),
+    'Required suites: ' + (data.configuration?.tests.requiredSuites.join(', ') || 'None declared'),
+    `Trusted: ${data.trusted} · configured: ${data.configured}`,
+    '',
+    'WORKING CHANGES',
+    ...(data.changes.files.length
+      ? data.changes.files
+      : [data.changes.status === 'available' ? 'No uncommitted Git changes.' : 'Git status unavailable.']),
   ];
-  if (data.task) lines.push(data.task, '');
-  if (team?.modelPolicy)
-    lines.push('Auto models · ' + team.modelPolicy.complexity + ' · ' + team.modelPolicy.reason);
-  if (team?.limits) lines.push('Task time limit: ' + team.limits.timeoutSeconds + ' seconds');
-  if (team?.members.length)
-    lines.push('Tokens are cumulative, including cached input; not a cost estimate.', '');
-  for (const member of team?.members ?? [])
-    lines.push(
-      `${teamLabel(member.role)} · ${member.status}`,
-      member.currentAction?.title ?? 'No active tool reported',
-      [
-        member.configuration?.model,
-        member.configuration?.reasoningEffort,
-        member.configuration?.sandbox,
-        member.totalTokens == null ? '' : member.totalTokens + ' tokens',
-      ]
-        .filter(Boolean)
-        .join(' · '),
-      member.selection ? 'Auto · ' + member.selection.tier + ' · ' + member.selection.reason : '',
-      member.tokenUsage
-        ? [
-            member.tokenUsage.inputTokens == null ? '' : 'Input ' + member.tokenUsage.inputTokens,
-            member.tokenUsage.cachedInputTokens == null
-              ? ''
-              : 'Cached input ' + member.tokenUsage.cachedInputTokens,
-            member.tokenUsage.outputTokens == null ? '' : 'Output ' + member.tokenUsage.outputTokens,
-            member.tokenUsage.reasoningOutputTokens == null
-              ? ''
-              : 'Reasoning output ' + member.tokenUsage.reasoningOutputTokens,
-          ]
-            .filter(Boolean)
-            .join(' · ')
-        : '',
-      '',
-    );
-  if (tab === 1) {
-    lines.push(
-      (team?.executionMode ?? data.preferences.executionMode) === 'single'
-        ? 'AGENT VERIFICATION'
-        : 'MANDATORY REVIEWS',
-    );
-    for (const v of team?.verification ?? [])
-      lines.push(
-        `${v.report.decision} · revision ${v.revision}`,
-        v.report.summary,
-        ...v.report.checks.map((c) => `${c.status} · ${c.name}: ${c.evidence}`),
-      );
-    for (const r of team?.reviews ?? [])
-      lines.push(
-        `${r.phase}: ${r.report.decision} · revision ${r.revision}`,
-        r.report.summary,
-        ...r.report.findings,
-      );
-    for (const q of team?.qa ?? [])
-      lines.push(
-        `QA: ${q.report.decision} · revision ${q.revision}`,
-        q.report.summary,
-        ...q.report.checks.map((c) => `${c.status} · ${c.name}: ${c.evidence}`),
-      );
-    lines.push('', 'PEER MESSAGES');
-    for (const m of team?.messages ?? [])
-      lines.push(`${teamLabel(m.from)} → ${teamLabel(m.to)} · ${m.status}`, m.text);
-  } else {
-    lines.push('WORKING CHANGES', ...data.changes.files, '', 'OBSERVED AGENT STEPS');
-    for (const o of [...(team?.observations ?? [])].reverse())
-      lines.push(`${teamLabel(o.role)} · ${o.kind}`, o.detail);
-  }
-  if (team?.diagnostics.length) lines.push('', ...team.diagnostics);
-  return lines;
 }
 
 export async function runPanelTui(root: string) {
@@ -135,7 +73,7 @@ export async function runPanelTui(root: string) {
     const lines = [
       paint(' APEXREST · Development panel', 'accent', color),
       clip(' ' + root, width),
-      ['Overview', 'Agent team', 'APEX operations', 'Settings']
+      ['Overview', 'APEX operations', 'Settings']
         .map((name, i) => `${i + 1} ${i === tab ? '[' + name + ']' : name}`)
         .join('  '),
       error
@@ -144,7 +82,7 @@ export async function runPanelTui(root: string) {
           ? 'Live · ' + new Date(data.updatedAt).toLocaleTimeString()
           : 'Connecting…',
       ...body.slice(offset, offset + height - 6),
-      '1–4 / ←→ views · ↑↓ scroll · r refresh · q exit | Actions: apexrest panel action --help',
+      '1–3 / ←→ views · ↑↓ scroll · r refresh · q exit | Actions: apexrest panel action --help',
     ];
     output.write('\x1b[H\x1b[2J' + lines.map((line, i) => (i === 0 ? line : clip(line, width))).join('\r\n'));
   };
@@ -182,12 +120,12 @@ export async function runPanelTui(root: string) {
     };
     const key = (_text: string, k: { name?: string; ctrl?: boolean }) => {
       if (k.name === 'q' || (k.ctrl && k.name === 'c')) return close();
-      if (/^[1-4]$/.test(k.name ?? '')) {
+      if (/^[1-3]$/.test(k.name ?? '')) {
         tab = Number(k.name) - 1;
         offset = 0;
       }
       if (k.name === 'right' || k.name === 'left') {
-        tab = (tab + (k.name === 'right' ? 1 : 3)) % 4;
+        tab = (tab + (k.name === 'right' ? 1 : 2)) % 3;
         offset = 0;
       }
       if (k.name === 'up') offset--;

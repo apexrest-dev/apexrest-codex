@@ -2,11 +2,11 @@
 
 English | [Українська](versions.uk.md)
 
-Version {{version}} is published as `apexrest@0.5.0` on npm `latest` and remains available through the source repository. Install it with `npm install -g apexrest`; the `beta` dist-tag has been removed. The [publication record](../../docs/evidence/npm-050-stable-publication.json) confirms registry integrity and installation; source-bound native-platform and Oracle integration qualification remains incomplete.
+Release {{version}} is packaged as `apexrest@1.0.0` and available through the source repository. Install with `npm install -g apexrest`; [release notes](../../docs/release-notes.md) record distribution status. Native-platform and Oracle integration qualification retains its documented limits.
 
 The supported toolchain targets Node 24 LTS (supported range: Node 24–26), SQLcl 26.1.2.132.1334, Java 21 and APEX 26.1+. ORDS APEXlang operations require a JDK 21+ containing `jdk.compiler`; SQLcl's managed JRE alone is insufficient for the Java bridge. Local generated MMD: 26.1.0+3102. Playwright is pinned at 1.63.0 with its matching browser revisions.
 
-Single mode uses the existing Codex session and its model and permissions; it does not start another agent or automatically open the panel. Teams require an explicit Settings opt-in. Six long MCP operations wait within one call; bounded metadata batches, summary inspection, shorter instructions and cached reference normalization reduce routine exchanges and context. Compact results retain diagnostics, artifact access and deployment safety information. Existing ORDS HTTP(S) transport, plugin-level connection settings and APEXlang import/export remain available. Payload budgets measure UTF-8 bytes; they do not establish billed-token savings. See [release notes](../../docs/release-notes.md) and [local checks for the 0.5.0-beta.1 reference update](../../docs/evidence/minor-050-local.json), promoted unchanged to `0.5.0`. No Git tag or GitHub release is implied.
+APEXREST works directly in the existing Codex session with 18 MCP tools and 12 skills. The host controls its model, context and permissions. Six long tools wait within one call; metadata batches, summary inspection, cached references and bounded output reduce routine exchanges while preserving diagnostics, recovery and deployment safety. SQLcl and ORDS operations remain available. UTF-8 bytes are payload measurements, not billed tokens. See [current local evidence](../../docs/evidence/current-session-100-local.json).
 
 - macOS arm64: local native host, client setup and compiler checks completed.
 - Linux x64: locked client artifacts and installer code; hosted quality gates are configured, while native client and Oracle integration remain unverified.

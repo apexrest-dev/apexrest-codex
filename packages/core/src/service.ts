@@ -17,10 +17,6 @@ import { ArtifactService } from './artifacts.ts';
 import { JobService } from './jobs.ts';
 import { sandboxAction } from './sandbox.ts';
 import { configureSqlcl, sqlclConfig, type SqlclConfig } from './sqlcl-config.ts';
-import { TeamService } from './team.ts';
-import { startWork, waitForTeam } from './work.ts';
-import { workStartSchema, teamWaitSchema } from './team-schema.ts';
-import { teamStartSchema } from './team-schema.ts';
 import { PanelService } from './panel.ts';
 import { panelActionSchema } from './panel-schema.ts';
 import { realpath } from 'node:fs/promises';
@@ -46,7 +42,7 @@ export async function dispatch(operation: string, input: Record<string, unknown>
         break;
       }
       case 'panel.status':
-        data = await new PanelService(root).snapshot(parsed.team as string | undefined);
+        data = await new PanelService(root).snapshot();
         break;
       case 'panel.action':
         {
@@ -160,24 +156,6 @@ export async function dispatch(operation: string, input: Record<string, unknown>
       default: {
         const ctx = await loadProject(root);
         switch (operation) {
-          case 'work.start':
-            data = await startWork(ctx, workStartSchema.parse(parsed));
-            break;
-          case 'team.wait':
-            data = await waitForTeam(ctx, teamWaitSchema.parse(parsed), signal);
-            break;
-          case 'team.start':
-            data = await new TeamService(ctx).start(teamStartSchema.parse(parsed));
-            break;
-          case 'team.status':
-            data = await new TeamService(ctx).snapshot(text('id'));
-            break;
-          case 'team.message':
-            data = await new TeamService(ctx).message(text('id'), text('message'));
-            break;
-          case 'team.cancel':
-            data = await new TeamService(ctx).cancel(text('id'));
-            break;
           case 'project.inspect':
             data = await projectInspect(ctx, parsed.detail as 'full' | 'summary');
             break;

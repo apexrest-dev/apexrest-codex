@@ -57,17 +57,9 @@ try {
             artifacts: { directory: '.apexrest/artifacts', retentionDays: 7 },
           },
           sqlcl: { schemaVersion: 1, mode: 'cli', databaseTransport: 'ords', mcpRestrictLevel: '4' },
-          preferences: {
-            executionMode: 'single',
-            browserMode: 'external',
-            developers: 1,
-            sandbox: 'read-only',
-            timeoutSeconds: 120,
-          },
+          preferences: { browserMode: 'external' },
           connections: {},
           toolchain: null,
-          teams: [],
-          team: null,
           jobs: [],
           deployments: [],
           changes: { status: 'available', files: [' M full-snapshot-only.apx'] },
@@ -115,35 +107,6 @@ try {
             ) {
               snapshot.preferences = message.params.arguments.action.settings;
               send({ id: message.id, result: wrap({ status: 'saved' }) });
-            } else if (
-              message.params.name === 'apexrest_panel_action' &&
-              message.params.arguments.action?.kind === 'start' &&
-              message.params.arguments.action.request.executionMode === 'single'
-            ) {
-              const request = message.params.arguments.action.request;
-              snapshot.task = request.task;
-              snapshot.team = {
-                id: '00000000-0000-4000-8000-000000000001',
-                executionMode: 'single',
-                executionHost: 'current_session',
-                browserMode: request.browserMode,
-                sandbox: request.sandbox,
-                status: 'current_session',
-                phase: 'queued',
-                revision: 0,
-                updatedAt: snapshot.updatedAt,
-                members: [],
-                messages: [],
-                reviews: [],
-                qa: [],
-                diagnostics: [],
-                result: '',
-              };
-              snapshot.teams = [snapshot.team];
-              send({
-                id: message.id,
-                result: wrap({ teamId: snapshot.team.id, executionHost: 'current_session' }),
-              });
             } else send({ id: message.id, error: { code: -32601, message: 'Unexpected fixture action' } });
           }
         });
@@ -158,51 +121,44 @@ try {
       await expect(panel.locator('#project-path')).toHaveText('/fixture/embedded-panel');
       await expect(panel.locator('#overview-live')).toContainText('full-snapshot-only.apx');
       await panel.locator('[data-view=settings]').click();
-      await expect(panel.locator('#default-execution-mode')).toHaveValue('single');
       await expect(panel.locator('#default-browser-mode')).toHaveValue('external');
       await expect(panel.locator('#connection-ords-password')).toBeDisabled();
-      await panel.locator('#default-execution-mode').selectOption('team');
+      await panel.locator('#default-browser-mode').selectOption('codex');
       await panel.locator('#preferences-form button[type=submit]').click();
-      await expect(panel.locator('#notice')).toHaveText('Settings saved for future runs.');
-      await expect(panel.locator('#preferences-form button[type=submit]')).toBeEnabled();
-      await expect(panel.locator('#settings-live')).toContainText('Agent team');
-      const calls = await page.evaluate(() => window.fixtureCalls);
-      assert.ok(calls.filter((call) => call.name === 'apexrest_panel_status').length >= 2);
-      const actions = calls.filter((call) => call.name === 'apexrest_panel_action');
+      await expect(panel.locator('#default-browser-mode')).toHaveValue('codex');
+      await expect
+        .poll(() =>
+          page.evaluate(
+            () => window.fixtureCalls.filter((call) => call.name === 'apexrest_panel_action').length,
+          ),
+        )
+        .toBe(1);
+      const actions = await page.evaluate(() =>
+        window.fixtureCalls.filter((call) => call.name === 'apexrest_panel_action'),
+      );
       assert.equal(actions.length, 1);
-      assert.equal(actions[0].arguments.action.settings.executionMode, 'team');
-      assert.ok(calls.every((call) => call.arguments.project === '/fixture/embedded-panel'));
-      await panel.locator('#new-task').click();
-      await panel.locator('#task-execution-mode').selectOption('single');
-      const task = 'Inspect this fixture in the current Codex chat without starting another agent.';
-      await panel.locator('#task').fill(task);
-      await panel.locator('#task-form button[type=submit]').click();
-      await expect(panel.locator('#notice')).toHaveText(
-        'Continue this task in your current Codex chat. No background agent was started.',
-      );
-      await expect(panel.locator('#team-live')).toContainText('Current Codex session');
-      await expect(panel.locator('#team-live .task-summary')).toHaveText(task);
-      await expect(panel.locator('#team-live')).toContainText('not a completed result');
-      await expect(panel.locator('.agent')).toHaveCount(0);
-      await expect(panel.locator('.step')).toHaveCount(0);
-      await expect(panel.locator('#message-form button[type=submit]')).toBeDisabled();
-      await expect(panel.locator('#cancel-team')).toBeDisabled();
-      const starts = await page.evaluate(() =>
-        window.fixtureCalls.filter(
-          (call) => call.name === 'apexrest_panel_action' && call.arguments.action.kind === 'start',
-        ),
-      );
-      assert.equal(starts.length, 1);
-      assert.equal(starts[0].arguments.action.request.executionMode, 'single');
-      assert.equal(starts[0].arguments.action.request.task, task);
-      assert.equal(starts[0].arguments.project, '/fixture/embedded-panel');
+      assert.deepEqual(actions[0].arguments.action, {
+        kind: 'preferences',
+        settings: { browserMode: 'codex' },
+      });
+      for (const selector of [
+        '#new-task',
+        '#default-execution-mode',
+        '#team-live',
+        '#cancel-team',
+        '[data-view=team]',
+      ])
+        await expect(panel.locator(selector)).toHaveCount(0);
+      await panel.locator('[data-view=operations]').click();
+      await expect(panel.locator('#validate')).toBeEnabled();
+      await expect(panel.locator('#run-tests')).toBeEnabled();
       assert.deepEqual(errors, []);
       assert.deepEqual(requests, []);
       checks.push({
         mode,
         rendering: 'passed',
         preferencesAction: 'passed',
-        currentSessionHandoff: 'passed',
+        agentControlsAbsent: 'passed',
         localOnly: true,
       });
     } catch (error) {

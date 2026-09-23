@@ -2,19 +2,7 @@
 
 English | [Українська](panel.uk.md)
 
-Settings also select **Direct Oracle listener / ORDS HTTP(S)** and manage plugin-level connection references. For ORDS, enter the schema URL, **Database username** and **Database password** of an existing Oracle database account with access through ORDS. No separate ORDS account is needed. These fields configure the plugin's connection to that account. ORDS uses CLI execution. See [ORDS setup and APEXlang behavior](ords.md).
-
-For direct Oracle access, choose an existing SQLcl saved connection from the selector. Opening Direct connection settings loads the list; **Refresh saved connections** reads it again on request. Loading reads SQLcl's local connection names without connecting to a database. The control shows loading, empty-list and error states, with **Retry** after a failure. Existing mappings remain available even if SQLcl does not return them in the refreshed list. Switching database transport preserves each reference's direct mapping and stored ORDS credentials.
-
-Single-agent execution is the default. Multi-agent work runs only after the user explicitly selects **Agent team** in **Settings → Defaults for new work** and saves it (`multiAgentEnabled: true`). A launch override cannot enable a team. Choose verification browser (`codex` or `external`) in the same settings. See [mode settings](work-modes.md). Independent review/QA descriptions below apply only to enabled team mode; screenshots from September 17 show the earlier panel.
-
-[APEX work from chat](chat-workflow.md) uses the existing Codex session in single mode; it does not start another agent or automatically open the panel. For explicitly enabled teams it opens the team view; the web task form is optional. Auto routing reasons, cumulative token breakdowns and the task time limit appear on team cards only; the plugin does not independently meter or control the current chat. Cached input and reasoning output are subsets, not extra tokens or a price estimate.
-
-For a complete walkthrough with actual screenshots, see [Agent workflow: from task to reviewed result](agent-workflow.md).
-
-Open `$apexrest-panel` in Codex desktop for a live workspace view in the in-app browser. The skill calls `apexrest_panel_open` with the absolute application project directory and opens the returned private local URL. Use the application project, not the plugin source or its installed cache. A folder without `apexrest.json` can be inspected but cannot start development work.
-
-In Codex CLI:
+Open `$apexrest-panel` in Codex for project settings and actual Oracle/APEX operation state. The skill calls `apexrest_panel_open` with the absolute application directory and opens the returned private local URL inside Codex. Use the application project containing `apexrest.json`, not the plugin source or installed cache. Implementation continues in the [current conversation](chat-workflow.md).
 
 ```sh
 apexrest panel tui --project /absolute/application
@@ -22,45 +10,34 @@ apexrest panel status --project /absolute/application --json
 apexrest panel open --project /absolute/application --json
 ```
 
-The TUI uses the same snapshot. Keys `1`–`4` or left/right switch views, up/down or page keys scroll, `r` refreshes and `q` exits. It restores terminal state on exit. Use CLI/MCP actions to make changes from the console; images are displayed in the desktop panel, names and roles in the terminal.
+## Views
 
-## Views and actions
+| View            | Content                                                                                                                                        |
+| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| Overview        | Project, Git changes, effective Oracle transport and recent operations                                                                         |
+| APEX operations | Background jobs, actual nested results, diagnostics, artifacts and durable deployment state; compilation, tests and explicit-environment plans |
+| Settings        | Project/environment identity, toolchain, required suites, browser preference, SQLcl CLI/MCP and Direct Oracle listener / ORDS HTTP(S) settings |
 
-| View | Recorded information and available work |
-| --- | --- |
-| Overview | Task, current phase, review gate, effective SQLcl mode, Git changes and observed agent tool activity |
-| Agents | Separate sessions, current tool, actual model/reasoning/sandbox, reported token usage, peer messages, manager reviews, independent QA checks and task updates/cancellation |
-| APEX operations | Real background jobs and nested result status, diagnostics/artifact references, durable deployment/import state; queue source compilation, tests or an explicit-environment deployment plan |
-| Settings | Full project configuration, environment identity and connection references, toolchain lock, required suites, browser/artifact settings and grant metadata; edit SQLcl CLI/MCP mode and defaults for future teams |
+The console uses the same snapshot. Choose views with number keys or arrows, scroll with up/down or page keys, refresh with `r`, and exit with `q`. The web view refreshes while visible and preserves focused inputs. Database transport changes affect future operations; do not change them during database work.
 
-Refresh runs every two seconds while the view is visible. The saved SQLcl connection list is loaded by an explicit action, independently of this refresh. Focused inputs are preserved. Settings changes affect future work; do not switch transport during active database work. Secret stores are never read for display. History is bounded to twelve recent runs, with concise team events and reports; the durable local records retain the original details. Token counts are the totals reported by Codex, including input context, not an estimate of cost.
+## Connections and browser
 
-`apexrest_panel_action` accepts an explicit allowlisted action. CLI example:
+Direct Oracle access selects an existing SQLcl saved connection. Opening its settings loads local saved names without a database login; refresh explicitly to read them again. Existing mappings survive an empty list or a transport switch.
+
+ORDS uses the schema URL and the existing database account's username/password. Enter credentials only in the private local panel or CLI `--password-file`. MCP connection actions do not accept passwords. Direct and ORDS mappings are preserved separately. See [ORDS setup](ords.md).
+
+`browserMode: codex|external` selects the verification browser for APEX pages; the development panel stays in Codex. Opening a browser is not verification of behavior.
+
+## Actions and safety
+
+`apexrest_panel_action` accepts allowlisted actions: `preferences`, `sqlcl`, `connection`, `saved-connections`, `cancel-job`, `validate`, `test`, `browser`, `plan`.
 
 ```sh
 apexrest panel action --project /absolute/application --action '{"kind":"validate"}' --json
 ```
 
-Supported kinds: `preferences`, `sqlcl`, `connection`, `saved-connections`, `start`, `message`, `cancel-team`, `cancel-job`, `validate`, `test`, `browser`, `plan`. The `saved-connections` action reads the selected SQLcl installation's saved names. Only the local browser form accepts an ORDS password; MCP connection actions exclude that field. A single-mode start returns a `current_session` receipt for work in the existing Codex chat, not a background task or completion result. Explicitly enabled team starts launch the reviewed workflow. The panel cannot submit review approvals, grant trust or apply a deployment directly. An authorized import still uses the existing [deploy workflow](deployment-safety.md). An expired heartbeat or a lost mutation response is not success; reconcile recorded state before retrying. Cancellation does not undo changes.
+The panel cannot grant project trust or deployment authorization, or directly apply a plan. Imports use the [deployment workflow](deployment-safety.md). Actual job failure remains failure after normal process exit. A lost heartbeat or mutation response can leave `outcome_unknown`; reconcile before retrying. Cancellation does not undo previous changes.
 
-## Pokémon identities
+The server binds to loopback, validates Host/Origin, serves an asset allowlist and requires a private capability for data/actions. Keep the capability URL and session file private. Project trust, target identity, authorization, backup and drift checks remain enforced in the shared core.
 
-| Name | Role |
-| --- | --- |
-| Mewtwo | Project manager |
-| Pikachu | Developer 1 |
-| Charmander | Developer 2 |
-| Bulbasaur | Developer 3 |
-| Squirtle | Independent QA |
-
-Names are stable within every team and accompany role labels in the panel, terminal, roster and agent instructions. Role keys still control communication, sandbox policy and review authority. Ephemeral App Server sessions reject `thread/name/set`, so these are plugin-owned identities, not renamed tasks attached to the current desktop conversation. Avatars are bundled locally from [PokeAPI sprites](https://github.com/PokeAPI/sprites); source revisions, hashes and upstream image copyright are retained in `packages/panel/assets`. No external image requests are made while using the panel. The project’s APEXREST logo is unchanged.
-
-## Codex integration and evidence
-
-The local server binds only to loopback, validates Host/Origin, requires a private session capability for data/actions and serves a fixed asset allowlist. It stops after one hour without authorized requests. The capability is kept in the URL fragment and private project state; do not publish the URL or session file. Existing project trust, exact target/plan authorization, backups and drift checks remain enforced by the underlying operations. Runtime team tools cannot launch another panel or team.
-
-The MCP server also advertises a self-contained `text/html;profile=mcp-app` resource and the documented UI bridge for Codex hosts that expose it. Resource discovery and content checks do **not** establish embedded MCP UI rendering. The verified desktop route is the actual Codex in-app browser, not a custom sidebar extension. No Codex fork or other-agent compatibility layer is used. See the [source audit](codex-integration.md).
-
-[Panel evidence](evidence/panel-local-checks.json) separates local security/contracts, actual in-app browser observations, console PTY checks and native plugin discovery. [Native team evidence](evidence/panel-team-native.json) uses real Codex inference on an isolated local coding task. No Oracle import, production change, Windows panel run or private desktop subagent attachment is claimed.
-
-The connection-settings revision has separate [local evidence](evidence/connection-settings-local.json) and [native-host evidence](evidence/connection-settings-native.json). Their recorded results define which controls and calls were actually checked; implementing the labels and selector does not itself establish browser rendering or a successful database connection. Earlier panel evidence retains its original scope.
+[Current local evidence](evidence/current-session-100-local.json) records this revision's checks. Older panel/browser reports retain their original scope and are not screenshots or rendering proof of this interface.

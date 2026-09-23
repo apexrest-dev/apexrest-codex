@@ -29,7 +29,6 @@ await cp('resources', 'dist/resources', { recursive: true });
 await mkdir('dist/resources/panel', { recursive: true });
 for (const file of ['index.html', 'panel.css'])
   await cp('packages/panel/src/' + file, 'dist/resources/panel/' + file);
-await cp('packages/panel/assets', 'dist/resources/panel/assets', { recursive: true });
 await build({
   entryPoints: ['packages/panel/src/panel.ts'],
   outfile: 'dist/resources/panel/panel.js',
@@ -37,7 +36,7 @@ await build({
   platform: 'browser',
   format: 'iife',
   target: 'es2022',
-  loader: { '.png': 'dataurl', '.svg': 'dataurl' },
+  loader: { '.svg': 'dataurl' },
 });
 await build({
   entryPoints: ['packages/testkit/src/apex.ts'],

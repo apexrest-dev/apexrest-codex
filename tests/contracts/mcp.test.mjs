@@ -7,31 +7,6 @@ import { tmpdir } from 'node:os';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 const runtime = path.resolve('dist/runtime');
-test('team workers cannot launch teams and reviewers receive only read-only domain tools', async (t) => {
-  for (const role of ['manager', 'qa', 'developer-1']) {
-    const client = new Client({ name: 'team-role-contract', version: '1.0.0' });
-    t.after(() => client.close());
-    await client.connect(
-      new StdioClientTransport({
-        command: process.execPath,
-        args: [path.join(runtime, 'mcp.mjs')],
-        env: { ...process.env, APEXREST_TEAM_WORKER: '1', APEXREST_TEAM_ROLE: role },
-        stderr: 'pipe',
-      }),
-    );
-    const { tools } = await client.listTools();
-    assert.ok(tools.length > 0);
-    assert.ok(tools.every((tool) => !/^apexrest_(team|panel|work)_/.test(tool.name)));
-    if (role !== 'developer-1')
-      assert.ok(
-        tools.every((tool) => tool.annotations.readOnlyHint || tool.name === 'apexrest_browser_open'),
-      );
-    else assert.ok(tools.some((tool) => tool.name === 'apexrest_apex_validate'));
-    const recursive = await client.callTool({ name: 'apexrest_team_start', arguments: {} });
-    assert.equal(JSON.parse(recursive.content[0].text).diagnostics[0].code, 'UNKNOWN_TOOL');
-    await client.close();
-  }
-});
 test('real stdio MCP initialize/list/call, CLI parity and bounded catalog', async (t) => {
   const client = new Client({ name: 'contract-test', version: '1.0.0' });
   t.after(() => client.close());
@@ -43,7 +18,7 @@ test('real stdio MCP initialize/list/call, CLI parity and bounded catalog', asyn
   const start = performance.now();
   await client.connect(transport);
   const catalog = await client.listTools();
-  assert.equal(catalog.tools.length, 24);
+  assert.equal(catalog.tools.length, 18);
   const jobSchema = catalog.tools.find((tool) => tool.name === 'apexrest_job_status').inputSchema;
   assert.equal(jobSchema.properties.waitSeconds.default, 0);
   assert.ok(!jobSchema.required.includes('waitSeconds'));
@@ -63,23 +38,18 @@ test('real stdio MCP initialize/list/call, CLI parity and bounded catalog', asyn
   const searchSchema = catalog.tools.find((tool) => tool.name === 'apexrest_reference_search').inputSchema;
   assert.ok(!searchSchema.required.includes('limit'));
   assert.ok(!searchSchema.required.includes('offset'));
-  for (const name of ['apexrest_work_start', 'apexrest_team_start']) {
-    const properties = catalog.tools.find((tool) => tool.name === name).inputSchema.properties;
-    assert.equal(properties.executionMode.default, undefined);
-    assert.equal(properties.multiAgentEnabled, undefined);
-  }
   const settings = catalog.tools
     .find((tool) => tool.name === 'apexrest_panel_action')
     .inputSchema.properties.action.oneOf.find((action) => action.properties.kind.const === 'preferences')
     .properties.settings;
-  assert.equal(settings.properties.multiAgentEnabled.type, 'boolean');
-  assert.equal(settings.properties.executionMode.default, undefined);
+  assert.deepEqual(Object.keys(settings.properties), ['browserMode']);
   const panelTool = catalog.tools.find((tool) => tool.name === 'apexrest_panel_open');
   assert.equal(panelTool._meta.ui.resourceUri, 'ui://apexrest/development-panel.html');
   const resources = await client.listResources();
   assert.equal(resources.resources[0].mimeType, 'text/html;profile=mcp-app');
   const ui = await client.readResource({ uri: panelTool._meta.ui.resourceUri });
-  assert.match(ui.contents[0].text, /data:image\/png;base64/);
+  assert.ok(!ui.contents[0].text.includes('Agent team'));
+  assert.ok(!ui.contents[0].text.includes('data-view="team"'));
   assert.ok(!ui.contents[0].text.includes('src="/panel.js"'));
   assert.ok(performance.now() - start < 10000);
   const reference = await client.callTool({
@@ -130,15 +100,9 @@ test('MCP project tools require an explicit absolute path before dispatch or job
   );
   const inputs = {
     apexrest_browser_open: { env: 'dev' },
-    apexrest_work_start: { task: 'Inspect the project.', requestId: '12345678-1234-4123-8123-123456789abc' },
-    apexrest_team_wait: { id: '12345678-1234-4123-8123-123456789abc' },
     apexrest_panel_open: {},
     apexrest_panel_status: {},
     apexrest_panel_action: { action: { kind: 'validate' } },
-    apexrest_team_start: { task: 'Inspect the project.' },
-    apexrest_team_status: { id: '12345678-1234-4123-8123-123456789abc' },
-    apexrest_team_message: { id: '12345678-1234-4123-8123-123456789abc', message: 'Check validation.' },
-    apexrest_team_cancel: { id: '12345678-1234-4123-8123-123456789abc' },
     apexrest_project_inspect: {},
     apexrest_metadata_read: { env: 'dev', kind: 'objects', schema: 'FIXTURE' },
     apexrest_apex_generate: { name: 'Fixture', output: 'new-app' },

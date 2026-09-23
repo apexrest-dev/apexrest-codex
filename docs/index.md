@@ -4,24 +4,24 @@ English | [Українська](index.uk.md)
 
 ![APEXREST pencil and ruler symbol](assets/apexrest-logo.svg)
 
-APEXREST is a native Codex plugin for Oracle APEX development, controlled imports and verification. Install the published `apexrest@0.5.0` release from npm with `npm install -g apexrest`, then open `apexrest` to install tools and register the plugin. [Implementation and evidence records](implementation-status.md) track the remaining release qualification checks separately.
+APEXREST is a native Codex plugin for Oracle APEX development, controlled imports and verification. Install `apexrest@1.0.0` from npm with `npm install -g apexrest`, then open `apexrest` to install tools and register the plugin. [Implementation and evidence records](implementation-status.md) track the remaining release qualification checks separately.
 
 ## Start here
 
-| Goal                                                         | Guide                                                     |
-| ------------------------------------------------------------ | --------------------------------------------------------- |
-| Install from npm or the repository and connect a target      | [Getting started](getting-started.md)                     |
-| Run the CLI in a Cloud container with ORDS                  | [Codex Cloud](codex-cloud.md)                             |
-| Run a reviewed agent task and understand the panel           | [Full agent workflow with screenshots](agent-workflow.md) |
-| Install/remove tools and test connections in the terminal    | [Terminal interface](tui.md)                              |
-| Understand the product and examples                          | [README](../README.md)                                    |
-| Bring an existing application into source control            | [Existing applications](existing-app.md)                  |
-| Configure environments, runtime paths and policy             | [Configuration](configuration.md)                         |
-| Connect over HTTP(S) when the Oracle listener is unavailable | [SQL through ORDS](ords.md)                               |
-| Learn the plan, import and recovery model                    | [Deployment safety](deployment-safety.md)                 |
-| Deploy without service tables                                | [Clean APEX deployment](clean-apex-deployment.md)         |
-| Select and run the checks appropriate to a change            | [Testing](testing.md)                                     |
-| Resolve setup, compiler or runtime failures                  | [Troubleshooting](troubleshooting.md)                     |
+| Goal                                                         | Guide                                             |
+| ------------------------------------------------------------ | ------------------------------------------------- |
+| Install from npm or the repository and connect a target      | [Getting started](getting-started.md)             |
+| Run the CLI in a Cloud container with ORDS                   | [Codex Cloud](codex-cloud.md)                     |
+| Implement an APEX change in the current conversation         | [Chat workflow](chat-workflow.md)                 |
+| Install/remove tools and test connections in the terminal    | [Terminal interface](tui.md)                      |
+| Understand the product and examples                          | [README](../README.md)                            |
+| Bring an existing application into source control            | [Existing applications](existing-app.md)          |
+| Configure environments, runtime paths and policy             | [Configuration](configuration.md)                 |
+| Connect over HTTP(S) when the Oracle listener is unavailable | [SQL through ORDS](ords.md)                       |
+| Learn the plan, import and recovery model                    | [Deployment safety](deployment-safety.md)         |
+| Deploy without service tables                                | [Clean APEX deployment](clean-apex-deployment.md) |
+| Select and run the checks appropriate to a change            | [Testing](testing.md)                             |
+| Resolve setup, compiler or runtime failures                  | [Troubleshooting](troubleshooting.md)             |
 
 ## Understand and extend
 

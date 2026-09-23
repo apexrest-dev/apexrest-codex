@@ -1,7 +1,7 @@
 interface:
-  display_name: "APEX work from chat"
-  short_description: "Work in this Codex session or an enabled reviewed team"
-  default_prompt: "Use $apexrest-work to complete my Oracle APEX change using my saved execution and browser settings. In single mode work directly in this Codex session; report actual results here."
+  display_name: 'APEX work from chat'
+  short_description: 'Complete APEX changes directly in this Codex session'
+  default_prompt: 'Use $apexrest-work to complete my Oracle APEX change directly in this Codex session using my project and browser settings; report actual results here.'
 
 policy:
   allow_implicit_invocation: true

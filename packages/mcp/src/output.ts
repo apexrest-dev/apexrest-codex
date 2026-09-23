@@ -16,26 +16,18 @@ function preview(value: unknown, depth = 0): unknown {
   for (const key of [
     'id',
     'jobId',
-    'teamId',
-    'cursor',
-    'terminal',
     'projectId',
     'project',
     'root',
     'status',
-    'phase',
-    'revision',
     'ok',
     'operation',
     'exitCode',
     'summary',
     'configured',
     'trusted',
-    'executionMode',
-    'executionHost',
     'browserMode',
     'nextAction',
-    'fullReport',
     'digest',
     'sourceDigest',
     'targetDigest',
@@ -50,16 +42,7 @@ function preview(value: unknown, depth = 0): unknown {
     if (['string', 'number', 'boolean'].includes(typeof entry))
       result[key] = typeof entry === 'string' ? entry.slice(0, 400) : entry;
   }
-  for (const key of [
-    'jobs',
-    'teams',
-    'deployments',
-    'diagnostics',
-    'artifacts',
-    'reviews',
-    'qa',
-    'verification',
-  ])
+  for (const key of ['jobs', 'deployments', 'diagnostics', 'artifacts', 'verification'])
     if (Array.isArray(data[key])) result[key + 'Count'] = data[key].length;
   if (Array.isArray(data.diagnostics))
     result.diagnostics = data.diagnostics
@@ -78,9 +61,8 @@ function preview(value: unknown, depth = 0): unknown {
       result[key] = data[key].slice(0, 4).map((entry) => String(entry).slice(0, 200));
       result[key + 'Omitted'] = Math.max(0, data[key].length - 4);
     }
-  if (depth < 2)
-    for (const key of ['result', 'team'])
-      if (data[key] && typeof data[key] === 'object') result[key] = preview(data[key], depth + 1);
+  if (depth < 2 && data.result && typeof data.result === 'object')
+    result.result = preview(data.result, depth + 1);
   if (data.operation === 'deploy.plan' && data.data && depth < 2) result.data = preview(data.data, depth + 1);
   const plan = data.scope === 'full-application-import' && typeof data.digest === 'string';
   if (plan) {
@@ -174,19 +156,18 @@ export async function toolOutput(original: Result, project?: string) {
     if (JSON.stringify(result).length > inlineLimit) {
       const data = result.data as Record<string, unknown>;
       result.data = Object.fromEntries(
-        ['id', 'jobId', 'teamId', 'cursor', 'terminal', 'status', 'ok', 'executionHost', 'output']
+        ['id', 'jobId', 'status', 'ok', 'output']
           .filter((key) => data[key] !== undefined)
           .map((key) => [key, data[key]]),
       );
-      for (const key of ['result', 'team'])
-        if (data[key] && typeof data[key] === 'object') {
-          const nested = data[key] as Record<string, unknown>;
-          (result.data as Record<string, unknown>)[key] = Object.fromEntries(
-            ['id', 'ok', 'status', 'exitCode', 'operation', 'summary']
-              .filter((field) => ['string', 'number', 'boolean'].includes(typeof nested[field]))
-              .map((field) => [field, nested[field]]),
-          );
-        }
+      if (data.result && typeof data.result === 'object') {
+        const nested = data.result as Record<string, unknown>;
+        (result.data as Record<string, unknown>).result = Object.fromEntries(
+          ['id', 'ok', 'status', 'exitCode', 'operation', 'summary']
+            .filter((field) => ['string', 'number', 'boolean'].includes(typeof nested[field]))
+            .map((field) => [field, nested[field]]),
+        );
+      }
     }
   }
   // UI-only metadata carries the original sanitized panel envelope. Text is

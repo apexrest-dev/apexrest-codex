@@ -19,7 +19,7 @@ for (const profile of ['codex-compat'])
     `apexrest-apex-${version}-${profile}.zip`,
     await zipTree('dist/' + profile, zipSync),
     'native-plugin',
-    { profile, compatibility: 'macos-arm64-verified' },
+    { profile, compatibility: 'codex-plugin' },
   );
 for (const platform of ['darwin-arm64', 'linux-x64', 'win32-x64']) {
   const staging = 'dist/runtime-package-' + platform;

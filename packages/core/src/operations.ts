@@ -3,13 +3,6 @@ import { metadataInputSchema } from './metadata.ts';
 import { refName, relativePath } from './config.ts';
 import { savedConnectionName, ordsUrl, ordsUsername } from './connections.ts';
 import { sqlclMode, sqlclRestriction, databaseTransport } from './sqlcl-config.ts';
-import {
-  teamStartSchema,
-  teamIdSchema,
-  teamMessageSchema,
-  workStartSchema,
-  teamWaitSchema,
-} from './team-schema.ts';
 import { panelReadSchema, publicPanelActionSchema } from './panel-schema.ts';
 const project = z.string().min(1).max(4096).optional(),
   env = refName;
@@ -43,13 +36,7 @@ export const schemas = {
     mcpRestrictLevel: sqlclRestriction.optional(),
     databaseTransport: databaseTransport.optional(),
   }),
-  'team.start': teamStartSchema,
-  'work.start': workStartSchema,
-  'team.wait': teamWaitSchema,
-  'team.status': teamIdSchema,
-  'team.message': teamMessageSchema,
-  'team.cancel': teamIdSchema,
-  'panel.open': panelReadSchema.omit({ team: true }),
+  'panel.open': panelReadSchema,
   'panel.status': panelReadSchema,
   'panel.action': publicPanelActionSchema,
   setup: z.strictObject(setup),
@@ -167,65 +154,24 @@ export const toolCatalog: {
     destructive: false,
   },
   {
-    name: 'apexrest_work_start',
-    operation: 'work.start',
-    description:
-      'Start APEX work: single continues in this chat without new agents/polling; explicitly enabled teams return a private panel. Fresh requestId per task; exact retries reuse the receipt.',
-    readOnly: false,
-  },
-  {
-    name: 'apexrest_team_wait',
-    operation: 'team.wait',
-    description:
-      'Wait for worker progress/completion (up to 30s). Reuse cursor; unchanged heartbeats stay silent. Terminal results check source digests. Not for current_session.',
-    readOnly: true,
-  },
-  {
     name: 'apexrest_panel_open',
     operation: 'panel.open',
     description:
-      'Open the Codex development panel: private local URL and optional native UI for settings, worker activity, reviews and APEX jobs.',
+      'Open the Codex development panel: private local URL and optional native UI for settings and APEX jobs.',
     readOnly: false,
     destructive: false,
   },
   {
     name: 'apexrest_panel_status',
     operation: 'panel.status',
-    description: 'Read local settings, worker activity, reviews, changes and job status. No database call.',
+    description: 'Read local settings, changes and APEX job status. No database call.',
     readOnly: true,
   },
   {
     name: 'apexrest_panel_action',
     operation: 'panel.action',
     description:
-      'Manage settings/workers or run checks/planning. Enable multiAgentEnabled only on explicit user request. Trust and deployment authorization still apply.',
-    readOnly: false,
-  },
-  {
-    name: 'apexrest_team_start',
-    operation: 'team.start',
-    description:
-      'Start work: single uses this chat, no new agent/polling. Team requires saved multiAgentEnabled opt-in and enforces manager/independent QA with source-bound completion.',
-    readOnly: false,
-  },
-  {
-    name: 'apexrest_team_status',
-    operation: 'team.status',
-    description:
-      'Read worker progress and digest-checked results. Teams require manager reviews and QA; historical single workers use self-verification. current_session is only a receipt.',
-    readOnly: true,
-  },
-  {
-    name: 'apexrest_team_message',
-    operation: 'team.message',
-    description:
-      'Steer an owned active team; changes invalidate prior reviews. Cannot attach to other Codex chats.',
-    readOnly: false,
-  },
-  {
-    name: 'apexrest_team_cancel',
-    operation: 'team.cancel',
-    description: 'Stop an owned team. Existing source or database changes are not rolled back.',
+      'Manage local settings or run APEX checks/planning. Trust and deployment authorization still apply.',
     readOnly: false,
   },
   {

@@ -6,11 +6,10 @@ import { randomUUID } from 'node:crypto';
 import { rm, symlink, mkdtemp, mkdir } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { fixture } from '../fixtures/project.ts';
-import { writeJson } from '../../packages/core/src/fs.ts';
+import { readJson, writeJson } from '../../packages/core/src/fs.ts';
 import { PanelService } from '../../packages/core/src/panel.ts';
 import { startPanelServer, panelDocument } from '../../packages/core/src/panel-server.ts';
 import { panelLines } from '../../packages/cli/src/panel-tui.ts';
-import { teamIdentities } from '../../packages/core/src/team-identity.ts';
 import { schemas } from '../../packages/core/src/operations.ts';
 
 async function setup(t: import('node:test').TestContext, trusted = true) {
@@ -49,14 +48,14 @@ test('panel preserves failed results and unknown workers, redacts secrets and re
   assert.ok(!JSON.stringify(s).includes('hidden'));
   assert.deepEqual(s.permissions.activeGrants, []);
   assert.equal(s.configuration?.environments.dev?.applicationId, 123);
-  assert.ok(panelLines(s, 2).some((line) => line.includes('failed')));
+  assert.ok(panelLines(s, 1).some((line) => line.includes('failed')));
 });
 test('panel trust and action allowlist cannot be bypassed; saved preferences round-trip without granting trust', async (t) => {
   const { ctx, service } = await setup(t, false);
   await assert.rejects(
     service.act({
       kind: 'preferences',
-      settings: { developers: 2, sandbox: 'read-only', timeoutSeconds: 120 },
+      settings: { browserMode: 'external' },
     }),
     /trust/i,
   );
@@ -67,10 +66,15 @@ test('panel trust and action allowlist cannot be bypassed; saved preferences rou
   });
   await service.act({
     kind: 'preferences',
-    settings: { developers: 2, sandbox: 'read-only', timeoutSeconds: 120 },
+    settings: { browserMode: 'external' },
   });
-  assert.equal((await service.snapshot()).preferences.developers, 2);
-  await assert.rejects(service.snapshot('../outside'), /Invalid/);
+  assert.equal((await service.snapshot()).preferences.browserMode, 'external');
+  await service.act({ kind: 'preferences', settings: {} });
+  assert.equal((await service.snapshot()).preferences.browserMode, 'external');
+  assert.deepEqual(await readJson(path.join(ctx.root, '.apexrest/panel/preferences.json')), {
+    browserMode: 'external',
+  });
+  assert.equal(schemas['panel.status'].safeParse({ team: randomUUID() }).success, false);
 });
 test('panel saves plugin ORDS settings, preserves direct connections, and never returns passwords', async (t) => {
   const { service } = await setup(t);
@@ -94,7 +98,7 @@ test('panel saves plugin ORDS settings, preserves direct connections, and never 
     username: 'app',
   });
   assert.doesNotMatch(JSON.stringify({ result, snapshot }), /local-test-secret/);
-  assert.ok(panelLines(snapshot, 3).includes('Database network: ORDS HTTP(S)'));
+  assert.ok(panelLines(snapshot, 2).includes('Database network: ORDS HTTP(S)'));
   await service.act({
     kind: 'connection',
     name: 'dev-read',
@@ -184,7 +188,7 @@ test('panel HTTP rejects unauthenticated, foreign-origin and unlisted mutations;
     (
       await post({
         kind: 'preferences',
-        settings: { developers: 3, timeoutSeconds: 120, sandbox: 'read-only' },
+        settings: { browserMode: 'external' },
       })
     ).status,
     200,
@@ -192,10 +196,10 @@ test('panel HTTP rejects unauthenticated, foreign-origin and unlisted mutations;
   assert.equal(
     (
       (await (await fetch(base + '/api/status', { headers })).json()) as {
-        preferences: { developers: number };
+        preferences: { browserMode: string };
       }
-    ).preferences.developers,
-    3,
+    ).preferences.browserMode,
+    'external',
   );
   const html = await fetch(base + '/');
   assert.equal(html.status, 200);
@@ -207,15 +211,44 @@ test('panel rejects state directory symlinks outside its project', async (t) => 
     outside = await mkdtemp(path.join(tmpdir(), 'panel-outside-'));
   t.after(() => rm(outside, { recursive: true, force: true }));
   await mkdir(path.join(ctx.root, '.apexrest'), { recursive: true });
-  await symlink(outside, path.join(ctx.root, '.apexrest/teams'));
+  await symlink(outside, path.join(ctx.root, '.apexrest/jobs'));
   await assert.rejects(service.snapshot(), /escape|outside/i);
 });
-test('bundled MCP panel contains its own assets and all five named agents have distinct identities', async () => {
+test('bundled MCP panel contains its assets and only current-session operation controls', async () => {
   const html = await panelDocument();
   assert.ok(!html.includes('src="/panel.js"'));
   assert.ok(!html.includes('href="/panel.css"'));
-  assert.ok(html.indexOf('<script>') > html.indexOf('id="task-form"'));
+  assert.ok(html.indexOf('<script>') > html.indexOf('id="connection-form"'));
   assert.ok(html.indexOf('<script>') < html.indexOf('</body>'));
-  assert.match(html, /data:image\/png;base64/);
-  assert.equal(new Set(Object.values(teamIdentities).map((i) => i.name)).size, 5);
+  assert.match(html, /Current Codex session/);
+  assert.match(html, /id="open-browser"/);
+  assert.doesNotMatch(html, /id="(?:task-form|team-select|new-task)"|data-page="team"|Agent team|avatar/);
+});
+
+test('removed workflow settings and actions are rejected while legacy preferences are safely read', async (t) => {
+  const { ctx, service } = await setup(t);
+  const file = path.join(ctx.root, '.apexrest/panel/preferences.json');
+  await writeJson(file, {
+    browserMode: 'external',
+    executionMode: 'team',
+    multiAgentEnabled: true,
+    developers: 3,
+    sandbox: 'workspace-write',
+    timeoutSeconds: 3600,
+  });
+  assert.deepEqual(await service.preferences(), { browserMode: 'external' });
+  const snapshot = await service.snapshot();
+  assert.equal('teams' in snapshot, false);
+  assert.equal('team' in snapshot, false);
+  assert.equal('task' in snapshot, false);
+  for (const action of [
+    { kind: 'preferences', settings: { executionMode: 'team' } },
+    { kind: 'preferences', settings: { multiAgentEnabled: true } },
+    { kind: 'start', request: { task: 'Start a task.' } },
+    { kind: 'message', id: randomUUID(), message: 'Change this.' },
+    { kind: 'cancel-team', id: randomUUID() },
+  ])
+    assert.equal(schemas['panel.action'].safeParse({ action }).success, false);
+  await service.act({ kind: 'preferences', settings: { browserMode: 'codex' } });
+  assert.deepEqual(await readJson(file), { browserMode: 'codex' });
 });
