@@ -20,6 +20,8 @@ The [acceptance matrix](acceptance.json) distinguishes current criteria, retired
 
 ## Distribution and remaining checks
 
+npm `latest` is verified as 1.0.0, with matching archive integrity and successful clean local/global installs. The [publication record](evidence/npm-100-publication.json) includes the source commit and passing Ubuntu/macOS/Windows CI.
+
 The package and native plugin version is `1.0.0`. [Release notes](release-notes.md) track distribution separately from implementation and verification. Registry installation, local packaging, GitHub source and deployed website are separate outcomes.
 
 Broader native-platform coverage, changed Oracle imports, SQL restore, real interruption/recovery, utPLSQL and authenticated application checks remain open where the existing evidence does not cover them. UTF-8 payload measurements are not paid-token measurements. See [next actions](next-actions.md).

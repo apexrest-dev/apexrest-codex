@@ -34,7 +34,8 @@
     "contextComparison": "current-session-100-context.json",
     "panelSettings": "current-session-100-panel.json",
     "panelBridge": "current-session-100-bridge.json",
-    "actualCodexPanel": "current-session-100-codex-panel.json"
+    "actualCodexPanel": "current-session-100-codex-panel.json",
+    "publication": "npm-100-publication.json"
   },
   "package": {
     "name": "apexrest",
@@ -51,6 +52,6 @@
     "nativePlatformAndLiveOracleMatrix": "not established for this source; historical evidence remains separately scoped",
     "measurements": "UTF-8 bytes and tool/skill counts, not billed tokens or model latency"
   },
-  "publication": "pending; registry evidence must be recorded separately after actual publication",
+  "publication": "published-and-registry-verified; see npm-100-publication.json",
   "generatedBundleCorrection": "Rebuilt using regular checkout dependencies after initial CI detected symlink-dependent esbuild source paths. Dependency chunk content matched after path/hash normalization; final tarball installations and contract/runtime checks passed."
 }

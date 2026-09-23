@@ -14,7 +14,7 @@ English | [Українська](release-notes.uk.md)
 
 [Local release evidence](evidence/current-session-100-local.json) records the actual source, package and validation results. It does not substitute for live Codex conversation, Oracle or application-browser verification. Package/skill/catalog measurements use files, tools and UTF-8 bytes, not billed tokens.
 
-The release version is `apexrest@1.0.0` with no prerelease suffix. npm publication and canonical GitHub synchronization are authorized for this release; registry metadata and clean-install results must be recorded after publication. A version change or `npm pack` alone is not publication. A Git tag, GitHub release and website deployment are separate actions.
+`apexrest@1.0.0` is published as npm `latest`. [Publication evidence](evidence/npm-100-publication.json) verifies registry integrity, clean local/global installs and the canonical GitHub source commit. CI passed on Ubuntu, macOS and Windows. The local Codex plugin was updated to 1.0.0; start a new conversation to load its tools and skills. A Git tag, GitHub release and website deployment remain separate actions.
 
 [Implementation status](implementation-status.md), the [acceptance matrix](acceptance.json) and [open verification](next-actions.md) separate the implemented scope from historical and current evidence.
 
