@@ -259,16 +259,30 @@ for (const profile of ['codex-compat'])
         assert.equal(found.ok, true);
         assert.ok(found.data.source.startsWith('https://github.com/oracle/skills/'));
         assert.equal(found.data.content.length, 80);
-        const queued = JSON.parse(
+        let result = JSON.parse(
           (await client.callTool({ name: 'apexrest_test_run', arguments: { project, suite: 'unit' } }))
             .content[0].text,
         );
-        assert.equal(queued.ok, true);
-        // Codex receives the completed operation in the original tool call.
-        assert.ok(queued.data.jobId);
-        assert.equal(queued.data.status, 'completed');
-        assert.equal(queued.data.result.ok, true, JSON.stringify(queued.data.result));
-        assert.equal(queued.data.result.data.tests, 1);
+        assert.equal(result.ok, true);
+        const jobId = result.data.jobId;
+        assert.ok(jobId);
+        // A loaded Windows runner can outlast the original tool call's bounded wait.
+        // Follow the same job instead of starting the suite again.
+        for (let attempt = 0; attempt < 3 && result.data.status !== 'completed'; attempt++) {
+          assert.ok(['queued', 'running'].includes(result.data.status), JSON.stringify(result));
+          result = JSON.parse(
+            (
+              await client.callTool({
+                name: 'apexrest_job_status',
+                arguments: { id: jobId, waitSeconds: 30 },
+              })
+            ).content[0].text,
+          );
+          assert.equal(result.ok, true, JSON.stringify(result));
+        }
+        assert.equal(result.data.status, 'completed', JSON.stringify(result));
+        assert.equal(result.data.result.ok, true, JSON.stringify(result.data.result));
+        assert.equal(result.data.result.data.tests, 1);
       } finally {
         await client.close();
       }
