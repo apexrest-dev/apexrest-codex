@@ -1,21 +1,29 @@
-# 0.5.0-beta.1 — minor beta
+# 0.5.0 — stable release
 
 English | [Українська](release-notes.uk.md)
 
+## 0.5.0 — 2026-09-23
+
+The package and native plugin now use `0.5.0`, promoting the reviewed APEXlang reference update from `0.5.0-beta.1` without a new feature change. The npm target is `apexrest@0.5.0` on `latest`, with the `beta` dist-tag removed. The [publication record](evidence/npm-050-stable-publication.json) tracks the actual registry result; `0.5.0-beta.1` remains available by exact version.
+
+The [release-readiness check](next-actions.md) remains blocked by missing source-bound native-platform and Oracle integration evidence. Local packaging and registry installation establish distribution, not those product checks. No Git tag, GitHub release or site deployment is part of this version change.
+
+## 0.5.0-beta.1 — 2026-09-22
+
 The 2026-09-22 minor update refreshes the plugin skills and pinned reference corpus from [Oracle APEXlang Skills 2026.09.21](https://github.com/oracle/skills/blob/b94ccf4dec34b27859c2378fa71ba2bad884f2fe/apex/apexlang/release-notes.json).
 
-## Changes
+### Changes
 
 - Pin Oracle commit `b94ccf4dec34b27859c2378fa71ba2bad884f2fe` and verify the archive SHA-256 before importing. The corpus contains 658 complete documents and 4,872 grammar fragments: 21 new documents, 30 updated documents and no removals. Grammar text and existing IDs are unchanged.
 - Add direct skill routes and focused guidance for Media List, Comments, Metric Card, Smart Filters/Search, Cards and Region Display Selector. Follow the selected component's source, parent, projection, navigation and authorization contracts; compiler metadata remains authoritative.
 - Preserve bounded reference search, lazy loading, exact snapshot selection and the offline runtime. The reference version is `26.1@b94ccf4`; `26.1` still selects the bundled snapshot.
 - Synchronize package, plugin, runtime, acceptance metadata and bilingual documentation to `0.5.0-beta.1`. Existing current-session execution, explicit team opt-in and authorized deployment/browser safeguards remain in force.
 
-## Verification and publication
+### Verification and publication
 
 [Version-specific local evidence](evidence/minor-050-local.json) records the checks for this update. Upstream validator and compiler-conformance claims describe Oracle's release; this plugin imports reference documents, not Oracle's validator implementation. Local corpus/retrieval and packaging checks do not establish live Oracle or application-browser verification for the new component workflows.
 
-The npm release target is `apexrest@0.5.0-beta.1` on the `beta` channel. The [publication record](evidence/npm-050-publication.json) tracks publication status and registry verification. The `latest` channel remains on `0.4.0-beta.1`; no Git tag or GitHub release is part of this update. Earlier evidence below retains its original version and scope.
+The npm release target is `apexrest@0.5.0-beta.1` on the `beta` channel. The [publication record](evidence/npm-050-publication.json) tracks publication status and registry verification. At that publication, `latest` remained on `0.4.0-beta.1`; no Git tag or GitHub release was created. Earlier evidence below retains its original version and scope.
 
 ## 0.4.0-beta.1 — 2026-09-21
 

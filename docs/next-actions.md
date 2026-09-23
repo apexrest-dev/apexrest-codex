@@ -2,13 +2,17 @@
 
 English | [Українська](next-actions.uk.md)
 
+## Stable 0.5.0 follow-up — 2026-09-23
+
+Publish the checked `apexrest@0.5.0` archive as npm `latest`, remove the `beta` dist-tag and verify registry integrity plus an isolated `apexrest@latest` installation. Track the exact result in the [0.5.0 npm record](evidence/npm-050-stable-publication.json). The former beta remains installable by exact version. Complete the source-bound native Linux/Windows, Oracle integration, recovery and authenticated application checks required by `npm run check-release-readiness`; do not infer those results from npm distribution.
+
 ## Oracle skills 0.5.0-beta.1 follow-up — 2026-09-22
 
-Use the refreshed `26.1@b94ccf4` component routes and preserve [version-specific local evidence](evidence/minor-050-local.json). Compile and verify each newly used component workflow on its authorized target; upstream release notes and local retrieval tests do not replace source-query and application-browser checks. Publication of `apexrest@0.5.0-beta.1` under `beta` and registry-install verification are complete; see the [npm record](evidence/npm-050-publication.json). Use `npm install apexrest@beta` for this version. Preserve the `latest` tag on `0.4.0-beta.1` and its historical evidence.
+Use the refreshed `26.1@b94ccf4` component routes and preserve [version-specific local evidence](evidence/minor-050-local.json). Compile and verify each newly used component workflow on its authorized target; upstream release notes and local retrieval tests do not replace source-query and application-browser checks. Publication of `apexrest@0.5.0-beta.1` under `beta` and registry-install verification are complete; see the [npm record](evidence/npm-050-publication.json). Use `npm install apexrest@0.5.0-beta.1` for that version after removal of the `beta` dist-tag. Preserve its historical evidence.
 
 ## npm publication follow-up — 2026-09-22
 
-Publication and registry-install verification are complete for `apexrest@0.4.0-beta.1`. Use `npm install apexrest` locally or `npm install -g apexrest` globally for the `latest` tag, which remains on `0.4.0-beta.1`. The `beta` tag now selects `0.5.0-beta.1`. Keep the package name and lockfile synchronized in future releases. The repository manifest and lockfile use the published name; no Git tag was created. Existing stable-release and platform verification work remains open.
+Publication and registry-install verification are complete for `apexrest@0.4.0-beta.1`. At that publication, `latest` selected `0.4.0-beta.1`; install it now by exact version. The later `beta` tag for `0.5.0-beta.1` is removed as part of the `0.5.0` release. Keep the package name and lockfile synchronized in future releases. The repository manifest and lockfile use the published name; no Git tag was created. Existing stable-release and platform verification work remains open.
 
 ## Minor beta 0.4.0-beta.1 — 2026-09-21
 

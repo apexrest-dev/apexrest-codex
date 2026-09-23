@@ -2,6 +2,12 @@
 
 English | [Українська](CHANGELOG.uk.md)
 
+## 0.5.0 — stable release
+
+- Promote the reviewed `0.5.0-beta.1` code and pinned Oracle APEXlang reference snapshot to package and plugin version `0.5.0`; no new component behavior is claimed.
+- Publish `apexrest@0.5.0` as npm `latest` and remove the npm `beta` dist-tag. The [publication record](docs/evidence/npm-050-stable-publication.json) tracks the actual registry outcome; the earlier beta remains available by exact version.
+- Keep the release-readiness gate honest: native-platform, Oracle integration and recovery evidence required for full qualification is still incomplete. See the [release notes](docs/release-notes.md).
+
 ## 0.5.0-beta.1 — minor beta
 
 - Refresh the pinned Oracle APEXlang references and plugin skills from Oracle's September 21 release notes and the upstream snapshot merged on September 22.

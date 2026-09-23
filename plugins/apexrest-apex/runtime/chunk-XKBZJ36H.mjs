@@ -12,7 +12,7 @@ import {
 } from "./chunk-QLRGI23I.mjs";
 import {
   VERSION
-} from "./chunk-AOZ4CKYZ.mjs";
+} from "./chunk-QDAKHEPF.mjs";
 import {
   OracleAdapter,
   configureConnection,

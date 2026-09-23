@@ -25,7 +25,7 @@ An existing clean APEX installation is enough for ordinary deployment. Service t
 
 ## Install from npm
 
-Use Node 24 LTS (supported range: Node 24–26). This release targets [apexrest](https://www.npmjs.com/package/apexrest) `0.5.0-beta.1` on the npm `beta` channel. See the [publication record](evidence/npm-050-publication.json) for publication status and registry verification. The `latest` channel remains on `0.4.0-beta.1`.
+Use Node 24 LTS (supported range: Node 24–26). This release targets [apexrest](https://www.npmjs.com/package/apexrest) `0.5.0` as npm `latest`. See the [publication record](evidence/npm-050-stable-publication.json) for its actual status and registry verification. The earlier beta remains installable by exact version.
 
 Install the CLI globally and check its version:
 
@@ -45,7 +45,7 @@ npx apexrest --version
 npx apexrest
 ```
 
-To pin this version, use `npm install -g apexrest@0.5.0-beta.1`. The repository installation below remains available.
+To pin this version, use `npm install -g apexrest@0.5.0`. The repository installation below remains available.
 
 ## Install with the terminal menu
 

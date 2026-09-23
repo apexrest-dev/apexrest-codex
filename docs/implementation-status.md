@@ -1,12 +1,16 @@
-# Implementation status — beta 0.5.0-beta.1
+# Implementation status — 0.5.0
 
 English | [Українська](implementation-status.uk.md)
+
+## Stable release 0.5.0 — 2026-09-23
+
+The package, workspace modules and native plugin use `0.5.0`; the Oracle APEXlang snapshot and behavior match the reviewed `0.5.0-beta.1` update. The npm target is `latest`, with the `beta` dist-tag removed; see the [version-specific publication record](evidence/npm-050-stable-publication.json) for the actual registry state and installation checks. Earlier beta evidence retains its original version and scope. The stable release-readiness gate remains blocked by missing source-bound native-platform and Oracle integration evidence; publication does not mark those checks as passed.
 
 ## Oracle skills refresh 0.5.0-beta.1 — 2026-09-22
 
 Implemented: the pinned Oracle APEXlang Skills `2026.09.21` snapshot (`b94ccf4`) adds 21 documents and updates 30, yielding 658 full documents and 4,872 unchanged grammar fragments. Skill routes and guidance cover Media List, Comments, Metric Card, Smart Filters/Search, Cards and Region Display Selector. The runtime still loads references offline and on demand; Oracle orchestration, deployment policy and validator implementation are not adopted.
 
-Passed [local checks](evidence/minor-050-local.json): 217 unit, 22 contract and 14 packaging tests, typecheck, lint, 47 documentation language pairs, the 30-page site build and plugin integrity. [Retrieval](evidence/minor-050-retrieval.json) returns the expected first result in 18/18 cases with and without a version filter. [Isolated native verification](evidence/minor-050-native.json) confirms skill/MCP discovery and retrieval from the new snapshot without updating the user installation. New workflow validation against a live target and application-browser behavior remain unverified. Published `apexrest@0.5.0-beta.1` under `beta`; [npm registry verification](evidence/npm-050-publication.json) confirms matching archive integrity and an isolated `apexrest@beta` installation. The `latest` tag remains on `0.4.0-beta.1`. The earlier npm record below describes that version. See [release notes](release-notes.md).
+Passed [local checks](evidence/minor-050-local.json): 217 unit, 22 contract and 14 packaging tests, typecheck, lint, 47 documentation language pairs, the 30-page site build and plugin integrity. [Retrieval](evidence/minor-050-retrieval.json) returns the expected first result in 18/18 cases with and without a version filter. [Isolated native verification](evidence/minor-050-native.json) confirms skill/MCP discovery and retrieval from the new snapshot without updating the user installation. New workflow validation against a live target and application-browser behavior remain unverified. Published `apexrest@0.5.0-beta.1` under `beta`; [npm registry verification](evidence/npm-050-publication.json) confirms matching archive integrity and an isolated `apexrest@beta` installation. At that beta publication, the `latest` tag remained on `0.4.0-beta.1`. The earlier npm record below describes that version. See [release notes](release-notes.md).
 
 ## npm publication — 2026-09-22
 
