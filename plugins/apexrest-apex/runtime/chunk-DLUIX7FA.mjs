@@ -3,7 +3,7 @@ import {
   browserPreferences,
   browserPreferencesSchema,
   openVerificationBrowser
-} from "./chunk-63OXIMOF.mjs";
+} from "./chunk-K5BV3TBZ.mjs";
 import {
   VERSION
 } from "./chunk-3XRCAA5S.mjs";
@@ -24,7 +24,7 @@ import {
   savedConnectionName,
   sqlclConfig,
   sqlclConfigSchema
-} from "./chunk-RQ2VEV4O.mjs";
+} from "./chunk-R6MER5QH.mjs";
 import {
   Fault,
   contained,

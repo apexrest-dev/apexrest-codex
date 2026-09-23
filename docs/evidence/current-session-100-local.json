@@ -40,16 +40,17 @@
     "name": "apexrest",
     "version": "1.0.0",
     "filename": "apexrest-1.0.0.tgz",
-    "bytes": 2586817,
-    "unpackedBytes": 17135364,
+    "bytes": 2585623,
+    "unpackedBytes": 17113988,
     "files": 440,
-    "integrity": "sha512-gUU8M9Ch6lIShoc5OgWQml1Tl6UmR0PGoUhwBkloRn5soTYXDlu+l9lBQPoCmFwwuHbKTZsNPHoqlffSN2KaWA==",
-    "shasum": "0727a8856e884d7d06cfd59904dccc4d94bb5854"
+    "integrity": "sha512-kE/corbHdNOSuhxWro0mIzT7Rj8ymIzPe0DM9/H4Sqxia6YwRjcluFLXQFltvDPZgQK98qZPNQWhB+rhim5H5g==",
+    "shasum": "eb565e4fdb54b36fea996cb96fad9f3cd6479086"
   },
   "qualification": {
     "signedFullReleaseReady": false,
     "nativePlatformAndLiveOracleMatrix": "not established for this source; historical evidence remains separately scoped",
     "measurements": "UTF-8 bytes and tool/skill counts, not billed tokens or model latency"
   },
-  "publication": "pending; registry evidence must be recorded separately after actual publication"
+  "publication": "pending; registry evidence must be recorded separately after actual publication",
+  "generatedBundleCorrection": "Rebuilt using regular checkout dependencies after initial CI detected symlink-dependent esbuild source paths. Dependency chunk content matched after path/hash normalization; final tarball installations and contract/runtime checks passed."
 }

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "timestamp": "2026-09-23T19:10:06.830Z",
+  "timestamp": "2026-09-23T19:15:36.153Z",
   "sourceDigest": "f5c6119aa8c71884fac0d452d29b9336b2b7471d4e40481e08b137bc261fb23a",
   "scope": "Built stdio MCP and CLI with a disposable trusted existing-app project and three real local executions of one synthetic unit test. No model turn, Codex App Server, Oracle, application import, or browser verification. Byte sizes describe tool response text, not billed tokens.",
   "node": "v25.9.0",
@@ -40,7 +40,7 @@
     "failures": 0,
     "skipped": 0,
     "resultTextBytes": 729,
-    "elapsedMs": 564.47
+    "elapsedMs": 523.46
   },
   "completedFailure": {
     "toolCalls": 1,
@@ -51,7 +51,7 @@
     "failures": 1,
     "skipped": 0,
     "resultTextBytes": 857,
-    "elapsedMs": 803.04
+    "elapsedMs": 517.27
   },
   "immediateQueueCompatibility": {
     "toolCalls": 2,
@@ -62,7 +62,7 @@
     "failures": 0,
     "skipped": 0,
     "resultTextBytes": 685,
-    "elapsedMs": 507.13
+    "elapsedMs": 505.82
   },
   "projectInspect": {
     "syntheticSourceFiles": 50,
@@ -71,7 +71,7 @@
     "reductionPercent": 85.34,
     "summaryContainsHashMap": false,
     "fullHashCount": 50,
-    "summaryElapsedMs": 6.03,
-    "fullElapsedMs": 10.92
+    "summaryElapsedMs": 25.74,
+    "fullElapsedMs": 10.89
   }
 }

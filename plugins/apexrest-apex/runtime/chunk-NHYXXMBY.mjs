@@ -5,12 +5,12 @@ import {
   panelActionSchema,
   panelReadSchema,
   publicPanelActionSchema
-} from "./chunk-ZT5GTPRX.mjs";
+} from "./chunk-DLUIX7FA.mjs";
 import {
   ArtifactService,
   DeploymentService,
   TestService
-} from "./chunk-63OXIMOF.mjs";
+} from "./chunk-K5BV3TBZ.mjs";
 import {
   VERSION
 } from "./chunk-3XRCAA5S.mjs";
@@ -43,7 +43,7 @@ import {
   sqlclConfig,
   sqlclMode,
   sqlclRestriction
-} from "./chunk-RQ2VEV4O.mjs";
+} from "./chunk-R6MER5QH.mjs";
 import {
   Fault,
   canonical,
@@ -703,7 +703,7 @@ async function dispatch(operation, input = {}, signal) {
     let data;
     switch (operation) {
       case "panel.open": {
-        const { openPanel } = await import("./chunk-UJEMWBWY.mjs");
+        const { openPanel } = await import("./chunk-XZNIV6UL.mjs");
         data = await openPanel(await realpath(root));
         break;
       }
@@ -740,29 +740,29 @@ async function dispatch(operation, input = {}, signal) {
         );
         break;
       case "dependencies.install": {
-        const { ToolchainService } = await import("./chunk-JANRUWTV.mjs");
+        const { ToolchainService } = await import("./chunk-EG2NPDAF.mjs");
         data = await new ToolchainService().apply(parsed);
         break;
       }
       case "dependencies.uninstall": {
-        const { uninstallTools } = await import("./chunk-FBQY4ZZR.mjs");
+        const { uninstallTools } = await import("./chunk-JN3KZCDI.mjs");
         data = await uninstallTools(parsed);
         break;
       }
       case "setup":
       case "plugin.install":
       case "plugin.update": {
-        const { setup: setup2 } = await import("./chunk-NHIJ2QIO.mjs");
+        const { setup: setup2 } = await import("./chunk-4GIV3RLJ.mjs");
         data = await setup2(parsed);
         break;
       }
       case "plugin.validate": {
-        const { validateNative } = await import("./chunk-NHIJ2QIO.mjs");
+        const { validateNative } = await import("./chunk-4GIV3RLJ.mjs");
         data = await validateNative(text("from"));
         break;
       }
       case "plugin.uninstall": {
-        const { uninstallNative } = await import("./chunk-NHIJ2QIO.mjs");
+        const { uninstallNative } = await import("./chunk-4GIV3RLJ.mjs");
         data = await uninstallNative(text("home") ?? managedHome(), Boolean(parsed.keepRuntime));
         break;
       }
@@ -947,7 +947,7 @@ async function dispatch(operation, input = {}, signal) {
             data = await tests.auth(ctx, text("env"));
             break;
           case "browser.open": {
-            const { openVerificationBrowser } = await import("./chunk-RKUUDARN.mjs");
+            const { openVerificationBrowser } = await import("./chunk-CJC3ESO4.mjs");
             data = await openVerificationBrowser(
               ctx,
               text("env"),
