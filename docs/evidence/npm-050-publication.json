@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "timestamp": "2026-09-22T16:51:33.590Z",
+  "timestamp": "2026-09-23T07:26:51Z",
   "package": "apexrest",
   "version": "0.5.0-beta.1",
   "registry": "https://registry.npmjs.org/",
   "tag": "beta",
-  "status": "awaiting-browser-authentication",
+  "status": "published-and-registry-verified",
   "authorization": "User explicitly requested commit, push and npm publication for the prepared minor beta.",
   "distTagsBefore": {
     "beta": "0.4.0-beta.1",
@@ -33,22 +33,39 @@
     "precedingRuntimeEvidence": "docs/evidence/minor-050-local.json",
     "precedingNativeEvidence": "docs/evidence/minor-050-native.json"
   },
-  "sourceCommit": "495601e9d68fe98b410d6c2846d70695200bf2af",
+  "sourceCommit": "e1115c0808f8df963767005016a80fe00aa39373",
   "git": {
     "branch": "main",
     "remote": "https://github.com/apexrest-dev/apexrest-codex",
-    "verifiedRemoteCommit": "495601e9d68fe98b410d6c2846d70695200bf2af"
+    "verifiedRemoteCommit": "e1115c0808f8df963767005016a80fe00aa39373"
   },
   "authentication": {
     "method": "npm browser WebAuthn / existing passkey",
-    "status": "user-presence-required",
+    "status": "completed",
     "credentialsRecorded": false
   },
   "ci": {
     "initialRun": "https://github.com/apexrest-dev/apexrest-codex/actions/runs/35756495094",
     "ubuntu": "passed",
     "macos": "passed",
-    "windows": "failed due to two POSIX-only Java fixture comparisons in tests/unit/ords-adapter.test.ts",
-    "fixScope": "Platform-aware test fixtures only; npm payload is unchanged."
+    "windows": "passed",
+    "fixScope": "Platform-aware unit fixtures and file-URL contract setup; npm payload is unchanged.",
+    "passingRun": "https://github.com/apexrest-dev/apexrest-codex/actions/runs/35830916815",
+    "passingRunCommit": "e1115c0808f8df963767005016a80fe00aa39373"
+  },
+  "publication": {
+    "npmCliExitCode": 0,
+    "npmWebStatus": "Published",
+    "verifiedAt": "2026-09-23T07:26:51Z",
+    "registryVersion": "0.5.0-beta.1",
+    "registryIntegrity": "sha512-dzOvThRtdGYwhz+pviTXA9GIyGEk1J0RqV19k4JH3ULfECGxI7D+iPfdA1uvulfa2tQOBQBPTJ4ivKpainaeeQ==",
+    "registryTarball": "https://registry.npmjs.org/apexrest/-/apexrest-0.5.0-beta.1.tgz",
+    "distTagsAfter": {
+      "beta": "0.5.0-beta.1",
+      "latest": "0.4.0-beta.1"
+    },
+    "isolatedRegistryInstall": "passed using apexrest@beta in a temporary prefix",
+    "installedCliVersion": "0.5.0-beta.1",
+    "installedNodeVersion": "v25.9.0"
   }
 }
