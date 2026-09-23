@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import { cp, mkdtemp, mkdir, readFile, readdir, rm, symlink, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
@@ -31,7 +32,7 @@ async function fixture(t) {
         process.execPath,
         [
           '--import',
-          path.join(repository, 'tests/fixtures/codex-preview.mjs'),
+          pathToFileURL(path.join(repository, 'tests/fixtures/codex-preview.mjs')).href,
           cli,
           'setup',
           '--dry-run',
