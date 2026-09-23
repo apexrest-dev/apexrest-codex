@@ -4,7 +4,7 @@ English | [Українська](release-notes.uk.md)
 
 ## 0.5.0 — 2026-09-23
 
-The package and native plugin now use `0.5.0`, promoting the reviewed APEXlang reference update from `0.5.0-beta.1` without a new feature change. The npm target is `apexrest@0.5.0` on `latest`, with the `beta` dist-tag removed. The [publication record](evidence/npm-050-stable-publication.json) tracks the actual registry result; `0.5.0-beta.1` remains available by exact version.
+The package and native plugin now use `0.5.0`, promoting the reviewed APEXlang reference update from `0.5.0-beta.1` without a new feature change. Published `apexrest@0.5.0` on npm `latest` and removed the `beta` dist-tag. The [publication record](evidence/npm-050-stable-publication.json) confirms the registry result; `0.5.0-beta.1` remains available by exact version.
 
 The [release-readiness check](next-actions.md) remains blocked by missing source-bound native-platform and Oracle integration evidence. Local packaging and registry installation establish distribution, not those product checks. No Git tag, GitHub release or site deployment is part of this version change.
 

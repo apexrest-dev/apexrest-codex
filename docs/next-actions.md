@@ -4,7 +4,7 @@ English | [Українська](next-actions.uk.md)
 
 ## Stable 0.5.0 follow-up — 2026-09-23
 
-Publish the checked `apexrest@0.5.0` archive as npm `latest`, remove the `beta` dist-tag and verify registry integrity plus an isolated `apexrest@latest` installation. Track the exact result in the [0.5.0 npm record](evidence/npm-050-stable-publication.json). The former beta remains installable by exact version. Complete the source-bound native Linux/Windows, Oracle integration, recovery and authenticated application checks required by `npm run check-release-readiness`; do not infer those results from npm distribution.
+Publication of `apexrest@0.5.0` as npm `latest`, removal of the `beta` dist-tag, registry-integrity verification and an isolated `apexrest@latest` installation are complete; see the [0.5.0 npm record](evidence/npm-050-stable-publication.json). The former beta remains installable by exact version. Complete the source-bound native Linux/Windows, Oracle integration, recovery and authenticated application checks required by `npm run check-release-readiness`; do not infer those results from npm distribution.
 
 ## Oracle skills 0.5.0-beta.1 follow-up — 2026-09-22
 

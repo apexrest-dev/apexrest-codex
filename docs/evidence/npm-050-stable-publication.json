@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "timestamp": "2026-09-23",
+  "timestamp": "2026-09-23T07:56:57Z",
   "package": "apexrest",
   "version": "0.5.0",
   "registry": "https://registry.npmjs.org/",
-  "status": "prepared-for-publication",
+  "status": "published-and-registry-verified",
   "authorization": "User explicitly confirmed this is a normal stable 0.5.0 release, requested removal of the beta tag, and previously authorized npm publication and Git push.",
   "requestedDistTags": {
     "latest": "0.5.0",
@@ -53,5 +53,34 @@
     },
     "note": "The user explicitly chose a stable npm release. The separate automated full release-readiness matrix remains unmet and is not presented as passed."
   },
-  "channel": "stable"
+  "channel": "stable",
+  "sourceCommit": "eee204e08b1111a51d500d940b65b72128c7f320",
+  "git": {
+    "branch": "main",
+    "remote": "https://github.com/apexrest-dev/apexrest-codex",
+    "verifiedRemoteCommit": "eee204e08b1111a51d500d940b65b72128c7f320"
+  },
+  "ci": {
+    "run": "https://github.com/apexrest-dev/apexrest-codex/actions/runs/35833586860",
+    "commit": "eee204e08b1111a51d500d940b65b72128c7f320",
+    "ubuntu": "passed",
+    "macos": "passed",
+    "windows": "passed"
+  },
+  "publication": {
+    "npmCliExitCode": 0,
+    "npmWebStatus": "Published",
+    "verifiedAt": "2026-09-23T07:56:57Z",
+    "registryVersion": "0.5.0",
+    "registryIntegrity": "sha512-qFYIKq6JrieGXkzeFpIcuYVseSRB/2bVc8tey5DTI5XnVpZNuw+jrUcldHs2qcWhw/chzNie9cp+BUOzUwfcSQ==",
+    "registryTarball": "https://registry.npmjs.org/apexrest/-/apexrest-0.5.0.tgz",
+    "distTagsAfter": {
+      "latest": "0.5.0"
+    },
+    "betaDistTagRemoval": "confirmed by npm dist-tag rm and subsequent npm dist-tag ls",
+    "betaVersionStillAvailable": "0.5.0-beta.1 by exact version",
+    "isolatedRegistryInstall": "passed using apexrest@latest in a temporary prefix",
+    "installedCliVersion": "0.5.0",
+    "installedNodeVersion": "v25.9.0"
+  }
 }
