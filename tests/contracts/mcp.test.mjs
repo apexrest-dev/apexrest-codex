@@ -38,6 +38,9 @@ test('real stdio MCP initialize/list/call, CLI parity and bounded catalog', asyn
   const searchSchema = catalog.tools.find((tool) => tool.name === 'apexrest_reference_search').inputSchema;
   assert.ok(!searchSchema.required.includes('limit'));
   assert.ok(!searchSchema.required.includes('offset'));
+  assert.ok(!searchSchema.required.includes('corpus'));
+  assert.deepEqual(searchSchema.properties.corpus.enum, ['apexlang', 'components']);
+  assert.equal(searchSchema.properties.corpus.default, 'apexlang');
   const settings = catalog.tools
     .find((tool) => tool.name === 'apexrest_panel_action')
     .inputSchema.properties.action.oneOf.find((action) => action.properties.kind.const === 'preferences')
@@ -65,6 +68,52 @@ test('real stdio MCP initialize/list/call, CLI parity and bounded catalog', asyn
   );
   assert.equal(cli.status, 0);
   assert.deepEqual(JSON.parse(cli.stdout).data, domain.data);
+  const component = await client.callTool({
+    name: 'apexrest_reference_search',
+    arguments: {
+      query: 'картка показника',
+      corpus: 'components',
+      kind: 'template',
+      version: '26.1',
+      limit: 3,
+    },
+  });
+  const componentDomain = JSON.parse(component.content[0].text);
+  assert.equal(componentDomain.ok, true);
+  assert.ok(Array.isArray(componentDomain.data) && componentDomain.data.length > 0);
+  assert.ok(componentDomain.data.some((entry) => entry.id.includes('metric-card')));
+  assert.ok(Buffer.byteLength(component.content[0].text, 'utf8') < 8192);
+  assert.ok(componentDomain.data.every((entry) => entry.classification === 'component-reference-data'));
+  const componentCli = spawnSync(
+    process.execPath,
+    [
+      path.join(runtime, 'apexrest.mjs'),
+      'docs',
+      'search',
+      'картка показника',
+      '--corpus',
+      'components',
+      '--kind',
+      'template',
+      '--version',
+      '26.1',
+      '--limit',
+      '3',
+      '--json',
+    ],
+    { encoding: 'utf8', cwd: tmpdir() },
+  );
+  assert.equal(componentCli.status, 0, componentCli.stdout + componentCli.stderr);
+  assert.deepEqual(JSON.parse(componentCli.stdout).data, componentDomain.data);
+  const componentPage = await client.callTool({
+    name: 'apexrest_reference_read',
+    arguments: { id: componentDomain.data[0].id },
+  });
+  const componentPageDomain = JSON.parse(componentPage.content[0].text);
+  assert.equal(componentPageDomain.ok, true);
+  assert.equal(componentPageDomain.data.classification, 'component-reference-data');
+  assert.equal(componentPageDomain.data.compatibility.apexVersion, '26.1');
+  assert.ok(Buffer.byteLength(componentPage.content[0].text, 'utf8') < 32768);
   const invalid = await client.callTool({
     name: 'apexrest_deploy_apply',
     arguments: { plan: 'x', approved: true },

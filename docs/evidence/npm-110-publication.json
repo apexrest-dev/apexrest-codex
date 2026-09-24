@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "package": "apexrest",
+  "version": "1.1.0",
+  "status": "prepared-not-published",
+  "registry": "https://registry.npmjs.org/",
+  "qualification": "Local source and package checks are separate from registry publication and live Oracle/browser verification.",
+  "timestamp": "2026-09-24T10:22:58.707Z",
+  "sourceDigest": "d9b24381be9a30f2ac85db8efae1ef0424043ac8ed91e73da4122c8a45ecda01",
+  "tarball": {
+    "filename": "apexrest-1.1.0.tgz",
+    "bytes": 9612098,
+    "unpackedBytes": 133848562,
+    "files": 1704,
+    "integrity": "sha512-tsvdOjo7+pQUGIpKSTrQHjPO+PgnLab6nRxYw1nmFcYq9mxuqYSgi2xX07s3Hqzk9XmS7ZHvtsTil2XmobAArw==",
+    "shasum": "7a5c2f622d3f2fb125418a57314932c5066bb5f5",
+    "sha256": "714608b85619884fd8a319c6dc05e0f3128b987562c0443f014990a86ef6ecdc"
+  },
+  "candidateSmoke": {
+    "status": "passed",
+    "version": "1.1.0",
+    "tools": 18,
+    "skills": 12,
+    "checks": [
+      "CLI version",
+      "isolated project initialization",
+      "stdio MCP catalog",
+      "project summary",
+      "pinned reference search",
+      "offline Ukrainian component search and recipe read",
+      "panel resource"
+    ],
+    "scope": "Local installed files and stdio MCP; no model, Oracle or native-host execution."
+  }
+}

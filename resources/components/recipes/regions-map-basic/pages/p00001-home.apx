@@ -1,0 +1,53 @@
+page 1 (
+    name: Component Example
+    alias: HOME
+    title: Component Example
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region example (
+        name: Map
+        type: map
+        source {
+            location: localDatabase
+            type: sqlQuery
+            sqlQuery:
+                ```sql
+                select 1 ID, 'Example location' TITLE, sdo_geometry(2001, 4326, sdo_point_type(13.4, 52.5, null), null, null) GEOMETRY from dual
+                ```
+        }
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        map {
+            background: builtIn
+            standard: oracleWorldMap
+        }
+        layer locations (
+            name: Locations
+            layout {
+                sequence: 10
+            }
+            source {
+                location: regionSource
+            }
+            columnMapping {
+                geometryColumn: GEOMETRY
+            }
+            tooltip {
+                advancedFormatting: true
+                htmlExpression: &TITLE!HTML.
+            }
+        )
+    )
+
+)

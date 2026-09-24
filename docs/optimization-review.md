@@ -2,7 +2,7 @@
 
 English | [Українська](optimization-review.uk.md)
 
-The dated measurements below describe earlier revisions. The current 1.0.0 scope is 18 MCP tools and 12 skills, with implementation directly in the current Codex session; see [current evidence](evidence/current-session-100-local.json). Historical counts are retained only for comparison.
+The dated measurements below describe earlier revisions. The current 1.1.0 scope is 18 MCP tools and 12 skills, with implementation directly in the current Codex session; see [catalog evidence](evidence/component-catalog-local.json). Historical counts are retained only for comparison.
 
 ## Smaller context and faster reference lookup — 2026-09-21
 

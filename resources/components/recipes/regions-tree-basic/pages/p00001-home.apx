@@ -1,0 +1,42 @@
+page 1 (
+    name: Component Example
+    alias: HOME
+    title: Component Example
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region example (
+        name: Tree
+        type: tree
+        source {
+            location: localDatabase
+            type: sqlQuery
+            sqlQuery:
+                ```sql
+                select 0 STATUS, 1 TREE_LEVEL, 'Example node' TITLE, 'fa-folder' ICON, 1 NODE_ID from dual
+                ```
+        }
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        settings {
+            nodeLabelColumn: TITLE
+            nodeValueColumn: NODE_ID
+            hierarchy: notComputed
+            nodeStatusColumn: STATUS
+            hierarchyLevelColumn: TREE_LEVEL
+            iconCssClassColumn: ICON
+            iconTypeCssClass: fa
+        }
+    )
+
+)

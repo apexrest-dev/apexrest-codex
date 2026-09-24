@@ -1,0 +1,55 @@
+page 1 (
+    name: Component Example
+    alias: HOME
+    title: Component Example
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region example (
+        name: Mobile Report
+        type: reflowReport
+        source {
+            location: localDatabase
+            type: sqlQuery
+            sqlQuery:
+                ```sql
+                select 1 ID, 'Example' TITLE from dual
+                ```
+        }
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        column ID (
+            source {
+                dataType: NUMBER
+            }
+            heading {
+                heading: Id
+            }
+            layout {
+                sequence: 10
+            }
+        )
+        column TITLE (
+            source {
+                dataType: VARCHAR2
+            }
+            heading {
+                heading: Title
+            }
+            layout {
+                sequence: 20
+            }
+        )
+    )
+
+)

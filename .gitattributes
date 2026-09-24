@@ -6,3 +6,5 @@
 *.gz binary
 # Preserve copied Oracle exports and third-party notices byte for byte.
 plugins/apexrest-apex/resources/** -text -whitespace
+# Compiler scaffold bytes are bound to the recorded recipe validation hashes.
+resources/components/recipes/_scaffold/** -whitespace

@@ -84,6 +84,7 @@ export const schemas = {
   'connection.remove': z.strictObject({ ...base, name: refName }),
   'docs.search': z.strictObject({
     query: z.string().min(1).max(256),
+    corpus: z.enum(['apexlang', 'components']).default('apexlang'),
     version: z.string().optional(),
     kind: z.enum(['grammar', 'template', 'contract', 'guide']).optional(),
     family: z.string().min(1).max(200).optional(),
@@ -198,14 +199,14 @@ export const toolCatalog: {
     name: 'apexrest_reference_search',
     operation: 'docs.search',
     description:
-      'Find Oracle syntax/templates using exact properties or English terms; filter kind/family/version (release or snapshot). Returns match offsets and required contracts.',
+      'Find Oracle syntax/templates (default corpus: apexlang) or EN/UK component recipes (corpus: components). Filter kind/family/version; follow nextResultOffset for more hits.',
     readOnly: true,
   },
   {
     name: 'apexrest_reference_read',
     operation: 'docs.read',
     description:
-      'Read result ID or grammar:production-name. Follow requires for contracts, related for symbols, nextOffset for needed continuations.',
+      'Read result ID, grammar:production-name or component: ID. Follow requires/related and nextOffset; component navigationOffset recovers all dependency links.',
     readOnly: true,
   },
   {

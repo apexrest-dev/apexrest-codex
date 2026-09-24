@@ -1,0 +1,71 @@
+page 1 (
+    name: Component Example
+    alias: HOME
+    title: Component Example
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region selector (
+        name: Sections
+        type: regionDisplaySelector
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/blank-with-attributes
+            templateOptions: #DEFAULT#
+        }
+        advanced {
+            htmlDomId: example_selector
+        }
+        settings {
+            mode: viewSingleRegion
+            rememberSelection: false
+            includeShowAll: true
+        }
+    )
+    region first (
+        name: First
+        type: staticContent
+        source {
+            htmlCode: <p>Local component example.</p>
+        }
+        layout {
+            sequence: 20
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        advanced {
+            htmlDomId: example_first
+            regionDisplaySelector: true
+        }
+    )
+    region second (
+        name: Second
+        type: staticContent
+        source {
+            htmlCode: <p>Local component example.</p>
+        }
+        layout {
+            sequence: 30
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        advanced {
+            htmlDomId: example_second
+            regionDisplaySelector: true
+        }
+    )
+
+)

@@ -1,0 +1,49 @@
+page 1 (
+    name: Component Example
+    alias: HOME
+    title: Component Example
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region example (
+        name: Avatar
+        type: themeTemplateComponent/avatar
+        source {
+            location: localDatabase
+            type: sqlQuery
+            sqlQuery:
+                ```sql
+                select 'EX' INITIALS from dual
+                ```
+        }
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/blank-with-attributes
+            templateOptions: #DEFAULT#
+        }
+        componentAppearance {
+            display: report
+        }
+        settings {
+            type: initials
+            initials: INITIALS
+        }
+        column INITIALS (
+            layout {
+                sequence: 10
+            }
+            source {
+                databaseColumn: INITIALS
+                dataType: varchar2
+            }
+        )
+    )
+
+)

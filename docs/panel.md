@@ -40,4 +40,4 @@ The panel cannot grant project trust or deployment authorization, or directly ap
 
 The server binds to loopback, validates Host/Origin, serves an asset allowlist and requires a private capability for data/actions. Keep the capability URL and session file private. Project trust, target identity, authorization, backup and drift checks remain enforced in the shared core.
 
-[Current local evidence](evidence/current-session-100-local.json) records this revision's checks. Older panel/browser reports retain their original scope and are not screenshots or rendering proof of this interface.
+[Historical 1.0.0 local evidence](evidence/current-session-100-local.json) records the panel checks for that revision; [catalog evidence](evidence/component-catalog-local.json) records the 1.1.0 addition. Older panel/browser reports retain their original scope and are not screenshots or rendering proof of this interface.

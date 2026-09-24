@@ -1,0 +1,87 @@
+page 1 (
+    name: Component Example
+    alias: HOME
+    title: Component Example
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region results (
+        name: Legacy Report Template
+        type: classicReport
+        source {
+            location: localDatabase
+            type: sqlQuery
+            sqlQuery:
+                ```sql
+                select 'Example title' TITLE, 'Example description' DESCRIPTION, 'Example misc' MISC, 'fa-info-circle' ICON_CLASS, cast(null as varchar2(100)) ACTIONS from dual
+                ```
+        }
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        componentAppearance {
+            template: @/content-row
+            templateOptions: #DEFAULT#
+        }
+        column TITLE (
+            reportColumnQueryId: 1
+            derivedColumn: N
+            heading {
+                heading: Title
+            }
+            layout {
+                sequence: 10
+            }
+        )
+        column DESCRIPTION (
+            reportColumnQueryId: 2
+            derivedColumn: N
+            heading {
+                heading: Description
+            }
+            layout {
+                sequence: 20
+            }
+        )
+        column MISC (
+            reportColumnQueryId: 3
+            derivedColumn: N
+            heading {
+                heading: Misc
+            }
+            layout {
+                sequence: 30
+            }
+        )
+        column ICON_CLASS (
+            reportColumnQueryId: 4
+            derivedColumn: N
+            heading {
+                heading: Icon Class
+            }
+            layout {
+                sequence: 40
+            }
+        )
+        column ACTIONS (
+            reportColumnQueryId: 5
+            derivedColumn: N
+            heading {
+                heading: Actions
+            }
+            layout {
+                sequence: 50
+            }
+        )
+    )
+
+)

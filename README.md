@@ -16,13 +16,15 @@ APEXREST connects native Codex skills and MCP tools to Oracle SQLcl. Generate AP
 
 ![APEXREST connects a Codex request to APEXlang source, a verified deployment plan, Oracle APEX and runtime checks.](docs/assets/overview.svg)
 
-> **Stable release: `1.0.0`.** Work directly in your current Codex session with 18 MCP tools and 12 focused skills. Codex owns the conversation and its execution; APEXREST handles Oracle/APEX operations. Programmatic job waiting, metadata batches, concise project inspection and focused references reduce routine tool exchanges. See [release notes](docs/release-notes.md) for changes and evidence limits. Independent tooling; not an official Oracle or OpenAI product.
+> **Release `1.1.0`.** Work directly in your current Codex session with 18 MCP tools and 12 focused skills. Codex owns the conversation and its execution; APEXREST handles Oracle/APEX operations. Programmatic job waiting, metadata batches, concise project inspection and focused references reduce routine tool exchanges. See [release notes](docs/release-notes.md) for changes and evidence limits. Independent tooling; not an official Oracle or OpenAI product.
 
 Describe the change in Codex chat or use `$apexrest-work`. Implementation starts in the same context without a plugin startup call. See the [chat workflow](docs/chat-workflow.md) and [Codex integration](docs/codex-integration.md). Choose **Codex in-app browser / External system browser** for APEX verification in Settings.
 
 **Settings → Database network transport** selects **Direct Oracle listener** or **ORDS HTTP(S)** for new operations across projects. Direct mode offers a picker of your saved SQLcl connections. ORDS uses your existing database username and password with the schema's ORDS URL when the listener, commonly on port 1521, is unavailable. Its connection settings and password stay in private plugin-level local files; enter the password in the local dashboard or through CLI `--password-file`. ORDS uses SQLcl CLI and supports the APEXlang import/export workflow. Switching back preserves both connection mappings. See [SQL through ORDS](docs/ords.md) for setup and verification limits.
 
 Open `$apexrest-panel` for project and connection settings, actual Oracle/APEX jobs and diagnostics inside Codex. The console view is `apexrest panel tui`. See the [development panel](docs/panel.md).
+
+The [component catalog](docs/component-catalog.md) in 1.1.0 provides offline discovery across 109 component families, contextual parameters and 138 compiler-checked APEXlang recipes; one unsupported recipe remains explicitly unresolved. Browse the [component list and examples](https://apex.oracle.com/ut). Search through the existing reference tools or CLI with `--corpus components`; compiler, SQL, import and browser evidence remain separate.
 
 ## ORDS SQL: a path to Codex Cloud
 
@@ -52,7 +54,7 @@ The [Cloud setup guide](docs/codex-cloud.md) covers CLI + ORDS in a configured c
 
 ## Install from npm
 
-Use Node 24 LTS (supported range: Node 24–26). Install [apexrest](https://www.npmjs.com/package/apexrest) from npm. The stable release version is `1.0.0`; the commands below use `latest`. See [release notes](docs/release-notes.md) for distribution and verification status.
+Use Node 24 LTS (supported range: Node 24–26). Install [apexrest](https://www.npmjs.com/package/apexrest) from npm. This package version is `1.1.0`; the commands below use `latest`. See [release notes](docs/release-notes.md) for distribution and verification status.
 
 Install the CLI globally and check its version:
 
@@ -72,7 +74,7 @@ npx apexrest --version
 npx apexrest
 ```
 
-To pin this version, use `npm install -g apexrest@1.0.0`. npm includes the built runtime, so no Git checkout or local build is needed. The repository installation below remains available.
+To pin this version, use `npm install -g apexrest@1.1.0`. npm includes the built runtime, so no Git checkout or local build is needed. The repository installation below remains available.
 
 ## Install with the terminal menu
 
@@ -143,7 +145,7 @@ An explicit request to create, update or import an identified development/test a
 
 **Change an existing app**
 
-> Use APEXREST to adopt application 100 from the configured test environment into a new project. Add a sales dashboard using real database measures. Preserve the existing pages, shared components and authentication, then import and verify the change.
+> Use APEXREST to adopt an existing application from the configured test environment into a new project. Add a sales dashboard using real database measures. Preserve the existing pages, shared components and authentication, then import and verify the change.
 
 **Make the next edit**
 

@@ -1,0 +1,22017 @@
+# Faceted Search: parameters
+
+component:regions/faceted-search
+
+Parameter identities include their component context and APEXlang path. UI labels alone are not unique. Raw database return values and DSL enum values may differ. Missing descriptions or unresolved paths are not inferred as supported syntax.
+
+Region template options and component-template options are independent surfaces. Current selections do not establish defaults. #DEFAULT# selects template defaults; it is not a CSS class.
+
+```json
+{
+  "templateOptions": [
+    {
+      "id": "template-option:REGION/FORMLEFTLABELS",
+      "name": "FORMLEFTLABELS",
+      "label": "Left",
+      "cssClasses": [
+        "t-Form--leftLabels"
+      ],
+      "groupId": "template-group:region/label-alignment",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {},
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": true,
+      "description": "Align form labels to left.",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-option:REGION/FORMREMOVEPADDING",
+      "name": "FORMREMOVEPADDING",
+      "label": "None",
+      "cssClasses": [
+        "t-Form--noPadding"
+      ],
+      "groupId": "template-group:region/item-padding",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {},
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": true,
+      "description": "Removes spacing between items.",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-option:REGION/FORMSIZELARGE",
+      "name": "FORMSIZELARGE",
+      "label": "Large",
+      "cssClasses": [
+        "t-Form--large"
+      ],
+      "groupId": "template-group:region/item-size",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {},
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": false,
+      "description": "Large: applies t-Form--large within its option group.",
+      "descriptionOrigin": "apexrest-factual-summary"
+    },
+    {
+      "id": "template-option:REGION/FORMSIZEXLARGE",
+      "name": "FORMSIZEXLARGE",
+      "label": "X Large",
+      "cssClasses": [
+        "t-Form--xlarge"
+      ],
+      "groupId": "template-group:region/item-size",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {},
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": false,
+      "description": "X Large: applies t-Form--xlarge within its option group.",
+      "descriptionOrigin": "apexrest-factual-summary"
+    },
+    {
+      "id": "template-option:REGION/FORMSLIMPADDING",
+      "name": "FORMSLIMPADDING",
+      "label": "Slim",
+      "cssClasses": [
+        "t-Form--slimPadding"
+      ],
+      "groupId": "template-group:region/item-padding",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {},
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": true,
+      "description": "Reduces form item spacing.",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-option:REGION/FORMSTANDARDPADDING",
+      "name": "FORMSTANDARDPADDING",
+      "label": "Standard",
+      "cssClasses": [
+        "t-Form--standardPadding"
+      ],
+      "groupId": "template-group:region/item-padding",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {},
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": true,
+      "description": "Uses the standard spacing between items.",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-option:REGION/H4",
+      "name": "H4",
+      "label": "H4",
+      "cssClasses": [
+        "js-headingLevel-4"
+      ],
+      "groupId": "template-group:region/heading-level",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {},
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": true,
+      "description": "H4",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-option:REGION/HEADING_LEVEL_H1",
+      "name": "HEADING_LEVEL_H1",
+      "label": "H1",
+      "cssClasses": [
+        "js-headingLevel-1"
+      ],
+      "groupId": "template-group:region/heading-level",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {},
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": true,
+      "description": "H1",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-option:REGION/HEADING_LEVEL_H2",
+      "name": "HEADING_LEVEL_H2",
+      "label": "H2",
+      "cssClasses": [
+        "js-headingLevel-2"
+      ],
+      "groupId": "template-group:region/heading-level",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {},
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": true,
+      "description": "H2",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-option:REGION/HEADING_LEVEL_H3",
+      "name": "HEADING_LEVEL_H3",
+      "label": "H3",
+      "cssClasses": [
+        "js-headingLevel-3"
+      ],
+      "groupId": "template-group:region/heading-level",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {},
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": true,
+      "description": "H3",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-option:REGION/HEADING_LEVEL_H5",
+      "name": "HEADING_LEVEL_H5",
+      "label": "H5",
+      "cssClasses": [
+        "js-headingLevel-5"
+      ],
+      "groupId": "template-group:region/heading-level",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {},
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": true,
+      "description": "H5",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-option:REGION/HEADING_LEVEL_H6",
+      "name": "HEADING_LEVEL_H6",
+      "label": "H6",
+      "cssClasses": [
+        "js-headingLevel-6"
+      ],
+      "groupId": "template-group:region/heading-level",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {},
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": true,
+      "description": "H6",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-option:REGION/RBM_LARGE",
+      "name": "RBM_LARGE",
+      "label": "Large",
+      "cssClasses": [
+        "margin-bottom-lg"
+      ],
+      "groupId": "template-group:region/region-bottom-margin",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {},
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": true,
+      "description": "Adds a large bottom margin to the region.",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-option:REGION/RBM_MEDIUM",
+      "name": "RBM_MEDIUM",
+      "label": "Medium",
+      "cssClasses": [
+        "margin-bottom-md"
+      ],
+      "groupId": "template-group:region/region-bottom-margin",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {},
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": true,
+      "description": "Adds a medium bottom margin to the region.",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-option:REGION/RBM_NONE",
+      "name": "RBM_NONE",
+      "label": "None",
+      "cssClasses": [
+        "margin-bottom-none"
+      ],
+      "groupId": "template-group:region/region-bottom-margin",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {},
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": true,
+      "description": "Removes the bottom margin for this region.",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-option:REGION/RBM_SMALL",
+      "name": "RBM_SMALL",
+      "label": "Small",
+      "cssClasses": [
+        "margin-bottom-sm"
+      ],
+      "groupId": "template-group:region/region-bottom-margin",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {},
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": true,
+      "description": "Adds a small bottom margin to the region.",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-option:REGION/RLM_LARGE",
+      "name": "RLM_LARGE",
+      "label": "Large",
+      "cssClasses": [
+        "margin-left-lg"
+      ],
+      "groupId": "template-group:region/region-left-margin",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {},
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": true,
+      "description": "Adds a large right margin to the region.",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-option:REGION/RLM_MEDIUM",
+      "name": "RLM_MEDIUM",
+      "label": "Medium",
+      "cssClasses": [
+        "margin-left-md"
+      ],
+      "groupId": "template-group:region/region-left-margin",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {},
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": true,
+      "description": "Adds a medium right margin to the region.",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-option:REGION/RLM_NONE",
+      "name": "RLM_NONE",
+      "label": "None",
+      "cssClasses": [
+        "margin-left-none"
+      ],
+      "groupId": "template-group:region/region-left-margin",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {},
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": true,
+      "description": "Removes the left margin from the region.",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-option:REGION/RLM_SMALL",
+      "name": "RLM_SMALL",
+      "label": "Small",
+      "cssClasses": [
+        "margin-left-sm"
+      ],
+      "groupId": "template-group:region/region-left-margin",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {},
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": true,
+      "description": "Adds a small left margin to the region.",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-option:REGION/RRM_LARGE",
+      "name": "RRM_LARGE",
+      "label": "Large",
+      "cssClasses": [
+        "margin-right-lg"
+      ],
+      "groupId": "template-group:region/region-right-margin",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {},
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": true,
+      "description": "Adds a large right margin to the region.",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-option:REGION/RRM_MEDIUM",
+      "name": "RRM_MEDIUM",
+      "label": "Medium",
+      "cssClasses": [
+        "margin-right-md"
+      ],
+      "groupId": "template-group:region/region-right-margin",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {},
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": true,
+      "description": "Adds a medium right margin to the region.",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-option:REGION/RRM_NONE",
+      "name": "RRM_NONE",
+      "label": "None",
+      "cssClasses": [
+        "margin-right-none"
+      ],
+      "groupId": "template-group:region/region-right-margin",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {},
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": true,
+      "description": "Removes the right margin from the region.",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-option:REGION/RRM_SMALL",
+      "name": "RRM_SMALL",
+      "label": "Small",
+      "cssClasses": [
+        "margin-right-sm"
+      ],
+      "groupId": "template-group:region/region-right-margin",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {},
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": true,
+      "description": "Adds a small right margin to the region.",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-option:REGION/RTM_LARGE",
+      "name": "RTM_LARGE",
+      "label": "Large",
+      "cssClasses": [
+        "margin-top-lg"
+      ],
+      "groupId": "template-group:region/region-top-margin",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {},
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": true,
+      "description": "Adds a large top margin to the region.",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-option:REGION/RTM_MEDIUM",
+      "name": "RTM_MEDIUM",
+      "label": "Medium",
+      "cssClasses": [
+        "margin-top-md"
+      ],
+      "groupId": "template-group:region/region-top-margin",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {},
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": true,
+      "description": "Adds a medium top margin to the region.",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-option:REGION/RTM_NONE",
+      "name": "RTM_NONE",
+      "label": "None",
+      "cssClasses": [
+        "margin-top-none"
+      ],
+      "groupId": "template-group:region/region-top-margin",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {},
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": true,
+      "description": "Removes the top margin for this region.",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-option:REGION/RTM_SMALL",
+      "name": "RTM_SMALL",
+      "label": "Small",
+      "cssClasses": [
+        "margin-top-sm"
+      ],
+      "groupId": "template-group:region/region-top-margin",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {},
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": true,
+      "description": "Adds a small top margin to the region.",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-option:REGION/SHOWFORMLABELSABOVE",
+      "name": "SHOWFORMLABELSABOVE",
+      "label": "Show Form Labels Above",
+      "cssClasses": [
+        "t-Form--labelsAbove"
+      ],
+      "groupId": "template-group:region/label-position",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {},
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": true,
+      "description": "Show form labels above input fields.",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-option:REGION/SORT_CENTER",
+      "name": "SORT_CENTER",
+      "label": "Center",
+      "cssClasses": [
+        "t-Region-orderBy--center"
+      ],
+      "groupId": "template-group:region/sort-order-alignment",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {},
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": false,
+      "description": "Center: applies t-Region-orderBy--center within its option group.",
+      "descriptionOrigin": "apexrest-factual-summary"
+    },
+    {
+      "id": "template-option:REGION/SORT_END",
+      "name": "SORT_END",
+      "label": "End",
+      "cssClasses": [
+        "t-Region-orderBy--end"
+      ],
+      "groupId": "template-group:region/sort-order-alignment",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {},
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": false,
+      "description": "End: applies t-Region-orderBy--end within its option group.",
+      "descriptionOrigin": "apexrest-factual-summary"
+    },
+    {
+      "id": "template-option:region/standard/240PX",
+      "name": "240PX",
+      "label": "240px",
+      "cssClasses": [
+        "i-h240"
+      ],
+      "groupId": "template-group:region/body-height",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {
+        "region": "Standard"
+      },
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": true,
+      "description": "Sets region body height to 240px.",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-option:region/standard/320PX",
+      "name": "320PX",
+      "label": "320px",
+      "cssClasses": [
+        "i-h320"
+      ],
+      "groupId": "template-group:region/body-height",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {
+        "region": "Standard"
+      },
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": true,
+      "description": "Sets region body height to 320px.",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-option:region/standard/480PX",
+      "name": "480PX",
+      "label": "480px",
+      "cssClasses": [
+        "i-h480"
+      ],
+      "groupId": "template-group:region/body-height",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {
+        "region": "Standard"
+      },
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": false,
+      "description": "480px: applies i-h480 within its option group.",
+      "descriptionOrigin": "apexrest-factual-summary"
+    },
+    {
+      "id": "template-option:region/standard/640PX",
+      "name": "640PX",
+      "label": "640px",
+      "cssClasses": [
+        "i-h640"
+      ],
+      "groupId": "template-group:region/body-height",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {
+        "region": "Standard"
+      },
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": false,
+      "description": "640px: applies i-h640 within its option group.",
+      "descriptionOrigin": "apexrest-factual-summary"
+    },
+    {
+      "id": "template-option:region/standard/ACCENT_1",
+      "name": "ACCENT_1",
+      "label": "Accent 1",
+      "cssClasses": [
+        "t-Region--accent1"
+      ],
+      "groupId": "template-group:region/accent",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {
+        "region": "Standard"
+      },
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": false,
+      "description": "Accent 1: applies t-Region--accent1 within its option group.",
+      "descriptionOrigin": "apexrest-factual-summary"
+    },
+    {
+      "id": "template-option:region/standard/ACCENT_2",
+      "name": "ACCENT_2",
+      "label": "Accent 2",
+      "cssClasses": [
+        "t-Region--accent2"
+      ],
+      "groupId": "template-group:region/accent",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {
+        "region": "Standard"
+      },
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": false,
+      "description": "Accent 2: applies t-Region--accent2 within its option group.",
+      "descriptionOrigin": "apexrest-factual-summary"
+    },
+    {
+      "id": "template-option:region/standard/ACCENT_3",
+      "name": "ACCENT_3",
+      "label": "Accent 3",
+      "cssClasses": [
+        "t-Region--accent3"
+      ],
+      "groupId": "template-group:region/accent",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {
+        "region": "Standard"
+      },
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": false,
+      "description": "Accent 3: applies t-Region--accent3 within its option group.",
+      "descriptionOrigin": "apexrest-factual-summary"
+    },
+    {
+      "id": "template-option:region/standard/ACCENT_4",
+      "name": "ACCENT_4",
+      "label": "Accent 4",
+      "cssClasses": [
+        "t-Region--accent4"
+      ],
+      "groupId": "template-group:region/accent",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {
+        "region": "Standard"
+      },
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": false,
+      "description": "Accent 4: applies t-Region--accent4 within its option group.",
+      "descriptionOrigin": "apexrest-factual-summary"
+    },
+    {
+      "id": "template-option:region/standard/ACCENT_5",
+      "name": "ACCENT_5",
+      "label": "Accent 5",
+      "cssClasses": [
+        "t-Region--accent5"
+      ],
+      "groupId": "template-group:region/accent",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {
+        "region": "Standard"
+      },
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": false,
+      "description": "Accent 5: applies t-Region--accent5 within its option group.",
+      "descriptionOrigin": "apexrest-factual-summary"
+    },
+    {
+      "id": "template-option:region/standard/ACCENT_6",
+      "name": "ACCENT_6",
+      "label": "Accent 6",
+      "cssClasses": [
+        "t-Region--accent6"
+      ],
+      "groupId": "template-group:region/accent",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {
+        "region": "Standard"
+      },
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": false,
+      "description": "Accent 6: applies t-Region--accent6 within its option group.",
+      "descriptionOrigin": "apexrest-factual-summary"
+    },
+    {
+      "id": "template-option:region/standard/ACCENT_7",
+      "name": "ACCENT_7",
+      "label": "Accent 7",
+      "cssClasses": [
+        "t-Region--accent7"
+      ],
+      "groupId": "template-group:region/accent",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {
+        "region": "Standard"
+      },
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": false,
+      "description": "Accent 7: applies t-Region--accent7 within its option group.",
+      "descriptionOrigin": "apexrest-factual-summary"
+    },
+    {
+      "id": "template-option:region/standard/ACCENT_8",
+      "name": "ACCENT_8",
+      "label": "Accent 8",
+      "cssClasses": [
+        "t-Region--accent8"
+      ],
+      "groupId": "template-group:region/accent",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {
+        "region": "Standard"
+      },
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": false,
+      "description": "Accent 8: applies t-Region--accent8 within its option group.",
+      "descriptionOrigin": "apexrest-factual-summary"
+    },
+    {
+      "id": "template-option:region/standard/ACCENT_9",
+      "name": "ACCENT_9",
+      "label": "Accent 9",
+      "cssClasses": [
+        "t-Region--accent9"
+      ],
+      "groupId": "template-group:region/accent",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {
+        "region": "Standard"
+      },
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": false,
+      "description": "Accent 9: applies t-Region--accent9 within its option group.",
+      "descriptionOrigin": "apexrest-factual-summary"
+    },
+    {
+      "id": "template-option:region/standard/ACCENT_10",
+      "name": "ACCENT_10",
+      "label": "Accent 10",
+      "cssClasses": [
+        "t-Region--accent10"
+      ],
+      "groupId": "template-group:region/accent",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {
+        "region": "Standard"
+      },
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": false,
+      "description": "Accent 10: applies t-Region--accent10 within its option group.",
+      "descriptionOrigin": "apexrest-factual-summary"
+    },
+    {
+      "id": "template-option:region/standard/ACCENT_11",
+      "name": "ACCENT_11",
+      "label": "Accent 11",
+      "cssClasses": [
+        "t-Region--accent11"
+      ],
+      "groupId": "template-group:region/accent",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {
+        "region": "Standard"
+      },
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": false,
+      "description": "Accent 11: applies t-Region--accent11 within its option group.",
+      "descriptionOrigin": "apexrest-factual-summary"
+    },
+    {
+      "id": "template-option:region/standard/ACCENT_12",
+      "name": "ACCENT_12",
+      "label": "Accent 12",
+      "cssClasses": [
+        "t-Region--accent12"
+      ],
+      "groupId": "template-group:region/accent",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {
+        "region": "Standard"
+      },
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": false,
+      "description": "Accent 12: applies t-Region--accent12 within its option group.",
+      "descriptionOrigin": "apexrest-factual-summary"
+    },
+    {
+      "id": "template-option:region/standard/ACCENT_13",
+      "name": "ACCENT_13",
+      "label": "Accent 13",
+      "cssClasses": [
+        "t-Region--accent13"
+      ],
+      "groupId": "template-group:region/accent",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {
+        "region": "Standard"
+      },
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": false,
+      "description": "Accent 13: applies t-Region--accent13 within its option group.",
+      "descriptionOrigin": "apexrest-factual-summary"
+    },
+    {
+      "id": "template-option:region/standard/ACCENT_14",
+      "name": "ACCENT_14",
+      "label": "Accent 14",
+      "cssClasses": [
+        "t-Region--accent14"
+      ],
+      "groupId": "template-group:region/accent",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {
+        "region": "Standard"
+      },
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": false,
+      "description": "Accent 14: applies t-Region--accent14 within its option group.",
+      "descriptionOrigin": "apexrest-factual-summary"
+    },
+    {
+      "id": "template-option:region/standard/ACCENT_15",
+      "name": "ACCENT_15",
+      "label": "Accent 15",
+      "cssClasses": [
+        "t-Region--accent15"
+      ],
+      "groupId": "template-group:region/accent",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {
+        "region": "Standard"
+      },
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": false,
+      "description": "Accent 15: applies t-Region--accent15 within its option group.",
+      "descriptionOrigin": "apexrest-factual-summary"
+    },
+    {
+      "id": "template-option:region/standard/HIDDENHEADERNOAT",
+      "name": "HIDDENHEADERNOAT",
+      "label": "Hidden",
+      "cssClasses": [
+        "t-Region--removeHeader js-removeLandmark"
+      ],
+      "groupId": "template-group:region/header",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {
+        "region": "Standard"
+      },
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": false,
+      "description": "Hidden: applies t-Region--removeHeader js-removeLandmark within its option group.",
+      "descriptionOrigin": "apexrest-factual-summary"
+    },
+    {
+      "id": "template-option:region/standard/HIDEOVERFLOW",
+      "name": "HIDEOVERFLOW",
+      "label": "Hide",
+      "cssClasses": [
+        "t-Region--hiddenOverflow"
+      ],
+      "groupId": "template-group:region/body-overflow",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {
+        "region": "Standard"
+      },
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": false,
+      "description": "Hide: applies t-Region--hiddenOverflow within its option group.",
+      "descriptionOrigin": "apexrest-factual-summary"
+    },
+    {
+      "id": "template-option:region/standard/HIDEREGIONHEADER",
+      "name": "HIDEREGIONHEADER",
+      "label": "Hidden but accessible",
+      "cssClasses": [
+        "t-Region--hideHeader js-addHiddenHeadingRoleDesc"
+      ],
+      "groupId": "template-group:region/header",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {
+        "region": "Standard"
+      },
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": true,
+      "description": "This option will hide the region header. Note that the region title will still be audible for Screen Readers. Buttons placed in the region header will be hidden and inaccessible.",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-option:region/standard/NOBODYPADDING",
+      "name": "NOBODYPADDING",
+      "label": "Remove Body Padding",
+      "cssClasses": [
+        "t-Region--noPadding"
+      ],
+      "groupId": null,
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {
+        "region": "Standard"
+      },
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": true,
+      "description": "Removes padding from region body.",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-option:region/standard/NOBORDER",
+      "name": "NOBORDER",
+      "label": "Remove Borders",
+      "cssClasses": [
+        "t-Region--noBorder"
+      ],
+      "groupId": "template-group:region/style-3",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {
+        "region": "Standard"
+      },
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": true,
+      "description": "Removes borders from the region.",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-option:region/standard/REMOVE_UI_DECORATION",
+      "name": "REMOVE_UI_DECORATION",
+      "label": "Remove UI Decoration",
+      "cssClasses": [
+        "t-Region--noUI"
+      ],
+      "groupId": "template-group:region/style-3",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {
+        "region": "Standard"
+      },
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": true,
+      "description": "Removes UI decoration (borders, backgrounds, shadows, etc) from the region.",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-option:region/standard/SCROLLBODY",
+      "name": "SCROLLBODY",
+      "label": "Scroll - Default",
+      "cssClasses": [
+        "t-Region--scrollBody"
+      ],
+      "groupId": "template-group:region/body-overflow",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {
+        "region": "Standard"
+      },
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": false,
+      "description": "Scroll - Default: applies t-Region--scrollBody within its option group.",
+      "descriptionOrigin": "apexrest-factual-summary"
+    },
+    {
+      "id": "template-option:region/standard/SHOW_MAXIMIZE_BUTTON",
+      "name": "SHOW_MAXIMIZE_BUTTON",
+      "label": "Show Maximize Button",
+      "cssClasses": [
+        "js-showMaximizeButton"
+      ],
+      "groupId": null,
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {
+        "region": "Standard"
+      },
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": true,
+      "description": "Displays a button in the Region Header to maximize the region. Clicking this button will toggle the maximize state and stretch the region to fill the screen.",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-option:region/standard/SHOW_REGION_ICON",
+      "name": "SHOW_REGION_ICON",
+      "label": "Show Region Icon",
+      "cssClasses": [
+        "t-Region--showIcon"
+      ],
+      "groupId": null,
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {
+        "region": "Standard"
+      },
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": true,
+      "description": "Displays the region icon in the region header beside the region title",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-option:region/standard/STACKED",
+      "name": "STACKED",
+      "label": "Stack Region",
+      "cssClasses": [
+        "t-Region--stacked"
+      ],
+      "groupId": "template-group:region/style-3",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {
+        "region": "Standard"
+      },
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": true,
+      "description": "Removes side borders and shadows, and can be useful for accordions and regions that need to be grouped together vertically.",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-option:region/standard/TEXT_CONTENT",
+      "name": "TEXT_CONTENT",
+      "label": "Text Content",
+      "cssClasses": [
+        "t-Region--textContent"
+      ],
+      "groupId": "template-group:region/style-3",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {
+        "region": "Standard"
+      },
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": true,
+      "description": "Useful for displaying primarily text-based content, such as FAQs and more.",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-option:region/standard/VISIBLEOVERFLOW",
+      "name": "VISIBLEOVERFLOW",
+      "label": "Visible",
+      "cssClasses": [
+        "t-Region--visibleOverflow"
+      ],
+      "groupId": "template-group:region/body-overflow",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {
+        "region": "Standard"
+      },
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": false,
+      "description": "Visible: applies t-Region--visibleOverflow within its option group.",
+      "descriptionOrigin": "apexrest-factual-summary"
+    },
+    {
+      "id": "template-option:REGION/STRETCH_FORM_FIELDS",
+      "name": "STRETCH_FORM_FIELDS",
+      "label": "Stretch Form Fields",
+      "cssClasses": [
+        "t-Form--stretchInputs"
+      ],
+      "groupId": "template-group:region/item-width",
+      "templateTypes": [
+        "REGION"
+      ],
+      "templates": {},
+      "virtualTemplateType": "REGION",
+      "advanced": false,
+      "sourceHasHelp": false,
+      "description": "Stretch Form Fields: applies t-Form--stretchInputs within its option group.",
+      "descriptionOrigin": "apexrest-factual-summary"
+    }
+  ],
+  "templateOptionGroups": [
+    {
+      "id": "template-group:region/accent",
+      "sourceId": "2137437835087345391",
+      "name": "ACCENT",
+      "label": "Accent",
+      "templateTypes": [
+        "REGION"
+      ],
+      "nullText": "Default",
+      "advanced": false,
+      "sourceHasHelp": true,
+      "description": "Set the Region's accent. This accent corresponds to a Theme-Rollable color and sets the background of the Region's Header.",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-group:region/body-height",
+      "sourceId": "2137440506450345391",
+      "name": "BODY_HEIGHT",
+      "label": "Body Height",
+      "templateTypes": [
+        "REGION"
+      ],
+      "nullText": "Auto - Default",
+      "advanced": false,
+      "sourceHasHelp": true,
+      "description": "Sets the Region Body height. You can also specify a custom height by modifying the Region's CSS Classes and using the height helper classes \"i-hXXX\" where XXX is any increment of 10 from 100 to 800.",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-group:region/body-overflow",
+      "sourceId": "2137436394330345390",
+      "name": "BODY_OVERFLOW",
+      "label": "Body Overflow",
+      "templateTypes": [
+        "REGION"
+      ],
+      "advanced": true,
+      "sourceHasHelp": true,
+      "description": "Determines the scroll behavior when the region contents are larger than their container.",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-group:region/header",
+      "sourceId": "2137435470226345390",
+      "name": "HEADER",
+      "label": "Header",
+      "templateTypes": [
+        "REGION"
+      ],
+      "nullText": "Visible - Default",
+      "advanced": false,
+      "sourceHasHelp": true,
+      "description": "Determines the display of the Region Header which also contains the Region Title.",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-group:region/heading-level",
+      "sourceId": "1854688978004436212",
+      "name": "HEADING_LEVEL",
+      "label": "Heading Level",
+      "templateTypes": [
+        "REGION"
+      ],
+      "nullText": "Default",
+      "advanced": true,
+      "sourceHasHelp": false,
+      "description": "Heading Level choices for REGION templates.",
+      "descriptionOrigin": "apexrest-factual-summary"
+    },
+    {
+      "id": "template-group:region/item-padding",
+      "sourceId": "2137440444399345391",
+      "name": "ITEM_PADDING",
+      "label": "Item Spacing",
+      "templateTypes": [
+        "REGION"
+      ],
+      "nullText": "Default",
+      "advanced": true,
+      "sourceHasHelp": true,
+      "description": "Sets the padding around items within this region.",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-group:region/item-size",
+      "sourceId": "2137436858184345391",
+      "name": "ITEM_SIZE",
+      "label": "Item Size",
+      "templateTypes": [
+        "REGION"
+      ],
+      "nullText": "Default",
+      "advanced": true,
+      "sourceHasHelp": true,
+      "description": "Sets the size of the form items within this region.",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-group:region/item-width",
+      "sourceId": "2668408922155612292",
+      "name": "ITEM_WIDTH",
+      "label": "Item Width",
+      "templateTypes": [
+        "REGION"
+      ],
+      "nullText": "Default",
+      "advanced": true,
+      "sourceHasHelp": true,
+      "description": "Sets the width of the form items within this region.",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-group:region/label-alignment",
+      "sourceId": "2391464006887948702",
+      "name": "LABEL_ALIGNMENT",
+      "label": "Label Alignment",
+      "templateTypes": [
+        "REGION"
+      ],
+      "nullText": "Right",
+      "advanced": true,
+      "sourceHasHelp": true,
+      "description": "Set the label text alignment for items within this region.",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-group:region/label-position",
+      "sourceId": "2391484669664981331",
+      "name": "LABEL_POSITION",
+      "label": "Label Position",
+      "templateTypes": [
+        "REGION"
+      ],
+      "nullText": "Inline - Default",
+      "advanced": true,
+      "sourceHasHelp": true,
+      "description": "Sets the position of the label relative to the form item.",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-group:region/region-bottom-margin",
+      "sourceId": "2498706129862154232",
+      "name": "REGION_BOTTOM_MARGIN",
+      "label": "Bottom Margin",
+      "templateTypes": [
+        "REGION"
+      ],
+      "nullText": "Default",
+      "advanced": true,
+      "sourceHasHelp": true,
+      "description": "Set the bottom margin for this region.",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-group:region/region-left-margin",
+      "sourceId": "2498708184263162223",
+      "name": "REGION_LEFT_MARGIN",
+      "label": "Left Margin",
+      "templateTypes": [
+        "REGION"
+      ],
+      "nullText": "Default",
+      "advanced": true,
+      "sourceHasHelp": true,
+      "description": "Set the left margin for this region.",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-group:region/region-right-margin",
+      "sourceId": "2498708543998164599",
+      "name": "REGION_RIGHT_MARGIN",
+      "label": "Right Margin",
+      "templateTypes": [
+        "REGION"
+      ],
+      "nullText": "Default",
+      "advanced": true,
+      "sourceHasHelp": true,
+      "description": "Set the right margin for this region.",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-group:region/region-top-margin",
+      "sourceId": "2498705575576152458",
+      "name": "REGION_TOP_MARGIN",
+      "label": "Top Margin",
+      "templateTypes": [
+        "REGION"
+      ],
+      "nullText": "Default",
+      "advanced": true,
+      "sourceHasHelp": true,
+      "description": "Set the top margin for this region.",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-group:region/sort-order-alignment",
+      "sourceId": "1611377962267616972",
+      "name": "SORT_ORDER_ALIGNMENT",
+      "label": "Sort Order Alignment",
+      "templateTypes": [
+        "REGION"
+      ],
+      "nullText": "Default (Start)",
+      "advanced": true,
+      "sourceHasHelp": true,
+      "description": "Sets the alignment of the sort order item.",
+      "descriptionOrigin": "oracle-upl"
+    },
+    {
+      "id": "template-group:region/style-3",
+      "sourceId": "2137437705448345391",
+      "name": "STYLE",
+      "label": "Style",
+      "templateTypes": [
+        "REGION"
+      ],
+      "nullText": "Default",
+      "advanced": false,
+      "sourceHasHelp": true,
+      "description": "Determines how the region is styled. Use the \"Remove Borders\" template option to remove the region's borders and shadows.",
+      "descriptionOrigin": "oracle-upl"
+    }
+  ],
+  "templateDefaults": [
+    {
+      "id": "region-template:standard",
+      "type": "region",
+      "name": "Standard",
+      "key": "standard",
+      "internalName": "STANDARD",
+      "defaultOptions": [],
+      "presetOptions": [
+        "t-Region--scrollBody"
+      ]
+    }
+  ],
+  "utAttributes": [],
+  "utAttributeValues": [],
+  "nativeParameters": [
+    {
+      "id": "mmd:5110:1",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "1",
+      "builderLabel": "Name",
+      "apexlangPath": "region.name",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": null,
+      "maxLength": 255,
+      "description": "Name (text) in region.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:4",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "4",
+      "builderLabel": "Comments",
+      "apexlangPath": "region.comments.comments",
+      "type": "TEXT EDITOR",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": null,
+      "maxLength": 4000,
+      "description": "Comments (text editor) in region.comments.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:13",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "13",
+      "builderLabel": "Title",
+      "apexlangPath": "region.title",
+      "type": "TEXT",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": null,
+      "maxLength": 255,
+      "description": "Title (text) in region.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:21",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "21",
+      "builderLabel": "Header Text",
+      "apexlangPath": "region.headerAndFooter.headerText",
+      "type": "HTML",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "REGION_TEMPLATE"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Header Text (html) in region.headerAndFooter.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:23",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "23",
+      "builderLabel": "Footer Text",
+      "apexlangPath": "region.headerAndFooter.footerText",
+      "type": "HTML",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "REGION_TEMPLATE"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Footer Text (html) in region.headerAndFooter.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:24",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "24",
+      "builderLabel": "Authorization Scheme",
+      "apexlangPath": "region.security.authorizationScheme",
+      "type": "COMPONENT",
+      "required": false,
+      "defaultValue": null,
+      "values": [
+        {
+          "name": "mustNotBePublicUser",
+          "returnValue": "MUST_NOT_BE_PUBLIC_USER",
+          "label": "MODEL.LOV.MUST_NOT_BE_PUBLIC_USER"
+        }
+      ],
+      "condition": null,
+      "maxLength": null,
+      "description": "Authorization Scheme (component) in region.security.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:32",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "32",
+      "builderLabel": "Cache Timeout",
+      "apexlangPath": "region.serverCache.cacheTimeout",
+      "type": "SELECT LIST",
+      "required": true,
+      "defaultValue": "21600",
+      "values": [
+        {
+          "name": "10Seconds",
+          "returnValue": "10",
+          "label": "10 seconds"
+        },
+        {
+          "name": "1Minute",
+          "returnValue": "60",
+          "label": "1 minute"
+        },
+        {
+          "name": "10Minutes",
+          "returnValue": "600",
+          "label": "10 minutes"
+        },
+        {
+          "name": "30Minutes",
+          "returnValue": "1800",
+          "label": "30 minutes"
+        },
+        {
+          "name": "1Hour",
+          "returnValue": "3600",
+          "label": "1 hour"
+        },
+        {
+          "name": "2Hours",
+          "returnValue": "7200",
+          "label": "2 hours"
+        },
+        {
+          "name": "3Hours",
+          "returnValue": "10800",
+          "label": "3 hours"
+        },
+        {
+          "name": "4Hours",
+          "returnValue": "14400",
+          "label": "4 hours"
+        },
+        {
+          "name": "6Hours",
+          "returnValue": "21600",
+          "label": "6 hours"
+        },
+        {
+          "name": "12Hours",
+          "returnValue": "43200",
+          "label": "12 hours"
+        },
+        {
+          "name": "1Day",
+          "returnValue": "86400",
+          "label": "1 day"
+        },
+        {
+          "name": "2Days",
+          "returnValue": "172800",
+          "label": "2 days"
+        },
+        {
+          "name": "3Days",
+          "returnValue": "259200",
+          "label": "3 days"
+        },
+        {
+          "name": "4Days",
+          "returnValue": "345600",
+          "label": "4 days"
+        },
+        {
+          "name": "1Week",
+          "returnValue": "604800",
+          "label": "1 week"
+        },
+        {
+          "name": "2Weeks",
+          "returnValue": "1209600",
+          "label": "2 weeks"
+        },
+        {
+          "name": "4Weeks",
+          "returnValue": "2419200",
+          "label": "4 Weeks"
+        },
+        {
+          "name": "10Weeks",
+          "returnValue": "6048000",
+          "label": "10 Weeks"
+        },
+        {
+          "name": "1Year",
+          "returnValue": "31536000",
+          "label": "1 Year"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_EQUALS",
+            "propertyId": "222",
+            "path": "region.serverCache.caching",
+            "hasToExist": true,
+            "value": "NOCACHE"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Cache Timeout (select list) in region.serverCache.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:38",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "38",
+      "builderLabel": "Build Option",
+      "apexlangPath": "region.config.buildOption",
+      "type": "COMPONENT",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": null,
+      "maxLength": null,
+      "description": "Build Option (component) in region.config.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:94",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "94",
+      "builderLabel": "Type",
+      "apexlangPath": "region.type",
+      "type": "SUPPORTED UI",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": null,
+      "maxLength": null,
+      "description": "Type (supported ui) in region.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:97",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "97",
+      "builderLabel": "Sequence",
+      "apexlangPath": "region.layout.sequence",
+      "type": "NUMBER",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": null,
+      "maxLength": 22,
+      "description": "Sequence (number) in region.layout.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:104",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "104",
+      "builderLabel": "Start New Layout",
+      "apexlangPath": "region.layout.startNewLayout",
+      "type": "YES NO",
+      "required": true,
+      "defaultValue": "N",
+      "values": [],
+      "condition": null,
+      "maxLength": 32767,
+      "description": "Start New Layout (yes no) in region.layout.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:105",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "105",
+      "builderLabel": "Start New Row",
+      "apexlangPath": "region.layout.startNewRow",
+      "type": "YES NO",
+      "required": true,
+      "defaultValue": "Y",
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "104",
+            "path": "region.layout.startNewLayout",
+            "hasToExist": false,
+            "value": "N"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Start New Row (yes no) in region.layout.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:106",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "106",
+      "builderLabel": "Column",
+      "apexlangPath": "region.layout.column",
+      "type": "SELECT LIST",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": null,
+      "maxLength": null,
+      "description": "Column (select list) in region.layout.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:107",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "107",
+      "builderLabel": "New Column",
+      "apexlangPath": "region.layout.newColumn",
+      "type": "YES NO",
+      "required": true,
+      "defaultValue": "Y",
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "105",
+            "path": "region.layout.startNewRow",
+            "hasToExist": false,
+            "value": "N"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "New Column (yes no) in region.layout.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:108",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "108",
+      "builderLabel": "Column Span",
+      "apexlangPath": "region.layout.columnSpan",
+      "type": "SELECT LIST",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": null,
+      "maxLength": null,
+      "description": "Column Span (select list) in region.layout.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:110",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "110",
+      "builderLabel": "Column Attributes",
+      "apexlangPath": "region.layout.columnAttributes",
+      "type": "COMBOBOX",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": null,
+      "maxLength": 255,
+      "description": "Column Attributes (combobox) in region.layout.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:129",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "129",
+      "builderLabel": "Custom Attributes",
+      "apexlangPath": "region.advanced.customAttributes",
+      "type": "COMBOBOX",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "REGION_TEMPLATE"
+            ]
+          }
+        ]
+      },
+      "maxLength": 2000,
+      "description": "Custom Attributes (combobox) in region.advanced.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:174",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "174",
+      "builderLabel": "Escape Special Characters",
+      "apexlangPath": "region.security.escapeSpecialChars",
+      "type": "YES NO",
+      "required": true,
+      "defaultValue": "Y",
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "ESCAPE_OUTPUT"
+            ]
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Escape Special Characters (yes no) in region.security.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:180",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "180",
+      "builderLabel": "Static ID",
+      "apexlangPath": "region.advanced.staticId",
+      "type": "STATIC ID",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": null,
+      "maxLength": 255,
+      "description": "Static ID (static id) in region.advanced.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:181",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "181",
+      "builderLabel": "HTML DOM ID",
+      "apexlangPath": "region.advanced.htmlDomId",
+      "type": "TEXT",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": null,
+      "maxLength": 255,
+      "description": "HTML DOM ID (text) in region.advanced.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:190",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "190",
+      "builderLabel": "Parent Region",
+      "apexlangPath": "region.layout.parentRegion",
+      "type": "COMPONENT",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": null,
+      "maxLength": null,
+      "description": "Parent Region (component) in region.layout.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:191",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "191",
+      "builderLabel": "Slot",
+      "apexlangPath": "region.layout.slot",
+      "type": "SELECT LIST",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": null,
+      "maxLength": null,
+      "description": "Slot (select list) in region.layout.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:193",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "193",
+      "builderLabel": "SQL Query",
+      "apexlangPath": "region.source.sqlQuery",
+      "type": "SQL",
+      "required": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURE_IS_REQUIRED",
+            "hasToExist": true,
+            "value": "SOURCE_SQL",
+            "propertyId": "94"
+          }
+        ]
+      },
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "SOURCE_SQL"
+            ]
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "SQL Query (sql) in region.source.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:194",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "194",
+      "builderLabel": "Text",
+      "apexlangPath": "region.source.text",
+      "type": "TEXT EDITOR",
+      "required": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURE_IS_REQUIRED",
+            "hasToExist": true,
+            "value": "SOURCE_PLAIN",
+            "propertyId": "94"
+          }
+        ]
+      },
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "SOURCE_PLAIN"
+            ]
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Text (text editor) in region.source.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:198",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "198",
+      "builderLabel": "PL/SQL Code",
+      "apexlangPath": "region.source.plsqlCode",
+      "type": "PLSQL",
+      "required": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURE_IS_REQUIRED",
+            "hasToExist": true,
+            "value": "SOURCE_PLSQL",
+            "propertyId": "94"
+          }
+        ]
+      },
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "SOURCE_PLSQL"
+            ]
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "PL/SQL Code (plsql) in region.source.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:213",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "213",
+      "builderLabel": "Exclude Title from Translation",
+      "apexlangPath": "region.advanced.excludeTitleFromTranslation",
+      "type": "YES NO",
+      "required": true,
+      "defaultValue": "N",
+      "values": [],
+      "condition": null,
+      "maxLength": 32767,
+      "description": "Exclude Title from Translation (yes no) in region.advanced.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:214",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "214",
+      "builderLabel": "HTML Code",
+      "apexlangPath": "region.source.htmlCode",
+      "type": "HTML",
+      "required": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURE_IS_REQUIRED",
+            "hasToExist": true,
+            "value": "SOURCE_HTML",
+            "propertyId": "94"
+          }
+        ]
+      },
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "SOURCE_HTML"
+            ]
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "HTML Code (html) in region.source.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:215",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "215",
+      "builderLabel": "Page Items to Submit",
+      "apexlangPath": "region.source.pageItemsToSubmit",
+      "type": "ITEM",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "AJAX_ITEMS_TO_SUBMIT"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Page Items to Submit (item) in region.source.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:217",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "217",
+      "builderLabel": "Template",
+      "apexlangPath": "region.appearance.template",
+      "type": "COMPONENT",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "REGION_TEMPLATE"
+            ]
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Template (component) in region.appearance.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:218",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "218",
+      "builderLabel": "Render Components",
+      "apexlangPath": "region.appearance.renderComponents",
+      "type": "SELECT LIST",
+      "required": true,
+      "defaultValue": "ABOVE",
+      "values": [
+        {
+          "name": "aboveContent",
+          "returnValue": "ABOVE",
+          "label": "Above Content"
+        },
+        {
+          "name": "belowContent",
+          "returnValue": "BELOW",
+          "label": "Below Content"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "REGION_TEMPLATE"
+            ]
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Render Components (select list) in region.appearance.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:219",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "219",
+      "builderLabel": "Region Display Selector",
+      "apexlangPath": "region.advanced.regionDisplaySelector",
+      "type": "YES NO",
+      "required": true,
+      "defaultValue": "N",
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_NULL",
+            "propertyId": "217",
+            "path": "region.appearance.template",
+            "hasToExist": false
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Region Display Selector (yes no) in region.advanced.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:220",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "220",
+      "builderLabel": "Region Image",
+      "apexlangPath": "region.advanced.regionImage",
+      "type": "TEXT",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "217",
+            "path": "region.appearance.template",
+            "hasToExist": true,
+            "values": [
+              "NOT_REGION_IMAGE_URL"
+            ]
+          }
+        ]
+      },
+      "maxLength": 255,
+      "description": "Region Image (text) in region.advanced.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:221",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "221",
+      "builderLabel": "Image Tag Attributes",
+      "apexlangPath": "region.advanced.imageTagAttributes",
+      "type": "TEXT",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_NULL",
+            "propertyId": "220",
+            "path": "region.advanced.regionImage",
+            "hasToExist": true
+          }
+        ]
+      },
+      "maxLength": 255,
+      "description": "Image Tag Attributes (text) in region.advanced.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:222",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "222",
+      "builderLabel": "Caching",
+      "apexlangPath": "region.serverCache.caching",
+      "type": "SELECT LIST",
+      "required": true,
+      "defaultValue": "NOCACHE",
+      "values": [
+        {
+          "name": "false",
+          "returnValue": "NOCACHE",
+          "label": "Disabled"
+        },
+        {
+          "name": "true",
+          "returnValue": "CACHE",
+          "label": "Enabled"
+        },
+        {
+          "name": "cacheByUser",
+          "returnValue": "USER",
+          "label": "Cache By User"
+        },
+        {
+          "name": "cacheBySession",
+          "returnValue": "SESSION",
+          "label": "Cache By Session"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "STARTS_WITH_ANY",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "NATIVE_JQM_LIST_VIEW",
+              "NATIVE_JQM_REFLOW",
+              "NATIVE_JQM_COLUMN_TOGGLE",
+              "NATIVE_LIST",
+              "NATIVE_URL",
+              "NATIVE_IR",
+              "NATIVE_SQL_REPORT",
+              "NATIVE_TABFORM",
+              "NATIVE_PLSQL",
+              "NATIVE_JSTREE",
+              "NATIVE_CALENDAR",
+              "NATIVE_SVG_CHART",
+              "NATIVE_SIMPLE_CHART",
+              "NATIVE_TREE",
+              "NATIVE_STATIC_SEARCH",
+              "NATIVE_DYNAMIC_CONTENT",
+              "PLUGIN_"
+            ]
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Caching (select list) in region.serverCache.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:223",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "223",
+      "builderLabel": "Customizable",
+      "apexlangPath": "region.customization.customizable",
+      "type": "SELECT LIST",
+      "required": true,
+      "defaultValue": "0",
+      "values": [
+        {
+          "name": "false",
+          "returnValue": "0",
+          "label": "Not Customizable By End Users"
+        },
+        {
+          "name": "shownByDefault",
+          "returnValue": "1",
+          "label": "Customizable and Shown By Default"
+        },
+        {
+          "name": "notShownByDefault",
+          "returnValue": "2",
+          "label": "Customizable and Not Shown By Default"
+        }
+      ],
+      "condition": null,
+      "maxLength": null,
+      "description": "Customizable (select list) in region.customization.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:224",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "224",
+      "builderLabel": "Name",
+      "apexlangPath": "region.customization.name",
+      "type": "TEXT",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "223",
+            "path": "region.customization.customizable",
+            "hasToExist": true,
+            "values": [
+              "1",
+              "2"
+            ]
+          }
+        ]
+      },
+      "maxLength": 255,
+      "description": "Name (text) in region.customization.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:225",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "225",
+      "builderLabel": "PL/SQL Function Body returning SQL Query",
+      "apexlangPath": "region.source.plsqlFunctionBody",
+      "type": "PLSQL FUNCTION BODY SQL",
+      "required": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURE_IS_REQUIRED",
+            "hasToExist": true,
+            "value": "SOURCE_PLSQL_FUNCTION",
+            "propertyId": "94"
+          }
+        ]
+      },
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "SOURCE_PLSQL_FUNCTION"
+            ]
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "PL/SQL Function Body returning SQL Query (plsql function body sql) in region.source.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:391",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "391",
+      "builderLabel": "Generic Column Count",
+      "apexlangPath": "region.source.genericColumnCount",
+      "type": "INTEGER",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "390",
+            "path": "region.source.useGenericColumnNames",
+            "hasToExist": true,
+            "value": "GENERIC_REPORT_COLUMNS"
+          }
+        ]
+      },
+      "maxLength": 3,
+      "description": "Generic Column Count (integer) in region.source.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:475",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "475",
+      "builderLabel": "Graph Owner",
+      "apexlangPath": "region.source.graphOwner",
+      "type": "OWNER",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "959",
+            "path": "region.source.type",
+            "hasToExist": true,
+            "value": "GRAPH"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Graph Owner (owner) in region.source.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:476",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "476",
+      "builderLabel": "Graph Name",
+      "apexlangPath": "region.source.graphName",
+      "type": "GRAPH",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "959",
+            "path": "region.source.type",
+            "hasToExist": true,
+            "value": "GRAPH"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Graph Name (graph) in region.source.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:477",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "477",
+      "builderLabel": "Match Clause",
+      "apexlangPath": "region.source.matchClause",
+      "type": "TEXT EDITOR",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "959",
+            "path": "region.source.type",
+            "hasToExist": true,
+            "value": "GRAPH"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Match Clause (text editor) in region.source.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:478",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "478",
+      "builderLabel": "Where Clause",
+      "apexlangPath": "region.source.whereClause",
+      "type": "WHERE CLAUSE",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "959",
+            "path": "region.source.type",
+            "hasToExist": true,
+            "value": "GRAPH"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Where Clause (where clause) in region.source.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:479",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "479",
+      "builderLabel": "Columns Clause",
+      "apexlangPath": "region.source.columnsClause",
+      "type": "TEXT EDITOR",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "959",
+            "path": "region.source.type",
+            "hasToExist": true,
+            "value": "GRAPH"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Columns Clause (text editor) in region.source.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:481",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "481",
+      "builderLabel": "Order By Clause",
+      "apexlangPath": "region.orderBy.orderByClause",
+      "type": "ORDER BY CLAUSE",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1238",
+            "path": "region.orderBy.type",
+            "hasToExist": true,
+            "value": "STATIC"
+          },
+          {
+            "type": "EQUALS",
+            "propertyId": "959",
+            "path": "region.source.type",
+            "hasToExist": true,
+            "value": "GRAPH"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Order By Clause (order by clause) in region.orderBy.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:482",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "482",
+      "builderLabel": "Item",
+      "apexlangPath": "region.orderBy.item",
+      "type": "ORDER BY ITEM",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1238",
+            "path": "region.orderBy.type",
+            "hasToExist": true,
+            "value": "ITEM"
+          },
+          {
+            "type": "EQUALS",
+            "propertyId": "959",
+            "path": "region.source.type",
+            "hasToExist": true,
+            "value": "GRAPH"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Item (order by item) in region.orderBy.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:739",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "739",
+      "builderLabel": "Icon",
+      "apexlangPath": "region.appearance.icon",
+      "type": "ICON",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_NULL",
+            "propertyId": "217",
+            "path": "region.appearance.template",
+            "hasToExist": true
+          }
+        ]
+      },
+      "maxLength": 255,
+      "description": "Icon (icon) in region.appearance.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:740",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "740",
+      "builderLabel": "CSS Classes",
+      "apexlangPath": "region.appearance.cssClasses",
+      "type": "COMBOBOX",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_NULL",
+            "propertyId": "217",
+            "path": "region.appearance.template",
+            "hasToExist": true
+          }
+        ]
+      },
+      "maxLength": 255,
+      "description": "CSS Classes (combobox) in region.appearance.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:741",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "741",
+      "builderLabel": "Template Options",
+      "apexlangPath": "region.appearance.templateOptions",
+      "type": "TEMPLATE OPTIONS",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_NULL",
+            "propertyId": "217",
+            "path": "region.appearance.template",
+            "hasToExist": true
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Template Options (template options) in region.appearance.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:751",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "751",
+      "builderLabel": "Depends On Item(s)",
+      "apexlangPath": "region.serverCache.dependsOnItems",
+      "type": "ITEM",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_EQUALS",
+            "propertyId": "222",
+            "path": "region.serverCache.caching",
+            "hasToExist": true,
+            "value": "NOCACHE"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Depends On Item(s) (item) in region.serverCache.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:763",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "763",
+      "builderLabel": "Column CSS Classes",
+      "apexlangPath": "region.layout.columnCssClasses",
+      "type": "COMBOBOX",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": null,
+      "maxLength": 255,
+      "description": "Column CSS Classes (combobox) in region.layout.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:814",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "814",
+      "builderLabel": "Row CSS Classes",
+      "apexlangPath": "region.layout.rowCssClasses",
+      "type": "COMBOBOX",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": null,
+      "maxLength": 255,
+      "description": "Row CSS Classes (combobox) in region.layout.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:957",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "957",
+      "builderLabel": "Location",
+      "apexlangPath": "region.source.location",
+      "type": "SELECT LIST",
+      "required": {
+        "operator": "OR",
+        "conditions": [
+          {
+            "operator": "AND",
+            "conditions": [
+              {
+                "type": "STARTS_WITH",
+                "hasToExist": true,
+                "value": "TMPL_",
+                "propertyId": "94"
+              },
+              {
+                "type": "EXISTS",
+                "hasToExist": true,
+                "componentTypeId": "7000",
+                "condition": {
+                  "operator": "AND",
+                  "conditions": [
+                    {
+                      "type": "EQUALS",
+                      "hasToExist": true,
+                      "value": "REPORT",
+                      "propertyId": "243"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "operator": "AND",
+            "conditions": [
+              {
+                "type": "NOT_STARTS_WITH",
+                "hasToExist": true,
+                "value": "TMPL_",
+                "propertyId": "94"
+              },
+              {
+                "type": "FEATURE_IS_REQUIRED",
+                "hasToExist": true,
+                "value": "SOURCE_LOCATION",
+                "propertyId": "94"
+              }
+            ]
+          }
+        ]
+      },
+      "defaultValue": "LOCAL",
+      "values": [
+        {
+          "name": "localDatabase",
+          "returnValue": "LOCAL",
+          "label": "Local Database"
+        },
+        {
+          "name": "restEnabledSql",
+          "returnValue": "REMOTE",
+          "label": "REST Enabled SQL"
+        },
+        {
+          "name": "restSource",
+          "returnValue": "WEB_SOURCE",
+          "label": "REST Source"
+        },
+        {
+          "name": "jsonDualityView",
+          "returnValue": "DUALITY_VIEW",
+          "label": "JSON Duality View"
+        },
+        {
+          "name": "jsonSource",
+          "returnValue": "JSON_COLLECTION",
+          "label": "JSON Source"
+        },
+        {
+          "name": "sampleData",
+          "returnValue": "SAMPLE_DATA",
+          "label": "Sample Data"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "SOURCE_LOCATION"
+            ]
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Location (select list) in region.source.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:958",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "958",
+      "builderLabel": "Remote Server",
+      "apexlangPath": "region.source.remoteServer",
+      "type": "COMPONENT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "957",
+            "path": "region.source.location",
+            "hasToExist": true,
+            "value": "REMOTE"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Remote Server (component) in region.source.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:959",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "959",
+      "builderLabel": "Type",
+      "apexlangPath": "region.source.type",
+      "type": "SELECT LIST",
+      "required": true,
+      "defaultValue": "TABLE",
+      "values": [
+        {
+          "name": "tableView",
+          "returnValue": "TABLE",
+          "label": "Table / View"
+        },
+        {
+          "name": "sqlQuery",
+          "returnValue": "SQL",
+          "label": "SQL Query"
+        },
+        {
+          "name": "functionBody",
+          "returnValue": "FUNC_BODY_RETURNING_SQL",
+          "label": "Function Body returning SQL Query"
+        },
+        {
+          "name": "propertyGraph",
+          "returnValue": "GRAPH",
+          "label": "Property Graph"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "957",
+            "path": "region.source.location",
+            "hasToExist": true,
+            "values": [
+              "LOCAL",
+              "REMOTE"
+            ]
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Type (select list) in region.source.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:960",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "960",
+      "builderLabel": "Table Owner",
+      "apexlangPath": "region.source.tableOwner",
+      "type": "OWNER",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "959",
+            "path": "region.source.type",
+            "hasToExist": true,
+            "value": "TABLE"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Table Owner (owner) in region.source.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:961",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "961",
+      "builderLabel": "Table Name",
+      "apexlangPath": "region.source.tableName",
+      "type": "TABLE",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "959",
+            "path": "region.source.type",
+            "hasToExist": true,
+            "value": "TABLE"
+          }
+        ]
+      },
+      "maxLength": 128,
+      "description": "Table Name (table) in region.source.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:962",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "962",
+      "builderLabel": "Where Clause",
+      "apexlangPath": "region.source.whereClause",
+      "type": "WHERE CLAUSE",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "959",
+            "path": "region.source.type",
+            "hasToExist": true,
+            "value": "TABLE"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Where Clause (where clause) in region.source.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:963",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "963",
+      "builderLabel": "Order By Clause",
+      "apexlangPath": "region.orderBy.orderByClause",
+      "type": "ORDER BY CLAUSE",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1238",
+            "path": "region.orderBy.type",
+            "hasToExist": true,
+            "value": "STATIC"
+          },
+          {
+            "type": "IN_LIST",
+            "propertyId": "959",
+            "path": "region.source.type",
+            "hasToExist": false,
+            "values": [
+              "TABLE",
+              "SQL",
+              "FUNC_BODY_RETURNING_SQL",
+              "$NULL$"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Order By Clause (order by clause) in region.orderBy.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:964",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "964",
+      "builderLabel": "SQL Query",
+      "apexlangPath": "region.source.sqlQuery",
+      "type": "SQL",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "959",
+            "path": "region.source.type",
+            "hasToExist": true,
+            "value": "SQL"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "SQL Query (sql) in region.source.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:965",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "965",
+      "builderLabel": "Caching",
+      "apexlangPath": "region.remoteCache.caching",
+      "type": "SELECT LIST",
+      "required": false,
+      "defaultValue": null,
+      "values": [
+        {
+          "name": "allUsers",
+          "returnValue": "ALL_USERS",
+          "label": "For All Users"
+        },
+        {
+          "name": "user",
+          "returnValue": "USER",
+          "label": "By User"
+        },
+        {
+          "name": "session",
+          "returnValue": "SESSION",
+          "label": "By Session"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "957",
+            "path": "region.source.location",
+            "hasToExist": true,
+            "value": "REMOTE"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Caching (select list) in region.remoteCache.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:966",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "966",
+      "builderLabel": "Timeout",
+      "apexlangPath": "region.remoteCache.timeout",
+      "type": "TEXT EDITOR",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_NULL",
+            "propertyId": "965",
+            "path": "region.remoteCache.caching",
+            "hasToExist": true
+          }
+        ]
+      },
+      "maxLength": 255,
+      "description": "Timeout (text editor) in region.remoteCache.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:967",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "967",
+      "builderLabel": "REST Source",
+      "apexlangPath": "region.source.restSource",
+      "type": "COMPONENT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "957",
+            "path": "region.source.location",
+            "hasToExist": true,
+            "value": "WEB_SOURCE"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "REST Source (component) in region.source.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:969",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "969",
+      "builderLabel": "Nested Rows",
+      "apexlangPath": "region.dataProfile.nestedRows",
+      "type": "COMPONENT",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "967",
+            "path": "region.source.restSource",
+            "hasToExist": true,
+            "values": [
+              "HAS_ARRAY_COLUMNS"
+            ]
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Nested Rows (component) in region.dataProfile.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:975",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "975",
+      "builderLabel": "Optimizer Hint",
+      "apexlangPath": "region.source.optimizerHint",
+      "type": "TEXT",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "957",
+            "path": "region.source.location",
+            "hasToExist": true,
+            "values": [
+              "LOCAL",
+              "REMOTE",
+              "WEB_SOURCE",
+              "DUALITY_VIEW",
+              "JSON_COLLECTION"
+            ]
+          }
+        ]
+      },
+      "maxLength": 255,
+      "description": "Optimizer Hint (text) in region.source.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:978",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "978",
+      "builderLabel": "Include ROWID Column",
+      "apexlangPath": "region.source.includeRowidColumn",
+      "type": "YES NO",
+      "required": true,
+      "defaultValue": "N",
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "959",
+            "path": "region.source.type",
+            "hasToExist": true,
+            "value": "TABLE"
+          },
+          {
+            "type": "FEATURES",
+            "propertyId": "958",
+            "path": "region.source.remoteServer",
+            "hasToExist": false,
+            "values": [
+              "IS_ORACLE"
+            ]
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Include ROWID Column (yes no) in region.source.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:1034",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "1034",
+      "builderLabel": "Type",
+      "apexlangPath": "region.localPostProcessing.type",
+      "type": "SELECT LIST",
+      "required": false,
+      "defaultValue": null,
+      "values": [
+        {
+          "name": "whereOrderByClause",
+          "returnValue": "WHERE_ORDER_BY_CLAUSE",
+          "label": "Where/Order By Clause"
+        },
+        {
+          "name": "sqlQuery",
+          "returnValue": "SQL",
+          "label": "SQL Query"
+        },
+        {
+          "name": "plsqlFunctionBody",
+          "returnValue": "FUNC_BODY_RETURNING_SQL",
+          "label": "PL/SQL Function Body returning SQL Query"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_NULL",
+            "propertyId": "967",
+            "path": "region.source.restSource",
+            "hasToExist": true
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Type (select list) in region.localPostProcessing.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:1035",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "1035",
+      "builderLabel": "Where Clause",
+      "apexlangPath": "region.localPostProcessing.whereClause",
+      "type": "WHERE CLAUSE",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1034",
+            "path": "region.localPostProcessing.type",
+            "hasToExist": true,
+            "value": "WHERE_ORDER_BY_CLAUSE"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Where Clause (where clause) in region.localPostProcessing.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:1036",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "1036",
+      "builderLabel": "Order By Clause",
+      "apexlangPath": "region.localPostProcessing.orderByClause",
+      "type": "ORDER BY CLAUSE",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1241",
+            "path": "region.localPostProcessing.orderByType",
+            "hasToExist": true,
+            "value": "STATIC"
+          }
+        ]
+      },
+      "maxLength": 255,
+      "description": "Order By Clause (order by clause) in region.localPostProcessing.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:1041",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "1041",
+      "builderLabel": "SQL Query",
+      "apexlangPath": "region.localPostProcessing.sqlQuery",
+      "type": "SQL",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1034",
+            "path": "region.localPostProcessing.type",
+            "hasToExist": true,
+            "value": "SQL"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "SQL Query (sql) in region.localPostProcessing.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:1042",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "1042",
+      "builderLabel": "Enabled",
+      "apexlangPath": "region.externalFilterAndOrderBy.enabled",
+      "type": "YES NO",
+      "required": true,
+      "defaultValue": "N",
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_NULL",
+            "propertyId": "967",
+            "path": "region.source.restSource",
+            "hasToExist": true
+          },
+          {
+            "type": "IN_LIST",
+            "propertyId": "1112",
+            "path": "region.restSynchronization.useLocalTable",
+            "hasToExist": false,
+            "values": [
+              "N",
+              "$NULL$"
+            ]
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Enabled (yes no) in region.externalFilterAndOrderBy.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:1043",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "1043",
+      "builderLabel": "Filter",
+      "apexlangPath": "region.externalFilterAndOrderBy.filter",
+      "type": "TEXT EDITOR",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1042",
+            "path": "region.externalFilterAndOrderBy.enabled",
+            "hasToExist": true,
+            "value": "Y"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Filter (text editor) in region.externalFilterAndOrderBy.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:1044",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "1044",
+      "builderLabel": "Order By",
+      "apexlangPath": "region.externalFilterAndOrderBy.orderBy",
+      "type": "TEXT EDITOR",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1244",
+            "path": "region.externalFilterAndOrderBy.orderByType",
+            "hasToExist": true,
+            "value": "STATIC"
+          }
+        ]
+      },
+      "maxLength": 255,
+      "description": "Order By (text editor) in region.externalFilterAndOrderBy.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:1090",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "1090",
+      "builderLabel": "Filtered Region",
+      "apexlangPath": "region.source.filteredRegion",
+      "type": "COMPONENT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "NATIVE_FACETED_SEARCH",
+              "NATIVE_SMART_FILTERS"
+            ]
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Filtered Region (component) in region.source.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:1112",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "1112",
+      "builderLabel": "Use Local Table",
+      "apexlangPath": "region.restSynchronization.useLocalTable",
+      "type": "YES NO",
+      "required": true,
+      "defaultValue": "N",
+      "values": [],
+      "condition": {
+        "operator": "OR",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "967",
+            "path": "region.source.restSource",
+            "hasToExist": true,
+            "values": [
+              "HAS_SYNC_HAS_NO_ARRAY_COLUMNS"
+            ]
+          },
+          {
+            "operator": "AND",
+            "conditions": [
+              {
+                "type": "NULL",
+                "propertyId": "969",
+                "path": "region.dataProfile.nestedRows",
+                "hasToExist": true
+              },
+              {
+                "type": "FEATURES",
+                "propertyId": "967",
+                "path": "region.source.restSource",
+                "hasToExist": true,
+                "values": [
+                  "HAS_SYNC_ALL_ARRAY_COLUMNS"
+                ]
+              }
+            ]
+          },
+          {
+            "type": "FEATURES",
+            "propertyId": "969",
+            "path": "region.dataProfile.nestedRows",
+            "hasToExist": true,
+            "values": [
+              "IS_SYNCED"
+            ]
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Use Local Table (yes no) in region.restSynchronization.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:1238",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "1238",
+      "builderLabel": "Type",
+      "apexlangPath": "region.orderBy.type",
+      "type": "SELECT LIST",
+      "required": false,
+      "defaultValue": null,
+      "values": [
+        {
+          "name": "staticValue",
+          "returnValue": "STATIC",
+          "label": "Static Value"
+        },
+        {
+          "name": "item",
+          "returnValue": "ITEM",
+          "label": "Item"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "ORDER_BY"
+            ]
+          },
+          {
+            "type": "IN_LIST",
+            "propertyId": "957",
+            "path": "region.source.location",
+            "hasToExist": true,
+            "values": [
+              "LOCAL",
+              "REMOTE",
+              "SAMPLE_DATA"
+            ]
+          },
+          {
+            "type": "IN_LIST",
+            "propertyId": "959",
+            "path": "region.source.type",
+            "hasToExist": false,
+            "values": [
+              "TABLE",
+              "GRAPH",
+              "SQL",
+              "FUNC_BODY_RETURNING_SQL",
+              "$NULL$"
+            ]
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Type (select list) in region.orderBy.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:1239",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "1239",
+      "builderLabel": "Item",
+      "apexlangPath": "region.orderBy.item",
+      "type": "ORDER BY ITEM",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1238",
+            "path": "region.orderBy.type",
+            "hasToExist": true,
+            "value": "ITEM"
+          },
+          {
+            "type": "IN_LIST",
+            "propertyId": "959",
+            "path": "region.source.type",
+            "hasToExist": false,
+            "values": [
+              "TABLE",
+              "SQL",
+              "FUNC_BODY_RETURNING_SQL",
+              "$NULL$"
+            ]
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Item (order by item) in region.orderBy.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:1241",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "1241",
+      "builderLabel": "Order By Type",
+      "apexlangPath": "region.localPostProcessing.orderByType",
+      "type": "SELECT LIST",
+      "required": false,
+      "defaultValue": null,
+      "values": [
+        {
+          "name": "staticValue",
+          "returnValue": "STATIC",
+          "label": "Static Value"
+        },
+        {
+          "name": "item",
+          "returnValue": "ITEM",
+          "label": "Item"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1034",
+            "path": "region.localPostProcessing.type",
+            "hasToExist": true,
+            "value": "WHERE_ORDER_BY_CLAUSE"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Order By Type (select list) in region.localPostProcessing.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:1242",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "1242",
+      "builderLabel": "Item",
+      "apexlangPath": "region.localPostProcessing.item",
+      "type": "ORDER BY ITEM",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1241",
+            "path": "region.localPostProcessing.orderByType",
+            "hasToExist": true,
+            "value": "ITEM"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Item (order by item) in region.localPostProcessing.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:1243",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "1243",
+      "builderLabel": "Order By Item",
+      "apexlangPath": "region.localPostProcessing.orderByItem",
+      "type": "ORDER BY ITEM",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "1034",
+            "path": "region.localPostProcessing.type",
+            "hasToExist": true,
+            "values": [
+              "SQL",
+              "FUNC_BODY_RETURNING_SQL"
+            ]
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Order By Item (order by item) in region.localPostProcessing.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:1244",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "1244",
+      "builderLabel": "Order By Type",
+      "apexlangPath": "region.externalFilterAndOrderBy.orderByType",
+      "type": "SELECT LIST",
+      "required": false,
+      "defaultValue": null,
+      "values": [
+        {
+          "name": "staticValue",
+          "returnValue": "STATIC",
+          "label": "Static Value"
+        },
+        {
+          "name": "item",
+          "returnValue": "ITEM",
+          "label": "Item"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "ORDER_BY"
+            ]
+          },
+          {
+            "type": "EQUALS",
+            "propertyId": "1042",
+            "path": "region.externalFilterAndOrderBy.enabled",
+            "hasToExist": true,
+            "value": "Y"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Order By Type (select list) in region.externalFilterAndOrderBy.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:1245",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "1245",
+      "builderLabel": "Item",
+      "apexlangPath": "region.externalFilterAndOrderBy.item",
+      "type": "ORDER BY ITEM",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1244",
+            "path": "region.externalFilterAndOrderBy.orderByType",
+            "hasToExist": true,
+            "value": "ITEM"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Item (order by item) in region.externalFilterAndOrderBy.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:1603",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "1603",
+      "builderLabel": "File URL",
+      "apexlangPath": "region.image.fileUrl",
+      "type": "TEXT",
+      "required": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "hasToExist": true,
+            "values": [
+              "REGION_IMAGE_URL"
+            ],
+            "propertyId": "217"
+          }
+        ]
+      },
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "217",
+            "path": "region.appearance.template",
+            "hasToExist": true,
+            "values": [
+              "REGION_IMAGE",
+              "REGION_IMAGE_URL"
+            ]
+          }
+        ]
+      },
+      "maxLength": 255,
+      "description": "File URL (text) in region.image.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:1604",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "1604",
+      "builderLabel": "Accessible Description",
+      "apexlangPath": "region.image.accessibleDescription",
+      "type": "TEXT",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "217",
+            "path": "region.appearance.template",
+            "hasToExist": true,
+            "values": [
+              "REGION_IMAGE_ALT_TEXT"
+            ]
+          },
+          {
+            "type": "NOT_NULL",
+            "propertyId": "1603",
+            "path": "region.image.fileUrl",
+            "hasToExist": true
+          }
+        ]
+      },
+      "maxLength": 255,
+      "description": "Accessible Description (text) in region.image.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:1605",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "1605",
+      "builderLabel": "Custom Attributes",
+      "apexlangPath": "region.image.customAttributes",
+      "type": "TEXT",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "217",
+            "path": "region.appearance.template",
+            "hasToExist": true,
+            "values": [
+              "REGION_IMAGE_ATTRIBUTES"
+            ]
+          },
+          {
+            "type": "NOT_NULL",
+            "propertyId": "1603",
+            "path": "region.image.fileUrl",
+            "hasToExist": true
+          }
+        ]
+      },
+      "maxLength": 255,
+      "description": "Custom Attributes (text) in region.image.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:1669",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "1669",
+      "builderLabel": "Use Landmark",
+      "apexlangPath": "region.accessibility.useLandmark",
+      "type": "YES NO",
+      "required": true,
+      "defaultValue": "Y",
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "217",
+            "path": "region.appearance.template",
+            "hasToExist": true,
+            "values": [
+              "REGION_LANDMARK_ATTRIBUTES"
+            ]
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Use Landmark (yes no) in region.accessibility.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:1670",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "1670",
+      "builderLabel": "Landmark Type",
+      "apexlangPath": "region.accessibility.landmarkType",
+      "type": "SELECT LIST",
+      "required": false,
+      "defaultValue": null,
+      "values": [
+        {
+          "name": "banner",
+          "returnValue": "banner",
+          "label": "Banner"
+        },
+        {
+          "name": "complementary",
+          "returnValue": "complementary",
+          "label": "Complementary"
+        },
+        {
+          "name": "contentInfo",
+          "returnValue": "contentinfo",
+          "label": "Content Info"
+        },
+        {
+          "name": "form",
+          "returnValue": "form",
+          "label": "Form"
+        },
+        {
+          "name": "main",
+          "returnValue": "main",
+          "label": "Main"
+        },
+        {
+          "name": "navigation",
+          "returnValue": "navigation",
+          "label": "Navigation"
+        },
+        {
+          "name": "region",
+          "returnValue": "region",
+          "label": "Region"
+        },
+        {
+          "name": "search",
+          "returnValue": "search",
+          "label": "Search"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1669",
+            "path": "region.accessibility.useLandmark",
+            "hasToExist": true,
+            "value": "Y"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Landmark Type (select list) in region.accessibility.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:1671",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "1671",
+      "builderLabel": "Landmark Label",
+      "apexlangPath": "region.accessibility.landmarkLabel",
+      "type": "TEXT",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1669",
+            "path": "region.accessibility.useLandmark",
+            "hasToExist": true,
+            "value": "Y"
+          }
+        ]
+      },
+      "maxLength": 255,
+      "description": "Landmark Label (text) in region.accessibility.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5000",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5000",
+      "builderLabel": "Type",
+      "apexlangPath": "region.serverCache.type",
+      "type": "SELECT LIST",
+      "required": false,
+      "defaultValue": null,
+      "values": [
+        {
+          "name": "always",
+          "returnValue": "ALWAYS",
+          "label": "Always"
+        },
+        {
+          "name": "rowsReturned",
+          "returnValue": "EXISTS",
+          "label": "Rows returned"
+        },
+        {
+          "name": "noRowsReturned",
+          "returnValue": "NOT_EXISTS",
+          "label": "No Rows returned"
+        },
+        {
+          "name": "expression",
+          "returnValue": "EXPRESSION",
+          "label": "Expression"
+        },
+        {
+          "name": "functionBody",
+          "returnValue": "FUNCTION_BODY",
+          "label": "Function Body"
+        },
+        {
+          "name": "request=Value",
+          "returnValue": "REQUEST_EQUALS_CONDITION",
+          "label": "Request = Value"
+        },
+        {
+          "name": "request!=Value",
+          "returnValue": "REQUEST_NOT_EQUAL_CONDITION",
+          "label": "Request != Value"
+        },
+        {
+          "name": "requestIsContainedInValue",
+          "returnValue": "REQUEST_IN_CONDITION",
+          "label": "Request is contained in Value"
+        },
+        {
+          "name": "requestIsNotContainedInValue",
+          "returnValue": "REQUEST_NOT_IN_CONDITION",
+          "label": "Request is NOT contained in Value"
+        },
+        {
+          "name": "item=value",
+          "returnValue": "VAL_OF_ITEM_IN_COND_EQ_COND2",
+          "label": "Item = Value"
+        },
+        {
+          "name": "item!=value",
+          "returnValue": "VAL_OF_ITEM_IN_COND_NOT_EQ_COND2",
+          "label": "Item != Value"
+        },
+        {
+          "name": "itemIsNull",
+          "returnValue": "ITEM_IS_NULL",
+          "label": "Item is NULL"
+        },
+        {
+          "name": "itemIsNotNull",
+          "returnValue": "ITEM_IS_NOT_NULL",
+          "label": "Item is NOT NULL"
+        },
+        {
+          "name": "itemIsZero",
+          "returnValue": "ITEM_IS_ZERO",
+          "label": "Item is zero"
+        },
+        {
+          "name": "itemIsNotZero",
+          "returnValue": "ITEM_IS_NOT_ZERO",
+          "label": "Item is NOT zero"
+        },
+        {
+          "name": "itemIsNullOrZero",
+          "returnValue": "ITEM_IS_NULL_OR_ZERO",
+          "label": "Item is NULL or zero"
+        },
+        {
+          "name": "itemIsNotNullAndNotZero",
+          "returnValue": "ITEM_NOT_NULL_OR_ZERO",
+          "label": "Item is NOT NULL and NOT zero"
+        },
+        {
+          "name": "itemContainsNoSpaces",
+          "returnValue": "ITEM_CONTAINS_NO_SPACES",
+          "label": "Item contains no spaces"
+        },
+        {
+          "name": "itemIsNumeric",
+          "returnValue": "ITEM_IS_NUMERIC",
+          "label": "Item is numeric"
+        },
+        {
+          "name": "itemIsNotNumeric",
+          "returnValue": "ITEM_IS_NOT_NUMERIC",
+          "label": "Item is NOT numeric"
+        },
+        {
+          "name": "itemIsAlphanumeric",
+          "returnValue": "ITEM_IS_ALPHANUMERIC",
+          "label": "Item is alphanumeric"
+        },
+        {
+          "name": "itemIsInColonDelimitedList",
+          "returnValue": "VALUE_OF_ITEM_IN_CONDITION_IN_COLON_DELIMITED_LIST",
+          "label": "Item is in colon delimited list"
+        },
+        {
+          "name": "itemIsNotInColonDelimitedList",
+          "returnValue": "VALUE_OF_ITEM_IN_CONDITION_NOT_IN_COLON_DELIMITED_LIST",
+          "label": "Item is NOT in colon delimited list"
+        },
+        {
+          "name": "textIsContainedInItem",
+          "returnValue": "CONDITION1_IN_VALUE_OF_ITEM_IN_CONDITION2",
+          "label": "Text is contained in Item"
+        },
+        {
+          "name": "text=value",
+          "returnValue": "DISPLAY_COND_EQUAL_COND_TEXT",
+          "label": "Text = Value"
+        },
+        {
+          "name": "text!=value",
+          "returnValue": "DISP_COND_NOT_EQUAL_COND_TEXT",
+          "label": "Text != Value"
+        },
+        {
+          "name": "textIsContainedInValue",
+          "returnValue": "DISPLAY_COND_IN_COND_TEXT",
+          "label": "Text is contained in Value"
+        },
+        {
+          "name": "textIsNotContainedInValue",
+          "returnValue": "DISPLAY_COND_NOT_IN_COND_TEXT",
+          "label": "Text is NOT contained in Value"
+        },
+        {
+          "name": "userPreference=value",
+          "returnValue": "USER_PREF_IN_COND_EQ_COND2",
+          "label": "User Preference = Value"
+        },
+        {
+          "name": "userPreference!=value",
+          "returnValue": "USER_PREF_IN_COND_NOT_EQ_COND2",
+          "label": "User Preference != Value"
+        },
+        {
+          "name": "currentPage=page",
+          "returnValue": "CURRENT_PAGE_EQUALS_CONDITION",
+          "label": "Current Page = Page"
+        },
+        {
+          "name": "currentPage!=page",
+          "returnValue": "CURRENT_PAGE_NOT_EQUAL_CONDITION",
+          "label": "Current Page != Page"
+        },
+        {
+          "name": "currentPageInList",
+          "returnValue": "CURRENT_PAGE_IN_CONDITION",
+          "label": "Current Page is in comma delimited list"
+        },
+        {
+          "name": "currentPageNotInList",
+          "returnValue": "CURRENT_PAGE_NOT_IN_CONDITION",
+          "label": "Current Page is NOT in comma delimited list"
+        },
+        {
+          "name": "currentPage=pageSubmitted",
+          "returnValue": "WHEN_THIS_PAGE_SUBMITTED",
+          "label": "Current Page = Page Submitted (posted)"
+        },
+        {
+          "name": "currentPage!=pageSubmitted",
+          "returnValue": "WHEN_THIS_PAGE_NOT_SUBMITTED",
+          "label": "Current Page != Page Submitted (posted)"
+        },
+        {
+          "name": "currentPageIsInPrinterFriendlyMode",
+          "returnValue": "PAGE_IS_IN_PRINTER_FRIENDLY_MODE",
+          "label": "Current Page is in Printer Friendly Mode"
+        },
+        {
+          "name": "currentPageIsNotInPrinterFriendlyMode",
+          "returnValue": "PAGE_IS_NOT_IN_PRINTER_FRIENDLY_MODE",
+          "label": "Current page is NOT in Printer Friendly Mode"
+        },
+        {
+          "name": "pageRegionIsReadOnly",
+          "returnValue": "IS_READ_ONLY",
+          "label": "Page/Region is Read Only"
+        },
+        {
+          "name": "pageRegionIsNotReadOnly",
+          "returnValue": "IS_NOT_READ_ONLY",
+          "label": "Page/Region is NOT Read Only"
+        },
+        {
+          "name": "userIsAuthenticated",
+          "returnValue": "USER_IS_NOT_PUBLIC_USER",
+          "label": "User is Authenticated (not public)"
+        },
+        {
+          "name": "userIsPublicUser",
+          "returnValue": "USER_IS_PUBLIC_USER",
+          "label": "User is the Public User (user has not authenticated)"
+        },
+        {
+          "name": "inlineValidationErrorsDisplayed",
+          "returnValue": "DISPLAYING_INLINE_VALIDATION_ERRORS",
+          "label": "Inline Validation Errors displayed"
+        },
+        {
+          "name": "inlineValidationErrorsNotDisplayed",
+          "returnValue": "NOT_DISPLAYING_INLINE_VALIDATION_ERRORS",
+          "label": "Inline Validation Errors NOT displayed"
+        },
+        {
+          "name": "sqlReportsOkToShowForwardButton",
+          "returnValue": "MAX_ROWS_LT_ROWS_FETCHED",
+          "label": "SQL Reports (OK to show the forward button)"
+        },
+        {
+          "name": "sqlReportsOkToShowBackButton",
+          "returnValue": "MIN_ROW_GT_THAN_ONE",
+          "label": "SQL Reports (OK to show the back button)"
+        },
+        {
+          "name": "currentLanguage=value",
+          "returnValue": "CURRENT_LANG_EQ_COND1",
+          "label": "Current Language = Value"
+        },
+        {
+          "name": "currentLanguage!=value",
+          "returnValue": "CURRENT_LANG_NOT_EQ_COND1",
+          "label": "Current Language != Value"
+        },
+        {
+          "name": "currentLanguageIsContainedInValue",
+          "returnValue": "CURRENT_LANG_IN_COND1",
+          "label": "Current Language is contained in Value"
+        },
+        {
+          "name": "currentLanguageIsNotContainedInValue",
+          "returnValue": "CURRENT_LANG_NOT_IN_COND1",
+          "label": "Current Language is NOT contained in Value"
+        },
+        {
+          "name": "clientBrowserIsMozilla",
+          "returnValue": "BROWSER_IS_NSCP",
+          "label": "Client Browser is Mozilla, Netscape 6.x/7x or higher"
+        },
+        {
+          "name": "clientBrowserIsIE7higher",
+          "returnValue": "BROWSER_IS_MSIE",
+          "label": "Client Browser is Microsoft Internet Explorer 7.0 or higher"
+        },
+        {
+          "name": "clientBrowserIsXhtmlCssCapable",
+          "returnValue": "BROWSER_IS_MSIE_OR_NSCP",
+          "label": "Client Browser is XHTML / CSS capable browser"
+        },
+        {
+          "name": "clientBrowserIsOther",
+          "returnValue": "BROWSER_IS_OTHER",
+          "label": "Client Browser is Other browsers (or older version)"
+        },
+        {
+          "name": "cgiEnvDadName=value",
+          "returnValue": "DAD_NAME_EQ_CONDITION",
+          "label": "CGI_ENV: DAD_NAME = Value"
+        },
+        {
+          "name": "cgiEnvDadName!=value",
+          "returnValue": "DAD_NAME_NOT_EQ_CONDITION",
+          "label": "CGI_ENV: DAD_NAME != Value"
+        },
+        {
+          "name": "cgiEnvServerName=value",
+          "returnValue": "SERVER_NAME_EQ_CONDITION",
+          "label": "CGI_ENV: SERVER_NAME = Value"
+        },
+        {
+          "name": "cgiEnvServerName!=value",
+          "returnValue": "SERVER_NAME_NOT_EQ_CONDITION",
+          "label": "CGI_ENV: SERVER_NAME != Value"
+        },
+        {
+          "name": "cgiEnvHttpHost=value",
+          "returnValue": "HTTP_HOST_EQ_CONDITION",
+          "label": "CGI_ENV: HTTP_HOST = Value"
+        },
+        {
+          "name": "cgiEnvHttpHost!=value",
+          "returnValue": "HTTP_HOST_NOT_EQ_CONDITION",
+          "label": "CGI_ENV: HTTP_HOST != Value"
+        },
+        {
+          "name": "never",
+          "returnValue": "NEVER",
+          "label": "Never"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_EQUALS",
+            "propertyId": "222",
+            "path": "region.serverCache.caching",
+            "hasToExist": true,
+            "value": "NOCACHE"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Type (select list) in region.serverCache.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5001",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5001",
+      "builderLabel": "SQL Query",
+      "apexlangPath": "region.serverCache.sqlQuery",
+      "type": "SQL",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5000",
+            "path": "region.serverCache.type",
+            "hasToExist": true,
+            "values": [
+              "EXISTS",
+              "NOT_EXISTS"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "SQL Query (sql) in region.serverCache.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5002",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5002",
+      "builderLabel": "Value",
+      "apexlangPath": "region.serverCache.value",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5000",
+            "path": "region.serverCache.type",
+            "hasToExist": true,
+            "values": [
+              "REQUEST_EQUALS_CONDITION",
+              "REQUEST_NOT_EQUAL_CONDITION",
+              "REQUEST_IN_CONDITION",
+              "REQUEST_NOT_IN_CONDITION",
+              "CURRENT_LANG_IN_COND1",
+              "CURRENT_LANG_NOT_IN_COND1",
+              "CURRENT_LANG_NOT_EQ_COND1",
+              "CURRENT_LANG_EQ_COND1",
+              "DAD_NAME_EQ_CONDITION",
+              "DAD_NAME_NOT_EQ_CONDITION",
+              "SERVER_NAME_EQ_CONDITION",
+              "SERVER_NAME_NOT_EQ_CONDITION",
+              "HTTP_HOST_EQ_CONDITION",
+              "HTTP_HOST_NOT_EQ_CONDITION"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Value (text) in region.serverCache.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5003",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5003",
+      "builderLabel": "Item",
+      "apexlangPath": "region.serverCache.item",
+      "type": "ITEM",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5000",
+            "path": "region.serverCache.type",
+            "hasToExist": true,
+            "values": [
+              "VAL_OF_ITEM_IN_COND_EQ_COND2",
+              "VAL_OF_ITEM_IN_COND_NOT_EQ_COND2",
+              "VALUE_OF_ITEM_IN_COND_1_EQ_COND_2",
+              "VALUE_OF_ITEM_IN_COND_1_NOT_EQ_COND_2",
+              "ITEM_IS_NULL",
+              "ITEM_IS_NOT_NULL",
+              "ITEM_IS_ZERO",
+              "ITEM_IS_NOT_ZERO",
+              "ITEM_IS_NULL_OR_ZERO",
+              "ITEM_NOT_NULL_OR_ZERO",
+              "ITEM_CONTAINS_NO_SPACES",
+              "ITEM_IS_NUMERIC",
+              "ITEM_IS_NOT_NUMERIC",
+              "ITEM_IS_ALPHANUMERIC",
+              "VALUE_OF_ITEM_IN_CONDITION_IN_COLON_DELIMITED_LIST",
+              "VALUE_OF_ITEM_IN_CONDITION_NOT_IN_COLON_DELIMITED_LIST"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Item (item) in region.serverCache.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5004",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5004",
+      "builderLabel": "List",
+      "apexlangPath": "region.serverCache.list",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5000",
+            "path": "region.serverCache.type",
+            "hasToExist": true,
+            "values": [
+              "VALUE_OF_ITEM_IN_CONDITION_IN_COLON_DELIMITED_LIST",
+              "VALUE_OF_ITEM_IN_CONDITION_NOT_IN_COLON_DELIMITED_LIST"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "List (text) in region.serverCache.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5005",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5005",
+      "builderLabel": "Preference",
+      "apexlangPath": "region.serverCache.preference",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5000",
+            "path": "region.serverCache.type",
+            "hasToExist": true,
+            "values": [
+              "USER_PREF_IN_COND_EQ_COND2",
+              "USER_PREF_IN_COND_NOT_EQ_COND2"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Preference (text) in region.serverCache.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5006",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5006",
+      "builderLabel": "Page",
+      "apexlangPath": "region.serverCache.page",
+      "type": "PAGE",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5000",
+            "path": "region.serverCache.type",
+            "hasToExist": true,
+            "values": [
+              "CURRENT_PAGE_EQUALS_CONDITION",
+              "CURRENT_PAGE_NOT_EQUAL_CONDITION"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Page (page) in region.serverCache.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5007",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5007",
+      "builderLabel": "Pages",
+      "apexlangPath": "region.serverCache.pages",
+      "type": "PAGE",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5000",
+            "path": "region.serverCache.type",
+            "hasToExist": true,
+            "values": [
+              "CURRENT_PAGE_IN_CONDITION",
+              "CURRENT_PAGE_NOT_IN_CONDITION"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Pages (page) in region.serverCache.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5008",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5008",
+      "builderLabel": "Text",
+      "apexlangPath": "region.serverCache.text",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5000",
+            "path": "region.serverCache.type",
+            "hasToExist": true,
+            "values": [
+              "CONDITION1_IN_VALUE_OF_ITEM_IN_CONDITION2",
+              "DISPLAY_COND_IN_COND_TEXT",
+              "DISPLAY_COND_NOT_IN_COND_TEXT",
+              "DISPLAY_COND_EQUAL_COND_TEXT",
+              "DISP_COND_NOT_EQUAL_COND_TEXT"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Text (text) in region.serverCache.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5009",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5009",
+      "builderLabel": "Value",
+      "apexlangPath": "region.serverCache.value",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5000",
+            "path": "region.serverCache.type",
+            "hasToExist": true,
+            "values": [
+              "VAL_OF_ITEM_IN_COND_EQ_COND2",
+              "VAL_OF_ITEM_IN_COND_NOT_EQ_COND2",
+              "VALUE_OF_ITEM_IN_COND_1_EQ_COND_2",
+              "VALUE_OF_ITEM_IN_COND_1_NOT_EQ_COND_2",
+              "USER_PREF_IN_COND_EQ_COND2",
+              "USER_PREF_IN_COND_NOT_EQ_COND2"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Value (text) in region.serverCache.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5010",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5010",
+      "builderLabel": "Item",
+      "apexlangPath": "region.serverCache.item",
+      "type": "ITEM",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5000",
+            "path": "region.serverCache.type",
+            "hasToExist": true,
+            "value": "CONDITION1_IN_VALUE_OF_ITEM_IN_CONDITION2"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Item (item) in region.serverCache.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5011",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5011",
+      "builderLabel": "Value",
+      "apexlangPath": "region.serverCache.value",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5000",
+            "path": "region.serverCache.type",
+            "hasToExist": true,
+            "values": [
+              "DISPLAY_COND_IN_COND_TEXT",
+              "DISPLAY_COND_NOT_IN_COND_TEXT",
+              "DISPLAY_COND_EQUAL_COND_TEXT",
+              "DISP_COND_NOT_EQUAL_COND_TEXT"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Value (text) in region.serverCache.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5012",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5012",
+      "builderLabel": "Language",
+      "apexlangPath": "region.serverCache.language",
+      "type": "CODE LANGUAGE",
+      "required": true,
+      "defaultValue": "PLSQL",
+      "values": [
+        {
+          "name": "sql",
+          "returnValue": "SQL",
+          "label": "SQL"
+        },
+        {
+          "name": "plsql",
+          "returnValue": "PLSQL",
+          "label": "PL/SQL"
+        },
+        {
+          "name": "javaScript-mle",
+          "returnValue": "JAVASCRIPT",
+          "label": "JavaScript (MLE)"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5000",
+            "path": "region.serverCache.type",
+            "hasToExist": true,
+            "value": "EXPRESSION"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Language (code language) in region.serverCache.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5013",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5013",
+      "builderLabel": "SQL Expression",
+      "apexlangPath": "region.serverCache.sqlExpression",
+      "type": "SQL EXPRESSION BOOLEAN",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5012",
+            "path": "region.serverCache.language",
+            "hasToExist": true,
+            "value": "SQL"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "SQL Expression (sql expression boolean) in region.serverCache.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5014",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5014",
+      "builderLabel": "PL/SQL Expression",
+      "apexlangPath": "region.serverCache.plsqlExpression",
+      "type": "PLSQL EXPRESSION BOOLEAN",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5012",
+            "path": "region.serverCache.language",
+            "hasToExist": true,
+            "value": "PLSQL"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "PL/SQL Expression (plsql expression boolean) in region.serverCache.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5015",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5015",
+      "builderLabel": "JavaScript Expression",
+      "apexlangPath": "region.serverCache.javaScriptExpression",
+      "type": "MLE JAVASCRIPT EXPRESSION BOOLEAN",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5012",
+            "path": "region.serverCache.language",
+            "hasToExist": true,
+            "value": "JAVASCRIPT"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "JavaScript Expression (mle javascript expression boolean) in region.serverCache.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5032",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5032",
+      "builderLabel": "Language",
+      "apexlangPath": "region.serverCache.language",
+      "type": "CODE LANGUAGE",
+      "required": true,
+      "defaultValue": "PLSQL",
+      "values": [
+        {
+          "name": "plsql",
+          "returnValue": "PLSQL",
+          "label": "PL/SQL"
+        },
+        {
+          "name": "javaScript-mle",
+          "returnValue": "JAVASCRIPT",
+          "label": "JavaScript (MLE)"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5000",
+            "path": "region.serverCache.type",
+            "hasToExist": true,
+            "value": "FUNCTION_BODY"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Language (code language) in region.serverCache.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5033",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5033",
+      "builderLabel": "PL/SQL Function Body",
+      "apexlangPath": "region.serverCache.plsqlFunctionBody",
+      "type": "PLSQL FUNCTION BODY BOOLEAN",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5032",
+            "path": "region.serverCache.language",
+            "hasToExist": true,
+            "value": "PLSQL"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "PL/SQL Function Body (plsql function body boolean) in region.serverCache.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5034",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5034",
+      "builderLabel": "JavaScript Function Body",
+      "apexlangPath": "region.serverCache.javaScriptFunctionBody",
+      "type": "MLE JAVASCRIPT FUNCTION BODY BOOLEAN",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5032",
+            "path": "region.serverCache.language",
+            "hasToExist": true,
+            "value": "JAVASCRIPT"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "JavaScript Function Body (mle javascript function body boolean) in region.serverCache.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5050",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5050",
+      "builderLabel": "Type",
+      "apexlangPath": "region.readOnly.type",
+      "type": "SELECT LIST",
+      "required": false,
+      "defaultValue": null,
+      "values": [
+        {
+          "name": "always",
+          "returnValue": "ALWAYS",
+          "label": "Always"
+        },
+        {
+          "name": "rowsReturned",
+          "returnValue": "EXISTS",
+          "label": "Rows returned"
+        },
+        {
+          "name": "noRowsReturned",
+          "returnValue": "NOT_EXISTS",
+          "label": "No Rows returned"
+        },
+        {
+          "name": "expression",
+          "returnValue": "EXPRESSION",
+          "label": "Expression"
+        },
+        {
+          "name": "functionBody",
+          "returnValue": "FUNCTION_BODY",
+          "label": "Function Body"
+        },
+        {
+          "name": "request=Value",
+          "returnValue": "REQUEST_EQUALS_CONDITION",
+          "label": "Request = Value"
+        },
+        {
+          "name": "request!=Value",
+          "returnValue": "REQUEST_NOT_EQUAL_CONDITION",
+          "label": "Request != Value"
+        },
+        {
+          "name": "requestIsContainedInValue",
+          "returnValue": "REQUEST_IN_CONDITION",
+          "label": "Request is contained in Value"
+        },
+        {
+          "name": "requestIsNotContainedInValue",
+          "returnValue": "REQUEST_NOT_IN_CONDITION",
+          "label": "Request is NOT contained in Value"
+        },
+        {
+          "name": "item=value",
+          "returnValue": "VAL_OF_ITEM_IN_COND_EQ_COND2",
+          "label": "Item = Value"
+        },
+        {
+          "name": "item!=value",
+          "returnValue": "VAL_OF_ITEM_IN_COND_NOT_EQ_COND2",
+          "label": "Item != Value"
+        },
+        {
+          "name": "itemIsNull",
+          "returnValue": "ITEM_IS_NULL",
+          "label": "Item is NULL"
+        },
+        {
+          "name": "itemIsNotNull",
+          "returnValue": "ITEM_IS_NOT_NULL",
+          "label": "Item is NOT NULL"
+        },
+        {
+          "name": "itemIsZero",
+          "returnValue": "ITEM_IS_ZERO",
+          "label": "Item is zero"
+        },
+        {
+          "name": "itemIsNotZero",
+          "returnValue": "ITEM_IS_NOT_ZERO",
+          "label": "Item is NOT zero"
+        },
+        {
+          "name": "itemIsNullOrZero",
+          "returnValue": "ITEM_IS_NULL_OR_ZERO",
+          "label": "Item is NULL or zero"
+        },
+        {
+          "name": "itemIsNotNullAndNotZero",
+          "returnValue": "ITEM_NOT_NULL_OR_ZERO",
+          "label": "Item is NOT NULL and NOT zero"
+        },
+        {
+          "name": "itemContainsNoSpaces",
+          "returnValue": "ITEM_CONTAINS_NO_SPACES",
+          "label": "Item contains no spaces"
+        },
+        {
+          "name": "itemIsNumeric",
+          "returnValue": "ITEM_IS_NUMERIC",
+          "label": "Item is numeric"
+        },
+        {
+          "name": "itemIsNotNumeric",
+          "returnValue": "ITEM_IS_NOT_NUMERIC",
+          "label": "Item is NOT numeric"
+        },
+        {
+          "name": "itemIsAlphanumeric",
+          "returnValue": "ITEM_IS_ALPHANUMERIC",
+          "label": "Item is alphanumeric"
+        },
+        {
+          "name": "itemIsInColonDelimitedList",
+          "returnValue": "VALUE_OF_ITEM_IN_CONDITION_IN_COLON_DELIMITED_LIST",
+          "label": "Item is in colon delimited list"
+        },
+        {
+          "name": "itemIsNotInColonDelimitedList",
+          "returnValue": "VALUE_OF_ITEM_IN_CONDITION_NOT_IN_COLON_DELIMITED_LIST",
+          "label": "Item is NOT in colon delimited list"
+        },
+        {
+          "name": "textIsContainedInItem",
+          "returnValue": "CONDITION1_IN_VALUE_OF_ITEM_IN_CONDITION2",
+          "label": "Text is contained in Item"
+        },
+        {
+          "name": "text=value",
+          "returnValue": "DISPLAY_COND_EQUAL_COND_TEXT",
+          "label": "Text = Value"
+        },
+        {
+          "name": "text!=value",
+          "returnValue": "DISP_COND_NOT_EQUAL_COND_TEXT",
+          "label": "Text != Value"
+        },
+        {
+          "name": "textIsContainedInValue",
+          "returnValue": "DISPLAY_COND_IN_COND_TEXT",
+          "label": "Text is contained in Value"
+        },
+        {
+          "name": "textIsNotContainedInValue",
+          "returnValue": "DISPLAY_COND_NOT_IN_COND_TEXT",
+          "label": "Text is NOT contained in Value"
+        },
+        {
+          "name": "userPreference=value",
+          "returnValue": "USER_PREF_IN_COND_EQ_COND2",
+          "label": "User Preference = Value"
+        },
+        {
+          "name": "userPreference!=value",
+          "returnValue": "USER_PREF_IN_COND_NOT_EQ_COND2",
+          "label": "User Preference != Value"
+        },
+        {
+          "name": "currentPage=page",
+          "returnValue": "CURRENT_PAGE_EQUALS_CONDITION",
+          "label": "Current Page = Page"
+        },
+        {
+          "name": "currentPage!=page",
+          "returnValue": "CURRENT_PAGE_NOT_EQUAL_CONDITION",
+          "label": "Current Page != Page"
+        },
+        {
+          "name": "currentPageInList",
+          "returnValue": "CURRENT_PAGE_IN_CONDITION",
+          "label": "Current Page is in comma delimited list"
+        },
+        {
+          "name": "currentPageNotInList",
+          "returnValue": "CURRENT_PAGE_NOT_IN_CONDITION",
+          "label": "Current Page is NOT in comma delimited list"
+        },
+        {
+          "name": "currentPage=pageSubmitted",
+          "returnValue": "WHEN_THIS_PAGE_SUBMITTED",
+          "label": "Current Page = Page Submitted (posted)"
+        },
+        {
+          "name": "currentPage!=pageSubmitted",
+          "returnValue": "WHEN_THIS_PAGE_NOT_SUBMITTED",
+          "label": "Current Page != Page Submitted (posted)"
+        },
+        {
+          "name": "currentPageIsInPrinterFriendlyMode",
+          "returnValue": "PAGE_IS_IN_PRINTER_FRIENDLY_MODE",
+          "label": "Current Page is in Printer Friendly Mode"
+        },
+        {
+          "name": "currentPageIsNotInPrinterFriendlyMode",
+          "returnValue": "PAGE_IS_NOT_IN_PRINTER_FRIENDLY_MODE",
+          "label": "Current page is NOT in Printer Friendly Mode"
+        },
+        {
+          "name": "pageRegionIsReadOnly",
+          "returnValue": "IS_READ_ONLY",
+          "label": "Page/Region is Read Only"
+        },
+        {
+          "name": "pageRegionIsNotReadOnly",
+          "returnValue": "IS_NOT_READ_ONLY",
+          "label": "Page/Region is NOT Read Only"
+        },
+        {
+          "name": "userIsAuthenticated",
+          "returnValue": "USER_IS_NOT_PUBLIC_USER",
+          "label": "User is Authenticated (not public)"
+        },
+        {
+          "name": "userIsPublicUser",
+          "returnValue": "USER_IS_PUBLIC_USER",
+          "label": "User is the Public User (user has not authenticated)"
+        },
+        {
+          "name": "inlineValidationErrorsDisplayed",
+          "returnValue": "DISPLAYING_INLINE_VALIDATION_ERRORS",
+          "label": "Inline Validation Errors displayed"
+        },
+        {
+          "name": "inlineValidationErrorsNotDisplayed",
+          "returnValue": "NOT_DISPLAYING_INLINE_VALIDATION_ERRORS",
+          "label": "Inline Validation Errors NOT displayed"
+        },
+        {
+          "name": "sqlReportsOkToShowForwardButton",
+          "returnValue": "MAX_ROWS_LT_ROWS_FETCHED",
+          "label": "SQL Reports (OK to show the forward button)"
+        },
+        {
+          "name": "sqlReportsOkToShowBackButton",
+          "returnValue": "MIN_ROW_GT_THAN_ONE",
+          "label": "SQL Reports (OK to show the back button)"
+        },
+        {
+          "name": "currentLanguage=value",
+          "returnValue": "CURRENT_LANG_EQ_COND1",
+          "label": "Current Language = Value"
+        },
+        {
+          "name": "currentLanguage!=value",
+          "returnValue": "CURRENT_LANG_NOT_EQ_COND1",
+          "label": "Current Language != Value"
+        },
+        {
+          "name": "currentLanguageIsContainedInValue",
+          "returnValue": "CURRENT_LANG_IN_COND1",
+          "label": "Current Language is contained in Value"
+        },
+        {
+          "name": "currentLanguageIsNotContainedInValue",
+          "returnValue": "CURRENT_LANG_NOT_IN_COND1",
+          "label": "Current Language is NOT contained in Value"
+        },
+        {
+          "name": "clientBrowserIsMozilla",
+          "returnValue": "BROWSER_IS_NSCP",
+          "label": "Client Browser is Mozilla, Netscape 6.x/7x or higher"
+        },
+        {
+          "name": "clientBrowserIsIE7higher",
+          "returnValue": "BROWSER_IS_MSIE",
+          "label": "Client Browser is Microsoft Internet Explorer 7.0 or higher"
+        },
+        {
+          "name": "clientBrowserIsXhtmlCssCapable",
+          "returnValue": "BROWSER_IS_MSIE_OR_NSCP",
+          "label": "Client Browser is XHTML / CSS capable browser"
+        },
+        {
+          "name": "clientBrowserIsOther",
+          "returnValue": "BROWSER_IS_OTHER",
+          "label": "Client Browser is Other browsers (or older version)"
+        },
+        {
+          "name": "cgiEnvDadName=value",
+          "returnValue": "DAD_NAME_EQ_CONDITION",
+          "label": "CGI_ENV: DAD_NAME = Value"
+        },
+        {
+          "name": "cgiEnvDadName!=value",
+          "returnValue": "DAD_NAME_NOT_EQ_CONDITION",
+          "label": "CGI_ENV: DAD_NAME != Value"
+        },
+        {
+          "name": "cgiEnvServerName=value",
+          "returnValue": "SERVER_NAME_EQ_CONDITION",
+          "label": "CGI_ENV: SERVER_NAME = Value"
+        },
+        {
+          "name": "cgiEnvServerName!=value",
+          "returnValue": "SERVER_NAME_NOT_EQ_CONDITION",
+          "label": "CGI_ENV: SERVER_NAME != Value"
+        },
+        {
+          "name": "cgiEnvHttpHost=value",
+          "returnValue": "HTTP_HOST_EQ_CONDITION",
+          "label": "CGI_ENV: HTTP_HOST = Value"
+        },
+        {
+          "name": "cgiEnvHttpHost!=value",
+          "returnValue": "HTTP_HOST_NOT_EQ_CONDITION",
+          "label": "CGI_ENV: HTTP_HOST != Value"
+        },
+        {
+          "name": "never",
+          "returnValue": "NEVER",
+          "label": "Never"
+        }
+      ],
+      "condition": null,
+      "maxLength": null,
+      "description": "Type (select list) in region.readOnly.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5051",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5051",
+      "builderLabel": "SQL Query",
+      "apexlangPath": "region.readOnly.sqlQuery",
+      "type": "SQL",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5050",
+            "path": "region.readOnly.type",
+            "hasToExist": true,
+            "values": [
+              "EXISTS",
+              "NOT_EXISTS"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "SQL Query (sql) in region.readOnly.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5052",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5052",
+      "builderLabel": "Value",
+      "apexlangPath": "region.readOnly.value",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5050",
+            "path": "region.readOnly.type",
+            "hasToExist": true,
+            "values": [
+              "REQUEST_EQUALS_CONDITION",
+              "REQUEST_NOT_EQUAL_CONDITION",
+              "REQUEST_IN_CONDITION",
+              "REQUEST_NOT_IN_CONDITION",
+              "CURRENT_LANG_IN_COND1",
+              "CURRENT_LANG_NOT_IN_COND1",
+              "CURRENT_LANG_NOT_EQ_COND1",
+              "CURRENT_LANG_EQ_COND1",
+              "DAD_NAME_EQ_CONDITION",
+              "DAD_NAME_NOT_EQ_CONDITION",
+              "SERVER_NAME_EQ_CONDITION",
+              "SERVER_NAME_NOT_EQ_CONDITION",
+              "HTTP_HOST_EQ_CONDITION",
+              "HTTP_HOST_NOT_EQ_CONDITION"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Value (text) in region.readOnly.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5053",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5053",
+      "builderLabel": "Item",
+      "apexlangPath": "region.readOnly.item",
+      "type": "ITEM",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5050",
+            "path": "region.readOnly.type",
+            "hasToExist": true,
+            "values": [
+              "VAL_OF_ITEM_IN_COND_EQ_COND2",
+              "VAL_OF_ITEM_IN_COND_NOT_EQ_COND2",
+              "VALUE_OF_ITEM_IN_COND_1_EQ_COND_2",
+              "VALUE_OF_ITEM_IN_COND_1_NOT_EQ_COND_2",
+              "ITEM_IS_NULL",
+              "ITEM_IS_NOT_NULL",
+              "ITEM_IS_ZERO",
+              "ITEM_IS_NOT_ZERO",
+              "ITEM_IS_NULL_OR_ZERO",
+              "ITEM_NOT_NULL_OR_ZERO",
+              "ITEM_CONTAINS_NO_SPACES",
+              "ITEM_IS_NUMERIC",
+              "ITEM_IS_NOT_NUMERIC",
+              "ITEM_IS_ALPHANUMERIC",
+              "VALUE_OF_ITEM_IN_CONDITION_IN_COLON_DELIMITED_LIST",
+              "VALUE_OF_ITEM_IN_CONDITION_NOT_IN_COLON_DELIMITED_LIST"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Item (item) in region.readOnly.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5054",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5054",
+      "builderLabel": "List",
+      "apexlangPath": "region.readOnly.list",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5050",
+            "path": "region.readOnly.type",
+            "hasToExist": true,
+            "values": [
+              "VALUE_OF_ITEM_IN_CONDITION_IN_COLON_DELIMITED_LIST",
+              "VALUE_OF_ITEM_IN_CONDITION_NOT_IN_COLON_DELIMITED_LIST"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "List (text) in region.readOnly.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5055",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5055",
+      "builderLabel": "Preference",
+      "apexlangPath": "region.readOnly.preference",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5050",
+            "path": "region.readOnly.type",
+            "hasToExist": true,
+            "values": [
+              "USER_PREF_IN_COND_EQ_COND2",
+              "USER_PREF_IN_COND_NOT_EQ_COND2"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Preference (text) in region.readOnly.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5056",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5056",
+      "builderLabel": "Page",
+      "apexlangPath": "region.readOnly.page",
+      "type": "PAGE",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5050",
+            "path": "region.readOnly.type",
+            "hasToExist": true,
+            "values": [
+              "CURRENT_PAGE_EQUALS_CONDITION",
+              "CURRENT_PAGE_NOT_EQUAL_CONDITION"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Page (page) in region.readOnly.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5057",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5057",
+      "builderLabel": "Pages",
+      "apexlangPath": "region.readOnly.pages",
+      "type": "PAGE",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5050",
+            "path": "region.readOnly.type",
+            "hasToExist": true,
+            "values": [
+              "CURRENT_PAGE_IN_CONDITION",
+              "CURRENT_PAGE_NOT_IN_CONDITION"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Pages (page) in region.readOnly.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5058",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5058",
+      "builderLabel": "Text",
+      "apexlangPath": "region.readOnly.text",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5050",
+            "path": "region.readOnly.type",
+            "hasToExist": true,
+            "values": [
+              "CONDITION1_IN_VALUE_OF_ITEM_IN_CONDITION2",
+              "DISPLAY_COND_IN_COND_TEXT",
+              "DISPLAY_COND_NOT_IN_COND_TEXT",
+              "DISPLAY_COND_EQUAL_COND_TEXT",
+              "DISP_COND_NOT_EQUAL_COND_TEXT"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Text (text) in region.readOnly.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5059",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5059",
+      "builderLabel": "Value",
+      "apexlangPath": "region.readOnly.value",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5050",
+            "path": "region.readOnly.type",
+            "hasToExist": true,
+            "values": [
+              "VAL_OF_ITEM_IN_COND_EQ_COND2",
+              "VAL_OF_ITEM_IN_COND_NOT_EQ_COND2",
+              "VALUE_OF_ITEM_IN_COND_1_EQ_COND_2",
+              "VALUE_OF_ITEM_IN_COND_1_NOT_EQ_COND_2",
+              "USER_PREF_IN_COND_EQ_COND2",
+              "USER_PREF_IN_COND_NOT_EQ_COND2"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Value (text) in region.readOnly.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5060",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5060",
+      "builderLabel": "Item",
+      "apexlangPath": "region.readOnly.item",
+      "type": "ITEM",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5050",
+            "path": "region.readOnly.type",
+            "hasToExist": true,
+            "value": "CONDITION1_IN_VALUE_OF_ITEM_IN_CONDITION2"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Item (item) in region.readOnly.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5061",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5061",
+      "builderLabel": "Value",
+      "apexlangPath": "region.readOnly.value",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5050",
+            "path": "region.readOnly.type",
+            "hasToExist": true,
+            "values": [
+              "DISPLAY_COND_IN_COND_TEXT",
+              "DISPLAY_COND_NOT_IN_COND_TEXT",
+              "DISPLAY_COND_EQUAL_COND_TEXT",
+              "DISP_COND_NOT_EQUAL_COND_TEXT"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Value (text) in region.readOnly.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5062",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5062",
+      "builderLabel": "Language",
+      "apexlangPath": "region.readOnly.language",
+      "type": "CODE LANGUAGE",
+      "required": true,
+      "defaultValue": "PLSQL",
+      "values": [
+        {
+          "name": "sql",
+          "returnValue": "SQL",
+          "label": "SQL"
+        },
+        {
+          "name": "plsql",
+          "returnValue": "PLSQL",
+          "label": "PL/SQL"
+        },
+        {
+          "name": "javaScript-mle",
+          "returnValue": "JAVASCRIPT",
+          "label": "JavaScript (MLE)"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5050",
+            "path": "region.readOnly.type",
+            "hasToExist": true,
+            "value": "EXPRESSION"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Language (code language) in region.readOnly.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5063",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5063",
+      "builderLabel": "SQL Expression",
+      "apexlangPath": "region.readOnly.sqlExpression",
+      "type": "SQL EXPRESSION BOOLEAN",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5062",
+            "path": "region.readOnly.language",
+            "hasToExist": true,
+            "value": "SQL"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "SQL Expression (sql expression boolean) in region.readOnly.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5064",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5064",
+      "builderLabel": "PL/SQL Expression",
+      "apexlangPath": "region.readOnly.plsqlExpression",
+      "type": "PLSQL EXPRESSION BOOLEAN",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5062",
+            "path": "region.readOnly.language",
+            "hasToExist": true,
+            "value": "PLSQL"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "PL/SQL Expression (plsql expression boolean) in region.readOnly.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5065",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5065",
+      "builderLabel": "JavaScript Expression",
+      "apexlangPath": "region.readOnly.javaScriptExpression",
+      "type": "MLE JAVASCRIPT EXPRESSION BOOLEAN",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5062",
+            "path": "region.readOnly.language",
+            "hasToExist": true,
+            "value": "JAVASCRIPT"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "JavaScript Expression (mle javascript expression boolean) in region.readOnly.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5082",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5082",
+      "builderLabel": "Language",
+      "apexlangPath": "region.readOnly.language",
+      "type": "CODE LANGUAGE",
+      "required": true,
+      "defaultValue": "PLSQL",
+      "values": [
+        {
+          "name": "plsql",
+          "returnValue": "PLSQL",
+          "label": "PL/SQL"
+        },
+        {
+          "name": "javaScript-mle",
+          "returnValue": "JAVASCRIPT",
+          "label": "JavaScript (MLE)"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5050",
+            "path": "region.readOnly.type",
+            "hasToExist": true,
+            "value": "FUNCTION_BODY"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Language (code language) in region.readOnly.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5083",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5083",
+      "builderLabel": "PL/SQL Function Body",
+      "apexlangPath": "region.readOnly.plsqlFunctionBody",
+      "type": "PLSQL FUNCTION BODY BOOLEAN",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5082",
+            "path": "region.readOnly.language",
+            "hasToExist": true,
+            "value": "PLSQL"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "PL/SQL Function Body (plsql function body boolean) in region.readOnly.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5084",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5084",
+      "builderLabel": "JavaScript Function Body",
+      "apexlangPath": "region.readOnly.javaScriptFunctionBody",
+      "type": "MLE JAVASCRIPT FUNCTION BODY BOOLEAN",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5082",
+            "path": "region.readOnly.language",
+            "hasToExist": true,
+            "value": "JAVASCRIPT"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "JavaScript Function Body (mle javascript function body boolean) in region.readOnly.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5100",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5100",
+      "builderLabel": "Type",
+      "apexlangPath": "region.serverSideCondition.type",
+      "type": "SELECT LIST",
+      "required": false,
+      "defaultValue": null,
+      "values": [
+        {
+          "name": "always",
+          "returnValue": "ALWAYS",
+          "label": "Always"
+        },
+        {
+          "name": "rowsReturned",
+          "returnValue": "EXISTS",
+          "label": "Rows returned"
+        },
+        {
+          "name": "noRowsReturned",
+          "returnValue": "NOT_EXISTS",
+          "label": "No Rows returned"
+        },
+        {
+          "name": "expression",
+          "returnValue": "EXPRESSION",
+          "label": "Expression"
+        },
+        {
+          "name": "functionBody",
+          "returnValue": "FUNCTION_BODY",
+          "label": "Function Body"
+        },
+        {
+          "name": "request=Value",
+          "returnValue": "REQUEST_EQUALS_CONDITION",
+          "label": "Request = Value"
+        },
+        {
+          "name": "request!=Value",
+          "returnValue": "REQUEST_NOT_EQUAL_CONDITION",
+          "label": "Request != Value"
+        },
+        {
+          "name": "requestIsContainedInValue",
+          "returnValue": "REQUEST_IN_CONDITION",
+          "label": "Request is contained in Value"
+        },
+        {
+          "name": "requestIsNotContainedInValue",
+          "returnValue": "REQUEST_NOT_IN_CONDITION",
+          "label": "Request is NOT contained in Value"
+        },
+        {
+          "name": "item=value",
+          "returnValue": "VAL_OF_ITEM_IN_COND_EQ_COND2",
+          "label": "Item = Value"
+        },
+        {
+          "name": "item!=value",
+          "returnValue": "VAL_OF_ITEM_IN_COND_NOT_EQ_COND2",
+          "label": "Item != Value"
+        },
+        {
+          "name": "itemIsNull",
+          "returnValue": "ITEM_IS_NULL",
+          "label": "Item is NULL"
+        },
+        {
+          "name": "itemIsNotNull",
+          "returnValue": "ITEM_IS_NOT_NULL",
+          "label": "Item is NOT NULL"
+        },
+        {
+          "name": "itemIsZero",
+          "returnValue": "ITEM_IS_ZERO",
+          "label": "Item is zero"
+        },
+        {
+          "name": "itemIsNotZero",
+          "returnValue": "ITEM_IS_NOT_ZERO",
+          "label": "Item is NOT zero"
+        },
+        {
+          "name": "itemIsNullOrZero",
+          "returnValue": "ITEM_IS_NULL_OR_ZERO",
+          "label": "Item is NULL or zero"
+        },
+        {
+          "name": "itemIsNotNullAndNotZero",
+          "returnValue": "ITEM_NOT_NULL_OR_ZERO",
+          "label": "Item is NOT NULL and NOT zero"
+        },
+        {
+          "name": "itemContainsNoSpaces",
+          "returnValue": "ITEM_CONTAINS_NO_SPACES",
+          "label": "Item contains no spaces"
+        },
+        {
+          "name": "itemIsNumeric",
+          "returnValue": "ITEM_IS_NUMERIC",
+          "label": "Item is numeric"
+        },
+        {
+          "name": "itemIsNotNumeric",
+          "returnValue": "ITEM_IS_NOT_NUMERIC",
+          "label": "Item is NOT numeric"
+        },
+        {
+          "name": "itemIsAlphanumeric",
+          "returnValue": "ITEM_IS_ALPHANUMERIC",
+          "label": "Item is alphanumeric"
+        },
+        {
+          "name": "itemIsInColonDelimitedList",
+          "returnValue": "VALUE_OF_ITEM_IN_CONDITION_IN_COLON_DELIMITED_LIST",
+          "label": "Item is in colon delimited list"
+        },
+        {
+          "name": "itemIsNotInColonDelimitedList",
+          "returnValue": "VALUE_OF_ITEM_IN_CONDITION_NOT_IN_COLON_DELIMITED_LIST",
+          "label": "Item is NOT in colon delimited list"
+        },
+        {
+          "name": "textIsContainedInItem",
+          "returnValue": "CONDITION1_IN_VALUE_OF_ITEM_IN_CONDITION2",
+          "label": "Text is contained in Item"
+        },
+        {
+          "name": "text=value",
+          "returnValue": "DISPLAY_COND_EQUAL_COND_TEXT",
+          "label": "Text = Value"
+        },
+        {
+          "name": "text!=value",
+          "returnValue": "DISP_COND_NOT_EQUAL_COND_TEXT",
+          "label": "Text != Value"
+        },
+        {
+          "name": "textIsContainedInValue",
+          "returnValue": "DISPLAY_COND_IN_COND_TEXT",
+          "label": "Text is contained in Value"
+        },
+        {
+          "name": "textIsNotContainedInValue",
+          "returnValue": "DISPLAY_COND_NOT_IN_COND_TEXT",
+          "label": "Text is NOT contained in Value"
+        },
+        {
+          "name": "userPreference=value",
+          "returnValue": "USER_PREF_IN_COND_EQ_COND2",
+          "label": "User Preference = Value"
+        },
+        {
+          "name": "userPreference!=value",
+          "returnValue": "USER_PREF_IN_COND_NOT_EQ_COND2",
+          "label": "User Preference != Value"
+        },
+        {
+          "name": "currentPage=page",
+          "returnValue": "CURRENT_PAGE_EQUALS_CONDITION",
+          "label": "Current Page = Page"
+        },
+        {
+          "name": "currentPage!=page",
+          "returnValue": "CURRENT_PAGE_NOT_EQUAL_CONDITION",
+          "label": "Current Page != Page"
+        },
+        {
+          "name": "currentPageInList",
+          "returnValue": "CURRENT_PAGE_IN_CONDITION",
+          "label": "Current Page is in comma delimited list"
+        },
+        {
+          "name": "currentPageNotInList",
+          "returnValue": "CURRENT_PAGE_NOT_IN_CONDITION",
+          "label": "Current Page is NOT in comma delimited list"
+        },
+        {
+          "name": "currentPage=pageSubmitted",
+          "returnValue": "WHEN_THIS_PAGE_SUBMITTED",
+          "label": "Current Page = Page Submitted (posted)"
+        },
+        {
+          "name": "currentPage!=pageSubmitted",
+          "returnValue": "WHEN_THIS_PAGE_NOT_SUBMITTED",
+          "label": "Current Page != Page Submitted (posted)"
+        },
+        {
+          "name": "currentPageIsInPrinterFriendlyMode",
+          "returnValue": "PAGE_IS_IN_PRINTER_FRIENDLY_MODE",
+          "label": "Current Page is in Printer Friendly Mode"
+        },
+        {
+          "name": "currentPageIsNotInPrinterFriendlyMode",
+          "returnValue": "PAGE_IS_NOT_IN_PRINTER_FRIENDLY_MODE",
+          "label": "Current page is NOT in Printer Friendly Mode"
+        },
+        {
+          "name": "pageRegionIsReadOnly",
+          "returnValue": "IS_READ_ONLY",
+          "label": "Page/Region is Read Only"
+        },
+        {
+          "name": "pageRegionIsNotReadOnly",
+          "returnValue": "IS_NOT_READ_ONLY",
+          "label": "Page/Region is NOT Read Only"
+        },
+        {
+          "name": "userIsAuthenticated",
+          "returnValue": "USER_IS_NOT_PUBLIC_USER",
+          "label": "User is Authenticated (not public)"
+        },
+        {
+          "name": "userIsPublicUser",
+          "returnValue": "USER_IS_PUBLIC_USER",
+          "label": "User is the Public User (user has not authenticated)"
+        },
+        {
+          "name": "inlineValidationErrorsDisplayed",
+          "returnValue": "DISPLAYING_INLINE_VALIDATION_ERRORS",
+          "label": "Inline Validation Errors displayed"
+        },
+        {
+          "name": "inlineValidationErrorsNotDisplayed",
+          "returnValue": "NOT_DISPLAYING_INLINE_VALIDATION_ERRORS",
+          "label": "Inline Validation Errors NOT displayed"
+        },
+        {
+          "name": "sqlReportsOkToShowForwardButton",
+          "returnValue": "MAX_ROWS_LT_ROWS_FETCHED",
+          "label": "SQL Reports (OK to show the forward button)"
+        },
+        {
+          "name": "sqlReportsOkToShowBackButton",
+          "returnValue": "MIN_ROW_GT_THAN_ONE",
+          "label": "SQL Reports (OK to show the back button)"
+        },
+        {
+          "name": "currentLanguage=value",
+          "returnValue": "CURRENT_LANG_EQ_COND1",
+          "label": "Current Language = Value"
+        },
+        {
+          "name": "currentLanguage!=value",
+          "returnValue": "CURRENT_LANG_NOT_EQ_COND1",
+          "label": "Current Language != Value"
+        },
+        {
+          "name": "currentLanguageIsContainedInValue",
+          "returnValue": "CURRENT_LANG_IN_COND1",
+          "label": "Current Language is contained in Value"
+        },
+        {
+          "name": "currentLanguageIsNotContainedInValue",
+          "returnValue": "CURRENT_LANG_NOT_IN_COND1",
+          "label": "Current Language is NOT contained in Value"
+        },
+        {
+          "name": "clientBrowserIsMozilla",
+          "returnValue": "BROWSER_IS_NSCP",
+          "label": "Client Browser is Mozilla, Netscape 6.x/7x or higher"
+        },
+        {
+          "name": "clientBrowserIsIE7higher",
+          "returnValue": "BROWSER_IS_MSIE",
+          "label": "Client Browser is Microsoft Internet Explorer 7.0 or higher"
+        },
+        {
+          "name": "clientBrowserIsXhtmlCssCapable",
+          "returnValue": "BROWSER_IS_MSIE_OR_NSCP",
+          "label": "Client Browser is XHTML / CSS capable browser"
+        },
+        {
+          "name": "clientBrowserIsOther",
+          "returnValue": "BROWSER_IS_OTHER",
+          "label": "Client Browser is Other browsers (or older version)"
+        },
+        {
+          "name": "cgiEnvDadName=value",
+          "returnValue": "DAD_NAME_EQ_CONDITION",
+          "label": "CGI_ENV: DAD_NAME = Value"
+        },
+        {
+          "name": "cgiEnvDadName!=value",
+          "returnValue": "DAD_NAME_NOT_EQ_CONDITION",
+          "label": "CGI_ENV: DAD_NAME != Value"
+        },
+        {
+          "name": "cgiEnvServerName=value",
+          "returnValue": "SERVER_NAME_EQ_CONDITION",
+          "label": "CGI_ENV: SERVER_NAME = Value"
+        },
+        {
+          "name": "cgiEnvServerName!=value",
+          "returnValue": "SERVER_NAME_NOT_EQ_CONDITION",
+          "label": "CGI_ENV: SERVER_NAME != Value"
+        },
+        {
+          "name": "cgiEnvHttpHost=value",
+          "returnValue": "HTTP_HOST_EQ_CONDITION",
+          "label": "CGI_ENV: HTTP_HOST = Value"
+        },
+        {
+          "name": "cgiEnvHttpHost!=value",
+          "returnValue": "HTTP_HOST_NOT_EQ_CONDITION",
+          "label": "CGI_ENV: HTTP_HOST != Value"
+        },
+        {
+          "name": "never",
+          "returnValue": "NEVER",
+          "label": "Never"
+        }
+      ],
+      "condition": null,
+      "maxLength": null,
+      "description": "Type (select list) in region.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5101",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5101",
+      "builderLabel": "SQL Query",
+      "apexlangPath": "region.serverSideCondition.sqlQuery",
+      "type": "SQL",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5100",
+            "path": "region.serverSideCondition.type",
+            "hasToExist": true,
+            "values": [
+              "EXISTS",
+              "NOT_EXISTS"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "SQL Query (sql) in region.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5102",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5102",
+      "builderLabel": "Value",
+      "apexlangPath": "region.serverSideCondition.value",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5100",
+            "path": "region.serverSideCondition.type",
+            "hasToExist": true,
+            "values": [
+              "REQUEST_EQUALS_CONDITION",
+              "REQUEST_NOT_EQUAL_CONDITION",
+              "REQUEST_IN_CONDITION",
+              "REQUEST_NOT_IN_CONDITION",
+              "CURRENT_LANG_IN_COND1",
+              "CURRENT_LANG_NOT_IN_COND1",
+              "CURRENT_LANG_NOT_EQ_COND1",
+              "CURRENT_LANG_EQ_COND1",
+              "DAD_NAME_EQ_CONDITION",
+              "DAD_NAME_NOT_EQ_CONDITION",
+              "SERVER_NAME_EQ_CONDITION",
+              "SERVER_NAME_NOT_EQ_CONDITION",
+              "HTTP_HOST_EQ_CONDITION",
+              "HTTP_HOST_NOT_EQ_CONDITION"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Value (text) in region.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5103",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5103",
+      "builderLabel": "Item",
+      "apexlangPath": "region.serverSideCondition.item",
+      "type": "ITEM",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5100",
+            "path": "region.serverSideCondition.type",
+            "hasToExist": true,
+            "values": [
+              "VAL_OF_ITEM_IN_COND_EQ_COND2",
+              "VAL_OF_ITEM_IN_COND_NOT_EQ_COND2",
+              "VALUE_OF_ITEM_IN_COND_1_EQ_COND_2",
+              "VALUE_OF_ITEM_IN_COND_1_NOT_EQ_COND_2",
+              "ITEM_IS_NULL",
+              "ITEM_IS_NOT_NULL",
+              "ITEM_IS_ZERO",
+              "ITEM_IS_NOT_ZERO",
+              "ITEM_IS_NULL_OR_ZERO",
+              "ITEM_NOT_NULL_OR_ZERO",
+              "ITEM_CONTAINS_NO_SPACES",
+              "ITEM_IS_NUMERIC",
+              "ITEM_IS_NOT_NUMERIC",
+              "ITEM_IS_ALPHANUMERIC",
+              "VALUE_OF_ITEM_IN_CONDITION_IN_COLON_DELIMITED_LIST",
+              "VALUE_OF_ITEM_IN_CONDITION_NOT_IN_COLON_DELIMITED_LIST"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Item (item) in region.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5104",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5104",
+      "builderLabel": "List",
+      "apexlangPath": "region.serverSideCondition.list",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5100",
+            "path": "region.serverSideCondition.type",
+            "hasToExist": true,
+            "values": [
+              "VALUE_OF_ITEM_IN_CONDITION_IN_COLON_DELIMITED_LIST",
+              "VALUE_OF_ITEM_IN_CONDITION_NOT_IN_COLON_DELIMITED_LIST"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "List (text) in region.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5105",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5105",
+      "builderLabel": "Preference",
+      "apexlangPath": "region.serverSideCondition.preference",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5100",
+            "path": "region.serverSideCondition.type",
+            "hasToExist": true,
+            "values": [
+              "USER_PREF_IN_COND_EQ_COND2",
+              "USER_PREF_IN_COND_NOT_EQ_COND2"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Preference (text) in region.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5106",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5106",
+      "builderLabel": "Page",
+      "apexlangPath": "region.serverSideCondition.page",
+      "type": "PAGE",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5100",
+            "path": "region.serverSideCondition.type",
+            "hasToExist": true,
+            "values": [
+              "CURRENT_PAGE_EQUALS_CONDITION",
+              "CURRENT_PAGE_NOT_EQUAL_CONDITION"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Page (page) in region.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5107",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5107",
+      "builderLabel": "Pages",
+      "apexlangPath": "region.serverSideCondition.pages",
+      "type": "PAGE",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5100",
+            "path": "region.serverSideCondition.type",
+            "hasToExist": true,
+            "values": [
+              "CURRENT_PAGE_IN_CONDITION",
+              "CURRENT_PAGE_NOT_IN_CONDITION"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Pages (page) in region.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5108",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5108",
+      "builderLabel": "Text",
+      "apexlangPath": "region.serverSideCondition.text",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5100",
+            "path": "region.serverSideCondition.type",
+            "hasToExist": true,
+            "values": [
+              "CONDITION1_IN_VALUE_OF_ITEM_IN_CONDITION2",
+              "DISPLAY_COND_IN_COND_TEXT",
+              "DISPLAY_COND_NOT_IN_COND_TEXT",
+              "DISPLAY_COND_EQUAL_COND_TEXT",
+              "DISP_COND_NOT_EQUAL_COND_TEXT"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Text (text) in region.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5109",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5109",
+      "builderLabel": "Value",
+      "apexlangPath": "region.serverSideCondition.value",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5100",
+            "path": "region.serverSideCondition.type",
+            "hasToExist": true,
+            "values": [
+              "VAL_OF_ITEM_IN_COND_EQ_COND2",
+              "VAL_OF_ITEM_IN_COND_NOT_EQ_COND2",
+              "VALUE_OF_ITEM_IN_COND_1_EQ_COND_2",
+              "VALUE_OF_ITEM_IN_COND_1_NOT_EQ_COND_2"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Value (text) in region.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5110",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5110",
+      "builderLabel": "Item",
+      "apexlangPath": "region.serverSideCondition.item",
+      "type": "ITEM",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5100",
+            "path": "region.serverSideCondition.type",
+            "hasToExist": true,
+            "value": "CONDITION1_IN_VALUE_OF_ITEM_IN_CONDITION2"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Item (item) in region.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5111",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5111",
+      "builderLabel": "Value",
+      "apexlangPath": "region.serverSideCondition.value",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5100",
+            "path": "region.serverSideCondition.type",
+            "hasToExist": true,
+            "values": [
+              "DISPLAY_COND_IN_COND_TEXT",
+              "DISPLAY_COND_NOT_IN_COND_TEXT",
+              "DISPLAY_COND_EQUAL_COND_TEXT",
+              "DISP_COND_NOT_EQUAL_COND_TEXT"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Value (text) in region.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5112",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5112",
+      "builderLabel": "Language",
+      "apexlangPath": "region.serverSideCondition.language",
+      "type": "CODE LANGUAGE",
+      "required": true,
+      "defaultValue": "PLSQL",
+      "values": [
+        {
+          "name": "sql",
+          "returnValue": "SQL",
+          "label": "SQL"
+        },
+        {
+          "name": "plsql",
+          "returnValue": "PLSQL",
+          "label": "PL/SQL"
+        },
+        {
+          "name": "javaScript-mle",
+          "returnValue": "JAVASCRIPT",
+          "label": "JavaScript (MLE)"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5100",
+            "path": "region.serverSideCondition.type",
+            "hasToExist": true,
+            "value": "EXPRESSION"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Language (code language) in region.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5113",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5113",
+      "builderLabel": "SQL Expression",
+      "apexlangPath": "region.serverSideCondition.sqlExpression",
+      "type": "SQL EXPRESSION BOOLEAN",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5112",
+            "path": "region.serverSideCondition.language",
+            "hasToExist": true,
+            "value": "SQL"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "SQL Expression (sql expression boolean) in region.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5114",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5114",
+      "builderLabel": "PL/SQL Expression",
+      "apexlangPath": "region.serverSideCondition.plsqlExpression",
+      "type": "PLSQL EXPRESSION BOOLEAN",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5112",
+            "path": "region.serverSideCondition.language",
+            "hasToExist": true,
+            "value": "PLSQL"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "PL/SQL Expression (plsql expression boolean) in region.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5115",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5115",
+      "builderLabel": "JavaScript Expression",
+      "apexlangPath": "region.serverSideCondition.javaScriptExpression",
+      "type": "MLE JAVASCRIPT EXPRESSION BOOLEAN",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5112",
+            "path": "region.serverSideCondition.language",
+            "hasToExist": true,
+            "value": "JAVASCRIPT"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "JavaScript Expression (mle javascript expression boolean) in region.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5132",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5132",
+      "builderLabel": "Language",
+      "apexlangPath": "region.serverSideCondition.language",
+      "type": "CODE LANGUAGE",
+      "required": true,
+      "defaultValue": "PLSQL",
+      "values": [
+        {
+          "name": "plsql",
+          "returnValue": "PLSQL",
+          "label": "PL/SQL"
+        },
+        {
+          "name": "javaScript-mle",
+          "returnValue": "JAVASCRIPT",
+          "label": "JavaScript (MLE)"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5100",
+            "path": "region.serverSideCondition.type",
+            "hasToExist": true,
+            "value": "FUNCTION_BODY"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Language (code language) in region.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5133",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5133",
+      "builderLabel": "PL/SQL Function Body",
+      "apexlangPath": "region.serverSideCondition.plsqlFunctionBody",
+      "type": "PLSQL FUNCTION BODY BOOLEAN",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5132",
+            "path": "region.serverSideCondition.language",
+            "hasToExist": true,
+            "value": "PLSQL"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "PL/SQL Function Body (plsql function body boolean) in region.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5134",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5134",
+      "builderLabel": "JavaScript Function Body",
+      "apexlangPath": "region.serverSideCondition.javaScriptFunctionBody",
+      "type": "MLE JAVASCRIPT FUNCTION BODY BOOLEAN",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5132",
+            "path": "region.serverSideCondition.language",
+            "hasToExist": true,
+            "value": "JAVASCRIPT"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "JavaScript Function Body (mle javascript function body boolean) in region.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5360",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5360",
+      "builderLabel": "Language",
+      "apexlangPath": "region.source.language",
+      "type": "CODE LANGUAGE",
+      "required": true,
+      "defaultValue": "PLSQL",
+      "values": [
+        {
+          "name": "plsql",
+          "returnValue": "PLSQL",
+          "label": "PL/SQL"
+        },
+        {
+          "name": "javaScript-mle",
+          "returnValue": "JAVASCRIPT",
+          "label": "JavaScript (MLE)"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "959",
+            "path": "region.source.type",
+            "hasToExist": true,
+            "value": "FUNC_BODY_RETURNING_SQL"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Language (code language) in region.source.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5361",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5361",
+      "builderLabel": "PL/SQL Function Body returning SQL Query",
+      "apexlangPath": "region.source.plsqlFunctionBody",
+      "type": "PLSQL FUNCTION BODY SQL",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5360",
+            "path": "region.source.language",
+            "hasToExist": true,
+            "value": "PLSQL"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "PL/SQL Function Body returning SQL Query (plsql function body sql) in region.source.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5362",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5362",
+      "builderLabel": "JavaScript Function Body returning SQL Query",
+      "apexlangPath": "region.source.javaScriptFunctionBody",
+      "type": "MLE JAVASCRIPT FUNCTION BODY SQL",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5360",
+            "path": "region.source.language",
+            "hasToExist": true,
+            "value": "JAVASCRIPT"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "JavaScript Function Body returning SQL Query (mle javascript function body sql) in region.source.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5380",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5380",
+      "builderLabel": "Language",
+      "apexlangPath": "region.localPostProcessing.language",
+      "type": "CODE LANGUAGE",
+      "required": true,
+      "defaultValue": "PLSQL",
+      "values": [
+        {
+          "name": "plsql",
+          "returnValue": "PLSQL",
+          "label": "PL/SQL"
+        },
+        {
+          "name": "javaScript-mle",
+          "returnValue": "JAVASCRIPT",
+          "label": "JavaScript (MLE)"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1034",
+            "path": "region.localPostProcessing.type",
+            "hasToExist": true,
+            "value": "FUNC_BODY_RETURNING_SQL"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Language (code language) in region.localPostProcessing.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5381",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5381",
+      "builderLabel": "PL/SQL Function Body returning SQL Query",
+      "apexlangPath": "region.localPostProcessing.plsqlFunctionBody",
+      "type": "PLSQL FUNCTION BODY SQL",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5380",
+            "path": "region.localPostProcessing.language",
+            "hasToExist": true,
+            "value": "PLSQL"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "PL/SQL Function Body returning SQL Query (plsql function body sql) in region.localPostProcessing.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:5382",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "5382",
+      "builderLabel": "JavaScript Function Body returning SQL Query",
+      "apexlangPath": "region.localPostProcessing.javaScriptFunctionBody",
+      "type": "MLE JAVASCRIPT FUNCTION BODY SQL",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5380",
+            "path": "region.localPostProcessing.language",
+            "hasToExist": true,
+            "value": "JAVASCRIPT"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "JavaScript Function Body returning SQL Query (mle javascript function body sql) in region.localPostProcessing.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:6001",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "6001",
+      "builderLabel": "PL/SQL Function Body returning a CLOB",
+      "apexlangPath": "region.source.plsqlFunctionBody",
+      "type": "PLSQL FUNCTION BODY CLOB",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "6000",
+            "path": "region.source.language",
+            "hasToExist": true,
+            "value": "PLSQL"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "PL/SQL Function Body returning a CLOB (plsql function body clob) in region.source.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:6002",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "6002",
+      "builderLabel": "JavaScript Function Body returning a String",
+      "apexlangPath": "region.source.javaScriptFunctionBody",
+      "type": "MLE JAVASCRIPT FUNCTION BODY CLOB",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "6000",
+            "path": "region.source.language",
+            "hasToExist": true,
+            "value": "JAVASCRIPT"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "JavaScript Function Body returning a String (mle javascript function body clob) in region.source.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:12171001",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "12171001",
+      "builderLabel": "Sample Data",
+      "apexlangPath": "region.source.sampleData",
+      "type": "SELECT LIST",
+      "required": true,
+      "defaultValue": null,
+      "values": [
+        {
+          "name": "employees",
+          "returnValue": "EMPLOYEES",
+          "label": "Employees"
+        },
+        {
+          "name": "tasks",
+          "returnValue": "TASKS",
+          "label": "Tasks"
+        },
+        {
+          "name": "products",
+          "returnValue": "PRODUCTS",
+          "label": "Products"
+        },
+        {
+          "name": "projects",
+          "returnValue": "PROJECTS",
+          "label": "Projects"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "957",
+            "path": "region.source.location",
+            "hasToExist": true,
+            "value": "SAMPLE_DATA"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Sample Data (select list) in region.source.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:53520005",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "53520005",
+      "builderLabel": "JSON Duality View",
+      "apexlangPath": "region.source.jsonDualityView",
+      "type": "COMPONENT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "957",
+            "path": "region.source.location",
+            "hasToExist": true,
+            "value": "DUALITY_VIEW"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "JSON Duality View (component) in region.source.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:53520006",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "53520006",
+      "builderLabel": "JSON Source",
+      "apexlangPath": "region.source.jsonSource",
+      "type": "COMPONENT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "957",
+            "path": "region.source.location",
+            "hasToExist": true,
+            "value": "JSON_COLLECTION"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "JSON Source (component) in region.source.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:53520009",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "53520009",
+      "builderLabel": "Nested Rows",
+      "apexlangPath": "region.dataProfile.nestedRows",
+      "type": "COMPONENT",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "53520005",
+            "path": "region.source.jsonDualityView",
+            "hasToExist": true,
+            "values": [
+              "HAS_ARRAY_COLUMNS"
+            ]
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Nested Rows (component) in region.dataProfile.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:53520010",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "53520010",
+      "builderLabel": "Nested Rows",
+      "apexlangPath": "region.dataProfile.nestedRows",
+      "type": "COMPONENT",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "53520006",
+            "path": "region.source.jsonSource",
+            "hasToExist": true,
+            "values": [
+              "HAS_ARRAY_COLUMNS"
+            ]
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Nested Rows (component) in region.dataProfile.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:53520012",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "53520012",
+      "builderLabel": "Type",
+      "apexlangPath": "region.localPostProcessing.type",
+      "type": "SELECT LIST",
+      "required": false,
+      "defaultValue": null,
+      "values": [
+        {
+          "name": "whereOrderByClause",
+          "returnValue": "WHERE_ORDER_BY_CLAUSE",
+          "label": "Where/Order By Clause"
+        },
+        {
+          "name": "sqlQuery",
+          "returnValue": "SQL",
+          "label": "SQL Query"
+        },
+        {
+          "name": "plsqlFunctionBody",
+          "returnValue": "FUNC_BODY_RETURNING_SQL",
+          "label": "PL/SQL Function Body returning SQL Query"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_NULL",
+            "propertyId": "53520005",
+            "path": "region.source.jsonDualityView",
+            "hasToExist": true
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Type (select list) in region.localPostProcessing.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:53520013",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "53520013",
+      "builderLabel": "Where Clause",
+      "apexlangPath": "region.localPostProcessing.whereClause",
+      "type": "WHERE CLAUSE",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "53520012",
+            "path": "region.localPostProcessing.type",
+            "hasToExist": true,
+            "value": "WHERE_ORDER_BY_CLAUSE"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Where Clause (where clause) in region.localPostProcessing.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:53520014",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "53520014",
+      "builderLabel": "Order By Clause",
+      "apexlangPath": "region.localPostProcessing.orderByClause",
+      "type": "ORDER BY CLAUSE",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "53520016",
+            "path": "region.localPostProcessing.orderByType",
+            "hasToExist": true,
+            "value": "STATIC"
+          }
+        ]
+      },
+      "maxLength": 255,
+      "description": "Order By Clause (order by clause) in region.localPostProcessing.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:53520015",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "53520015",
+      "builderLabel": "SQL Query",
+      "apexlangPath": "region.localPostProcessing.sqlQuery",
+      "type": "SQL",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "53520012",
+            "path": "region.localPostProcessing.type",
+            "hasToExist": true,
+            "value": "SQL"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "SQL Query (sql) in region.localPostProcessing.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:53520016",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "53520016",
+      "builderLabel": "Order By Type",
+      "apexlangPath": "region.localPostProcessing.orderByType",
+      "type": "SELECT LIST",
+      "required": false,
+      "defaultValue": null,
+      "values": [
+        {
+          "name": "staticValue",
+          "returnValue": "STATIC",
+          "label": "Static Value"
+        },
+        {
+          "name": "item",
+          "returnValue": "ITEM",
+          "label": "Item"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "53520012",
+            "path": "region.localPostProcessing.type",
+            "hasToExist": true,
+            "value": "WHERE_ORDER_BY_CLAUSE"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Order By Type (select list) in region.localPostProcessing.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:53520017",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "53520017",
+      "builderLabel": "Item",
+      "apexlangPath": "region.localPostProcessing.item",
+      "type": "ORDER BY ITEM",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "53520016",
+            "path": "region.localPostProcessing.orderByType",
+            "hasToExist": true,
+            "value": "ITEM"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Item (order by item) in region.localPostProcessing.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:53520018",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "53520018",
+      "builderLabel": "Order By Item",
+      "apexlangPath": "region.localPostProcessing.orderByItem",
+      "type": "ORDER BY ITEM",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "53520012",
+            "path": "region.localPostProcessing.type",
+            "hasToExist": true,
+            "values": [
+              "SQL",
+              "FUNC_BODY_RETURNING_SQL"
+            ]
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Order By Item (order by item) in region.localPostProcessing.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:53520019",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "53520019",
+      "builderLabel": "Type",
+      "apexlangPath": "region.localPostProcessing.type",
+      "type": "SELECT LIST",
+      "required": false,
+      "defaultValue": null,
+      "values": [
+        {
+          "name": "whereOrderByClause",
+          "returnValue": "WHERE_ORDER_BY_CLAUSE",
+          "label": "Where/Order By Clause"
+        },
+        {
+          "name": "sqlQuery",
+          "returnValue": "SQL",
+          "label": "SQL Query"
+        },
+        {
+          "name": "plsqlFunctionBody",
+          "returnValue": "FUNC_BODY_RETURNING_SQL",
+          "label": "PL/SQL Function Body returning SQL Query"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_NULL",
+            "propertyId": "53520006",
+            "path": "region.source.jsonSource",
+            "hasToExist": true
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Type (select list) in region.localPostProcessing.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:53520020",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "53520020",
+      "builderLabel": "Where Clause",
+      "apexlangPath": "region.localPostProcessing.whereClause",
+      "type": "WHERE CLAUSE",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "53520019",
+            "path": "region.localPostProcessing.type",
+            "hasToExist": true,
+            "value": "WHERE_ORDER_BY_CLAUSE"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Where Clause (where clause) in region.localPostProcessing.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:53520021",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "53520021",
+      "builderLabel": "Order By Clause",
+      "apexlangPath": "region.localPostProcessing.orderByClause",
+      "type": "ORDER BY CLAUSE",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "53520023",
+            "path": "region.localPostProcessing.orderByType",
+            "hasToExist": true,
+            "value": "STATIC"
+          }
+        ]
+      },
+      "maxLength": 255,
+      "description": "Order By Clause (order by clause) in region.localPostProcessing.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:53520022",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "53520022",
+      "builderLabel": "SQL Query",
+      "apexlangPath": "region.localPostProcessing.sqlQuery",
+      "type": "SQL",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "53520019",
+            "path": "region.localPostProcessing.type",
+            "hasToExist": true,
+            "value": "SQL"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "SQL Query (sql) in region.localPostProcessing.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:53520023",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "53520023",
+      "builderLabel": "Order By Type",
+      "apexlangPath": "region.localPostProcessing.orderByType",
+      "type": "SELECT LIST",
+      "required": false,
+      "defaultValue": null,
+      "values": [
+        {
+          "name": "staticValue",
+          "returnValue": "STATIC",
+          "label": "Static Value"
+        },
+        {
+          "name": "item",
+          "returnValue": "ITEM",
+          "label": "Item"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "53520019",
+            "path": "region.localPostProcessing.type",
+            "hasToExist": true,
+            "value": "WHERE_ORDER_BY_CLAUSE"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Order By Type (select list) in region.localPostProcessing.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:53520024",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "53520024",
+      "builderLabel": "Item",
+      "apexlangPath": "region.localPostProcessing.item",
+      "type": "ORDER BY ITEM",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "53520023",
+            "path": "region.localPostProcessing.orderByType",
+            "hasToExist": true,
+            "value": "ITEM"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Item (order by item) in region.localPostProcessing.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:53520025",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "53520025",
+      "builderLabel": "Order By Item",
+      "apexlangPath": "region.localPostProcessing.orderByItem",
+      "type": "ORDER BY ITEM",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "53520019",
+            "path": "region.localPostProcessing.type",
+            "hasToExist": true,
+            "values": [
+              "SQL",
+              "FUNC_BODY_RETURNING_SQL"
+            ]
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Order By Item (order by item) in region.localPostProcessing.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:53520100",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "53520100",
+      "builderLabel": "Language",
+      "apexlangPath": "region.localPostProcessing.language",
+      "type": "CODE LANGUAGE",
+      "required": true,
+      "defaultValue": "PLSQL",
+      "values": [
+        {
+          "name": "plsql",
+          "returnValue": "PLSQL",
+          "label": "PL/SQL"
+        },
+        {
+          "name": "javaScript-mle",
+          "returnValue": "JAVASCRIPT",
+          "label": "JavaScript (MLE)"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "53520012",
+            "path": "region.localPostProcessing.type",
+            "hasToExist": true,
+            "value": "FUNC_BODY_RETURNING_SQL"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Language (code language) in region.localPostProcessing.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:53520101",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "53520101",
+      "builderLabel": "PL/SQL Function Body returning SQL Query",
+      "apexlangPath": "region.localPostProcessing.plsqlFunctionBody",
+      "type": "PLSQL FUNCTION BODY SQL",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "53520100",
+            "path": "region.localPostProcessing.language",
+            "hasToExist": true,
+            "value": "PLSQL"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "PL/SQL Function Body returning SQL Query (plsql function body sql) in region.localPostProcessing.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:53520102",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "53520102",
+      "builderLabel": "JavaScript Function Body returning SQL Query",
+      "apexlangPath": "region.localPostProcessing.javaScriptFunctionBody",
+      "type": "MLE JAVASCRIPT FUNCTION BODY SQL",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "53520100",
+            "path": "region.localPostProcessing.language",
+            "hasToExist": true,
+            "value": "JAVASCRIPT"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "JavaScript Function Body returning SQL Query (mle javascript function body sql) in region.localPostProcessing.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:53520120",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "53520120",
+      "builderLabel": "Language",
+      "apexlangPath": "region.localPostProcessing.language",
+      "type": "CODE LANGUAGE",
+      "required": true,
+      "defaultValue": "PLSQL",
+      "values": [
+        {
+          "name": "plsql",
+          "returnValue": "PLSQL",
+          "label": "PL/SQL"
+        },
+        {
+          "name": "javaScript-mle",
+          "returnValue": "JAVASCRIPT",
+          "label": "JavaScript (MLE)"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "53520019",
+            "path": "region.localPostProcessing.type",
+            "hasToExist": true,
+            "value": "FUNC_BODY_RETURNING_SQL"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Language (code language) in region.localPostProcessing.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:53520121",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "53520121",
+      "builderLabel": "PL/SQL Function Body returning SQL Query",
+      "apexlangPath": "region.localPostProcessing.plsqlFunctionBody",
+      "type": "PLSQL FUNCTION BODY SQL",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "53520120",
+            "path": "region.localPostProcessing.language",
+            "hasToExist": true,
+            "value": "PLSQL"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "PL/SQL Function Body returning SQL Query (plsql function body sql) in region.localPostProcessing.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:5110:53520122",
+      "context": "region",
+      "componentTypeId": "5110",
+      "componentTitle": "Region",
+      "parentContext": "page",
+      "parentComponentTypeId": "5000",
+      "componentCondition": null,
+      "propertyId": "53520122",
+      "builderLabel": "JavaScript Function Body returning SQL Query",
+      "apexlangPath": "region.localPostProcessing.javaScriptFunctionBody",
+      "type": "MLE JAVASCRIPT FUNCTION BODY SQL",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "53520120",
+            "path": "region.localPostProcessing.language",
+            "hasToExist": true,
+            "value": "JAVASCRIPT"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "JavaScript Function Body returning SQL Query (mle javascript function body sql) in region.localPostProcessing.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:7000:241",
+      "context": "attributes",
+      "componentTypeId": "7000",
+      "componentTitle": "Attributes",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_IN_LIST",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "NATIVE_SQL_REPORT",
+              "NATIVE_TABFORM",
+              "NATIVE_IR",
+              "NATIVE_IG",
+              "NATIVE_JET_CHART",
+              "NATIVE_CARDS",
+              "NATIVE_MAP_REGION"
+            ]
+          }
+        ]
+      },
+      "propertyId": "241",
+      "builderLabel": "Singular",
+      "apexlangPath": "attributes.entityTitle.singular",
+      "type": "TEXT",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "243",
+            "path": "attributes.componentAppearance.display",
+            "hasToExist": true,
+            "value": "REPORT"
+          }
+        ]
+      },
+      "maxLength": 255,
+      "description": "Singular (text) in attributes.entityTitle.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:7000:242",
+      "context": "attributes",
+      "componentTypeId": "7000",
+      "componentTitle": "Attributes",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_IN_LIST",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "NATIVE_SQL_REPORT",
+              "NATIVE_TABFORM",
+              "NATIVE_IR",
+              "NATIVE_IG",
+              "NATIVE_JET_CHART",
+              "NATIVE_CARDS",
+              "NATIVE_MAP_REGION"
+            ]
+          }
+        ]
+      },
+      "propertyId": "242",
+      "builderLabel": "Plural",
+      "apexlangPath": "attributes.entityTitle.plural",
+      "type": "TEXT",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "243",
+            "path": "attributes.componentAppearance.display",
+            "hasToExist": true,
+            "value": "REPORT"
+          }
+        ]
+      },
+      "maxLength": 255,
+      "description": "Plural (text) in attributes.entityTitle.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:7000:244",
+      "context": "attributes",
+      "componentTypeId": "7000",
+      "componentTitle": "Attributes",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_IN_LIST",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "NATIVE_SQL_REPORT",
+              "NATIVE_TABFORM",
+              "NATIVE_IR",
+              "NATIVE_IG",
+              "NATIVE_JET_CHART",
+              "NATIVE_CARDS",
+              "NATIVE_MAP_REGION"
+            ]
+          }
+        ]
+      },
+      "propertyId": "244",
+      "builderLabel": "Entities per Page",
+      "apexlangPath": "attributes.pagination.entitiesPerPage",
+      "type": "INTEGER",
+      "required": true,
+      "defaultValue": "15",
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "783",
+            "path": "attributes.pagination.type",
+            "hasToExist": true,
+            "value": "SET"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Entities per Page (integer) in attributes.pagination.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:7000:253",
+      "context": "attributes",
+      "componentTypeId": "7000",
+      "componentTitle": "Attributes",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_IN_LIST",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "NATIVE_SQL_REPORT",
+              "NATIVE_TABFORM",
+              "NATIVE_IR",
+              "NATIVE_IG",
+              "NATIVE_JET_CHART",
+              "NATIVE_CARDS",
+              "NATIVE_MAP_REGION"
+            ]
+          }
+        ]
+      },
+      "propertyId": "253",
+      "builderLabel": "Initial Entities Count",
+      "apexlangPath": "attributes.pagination.initialEntitiesCount",
+      "type": "INTEGER",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "783",
+            "path": "attributes.pagination.type",
+            "hasToExist": true,
+            "value": "SCROLL"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Initial Entities Count (integer) in attributes.pagination.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:7000:297",
+      "context": "attributes",
+      "componentTypeId": "7000",
+      "componentTitle": "Attributes",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_IN_LIST",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "NATIVE_SQL_REPORT",
+              "NATIVE_TABFORM",
+              "NATIVE_IR",
+              "NATIVE_IG",
+              "NATIVE_JET_CHART",
+              "NATIVE_CARDS",
+              "NATIVE_MAP_REGION"
+            ]
+          }
+        ]
+      },
+      "propertyId": "297",
+      "builderLabel": "When No Data Found",
+      "apexlangPath": "attributes.messages.whenNoDataFound",
+      "type": "TEXT EDITOR",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "NO_DATA_FOUND_MESSAGE"
+            ]
+          },
+          {
+            "type": "EQUALS",
+            "propertyId": "243",
+            "path": "attributes.componentAppearance.display",
+            "hasToExist": false,
+            "value": "REPORT"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "When No Data Found (text editor) in attributes.messages.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:7000:298",
+      "context": "attributes",
+      "componentTypeId": "7000",
+      "componentTitle": "Attributes",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_IN_LIST",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "NATIVE_SQL_REPORT",
+              "NATIVE_TABFORM",
+              "NATIVE_IR",
+              "NATIVE_IG",
+              "NATIVE_JET_CHART",
+              "NATIVE_CARDS",
+              "NATIVE_MAP_REGION"
+            ]
+          }
+        ]
+      },
+      "propertyId": "298",
+      "builderLabel": "No Data Found Icon",
+      "apexlangPath": "attributes.messages.noDataFoundIcon",
+      "type": "ICON",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "NO_DATA_FOUND_ICON"
+            ]
+          },
+          {
+            "type": "NOT_NULL",
+            "propertyId": "297",
+            "path": "attributes.messages.whenNoDataFound",
+            "hasToExist": true
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "No Data Found Icon (icon) in attributes.messages.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:7000:427",
+      "context": "attributes",
+      "componentTypeId": "7000",
+      "componentTitle": "Attributes",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_IN_LIST",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "NATIVE_SQL_REPORT",
+              "NATIVE_TABFORM",
+              "NATIVE_IR",
+              "NATIVE_IG",
+              "NATIVE_JET_CHART",
+              "NATIVE_CARDS",
+              "NATIVE_MAP_REGION"
+            ]
+          }
+        ]
+      },
+      "propertyId": "427",
+      "builderLabel": "Type",
+      "apexlangPath": "attributes.heading.type",
+      "type": "SELECT LIST",
+      "required": true,
+      "defaultValue": "COLON_DELMITED_LIST",
+      "values": [
+        {
+          "name": "columnNames",
+          "returnValue": "QUERY_COLUMNS",
+          "label": "Column Names"
+        },
+        {
+          "name": "columnNamesInitcap",
+          "returnValue": "QUERY_COLUMNS_INITCAP",
+          "label": "Column Names (InitCap)"
+        },
+        {
+          "name": "customHeadings",
+          "returnValue": "COLON_DELMITED_LIST",
+          "label": "Custom Headings"
+        },
+        {
+          "name": "plsqlFunctionBody",
+          "returnValue": "FUNCTION_BODY_RETURNING_COLON_DELIMITED_LIST",
+          "label": "PL/SQL Function Body"
+        },
+        {
+          "name": "none",
+          "returnValue": "NO_HEADINGS",
+          "label": "None"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "COLUMN_HEADING"
+            ]
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Type (select list) in attributes.heading.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:7000:428",
+      "context": "attributes",
+      "componentTypeId": "7000",
+      "componentTitle": "Attributes",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_IN_LIST",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "NATIVE_SQL_REPORT",
+              "NATIVE_TABFORM",
+              "NATIVE_IR",
+              "NATIVE_IG",
+              "NATIVE_JET_CHART",
+              "NATIVE_CARDS",
+              "NATIVE_MAP_REGION"
+            ]
+          }
+        ]
+      },
+      "propertyId": "428",
+      "builderLabel": "PL/SQL Function Body",
+      "apexlangPath": "attributes.heading.plsqlFunctionBody",
+      "type": "PLSQL FUNCTION BODY VARCHAR2",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "427",
+            "path": "attributes.heading.type",
+            "hasToExist": true,
+            "value": "FUNCTION_BODY_RETURNING_COLON_DELIMITED_LIST"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "PL/SQL Function Body (plsql function body varchar2) in attributes.heading.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:7000:433",
+      "context": "attributes",
+      "componentTypeId": "7000",
+      "componentTitle": "Attributes",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_IN_LIST",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "NATIVE_SQL_REPORT",
+              "NATIVE_TABFORM",
+              "NATIVE_IR",
+              "NATIVE_IG",
+              "NATIVE_JET_CHART",
+              "NATIVE_CARDS",
+              "NATIVE_MAP_REGION"
+            ]
+          }
+        ]
+      },
+      "propertyId": "433",
+      "builderLabel": "Number of Rows Type",
+      "apexlangPath": "attributes.reportLayout.numberOfRowsType",
+      "type": "SELECT LIST",
+      "required": true,
+      "defaultValue": "STATIC",
+      "values": [
+        {
+          "name": "staticValue",
+          "returnValue": "STATIC",
+          "label": "Static Value"
+        },
+        {
+          "name": "itemValue",
+          "returnValue": "ITEM",
+          "label": "Based on Item Value"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "FETCHED_ROWS"
+            ]
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Number of Rows Type (select list) in attributes.reportLayout.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:7000:434",
+      "context": "attributes",
+      "componentTypeId": "7000",
+      "componentTitle": "Attributes",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_IN_LIST",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "NATIVE_SQL_REPORT",
+              "NATIVE_TABFORM",
+              "NATIVE_IR",
+              "NATIVE_IG",
+              "NATIVE_JET_CHART",
+              "NATIVE_CARDS",
+              "NATIVE_MAP_REGION"
+            ]
+          }
+        ]
+      },
+      "propertyId": "434",
+      "builderLabel": "Number of Rows",
+      "apexlangPath": "attributes.reportLayout.numberOfRows",
+      "type": "INTEGER",
+      "required": true,
+      "defaultValue": "15",
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "433",
+            "path": "attributes.reportLayout.numberOfRowsType",
+            "hasToExist": true,
+            "value": "STATIC"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Number of Rows (integer) in attributes.reportLayout.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:7000:435",
+      "context": "attributes",
+      "componentTypeId": "7000",
+      "componentTitle": "Attributes",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_IN_LIST",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "NATIVE_SQL_REPORT",
+              "NATIVE_TABFORM",
+              "NATIVE_IR",
+              "NATIVE_IG",
+              "NATIVE_JET_CHART",
+              "NATIVE_CARDS",
+              "NATIVE_MAP_REGION"
+            ]
+          }
+        ]
+      },
+      "propertyId": "435",
+      "builderLabel": "Item",
+      "apexlangPath": "attributes.reportLayout.item",
+      "type": "ITEM",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "433",
+            "path": "attributes.reportLayout.numberOfRowsType",
+            "hasToExist": true,
+            "value": "ITEM"
+          }
+        ]
+      },
+      "maxLength": 255,
+      "description": "Item (item) in attributes.reportLayout.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:7000:453",
+      "context": "attributes",
+      "componentTypeId": "7000",
+      "componentTitle": "Attributes",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_IN_LIST",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "NATIVE_SQL_REPORT",
+              "NATIVE_TABFORM",
+              "NATIVE_IR",
+              "NATIVE_IG",
+              "NATIVE_JET_CHART",
+              "NATIVE_CARDS",
+              "NATIVE_MAP_REGION"
+            ]
+          }
+        ]
+      },
+      "propertyId": "453",
+      "builderLabel": "Type",
+      "apexlangPath": "attributes.rowSelection.type",
+      "type": "SELECT LIST",
+      "required": false,
+      "defaultValue": null,
+      "values": [
+        {
+          "name": "focusOnly",
+          "returnValue": "FOCUS",
+          "label": "Focus only"
+        },
+        {
+          "name": "singleSelection",
+          "returnValue": "SINGLE",
+          "label": "Single Selection"
+        },
+        {
+          "name": "multipleSelection",
+          "returnValue": "MULTIPLE",
+          "label": "Multiple Selection"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "ROW_SELECTION"
+            ]
+          },
+          {
+            "type": "EQUALS",
+            "propertyId": "243",
+            "path": "attributes.componentAppearance.display",
+            "hasToExist": true,
+            "value": "REPORT"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Type (select list) in attributes.rowSelection.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:7000:454",
+      "context": "attributes",
+      "componentTypeId": "7000",
+      "componentTitle": "Attributes",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_IN_LIST",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "NATIVE_SQL_REPORT",
+              "NATIVE_TABFORM",
+              "NATIVE_IR",
+              "NATIVE_IG",
+              "NATIVE_JET_CHART",
+              "NATIVE_CARDS",
+              "NATIVE_MAP_REGION"
+            ]
+          }
+        ]
+      },
+      "propertyId": "454",
+      "builderLabel": "Current Selection Page Item",
+      "apexlangPath": "attributes.rowSelection.currentSelectionPageItem",
+      "type": "ITEM",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "453",
+            "path": "attributes.rowSelection.type",
+            "hasToExist": true,
+            "values": [
+              "SINGLE",
+              "MULTIPLE"
+            ]
+          }
+        ]
+      },
+      "maxLength": 255,
+      "description": "Current Selection Page Item (item) in attributes.rowSelection.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:7000:455",
+      "context": "attributes",
+      "componentTypeId": "7000",
+      "componentTitle": "Attributes",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_IN_LIST",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "NATIVE_SQL_REPORT",
+              "NATIVE_TABFORM",
+              "NATIVE_IR",
+              "NATIVE_IG",
+              "NATIVE_JET_CHART",
+              "NATIVE_CARDS",
+              "NATIVE_MAP_REGION"
+            ]
+          }
+        ]
+      },
+      "propertyId": "455",
+      "builderLabel": "Select All Page Item",
+      "apexlangPath": "attributes.rowSelection.selectAllPageItem",
+      "type": "ITEM",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "453",
+            "path": "attributes.rowSelection.type",
+            "hasToExist": true,
+            "value": "MULTIPLE"
+          }
+        ]
+      },
+      "maxLength": 255,
+      "description": "Select All Page Item (item) in attributes.rowSelection.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:7000:556",
+      "context": "attributes",
+      "componentTypeId": "7000",
+      "componentTitle": "Attributes",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_IN_LIST",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "NATIVE_SQL_REPORT",
+              "NATIVE_TABFORM",
+              "NATIVE_IR",
+              "NATIVE_IG",
+              "NATIVE_JET_CHART",
+              "NATIVE_CARDS",
+              "NATIVE_MAP_REGION"
+            ]
+          }
+        ]
+      },
+      "propertyId": "556",
+      "builderLabel": "Template Options",
+      "apexlangPath": "attributes.componentAppearance.templateOptions",
+      "type": "TEMPLATE OPTIONS",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "OR",
+        "conditions": [
+          {
+            "type": "NOT_NULL",
+            "propertyId": "387",
+            "path": "attributes.componentAppearance.breadcrumbTemplate",
+            "hasToExist": true
+          },
+          {
+            "type": "NOT_NULL",
+            "propertyId": "386",
+            "path": "attributes.componentAppearance.listTemplate",
+            "hasToExist": true
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Template Options (template options) in attributes.componentAppearance.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:7000:559",
+      "context": "attributes",
+      "componentTypeId": "7000",
+      "componentTitle": "Attributes",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_IN_LIST",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "NATIVE_SQL_REPORT",
+              "NATIVE_TABFORM",
+              "NATIVE_IR",
+              "NATIVE_IG",
+              "NATIVE_JET_CHART",
+              "NATIVE_CARDS",
+              "NATIVE_MAP_REGION"
+            ]
+          }
+        ]
+      },
+      "propertyId": "559",
+      "builderLabel": "Initialization JavaScript Function",
+      "apexlangPath": "attributes.componentAdvanced.initJavaScriptFunction",
+      "type": "JAVASCRIPT",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "INIT_JAVASCRIPT_CODE"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Initialization JavaScript Function (javascript) in attributes.componentAdvanced.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:7000:770",
+      "context": "attributes",
+      "componentTypeId": "7000",
+      "componentTitle": "Attributes",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_IN_LIST",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "NATIVE_SQL_REPORT",
+              "NATIVE_TABFORM",
+              "NATIVE_IR",
+              "NATIVE_IG",
+              "NATIVE_JET_CHART",
+              "NATIVE_CARDS",
+              "NATIVE_MAP_REGION"
+            ]
+          }
+        ]
+      },
+      "propertyId": "770",
+      "builderLabel": "Enabled",
+      "apexlangPath": "attributes.edit.enabled",
+      "type": "YES NO",
+      "required": true,
+      "defaultValue": "N",
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "EDITABLE"
+            ]
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Enabled (yes no) in attributes.edit.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:7000:771",
+      "context": "attributes",
+      "componentTypeId": "7000",
+      "componentTitle": "Attributes",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_IN_LIST",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "NATIVE_SQL_REPORT",
+              "NATIVE_TABFORM",
+              "NATIVE_IR",
+              "NATIVE_IG",
+              "NATIVE_JET_CHART",
+              "NATIVE_CARDS",
+              "NATIVE_MAP_REGION"
+            ]
+          }
+        ]
+      },
+      "propertyId": "771",
+      "builderLabel": "Allowed Operations",
+      "apexlangPath": "attributes.edit.allowedOperations",
+      "type": "CHECKBOXES",
+      "required": false,
+      "defaultValue": null,
+      "values": [
+        {
+          "name": "add",
+          "returnValue": "i",
+          "label": "Add Row"
+        },
+        {
+          "name": "update",
+          "returnValue": "u",
+          "label": "Update Row"
+        },
+        {
+          "name": "delete",
+          "returnValue": "d",
+          "label": "Delete Row"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "770",
+            "path": "attributes.edit.enabled",
+            "hasToExist": true,
+            "value": "Y"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Allowed Operations (checkboxes) in attributes.edit.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:7000:772",
+      "context": "attributes",
+      "componentTypeId": "7000",
+      "componentTitle": "Attributes",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_IN_LIST",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "NATIVE_SQL_REPORT",
+              "NATIVE_TABFORM",
+              "NATIVE_IR",
+              "NATIVE_IG",
+              "NATIVE_JET_CHART",
+              "NATIVE_CARDS",
+              "NATIVE_MAP_REGION"
+            ]
+          }
+        ]
+      },
+      "propertyId": "772",
+      "builderLabel": "Allowed Row Operations Column",
+      "apexlangPath": "attributes.edit.allowedRowOperationsColumn",
+      "type": "REGION COLUMN",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "771",
+            "path": "attributes.edit.allowedOperations",
+            "hasToExist": true,
+            "values": [
+              "u",
+              "d"
+            ]
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Allowed Row Operations Column (region column) in attributes.edit.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:7000:773",
+      "context": "attributes",
+      "componentTypeId": "7000",
+      "componentTitle": "Attributes",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_IN_LIST",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "NATIVE_SQL_REPORT",
+              "NATIVE_TABFORM",
+              "NATIVE_IR",
+              "NATIVE_IG",
+              "NATIVE_JET_CHART",
+              "NATIVE_CARDS",
+              "NATIVE_MAP_REGION"
+            ]
+          }
+        ]
+      },
+      "propertyId": "773",
+      "builderLabel": "Add",
+      "apexlangPath": "attributes.editAuthorization.add",
+      "type": "COMPONENT",
+      "required": false,
+      "defaultValue": null,
+      "values": [
+        {
+          "name": "mustNotBePublicUser",
+          "returnValue": "MUST_NOT_BE_PUBLIC_USER",
+          "label": "MODEL.LOV.MUST_NOT_BE_PUBLIC_USER"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "771",
+            "path": "attributes.edit.allowedOperations",
+            "hasToExist": true,
+            "value": "i"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Add (component) in attributes.editAuthorization.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:7000:774",
+      "context": "attributes",
+      "componentTypeId": "7000",
+      "componentTitle": "Attributes",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_IN_LIST",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "NATIVE_SQL_REPORT",
+              "NATIVE_TABFORM",
+              "NATIVE_IR",
+              "NATIVE_IG",
+              "NATIVE_JET_CHART",
+              "NATIVE_CARDS",
+              "NATIVE_MAP_REGION"
+            ]
+          }
+        ]
+      },
+      "propertyId": "774",
+      "builderLabel": "Update",
+      "apexlangPath": "attributes.editAuthorization.update",
+      "type": "COMPONENT",
+      "required": false,
+      "defaultValue": null,
+      "values": [
+        {
+          "name": "mustNotBePublicUser",
+          "returnValue": "MUST_NOT_BE_PUBLIC_USER",
+          "label": "MODEL.LOV.MUST_NOT_BE_PUBLIC_USER"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "771",
+            "path": "attributes.edit.allowedOperations",
+            "hasToExist": true,
+            "value": "u"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Update (component) in attributes.editAuthorization.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:7000:775",
+      "context": "attributes",
+      "componentTypeId": "7000",
+      "componentTitle": "Attributes",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_IN_LIST",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "NATIVE_SQL_REPORT",
+              "NATIVE_TABFORM",
+              "NATIVE_IR",
+              "NATIVE_IG",
+              "NATIVE_JET_CHART",
+              "NATIVE_CARDS",
+              "NATIVE_MAP_REGION"
+            ]
+          }
+        ]
+      },
+      "propertyId": "775",
+      "builderLabel": "Delete",
+      "apexlangPath": "attributes.editAuthorization.delete",
+      "type": "COMPONENT",
+      "required": false,
+      "defaultValue": null,
+      "values": [
+        {
+          "name": "mustNotBePublicUser",
+          "returnValue": "MUST_NOT_BE_PUBLIC_USER",
+          "label": "MODEL.LOV.MUST_NOT_BE_PUBLIC_USER"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "771",
+            "path": "attributes.edit.allowedOperations",
+            "hasToExist": true,
+            "value": "d"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Delete (component) in attributes.editAuthorization.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:7000:776",
+      "context": "attributes",
+      "componentTypeId": "7000",
+      "componentTitle": "Attributes",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_IN_LIST",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "NATIVE_SQL_REPORT",
+              "NATIVE_TABFORM",
+              "NATIVE_IR",
+              "NATIVE_IG",
+              "NATIVE_JET_CHART",
+              "NATIVE_CARDS",
+              "NATIVE_MAP_REGION"
+            ]
+          }
+        ]
+      },
+      "propertyId": "776",
+      "builderLabel": "Lost Update Type",
+      "apexlangPath": "attributes.edit.lostUpdateType",
+      "type": "SELECT LIST",
+      "required": true,
+      "defaultValue": "VALUES",
+      "values": [
+        {
+          "name": "rowValues",
+          "returnValue": "VALUES",
+          "label": "Row Values"
+        },
+        {
+          "name": "rowVersionColumn",
+          "returnValue": "COLUMN",
+          "label": "Row Version Column"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "770",
+            "path": "attributes.edit.enabled",
+            "hasToExist": true,
+            "value": "Y"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Lost Update Type (select list) in attributes.edit.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:7000:777",
+      "context": "attributes",
+      "componentTypeId": "7000",
+      "componentTitle": "Attributes",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_IN_LIST",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "NATIVE_SQL_REPORT",
+              "NATIVE_TABFORM",
+              "NATIVE_IR",
+              "NATIVE_IG",
+              "NATIVE_JET_CHART",
+              "NATIVE_CARDS",
+              "NATIVE_MAP_REGION"
+            ]
+          }
+        ]
+      },
+      "propertyId": "777",
+      "builderLabel": "Row Version Column",
+      "apexlangPath": "attributes.edit.rowVersionColumn",
+      "type": "REGION COLUMN",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "776",
+            "path": "attributes.edit.lostUpdateType",
+            "hasToExist": true,
+            "value": "COLUMN"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Row Version Column (region column) in attributes.edit.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:7000:780",
+      "context": "attributes",
+      "componentTypeId": "7000",
+      "componentTitle": "Attributes",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_IN_LIST",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "NATIVE_SQL_REPORT",
+              "NATIVE_TABFORM",
+              "NATIVE_IR",
+              "NATIVE_IG",
+              "NATIVE_JET_CHART",
+              "NATIVE_CARDS",
+              "NATIVE_MAP_REGION"
+            ]
+          }
+        ]
+      },
+      "propertyId": "780",
+      "builderLabel": "Lazy Loading",
+      "apexlangPath": "attributes.performance.lazyLoading",
+      "type": "YES NO",
+      "required": true,
+      "defaultValue": "N",
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "LAZY_LOADING"
+            ]
+          },
+          {
+            "type": "NOT_NULL",
+            "propertyId": "957",
+            "path": "region.source.location",
+            "hasToExist": true
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Lazy Loading (yes no) in attributes.performance.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:7000:783",
+      "context": "attributes",
+      "componentTypeId": "7000",
+      "componentTitle": "Attributes",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_IN_LIST",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "NATIVE_SQL_REPORT",
+              "NATIVE_TABFORM",
+              "NATIVE_IR",
+              "NATIVE_IG",
+              "NATIVE_JET_CHART",
+              "NATIVE_CARDS",
+              "NATIVE_MAP_REGION"
+            ]
+          }
+        ]
+      },
+      "propertyId": "783",
+      "builderLabel": "Type",
+      "apexlangPath": "attributes.pagination.type",
+      "type": "SELECT LIST",
+      "required": true,
+      "defaultValue": "SET",
+      "values": [
+        {
+          "name": "page",
+          "returnValue": "SET",
+          "label": "Page"
+        },
+        {
+          "name": "scroll",
+          "returnValue": "SCROLL",
+          "label": "Scroll"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "243",
+            "path": "attributes.componentAppearance.display",
+            "hasToExist": true,
+            "value": "REPORT"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Type (select list) in attributes.pagination.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:7000:784",
+      "context": "attributes",
+      "componentTypeId": "7000",
+      "componentTitle": "Attributes",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_IN_LIST",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "NATIVE_SQL_REPORT",
+              "NATIVE_TABFORM",
+              "NATIVE_IR",
+              "NATIVE_IG",
+              "NATIVE_JET_CHART",
+              "NATIVE_CARDS",
+              "NATIVE_MAP_REGION"
+            ]
+          }
+        ]
+      },
+      "propertyId": "784",
+      "builderLabel": "Show Total Count",
+      "apexlangPath": "attributes.pagination.showTotalCount",
+      "type": "YES NO",
+      "required": true,
+      "defaultValue": "N",
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "243",
+            "path": "attributes.componentAppearance.display",
+            "hasToExist": true,
+            "value": "REPORT"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Show Total Count (yes no) in attributes.pagination.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:7000:1132",
+      "context": "attributes",
+      "componentTypeId": "7000",
+      "componentTitle": "Attributes",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_IN_LIST",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "NATIVE_SQL_REPORT",
+              "NATIVE_TABFORM",
+              "NATIVE_IR",
+              "NATIVE_IG",
+              "NATIVE_JET_CHART",
+              "NATIVE_CARDS",
+              "NATIVE_MAP_REGION"
+            ]
+          }
+        ]
+      },
+      "propertyId": "1132",
+      "builderLabel": "CSS Classes",
+      "apexlangPath": "attributes.componentAppearance.cssClasses",
+      "type": "COMBOBOX",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "STARTS_WITH_ANY",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "NATIVE_BREADCRUMB",
+              "NATIVE_LIST",
+              "TMPL_"
+            ]
+          }
+        ]
+      },
+      "maxLength": 255,
+      "description": "CSS Classes (combobox) in attributes.componentAppearance.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:7000:2422",
+      "context": "attributes",
+      "componentTypeId": "7000",
+      "componentTitle": "Attributes",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_IN_LIST",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "NATIVE_SQL_REPORT",
+              "NATIVE_TABFORM",
+              "NATIVE_IR",
+              "NATIVE_IG",
+              "NATIVE_JET_CHART",
+              "NATIVE_CARDS",
+              "NATIVE_MAP_REGION"
+            ]
+          }
+        ]
+      },
+      "propertyId": "2422",
+      "builderLabel": "Lazy Loading",
+      "apexlangPath": "attributes.performance.lazyLoading",
+      "type": "YES NO",
+      "required": true,
+      "defaultValue": "N",
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "LAZY_LOADING_ALWAYS"
+            ]
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Lazy Loading (yes no) in attributes.performance.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:7000:89890006",
+      "context": "attributes",
+      "componentTypeId": "7000",
+      "componentTitle": "Attributes",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_IN_LIST",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "NATIVE_SQL_REPORT",
+              "NATIVE_TABFORM",
+              "NATIVE_IR",
+              "NATIVE_IG",
+              "NATIVE_JET_CHART",
+              "NATIVE_CARDS",
+              "NATIVE_MAP_REGION"
+            ]
+          }
+        ]
+      },
+      "propertyId": "89890006",
+      "builderLabel": "Enabled",
+      "apexlangPath": "attributes.genAI.enabled",
+      "type": "YES NO",
+      "required": true,
+      "defaultValue": "N",
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "AI_ENABLED"
+            ]
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Enabled (yes no) in attributes.genAI.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:7000:89890007",
+      "context": "attributes",
+      "componentTypeId": "7000",
+      "componentTitle": "Attributes",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_IN_LIST",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "NATIVE_SQL_REPORT",
+              "NATIVE_TABFORM",
+              "NATIVE_IR",
+              "NATIVE_IG",
+              "NATIVE_JET_CHART",
+              "NATIVE_CARDS",
+              "NATIVE_MAP_REGION"
+            ]
+          }
+        ]
+      },
+      "propertyId": "89890007",
+      "builderLabel": "Agent",
+      "apexlangPath": "attributes.genAI.agent",
+      "type": "COMPONENT",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "AI_ENABLED_ALWAYS",
+              "AI_ENABLED"
+            ]
+          },
+          {
+            "type": "EQUALS",
+            "propertyId": "89890006",
+            "path": "attributes.genAI.enabled",
+            "hasToExist": false,
+            "value": "Y"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Agent (component) in attributes.genAI.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:7000:89890008",
+      "context": "attributes",
+      "componentTypeId": "7000",
+      "componentTitle": "Attributes",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_IN_LIST",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "NATIVE_SQL_REPORT",
+              "NATIVE_TABFORM",
+              "NATIVE_IR",
+              "NATIVE_IG",
+              "NATIVE_JET_CHART",
+              "NATIVE_CARDS",
+              "NATIVE_MAP_REGION"
+            ]
+          }
+        ]
+      },
+      "propertyId": "89890008",
+      "builderLabel": "Service",
+      "apexlangPath": "attributes.genAI.service",
+      "type": "COMPONENT",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NULL",
+            "propertyId": "89890007",
+            "path": "attributes.genAI.agent",
+            "hasToExist": true
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Service (component) in attributes.genAI.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:7000:89890009",
+      "context": "attributes",
+      "componentTypeId": "7000",
+      "componentTitle": "Attributes",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_IN_LIST",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "NATIVE_SQL_REPORT",
+              "NATIVE_TABFORM",
+              "NATIVE_IR",
+              "NATIVE_IG",
+              "NATIVE_JET_CHART",
+              "NATIVE_CARDS",
+              "NATIVE_MAP_REGION"
+            ]
+          }
+        ]
+      },
+      "propertyId": "89890009",
+      "builderLabel": "System Prompt",
+      "apexlangPath": "attributes.genAI.systemPrompt",
+      "type": "TEXT EDITOR",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "AI_SYSTEM_PROMPT"
+            ]
+          },
+          {
+            "type": "NULL",
+            "propertyId": "89890007",
+            "path": "attributes.genAI.agent",
+            "hasToExist": true
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "System Prompt (text editor) in attributes.genAI.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:7000:89890010",
+      "context": "attributes",
+      "componentTypeId": "7000",
+      "componentTitle": "Attributes",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_IN_LIST",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "NATIVE_SQL_REPORT",
+              "NATIVE_TABFORM",
+              "NATIVE_IR",
+              "NATIVE_IG",
+              "NATIVE_JET_CHART",
+              "NATIVE_CARDS",
+              "NATIVE_MAP_REGION"
+            ]
+          }
+        ]
+      },
+      "propertyId": "89890010",
+      "builderLabel": "Welcome Message",
+      "apexlangPath": "attributes.genAI.welcomeMessage",
+      "type": "HTML",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "values": [
+              "AI_UI"
+            ]
+          },
+          {
+            "type": "NULL",
+            "propertyId": "89890007",
+            "path": "attributes.genAI.agent",
+            "hasToExist": true
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Welcome Message (html) in attributes.genAI.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:8000:76",
+      "context": "parameter",
+      "componentTypeId": "8000",
+      "componentTitle": "Parameter",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_NULL",
+            "propertyId": "967",
+            "path": "region.source.restSource",
+            "hasToExist": true
+          },
+          {
+            "type": "EQUALS",
+            "propertyId": "1112",
+            "path": "region.restSynchronization.useLocalTable",
+            "hasToExist": false,
+            "value": "N"
+          }
+        ]
+      },
+      "propertyId": "76",
+      "builderLabel": "Static Value",
+      "apexlangPath": "parameter.value.staticValue",
+      "type": "SELECT LIST",
+      "required": true,
+      "defaultValue": null,
+      "values": [
+        {
+          "name": "true",
+          "returnValue": "TRUE",
+          "label": "True"
+        },
+        {
+          "name": "false",
+          "returnValue": "FALSE",
+          "label": "False"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1005",
+            "path": "parameter.value.type",
+            "hasToExist": true,
+            "value": "STATIC"
+          },
+          {
+            "type": "FEATURES",
+            "propertyId": "1004",
+            "path": "parameter.name",
+            "hasToExist": true,
+            "values": [
+              "BOOLEAN_PARAMETER"
+            ]
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Static Value (select list) in parameter.value.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:8000:184",
+      "context": "parameter",
+      "componentTypeId": "8000",
+      "componentTitle": "Parameter",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_NULL",
+            "propertyId": "967",
+            "path": "region.source.restSource",
+            "hasToExist": true
+          },
+          {
+            "type": "EQUALS",
+            "propertyId": "1112",
+            "path": "region.restSynchronization.useLocalTable",
+            "hasToExist": false,
+            "value": "N"
+          }
+        ]
+      },
+      "propertyId": "184",
+      "builderLabel": "True Value",
+      "apexlangPath": "parameter.value.trueValue",
+      "type": "TEXT",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "1004",
+            "path": "parameter.name",
+            "hasToExist": true,
+            "values": [
+              "BOOLEAN_PARAMETER"
+            ]
+          },
+          {
+            "type": "IN_LIST",
+            "propertyId": "1005",
+            "path": "parameter.value.type",
+            "hasToExist": true,
+            "values": [
+              "ITEM",
+              "PREFERENCE"
+            ]
+          }
+        ]
+      },
+      "maxLength": 10,
+      "description": "True Value (text) in parameter.value.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:8000:185",
+      "context": "parameter",
+      "componentTypeId": "8000",
+      "componentTitle": "Parameter",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_NULL",
+            "propertyId": "967",
+            "path": "region.source.restSource",
+            "hasToExist": true
+          },
+          {
+            "type": "EQUALS",
+            "propertyId": "1112",
+            "path": "region.restSynchronization.useLocalTable",
+            "hasToExist": false,
+            "value": "N"
+          }
+        ]
+      },
+      "propertyId": "185",
+      "builderLabel": "False Value",
+      "apexlangPath": "parameter.value.falseValue",
+      "type": "TEXT",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "1004",
+            "path": "parameter.name",
+            "hasToExist": true,
+            "values": [
+              "BOOLEAN_PARAMETER"
+            ]
+          },
+          {
+            "type": "IN_LIST",
+            "propertyId": "1005",
+            "path": "parameter.value.type",
+            "hasToExist": true,
+            "values": [
+              "ITEM",
+              "PREFERENCE"
+            ]
+          }
+        ]
+      },
+      "maxLength": 10,
+      "description": "False Value (text) in parameter.value.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:8000:235",
+      "context": "parameter",
+      "componentTypeId": "8000",
+      "componentTitle": "Parameter",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_NULL",
+            "propertyId": "967",
+            "path": "region.source.restSource",
+            "hasToExist": true
+          },
+          {
+            "type": "EQUALS",
+            "propertyId": "1112",
+            "path": "region.restSynchronization.useLocalTable",
+            "hasToExist": false,
+            "value": "N"
+          }
+        ]
+      },
+      "propertyId": "235",
+      "builderLabel": "Format Mask",
+      "apexlangPath": "parameter.value.formatMask",
+      "type": "COMBOBOX",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "1004",
+            "path": "parameter.name",
+            "hasToExist": true,
+            "values": [
+              "NUMBER_PARAMETER",
+              "DATE_PARAMETER",
+              "TIMESTAMP_PARAMETER",
+              "TIMESTAMP_TZ_PARAMETER"
+            ]
+          },
+          {
+            "type": "IN_LIST",
+            "propertyId": "1005",
+            "path": "parameter.value.type",
+            "hasToExist": true,
+            "values": [
+              "STATIC",
+              "ITEM",
+              "PREFERENCE"
+            ]
+          }
+        ]
+      },
+      "maxLength": 255,
+      "description": "Format Mask (combobox) in parameter.value.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:8000:1004",
+      "context": "parameter",
+      "componentTypeId": "8000",
+      "componentTitle": "Parameter",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_NULL",
+            "propertyId": "967",
+            "path": "region.source.restSource",
+            "hasToExist": true
+          },
+          {
+            "type": "EQUALS",
+            "propertyId": "1112",
+            "path": "region.restSynchronization.useLocalTable",
+            "hasToExist": false,
+            "value": "N"
+          }
+        ]
+      },
+      "propertyId": "1004",
+      "builderLabel": "Name",
+      "apexlangPath": "parameter.name",
+      "type": "COMPONENT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": null,
+      "maxLength": null,
+      "description": "Name (component) in parameter.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:8000:1005",
+      "context": "parameter",
+      "componentTypeId": "8000",
+      "componentTitle": "Parameter",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_NULL",
+            "propertyId": "967",
+            "path": "region.source.restSource",
+            "hasToExist": true
+          },
+          {
+            "type": "EQUALS",
+            "propertyId": "1112",
+            "path": "region.restSynchronization.useLocalTable",
+            "hasToExist": false,
+            "value": "N"
+          }
+        ]
+      },
+      "propertyId": "1005",
+      "builderLabel": "Type",
+      "apexlangPath": "parameter.value.type",
+      "type": "SELECT LIST",
+      "required": true,
+      "defaultValue": null,
+      "values": [
+        {
+          "name": "staticValue",
+          "returnValue": "STATIC",
+          "label": "Static Value"
+        },
+        {
+          "name": "restSourceDefault",
+          "returnValue": "DEFAULT",
+          "label": "REST Source Default"
+        },
+        {
+          "name": "item",
+          "returnValue": "ITEM",
+          "label": "Item"
+        },
+        {
+          "name": "sqlQuery",
+          "returnValue": "SQL_QUERY",
+          "label": "SQL Query (return single value)"
+        },
+        {
+          "name": "expression",
+          "returnValue": "EXPRESSION",
+          "label": "Expression"
+        },
+        {
+          "name": "functionBody",
+          "returnValue": "FUNCTION_BODY",
+          "label": "Function Body"
+        },
+        {
+          "name": "collectionClob",
+          "returnValue": "COLLECTION",
+          "label": "Collection (CLOB)"
+        },
+        {
+          "name": "preference",
+          "returnValue": "PREFERENCE",
+          "label": "Preference"
+        },
+        {
+          "name": "parentColumn",
+          "returnValue": "PARENT_COLUMN",
+          "label": "Parent Column"
+        },
+        {
+          "name": "null",
+          "returnValue": "NULL",
+          "label": "Null"
+        }
+      ],
+      "condition": {
+        "operator": "OR",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "1004",
+            "path": "parameter.name",
+            "hasToExist": true,
+            "values": [
+              "IN_PARAMETER",
+              "IN_OUT_PARAMETER"
+            ]
+          },
+          {
+            "type": "EQUALS",
+            "propertyId": "35",
+            "path": "parameter.parameter.ignoreOutput",
+            "hasToExist": true,
+            "value": "N"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Type (select list) in parameter.value.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:8000:1006",
+      "context": "parameter",
+      "componentTypeId": "8000",
+      "componentTitle": "Parameter",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_NULL",
+            "propertyId": "967",
+            "path": "region.source.restSource",
+            "hasToExist": true
+          },
+          {
+            "type": "EQUALS",
+            "propertyId": "1112",
+            "path": "region.restSynchronization.useLocalTable",
+            "hasToExist": false,
+            "value": "N"
+          }
+        ]
+      },
+      "propertyId": "1006",
+      "builderLabel": "Static Value",
+      "apexlangPath": "parameter.value.staticValue",
+      "type": "TEXT EDITOR",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1005",
+            "path": "parameter.value.type",
+            "hasToExist": true,
+            "value": "STATIC"
+          },
+          {
+            "type": "NOT_FEATURES",
+            "propertyId": "1004",
+            "path": "parameter.name",
+            "hasToExist": true,
+            "values": [
+              "BOOLEAN_PARAMETER"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Static Value (text editor) in parameter.value.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:8000:1007",
+      "context": "parameter",
+      "componentTypeId": "8000",
+      "componentTitle": "Parameter",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_NULL",
+            "propertyId": "967",
+            "path": "region.source.restSource",
+            "hasToExist": true
+          },
+          {
+            "type": "EQUALS",
+            "propertyId": "1112",
+            "path": "region.restSynchronization.useLocalTable",
+            "hasToExist": false,
+            "value": "N"
+          }
+        ]
+      },
+      "propertyId": "1007",
+      "builderLabel": "SQL Query",
+      "apexlangPath": "parameter.value.sqlQuery",
+      "type": "SQL",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1005",
+            "path": "parameter.value.type",
+            "hasToExist": true,
+            "value": "SQL_QUERY"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "SQL Query (sql) in parameter.value.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:8000:1009",
+      "context": "parameter",
+      "componentTypeId": "8000",
+      "componentTitle": "Parameter",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_NULL",
+            "propertyId": "967",
+            "path": "region.source.restSource",
+            "hasToExist": true
+          },
+          {
+            "type": "EQUALS",
+            "propertyId": "1112",
+            "path": "region.restSynchronization.useLocalTable",
+            "hasToExist": false,
+            "value": "N"
+          }
+        ]
+      },
+      "propertyId": "1009",
+      "builderLabel": "Item",
+      "apexlangPath": "parameter.value.item",
+      "type": "ITEM",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1005",
+            "path": "parameter.value.type",
+            "hasToExist": true,
+            "value": "ITEM"
+          }
+        ]
+      },
+      "maxLength": 255,
+      "description": "Item (item) in parameter.value.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:8000:1012",
+      "context": "parameter",
+      "componentTypeId": "8000",
+      "componentTitle": "Parameter",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_NULL",
+            "propertyId": "967",
+            "path": "region.source.restSource",
+            "hasToExist": true
+          },
+          {
+            "type": "EQUALS",
+            "propertyId": "1112",
+            "path": "region.restSynchronization.useLocalTable",
+            "hasToExist": false,
+            "value": "N"
+          }
+        ]
+      },
+      "propertyId": "1012",
+      "builderLabel": "Preference",
+      "apexlangPath": "parameter.value.preference",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1005",
+            "path": "parameter.value.type",
+            "hasToExist": true,
+            "value": "PREFERENCE"
+          }
+        ]
+      },
+      "maxLength": 255,
+      "description": "Preference (text) in parameter.value.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:8000:1015",
+      "context": "parameter",
+      "componentTypeId": "8000",
+      "componentTitle": "Parameter",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_NULL",
+            "propertyId": "967",
+            "path": "region.source.restSource",
+            "hasToExist": true
+          },
+          {
+            "type": "EQUALS",
+            "propertyId": "1112",
+            "path": "region.restSynchronization.useLocalTable",
+            "hasToExist": false,
+            "value": "N"
+          }
+        ]
+      },
+      "propertyId": "1015",
+      "builderLabel": "Name",
+      "apexlangPath": "parameter.value.name",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1005",
+            "path": "parameter.value.type",
+            "hasToExist": true,
+            "value": "COLLECTION"
+          }
+        ]
+      },
+      "maxLength": 255,
+      "description": "Name (text) in parameter.value.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:8000:2381",
+      "context": "parameter",
+      "componentTypeId": "8000",
+      "componentTitle": "Parameter",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_NULL",
+            "propertyId": "967",
+            "path": "region.source.restSource",
+            "hasToExist": true
+          },
+          {
+            "type": "EQUALS",
+            "propertyId": "1112",
+            "path": "region.restSynchronization.useLocalTable",
+            "hasToExist": false,
+            "value": "N"
+          }
+        ]
+      },
+      "propertyId": "2381",
+      "builderLabel": "Column",
+      "apexlangPath": "parameter.value.column",
+      "type": "COMPONENT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1005",
+            "path": "parameter.value.type",
+            "hasToExist": true,
+            "value": "PARENT_COLUMN"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Column (component) in parameter.value.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:8000:6060",
+      "context": "parameter",
+      "componentTypeId": "8000",
+      "componentTitle": "Parameter",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_NULL",
+            "propertyId": "967",
+            "path": "region.source.restSource",
+            "hasToExist": true
+          },
+          {
+            "type": "EQUALS",
+            "propertyId": "1112",
+            "path": "region.restSynchronization.useLocalTable",
+            "hasToExist": false,
+            "value": "N"
+          }
+        ]
+      },
+      "propertyId": "6060",
+      "builderLabel": "Language",
+      "apexlangPath": "parameter.value.language",
+      "type": "CODE LANGUAGE",
+      "required": true,
+      "defaultValue": "PLSQL",
+      "values": [
+        {
+          "name": "sql",
+          "returnValue": "SQL",
+          "label": "SQL"
+        },
+        {
+          "name": "plsql",
+          "returnValue": "PLSQL",
+          "label": "PL/SQL"
+        },
+        {
+          "name": "javaScript-mle",
+          "returnValue": "JAVASCRIPT",
+          "label": "JavaScript (MLE)"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1005",
+            "path": "parameter.value.type",
+            "hasToExist": true,
+            "value": "EXPRESSION"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Language (code language) in parameter.value.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:8000:6061",
+      "context": "parameter",
+      "componentTypeId": "8000",
+      "componentTitle": "Parameter",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_NULL",
+            "propertyId": "967",
+            "path": "region.source.restSource",
+            "hasToExist": true
+          },
+          {
+            "type": "EQUALS",
+            "propertyId": "1112",
+            "path": "region.restSynchronization.useLocalTable",
+            "hasToExist": false,
+            "value": "N"
+          }
+        ]
+      },
+      "propertyId": "6061",
+      "builderLabel": "SQL Expression",
+      "apexlangPath": "parameter.value.sqlExpression",
+      "type": "SQL EXPRESSION CUSTOM",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "6060",
+            "path": "parameter.value.language",
+            "hasToExist": true,
+            "value": "SQL"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "SQL Expression (sql expression custom) in parameter.value.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:8000:6062",
+      "context": "parameter",
+      "componentTypeId": "8000",
+      "componentTitle": "Parameter",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_NULL",
+            "propertyId": "967",
+            "path": "region.source.restSource",
+            "hasToExist": true
+          },
+          {
+            "type": "EQUALS",
+            "propertyId": "1112",
+            "path": "region.restSynchronization.useLocalTable",
+            "hasToExist": false,
+            "value": "N"
+          }
+        ]
+      },
+      "propertyId": "6062",
+      "builderLabel": "PL/SQL Expression",
+      "apexlangPath": "parameter.value.plsqlExpression",
+      "type": "PLSQL EXPRESSION CUSTOM",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "6060",
+            "path": "parameter.value.language",
+            "hasToExist": true,
+            "value": "PLSQL"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "PL/SQL Expression (plsql expression custom) in parameter.value.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:8000:6063",
+      "context": "parameter",
+      "componentTypeId": "8000",
+      "componentTitle": "Parameter",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_NULL",
+            "propertyId": "967",
+            "path": "region.source.restSource",
+            "hasToExist": true
+          },
+          {
+            "type": "EQUALS",
+            "propertyId": "1112",
+            "path": "region.restSynchronization.useLocalTable",
+            "hasToExist": false,
+            "value": "N"
+          }
+        ]
+      },
+      "propertyId": "6063",
+      "builderLabel": "JavaScript Expression",
+      "apexlangPath": "parameter.value.javaScriptExpression",
+      "type": "MLE JAVASCRIPT EXPRESSION CUSTOM",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "6060",
+            "path": "parameter.value.language",
+            "hasToExist": true,
+            "value": "JAVASCRIPT"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "JavaScript Expression (mle javascript expression custom) in parameter.value.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:8000:6080",
+      "context": "parameter",
+      "componentTypeId": "8000",
+      "componentTitle": "Parameter",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_NULL",
+            "propertyId": "967",
+            "path": "region.source.restSource",
+            "hasToExist": true
+          },
+          {
+            "type": "EQUALS",
+            "propertyId": "1112",
+            "path": "region.restSynchronization.useLocalTable",
+            "hasToExist": false,
+            "value": "N"
+          }
+        ]
+      },
+      "propertyId": "6080",
+      "builderLabel": "Language",
+      "apexlangPath": "parameter.value.language",
+      "type": "CODE LANGUAGE",
+      "required": true,
+      "defaultValue": "PLSQL",
+      "values": [
+        {
+          "name": "plsql",
+          "returnValue": "PLSQL",
+          "label": "PL/SQL"
+        },
+        {
+          "name": "javaScript-mle",
+          "returnValue": "JAVASCRIPT",
+          "label": "JavaScript (MLE)"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1005",
+            "path": "parameter.value.type",
+            "hasToExist": true,
+            "value": "FUNCTION_BODY"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Language (code language) in parameter.value.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:8000:6081",
+      "context": "parameter",
+      "componentTypeId": "8000",
+      "componentTitle": "Parameter",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_NULL",
+            "propertyId": "967",
+            "path": "region.source.restSource",
+            "hasToExist": true
+          },
+          {
+            "type": "EQUALS",
+            "propertyId": "1112",
+            "path": "region.restSynchronization.useLocalTable",
+            "hasToExist": false,
+            "value": "N"
+          }
+        ]
+      },
+      "propertyId": "6081",
+      "builderLabel": "PL/SQL Function Body",
+      "apexlangPath": "parameter.value.plsqlFunctionBody",
+      "type": "PLSQL FUNCTION BODY CUSTOM",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "6080",
+            "path": "parameter.value.language",
+            "hasToExist": true,
+            "value": "PLSQL"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "PL/SQL Function Body (plsql function body custom) in parameter.value.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:8000:6082",
+      "context": "parameter",
+      "componentTypeId": "8000",
+      "componentTitle": "Parameter",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_NULL",
+            "propertyId": "967",
+            "path": "region.source.restSource",
+            "hasToExist": true
+          },
+          {
+            "type": "EQUALS",
+            "propertyId": "1112",
+            "path": "region.restSynchronization.useLocalTable",
+            "hasToExist": false,
+            "value": "N"
+          }
+        ]
+      },
+      "propertyId": "6082",
+      "builderLabel": "JavaScript Function Body",
+      "apexlangPath": "parameter.value.javaScriptFunctionBody",
+      "type": "MLE JAVASCRIPT FUNCTION BODY CUSTOM",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "6080",
+            "path": "parameter.value.language",
+            "hasToExist": true,
+            "value": "JAVASCRIPT"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "JavaScript Function Body (mle javascript function body custom) in parameter.value.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": null
+    },
+    {
+      "id": "mmd:8010:4",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "4",
+      "builderLabel": "Comments",
+      "apexlangPath": "facet.comments.comments",
+      "type": "TEXT EDITOR",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": null,
+      "maxLength": 4000,
+      "description": "Comments (text editor) in facet.comments.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:24",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "24",
+      "builderLabel": "Authorization Scheme",
+      "apexlangPath": "facet.security.authorizationScheme",
+      "type": "COMPONENT",
+      "required": false,
+      "defaultValue": null,
+      "values": [
+        {
+          "name": "mustNotBePublicUser",
+          "returnValue": "MUST_NOT_BE_PUBLIC_USER",
+          "label": "MODEL.LOV.MUST_NOT_BE_PUBLIC_USER"
+        }
+      ],
+      "condition": null,
+      "maxLength": null,
+      "description": "Authorization Scheme (component) in facet.security.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:38",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "38",
+      "builderLabel": "Build Option",
+      "apexlangPath": "facet.config.buildOption",
+      "type": "COMPONENT",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": null,
+      "maxLength": null,
+      "description": "Build Option (component) in facet.config.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:93",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "93",
+      "builderLabel": "Type",
+      "apexlangPath": "facet.type",
+      "type": "SUPPORTED UI",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": null,
+      "maxLength": null,
+      "description": "Type (supported ui) in facet.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:96",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "96",
+      "builderLabel": "Name",
+      "apexlangPath": "facet.name",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": "P#PAGE_ID#_NEW",
+      "values": [],
+      "condition": null,
+      "maxLength": 255,
+      "description": "Name (text) in facet.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:97",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "97",
+      "builderLabel": "Sequence",
+      "apexlangPath": "facet.layout.sequence",
+      "type": "NUMBER",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": null,
+      "maxLength": 22,
+      "description": "Sequence (number) in facet.layout.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:99",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "99",
+      "builderLabel": "Label",
+      "apexlangPath": "facet.label.label",
+      "type": "TEXT",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "93",
+            "path": "facet.type",
+            "hasToExist": true,
+            "values": [
+              "VISIBLE"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Label (text) in facet.label.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:112",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "112",
+      "builderLabel": "Format Mask",
+      "apexlangPath": "facet.appearance.formatMask",
+      "type": "COMBOBOX",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "93",
+            "path": "facet.type",
+            "hasToExist": true,
+            "values": [
+              "FORMAT_MASK_DATE"
+            ]
+          },
+          {
+            "type": "IN_LIST",
+            "propertyId": "818",
+            "path": "facet.source.dataType",
+            "hasToExist": true,
+            "values": [
+              "DATE",
+              "TIMESTAMP",
+              "TIMESTAMP_TZ",
+              "TIMESTAMP_LTZ"
+            ]
+          }
+        ]
+      },
+      "maxLength": 255,
+      "description": "Format Mask (combobox) in facet.appearance.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:114",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "114",
+      "builderLabel": "List of Values",
+      "apexlangPath": "facet.lov.lov",
+      "type": "COMPONENT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1091",
+            "path": "facet.lov.type",
+            "hasToExist": true,
+            "value": "SHARED"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "List of Values (component) in facet.lov.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:117",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "117",
+      "builderLabel": "Null Display Value",
+      "apexlangPath": "facet.lov.nullDisplayValue",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1097",
+            "path": "facet.lov.includeNullOption",
+            "hasToExist": true,
+            "value": "Y"
+          }
+        ]
+      },
+      "maxLength": 255,
+      "description": "Null Display Value (text) in facet.lov.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:121",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "121",
+      "builderLabel": "Parent Required",
+      "apexlangPath": "facet.cascadingLov.parentRequired",
+      "type": "YES NO",
+      "required": true,
+      "defaultValue": "Y",
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_NULL",
+            "propertyId": "1109",
+            "path": "facet.cascadingLov.parentFacet",
+            "hasToExist": true
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Parent Required (yes no) in facet.cascadingLov.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:122",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "122",
+      "builderLabel": "SQL Query",
+      "apexlangPath": "facet.lov.sqlQuery",
+      "type": "SQL",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1091",
+            "path": "facet.lov.type",
+            "hasToExist": true,
+            "value": "SQL_QUERY"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "SQL Query (sql) in facet.lov.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:127",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "127",
+      "builderLabel": "Value Placeholder",
+      "apexlangPath": "facet.appearance.valuePlaceholder",
+      "type": "TEXT",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "93",
+            "path": "facet.type",
+            "hasToExist": true,
+            "values": [
+              "PLACEHOLDER"
+            ]
+          }
+        ]
+      },
+      "maxLength": 255,
+      "description": "Value Placeholder (text) in facet.appearance.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:128",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "128",
+      "builderLabel": "CSS Classes",
+      "apexlangPath": "facet.advanced.cssClasses",
+      "type": "COMBOBOX",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_EQUALS",
+            "propertyId": "93",
+            "path": "facet.type",
+            "hasToExist": true,
+            "value": "NATIVE_SEARCH"
+          },
+          {
+            "type": "EQUALS",
+            "propertyId": "1219",
+            "path": "facet.appearance.display",
+            "hasToExist": true,
+            "value": "INLINE"
+          }
+        ]
+      },
+      "maxLength": 255,
+      "description": "CSS Classes (combobox) in facet.advanced.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:141",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "141",
+      "builderLabel": "Database Column",
+      "apexlangPath": "facet.source.databaseColumn",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_EQUALS",
+            "propertyId": "93",
+            "path": "facet.type",
+            "hasToExist": true,
+            "value": "NATIVE_SEARCH"
+          }
+        ]
+      },
+      "maxLength": 128,
+      "description": "Database Column (text) in facet.source.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:145",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "145",
+      "builderLabel": "Type",
+      "apexlangPath": "facet.default.type",
+      "type": "SELECT LIST",
+      "required": false,
+      "defaultValue": null,
+      "values": [
+        {
+          "name": "static",
+          "returnValue": "STATIC_TEXT_WITH_SUBSTITUTIONS",
+          "label": "Static"
+        },
+        {
+          "name": "item",
+          "returnValue": "ITEM",
+          "label": "Item"
+        },
+        {
+          "name": "sqlQuerySingleValue",
+          "returnValue": "SQL_QUERY",
+          "label": "SQL Query (return single value)"
+        },
+        {
+          "name": "sqlQueryMultipleValues",
+          "returnValue": "SQL_QUERY_COLON",
+          "label": "SQL Query (return multiple values)"
+        },
+        {
+          "name": "expression",
+          "returnValue": "EXPRESSION",
+          "label": "Expression"
+        },
+        {
+          "name": "functionBody",
+          "returnValue": "FUNCTION_BODY",
+          "label": "Function Body"
+        },
+        {
+          "name": "sequence",
+          "returnValue": "SEQUENCE",
+          "label": "Sequence"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "93",
+            "path": "facet.type",
+            "hasToExist": true,
+            "values": [
+              "SOURCE"
+            ]
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Type (select list) in facet.default.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:146",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "146",
+      "builderLabel": "Static Value",
+      "apexlangPath": "facet.default.staticValue",
+      "type": "TEXT EDITOR",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "145",
+            "path": "facet.default.type",
+            "hasToExist": true,
+            "value": "STATIC_TEXT_WITH_SUBSTITUTIONS"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Static Value (text editor) in facet.default.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:173",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "173",
+      "builderLabel": "Store value encrypted in session state",
+      "apexlangPath": "facet.security.encryptSessionState",
+      "type": "YES NO",
+      "required": true,
+      "defaultValue": "Y",
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "93",
+            "path": "facet.type",
+            "hasToExist": true,
+            "values": [
+              "ENCRYPT"
+            ]
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Store value encrypted in session state (yes no) in facet.security.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:174",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "174",
+      "builderLabel": "Escape Special Characters",
+      "apexlangPath": "facet.security.escapeSpecialChars",
+      "type": "YES NO",
+      "required": true,
+      "defaultValue": "Y",
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "93",
+            "path": "facet.type",
+            "hasToExist": true,
+            "values": [
+              "ESCAPE_OUTPUT"
+            ]
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Escape Special Characters (yes no) in facet.security.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:374",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "374",
+      "builderLabel": "Static Values",
+      "apexlangPath": "facet.lov.staticValues",
+      "type": "STATIC LOV",
+      "required": true,
+      "defaultValue": "STATIC:Display1;Return1,Display2;Return2",
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1091",
+            "path": "facet.lov.type",
+            "hasToExist": true,
+            "value": "STATIC"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Static Values (static lov) in facet.lov.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:461",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "461",
+      "builderLabel": "Item",
+      "apexlangPath": "facet.default.item",
+      "type": "ITEM",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "145",
+            "path": "facet.default.type",
+            "hasToExist": true,
+            "value": "ITEM"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Item (item) in facet.default.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:739",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "739",
+      "builderLabel": "Icon",
+      "apexlangPath": "facet.appearance.icon",
+      "type": "ICON",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_EQUALS",
+            "propertyId": "93",
+            "path": "facet.type",
+            "hasToExist": true,
+            "value": "NATIVE_SEARCH"
+          }
+        ]
+      },
+      "maxLength": 255,
+      "description": "Icon (icon) in facet.appearance.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:818",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "818",
+      "builderLabel": "Data Type",
+      "apexlangPath": "facet.source.dataType",
+      "type": "SELECT LIST",
+      "required": true,
+      "defaultValue": "VARCHAR2",
+      "values": [
+        {
+          "name": "varchar2",
+          "returnValue": "VARCHAR2",
+          "label": "VARCHAR2"
+        },
+        {
+          "name": "number",
+          "returnValue": "NUMBER",
+          "label": "NUMBER"
+        },
+        {
+          "name": "date",
+          "returnValue": "DATE",
+          "label": "DATE"
+        },
+        {
+          "name": "timestamp",
+          "returnValue": "TIMESTAMP",
+          "label": "TIMESTAMP"
+        },
+        {
+          "name": "timestampWithTimeZone",
+          "returnValue": "TIMESTAMP_TZ",
+          "label": "TIMESTAMP WITH TIME ZONE"
+        },
+        {
+          "name": "timestampWithLocalTimeZone",
+          "returnValue": "TIMESTAMP_LTZ",
+          "label": "TIMESTAMP WITH LOCAL TIME ZONE"
+        },
+        {
+          "name": "intervalYearToMonth",
+          "returnValue": "INTERVAL_Y2M",
+          "label": "INTERVAL YEAR TO MONTH"
+        },
+        {
+          "name": "intervalDayToSecond",
+          "returnValue": "INTERVAL_D2S",
+          "label": "INTERVAL DAY TO SECOND"
+        },
+        {
+          "name": "clob",
+          "returnValue": "CLOB",
+          "label": "CLOB"
+        },
+        {
+          "name": "blob",
+          "returnValue": "BLOB",
+          "label": "BLOB"
+        },
+        {
+          "name": "boolean",
+          "returnValue": "BOOLEAN",
+          "label": "BOOLEAN"
+        },
+        {
+          "name": "rowid",
+          "returnValue": "ROWID",
+          "label": "ROWID"
+        },
+        {
+          "name": "bfile",
+          "returnValue": "BFILE",
+          "label": "BFILE"
+        },
+        {
+          "name": "sdoGeometry",
+          "returnValue": "SDO_GEOMETRY",
+          "label": "SDO_GEOMETRY"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_EQUALS",
+            "propertyId": "93",
+            "path": "facet.type",
+            "hasToExist": true,
+            "value": "NATIVE_SEARCH"
+          }
+        ]
+      },
+      "maxLength": 128,
+      "description": "Data Type (select list) in facet.source.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:824",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "824",
+      "builderLabel": "SQL Query (return single value)",
+      "apexlangPath": "facet.default.sqlQuerySingleValue",
+      "type": "SQL",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "145",
+            "path": "facet.default.type",
+            "hasToExist": true,
+            "value": "SQL_QUERY"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "SQL Query (return single value) (sql) in facet.default.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:825",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "825",
+      "builderLabel": "SQL Query (return multiple values)",
+      "apexlangPath": "facet.default.sqlQueryMultipleValues",
+      "type": "SQL",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "145",
+            "path": "facet.default.type",
+            "hasToExist": true,
+            "value": "SQL_QUERY_COLON"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "SQL Query (return multiple values) (sql) in facet.default.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:826",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "826",
+      "builderLabel": "Sequence",
+      "apexlangPath": "facet.default.sequence",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "145",
+            "path": "facet.default.type",
+            "hasToExist": true,
+            "value": "SEQUENCE"
+          }
+        ]
+      },
+      "maxLength": 128,
+      "description": "Sequence (text) in facet.default.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:1091",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "1091",
+      "builderLabel": "Type",
+      "apexlangPath": "facet.lov.type",
+      "type": "SELECT LIST",
+      "required": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURE_IS_REQUIRED",
+            "hasToExist": true,
+            "value": "LOV",
+            "propertyId": "93"
+          }
+        ]
+      },
+      "defaultValue": null,
+      "values": [
+        {
+          "name": "sharedComponent",
+          "returnValue": "SHARED",
+          "label": "Shared Component"
+        },
+        {
+          "name": "sqlQuery",
+          "returnValue": "SQL_QUERY",
+          "label": "SQL Query"
+        },
+        {
+          "name": "staticValues",
+          "returnValue": "STATIC",
+          "label": "Static Values"
+        },
+        {
+          "name": "functionBody",
+          "returnValue": "FUNCTION_BODY",
+          "label": "Function Body returning SQL Query"
+        },
+        {
+          "name": "distinctValues",
+          "returnValue": "DISTINCT",
+          "label": "Distinct Values"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "93",
+            "path": "facet.type",
+            "hasToExist": true,
+            "values": [
+              "LOV"
+            ]
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Type (select list) in facet.lov.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:1092",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "1092",
+      "builderLabel": "Compute Counts",
+      "apexlangPath": "facet.listEntries.computeCounts",
+      "type": "YES NO",
+      "required": true,
+      "defaultValue": "Y",
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "93",
+            "path": "facet.type",
+            "hasToExist": true,
+            "values": [
+              "FC_HAS_FEEDBACK"
+            ]
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Compute Counts (yes no) in facet.listEntries.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:1093",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "1093",
+      "builderLabel": "Show Counts",
+      "apexlangPath": "facet.listEntries.showCounts",
+      "type": "YES NO",
+      "required": true,
+      "defaultValue": "Y",
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1092",
+            "path": "facet.listEntries.computeCounts",
+            "hasToExist": true,
+            "value": "Y"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Show Counts (yes no) in facet.listEntries.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:1094",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "1094",
+      "builderLabel": "Zero Count Entries",
+      "apexlangPath": "facet.listEntries.zeroCountEntries",
+      "type": "SELECT LIST",
+      "required": true,
+      "defaultValue": "H",
+      "values": [
+        {
+          "name": "hide",
+          "returnValue": "H",
+          "label": "Hide"
+        },
+        {
+          "name": "disable",
+          "returnValue": "D",
+          "label": "Disable"
+        },
+        {
+          "name": "showLast",
+          "returnValue": "L",
+          "label": "Show Last"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1092",
+            "path": "facet.listEntries.computeCounts",
+            "hasToExist": true,
+            "value": "Y"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Zero Count Entries (select list) in facet.listEntries.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:1095",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "1095",
+      "builderLabel": "Display Filter Initially",
+      "apexlangPath": "facet.listEntries.displayFilterInitially",
+      "type": "YES NO",
+      "required": true,
+      "defaultValue": "N",
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "93",
+            "path": "facet.type",
+            "hasToExist": true,
+            "values": [
+              "FC_FILTER_VALUES"
+            ]
+          },
+          {
+            "type": "NOT_NULL",
+            "propertyId": "1091",
+            "path": "facet.lov.type",
+            "hasToExist": true
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Display Filter Initially (yes no) in facet.listEntries.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:1096",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "1096",
+      "builderLabel": "Show Selected First",
+      "apexlangPath": "facet.listEntries.showSelectedFirst",
+      "type": "YES NO",
+      "required": true,
+      "defaultValue": "N",
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "93",
+            "path": "facet.type",
+            "hasToExist": true,
+            "values": [
+              "FC_SHOW_SELECTED_FIRST"
+            ]
+          },
+          {
+            "type": "NOT_NULL",
+            "propertyId": "1091",
+            "path": "facet.lov.type",
+            "hasToExist": true
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Show Selected First (yes no) in facet.listEntries.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:1097",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "1097",
+      "builderLabel": "Include Null Option",
+      "apexlangPath": "facet.lov.includeNullOption",
+      "type": "YES NO",
+      "required": true,
+      "defaultValue": "N",
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "93",
+            "path": "facet.type",
+            "hasToExist": true,
+            "values": [
+              "FC_LOV_DISPLAY_NULL"
+            ]
+          },
+          {
+            "type": "NOT_NULL",
+            "propertyId": "1091",
+            "path": "facet.lov.type",
+            "hasToExist": true
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Include Null Option (yes no) in facet.lov.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:1098",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "1098",
+      "builderLabel": "Maximum Displayed Entries",
+      "apexlangPath": "facet.listEntries.maxDisplayedEntries",
+      "type": "INTEGER",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "93",
+            "path": "facet.type",
+            "hasToExist": true,
+            "values": [
+              "FC_SHOW_MORE_COUNT"
+            ]
+          },
+          {
+            "type": "NOT_NULL",
+            "propertyId": "1091",
+            "path": "facet.lov.type",
+            "hasToExist": true
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Maximum Displayed Entries (integer) in facet.listEntries.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:1099",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "1099",
+      "builderLabel": "Collapsible",
+      "apexlangPath": "facet.advanced.collapsible",
+      "type": "YES NO",
+      "required": true,
+      "defaultValue": "N",
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_EQUALS",
+            "propertyId": "93",
+            "path": "facet.type",
+            "hasToExist": true,
+            "value": "NATIVE_SEARCH"
+          },
+          {
+            "type": "EQUALS",
+            "propertyId": "1219",
+            "path": "facet.appearance.display",
+            "hasToExist": true,
+            "value": "INLINE"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Collapsible (yes no) in facet.advanced.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:1100",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "1100",
+      "builderLabel": "Initially Collapsed",
+      "apexlangPath": "facet.advanced.initiallyCollapsed",
+      "type": "YES NO",
+      "required": true,
+      "defaultValue": "N",
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1099",
+            "path": "facet.advanced.collapsible",
+            "hasToExist": true,
+            "value": "Y"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Initially Collapsed (yes no) in facet.advanced.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:1101",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "1101",
+      "builderLabel": "Maximum Height",
+      "apexlangPath": "facet.layout.maxHeight",
+      "type": "INTEGER",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_IN_LIST",
+            "propertyId": "93",
+            "path": "facet.type",
+            "hasToExist": true,
+            "values": [
+              "NATIVE_SEARCH",
+              "NATIVE_INPUT"
+            ]
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Maximum Height (integer) in facet.layout.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:1102",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "1102",
+      "builderLabel": "Database Column(s)",
+      "apexlangPath": "facet.source.dbColumns",
+      "type": "TEXT",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "93",
+            "path": "facet.type",
+            "hasToExist": true,
+            "value": "NATIVE_SEARCH"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Database Column(s) (text) in facet.source.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:1103",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "1103",
+      "builderLabel": "Sort By Top Counts",
+      "apexlangPath": "facet.listEntries.sortByTopCounts",
+      "type": "YES NO",
+      "required": true,
+      "defaultValue": "Y",
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1093",
+            "path": "facet.listEntries.showCounts",
+            "hasToExist": true,
+            "value": "Y"
+          },
+          {
+            "type": "IN_LIST",
+            "propertyId": "93",
+            "path": "facet.type",
+            "hasToExist": true,
+            "values": [
+              "NATIVE_CHECKBOX",
+              "NATIVE_RADIOGROUP"
+            ]
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Sort By Top Counts (yes no) in facet.listEntries.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:1104",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "1104",
+      "builderLabel": "Facet",
+      "apexlangPath": "facet.dependingOn.facet",
+      "type": "COMPONENT",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_EQUALS",
+            "propertyId": "93",
+            "path": "facet.type",
+            "hasToExist": true,
+            "value": "NATIVE_SEARCH"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Facet (component) in facet.dependingOn.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:1105",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "1105",
+      "builderLabel": "Type",
+      "apexlangPath": "facet.dependingOn.type",
+      "type": "SELECT LIST",
+      "required": true,
+      "defaultValue": "NOT_NULL",
+      "values": [
+        {
+          "name": "=",
+          "returnValue": "EQUALS",
+          "label": "equal to"
+        },
+        {
+          "name": "!=",
+          "returnValue": "NOT_EQUALS",
+          "label": "not equal to"
+        },
+        {
+          "name": "inList",
+          "returnValue": "IN_LIST",
+          "label": "in list"
+        },
+        {
+          "name": "notInList",
+          "returnValue": "NOT_IN_LIST",
+          "label": "not in list"
+        },
+        {
+          "name": "isNull",
+          "returnValue": "NULL",
+          "label": "is null"
+        },
+        {
+          "name": "isNotNull",
+          "returnValue": "NOT_NULL",
+          "label": "is not null"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_NULL",
+            "propertyId": "1104",
+            "path": "facet.dependingOn.facet",
+            "hasToExist": true
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Type (select list) in facet.dependingOn.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:1106",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "1106",
+      "builderLabel": "Value",
+      "apexlangPath": "facet.dependingOn.value",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "1105",
+            "path": "facet.dependingOn.type",
+            "hasToExist": true,
+            "values": [
+              "EQUALS",
+              "NOT_EQUALS"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Value (text) in facet.dependingOn.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:1107",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "1107",
+      "builderLabel": "List",
+      "apexlangPath": "facet.dependingOn.list",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "1105",
+            "path": "facet.dependingOn.type",
+            "hasToExist": true,
+            "values": [
+              "IN_LIST",
+              "NOT_IN_LIST"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "List (text) in facet.dependingOn.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:1108",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "1108",
+      "builderLabel": "LOV Column",
+      "apexlangPath": "facet.cascadingLov.lovColumn",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_NULL",
+            "propertyId": "1109",
+            "path": "facet.cascadingLov.parentFacet",
+            "hasToExist": true
+          }
+        ]
+      },
+      "maxLength": 128,
+      "description": "LOV Column (text) in facet.cascadingLov.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:1109",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "1109",
+      "builderLabel": "Parent Facet",
+      "apexlangPath": "facet.cascadingLov.parentFacet",
+      "type": "FACET",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1091",
+            "path": "facet.lov.type",
+            "hasToExist": true,
+            "value": "SHARED"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Parent Facet (facet) in facet.cascadingLov.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:1119",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "1119",
+      "builderLabel": "Sort Direction",
+      "apexlangPath": "facet.lov.sortDirection",
+      "type": "SELECT LIST",
+      "required": true,
+      "defaultValue": "ASC",
+      "values": [
+        {
+          "name": "asc",
+          "returnValue": "ASC",
+          "label": "Ascending"
+        },
+        {
+          "name": "desc",
+          "returnValue": "DESC",
+          "label": "Descending"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1091",
+            "path": "facet.lov.type",
+            "hasToExist": true,
+            "value": "DISTINCT"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Sort Direction (select list) in facet.lov.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:1176",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "1176",
+      "builderLabel": "Chart",
+      "apexlangPath": "facet.actionsMenu.chart",
+      "type": "YES NO",
+      "required": true,
+      "defaultValue": "Y",
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1092",
+            "path": "facet.listEntries.computeCounts",
+            "hasToExist": true,
+            "value": "Y"
+          },
+          {
+            "type": "NOT_NULL",
+            "propertyId": "1091",
+            "path": "facet.lov.type",
+            "hasToExist": true
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Chart (yes no) in facet.actionsMenu.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:1177",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "1177",
+      "builderLabel": "Show Chart Initially",
+      "apexlangPath": "facet.advanced.showChartInitially",
+      "type": "YES NO",
+      "required": true,
+      "defaultValue": "N",
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1176",
+            "path": "facet.actionsMenu.chart",
+            "hasToExist": true,
+            "value": "Y"
+          },
+          {
+            "type": "EQUALS",
+            "propertyId": "1219",
+            "path": "facet.appearance.display",
+            "hasToExist": true,
+            "value": "INLINE"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Show Chart Initially (yes no) in facet.advanced.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:1219",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "1219",
+      "builderLabel": "Display",
+      "apexlangPath": "facet.appearance.display",
+      "type": "PILL BUTTONS",
+      "required": true,
+      "defaultValue": "INLINE",
+      "values": [
+        {
+          "name": "inline",
+          "returnValue": "INLINE",
+          "label": "Inline"
+        },
+        {
+          "name": "addFilterDialog",
+          "returnValue": "FILTER_DIALOG",
+          "label": "Add Filter Dialog"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_EQUALS",
+            "propertyId": "93",
+            "path": "facet.type",
+            "hasToExist": true,
+            "value": "NATIVE_SEARCH"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Display (pill buttons) in facet.appearance.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:1221",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "1221",
+      "builderLabel": "Type",
+      "apexlangPath": "facet.multipleValues.type",
+      "type": "SELECT LIST",
+      "required": false,
+      "defaultValue": null,
+      "values": [
+        {
+          "name": "delimitedList",
+          "returnValue": "SEPARATED",
+          "label": "Delimited List"
+        },
+        {
+          "name": "jsonArray",
+          "returnValue": "JSON_ARRAY",
+          "label": "JSON Array"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "93",
+            "path": "facet.type",
+            "hasToExist": true,
+            "values": [
+              "NATIVE_CHECKBOX",
+              "NATIVE_RADIOGROUP",
+              "NATIVE_SELECT_LIST"
+            ]
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Type (select list) in facet.multipleValues.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:1223",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "1223",
+      "builderLabel": "Trim Whitespace",
+      "apexlangPath": "facet.multipleValues.trimWhitespace",
+      "type": "YES NO",
+      "required": true,
+      "defaultValue": "N",
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1221",
+            "path": "facet.multipleValues.type",
+            "hasToExist": true,
+            "value": "SEPARATED"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Trim Whitespace (yes no) in facet.multipleValues.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:1224",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "1224",
+      "builderLabel": "Filter Combination",
+      "apexlangPath": "facet.multipleValues.filterCombination",
+      "type": "SELECT LIST",
+      "required": true,
+      "defaultValue": "OR",
+      "values": [
+        {
+          "name": "or",
+          "returnValue": "OR",
+          "label": "OR (Union)"
+        },
+        {
+          "name": "and",
+          "returnValue": "AND",
+          "label": "AND (Intersect)"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_NULL",
+            "propertyId": "1221",
+            "path": "facet.multipleValues.type",
+            "hasToExist": true
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Filter Combination (select list) in facet.multipleValues.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:1235",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "1235",
+      "builderLabel": "Show Label for Current Facet",
+      "apexlangPath": "facet.label.showLabelForCurrentFacet",
+      "type": "YES NO",
+      "required": true,
+      "defaultValue": "Y",
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "93",
+            "path": "facet.type",
+            "hasToExist": true,
+            "values": [
+              "VISIBLE"
+            ]
+          },
+          {
+            "type": "NOT_EQUALS",
+            "propertyId": "93",
+            "path": "facet.type",
+            "hasToExist": true,
+            "value": "NATIVE_SEARCH"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Show Label for Current Facet (yes no) in facet.label.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:1261",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "1261",
+      "builderLabel": "Separator",
+      "apexlangPath": "facet.multipleValues.separator",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": ":",
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1221",
+            "path": "facet.multipleValues.type",
+            "hasToExist": true,
+            "value": "SEPARATED"
+          }
+        ]
+      },
+      "maxLength": 5,
+      "description": "Separator (text) in facet.multipleValues.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:1402",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "1402",
+      "builderLabel": "Filter",
+      "apexlangPath": "facet.actionsMenu.filter",
+      "type": "YES NO",
+      "required": true,
+      "defaultValue": "Y",
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "93",
+            "path": "facet.type",
+            "hasToExist": true,
+            "values": [
+              "FC_FILTER_VALUES"
+            ]
+          },
+          {
+            "type": "NOT_NULL",
+            "propertyId": "1091",
+            "path": "facet.lov.type",
+            "hasToExist": true
+          },
+          {
+            "type": "EQUALS",
+            "propertyId": "1219",
+            "path": "facet.appearance.display",
+            "hasToExist": true,
+            "value": "INLINE"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Filter (yes no) in facet.actionsMenu.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:5100",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "5100",
+      "builderLabel": "Type",
+      "apexlangPath": "facet.serverSideCondition.type",
+      "type": "SELECT LIST",
+      "required": false,
+      "defaultValue": null,
+      "values": [
+        {
+          "name": "always",
+          "returnValue": "ALWAYS",
+          "label": "Always"
+        },
+        {
+          "name": "rowsReturned",
+          "returnValue": "EXISTS",
+          "label": "Rows returned"
+        },
+        {
+          "name": "noRowsReturned",
+          "returnValue": "NOT_EXISTS",
+          "label": "No Rows returned"
+        },
+        {
+          "name": "expression",
+          "returnValue": "EXPRESSION",
+          "label": "Expression"
+        },
+        {
+          "name": "functionBody",
+          "returnValue": "FUNCTION_BODY",
+          "label": "Function Body"
+        },
+        {
+          "name": "request=Value",
+          "returnValue": "REQUEST_EQUALS_CONDITION",
+          "label": "Request = Value"
+        },
+        {
+          "name": "request!=Value",
+          "returnValue": "REQUEST_NOT_EQUAL_CONDITION",
+          "label": "Request != Value"
+        },
+        {
+          "name": "requestIsContainedInValue",
+          "returnValue": "REQUEST_IN_CONDITION",
+          "label": "Request is contained in Value"
+        },
+        {
+          "name": "requestIsNotContainedInValue",
+          "returnValue": "REQUEST_NOT_IN_CONDITION",
+          "label": "Request is NOT contained in Value"
+        },
+        {
+          "name": "item=value",
+          "returnValue": "VAL_OF_ITEM_IN_COND_EQ_COND2",
+          "label": "Item = Value"
+        },
+        {
+          "name": "item!=value",
+          "returnValue": "VAL_OF_ITEM_IN_COND_NOT_EQ_COND2",
+          "label": "Item != Value"
+        },
+        {
+          "name": "itemIsNull",
+          "returnValue": "ITEM_IS_NULL",
+          "label": "Item is NULL"
+        },
+        {
+          "name": "itemIsNotNull",
+          "returnValue": "ITEM_IS_NOT_NULL",
+          "label": "Item is NOT NULL"
+        },
+        {
+          "name": "itemIsZero",
+          "returnValue": "ITEM_IS_ZERO",
+          "label": "Item is zero"
+        },
+        {
+          "name": "itemIsNotZero",
+          "returnValue": "ITEM_IS_NOT_ZERO",
+          "label": "Item is NOT zero"
+        },
+        {
+          "name": "itemIsNullOrZero",
+          "returnValue": "ITEM_IS_NULL_OR_ZERO",
+          "label": "Item is NULL or zero"
+        },
+        {
+          "name": "itemIsNotNullAndNotZero",
+          "returnValue": "ITEM_NOT_NULL_OR_ZERO",
+          "label": "Item is NOT NULL and NOT zero"
+        },
+        {
+          "name": "itemContainsNoSpaces",
+          "returnValue": "ITEM_CONTAINS_NO_SPACES",
+          "label": "Item contains no spaces"
+        },
+        {
+          "name": "itemIsNumeric",
+          "returnValue": "ITEM_IS_NUMERIC",
+          "label": "Item is numeric"
+        },
+        {
+          "name": "itemIsNotNumeric",
+          "returnValue": "ITEM_IS_NOT_NUMERIC",
+          "label": "Item is NOT numeric"
+        },
+        {
+          "name": "itemIsAlphanumeric",
+          "returnValue": "ITEM_IS_ALPHANUMERIC",
+          "label": "Item is alphanumeric"
+        },
+        {
+          "name": "itemIsInColonDelimitedList",
+          "returnValue": "VALUE_OF_ITEM_IN_CONDITION_IN_COLON_DELIMITED_LIST",
+          "label": "Item is in colon delimited list"
+        },
+        {
+          "name": "itemIsNotInColonDelimitedList",
+          "returnValue": "VALUE_OF_ITEM_IN_CONDITION_NOT_IN_COLON_DELIMITED_LIST",
+          "label": "Item is NOT in colon delimited list"
+        },
+        {
+          "name": "textIsContainedInItem",
+          "returnValue": "CONDITION1_IN_VALUE_OF_ITEM_IN_CONDITION2",
+          "label": "Text is contained in Item"
+        },
+        {
+          "name": "text=value",
+          "returnValue": "DISPLAY_COND_EQUAL_COND_TEXT",
+          "label": "Text = Value"
+        },
+        {
+          "name": "text!=value",
+          "returnValue": "DISP_COND_NOT_EQUAL_COND_TEXT",
+          "label": "Text != Value"
+        },
+        {
+          "name": "textIsContainedInValue",
+          "returnValue": "DISPLAY_COND_IN_COND_TEXT",
+          "label": "Text is contained in Value"
+        },
+        {
+          "name": "textIsNotContainedInValue",
+          "returnValue": "DISPLAY_COND_NOT_IN_COND_TEXT",
+          "label": "Text is NOT contained in Value"
+        },
+        {
+          "name": "userPreference=value",
+          "returnValue": "USER_PREF_IN_COND_EQ_COND2",
+          "label": "User Preference = Value"
+        },
+        {
+          "name": "userPreference!=value",
+          "returnValue": "USER_PREF_IN_COND_NOT_EQ_COND2",
+          "label": "User Preference != Value"
+        },
+        {
+          "name": "currentPage=page",
+          "returnValue": "CURRENT_PAGE_EQUALS_CONDITION",
+          "label": "Current Page = Page"
+        },
+        {
+          "name": "currentPage!=page",
+          "returnValue": "CURRENT_PAGE_NOT_EQUAL_CONDITION",
+          "label": "Current Page != Page"
+        },
+        {
+          "name": "currentPageInList",
+          "returnValue": "CURRENT_PAGE_IN_CONDITION",
+          "label": "Current Page is in comma delimited list"
+        },
+        {
+          "name": "currentPageNotInList",
+          "returnValue": "CURRENT_PAGE_NOT_IN_CONDITION",
+          "label": "Current Page is NOT in comma delimited list"
+        },
+        {
+          "name": "currentPage=pageSubmitted",
+          "returnValue": "WHEN_THIS_PAGE_SUBMITTED",
+          "label": "Current Page = Page Submitted (posted)"
+        },
+        {
+          "name": "currentPage!=pageSubmitted",
+          "returnValue": "WHEN_THIS_PAGE_NOT_SUBMITTED",
+          "label": "Current Page != Page Submitted (posted)"
+        },
+        {
+          "name": "currentPageIsInPrinterFriendlyMode",
+          "returnValue": "PAGE_IS_IN_PRINTER_FRIENDLY_MODE",
+          "label": "Current Page is in Printer Friendly Mode"
+        },
+        {
+          "name": "currentPageIsNotInPrinterFriendlyMode",
+          "returnValue": "PAGE_IS_NOT_IN_PRINTER_FRIENDLY_MODE",
+          "label": "Current page is NOT in Printer Friendly Mode"
+        },
+        {
+          "name": "pageRegionIsReadOnly",
+          "returnValue": "IS_READ_ONLY",
+          "label": "Page/Region is Read Only"
+        },
+        {
+          "name": "pageRegionIsNotReadOnly",
+          "returnValue": "IS_NOT_READ_ONLY",
+          "label": "Page/Region is NOT Read Only"
+        },
+        {
+          "name": "userIsAuthenticated",
+          "returnValue": "USER_IS_NOT_PUBLIC_USER",
+          "label": "User is Authenticated (not public)"
+        },
+        {
+          "name": "userIsPublicUser",
+          "returnValue": "USER_IS_PUBLIC_USER",
+          "label": "User is the Public User (user has not authenticated)"
+        },
+        {
+          "name": "inlineValidationErrorsDisplayed",
+          "returnValue": "DISPLAYING_INLINE_VALIDATION_ERRORS",
+          "label": "Inline Validation Errors displayed"
+        },
+        {
+          "name": "inlineValidationErrorsNotDisplayed",
+          "returnValue": "NOT_DISPLAYING_INLINE_VALIDATION_ERRORS",
+          "label": "Inline Validation Errors NOT displayed"
+        },
+        {
+          "name": "sqlReportsOkToShowForwardButton",
+          "returnValue": "MAX_ROWS_LT_ROWS_FETCHED",
+          "label": "SQL Reports (OK to show the forward button)"
+        },
+        {
+          "name": "sqlReportsOkToShowBackButton",
+          "returnValue": "MIN_ROW_GT_THAN_ONE",
+          "label": "SQL Reports (OK to show the back button)"
+        },
+        {
+          "name": "currentLanguage=value",
+          "returnValue": "CURRENT_LANG_EQ_COND1",
+          "label": "Current Language = Value"
+        },
+        {
+          "name": "currentLanguage!=value",
+          "returnValue": "CURRENT_LANG_NOT_EQ_COND1",
+          "label": "Current Language != Value"
+        },
+        {
+          "name": "currentLanguageIsContainedInValue",
+          "returnValue": "CURRENT_LANG_IN_COND1",
+          "label": "Current Language is contained in Value"
+        },
+        {
+          "name": "currentLanguageIsNotContainedInValue",
+          "returnValue": "CURRENT_LANG_NOT_IN_COND1",
+          "label": "Current Language is NOT contained in Value"
+        },
+        {
+          "name": "clientBrowserIsMozilla",
+          "returnValue": "BROWSER_IS_NSCP",
+          "label": "Client Browser is Mozilla, Netscape 6.x/7x or higher"
+        },
+        {
+          "name": "clientBrowserIsIE7higher",
+          "returnValue": "BROWSER_IS_MSIE",
+          "label": "Client Browser is Microsoft Internet Explorer 7.0 or higher"
+        },
+        {
+          "name": "clientBrowserIsXhtmlCssCapable",
+          "returnValue": "BROWSER_IS_MSIE_OR_NSCP",
+          "label": "Client Browser is XHTML / CSS capable browser"
+        },
+        {
+          "name": "clientBrowserIsOther",
+          "returnValue": "BROWSER_IS_OTHER",
+          "label": "Client Browser is Other browsers (or older version)"
+        },
+        {
+          "name": "cgiEnvDadName=value",
+          "returnValue": "DAD_NAME_EQ_CONDITION",
+          "label": "CGI_ENV: DAD_NAME = Value"
+        },
+        {
+          "name": "cgiEnvDadName!=value",
+          "returnValue": "DAD_NAME_NOT_EQ_CONDITION",
+          "label": "CGI_ENV: DAD_NAME != Value"
+        },
+        {
+          "name": "cgiEnvServerName=value",
+          "returnValue": "SERVER_NAME_EQ_CONDITION",
+          "label": "CGI_ENV: SERVER_NAME = Value"
+        },
+        {
+          "name": "cgiEnvServerName!=value",
+          "returnValue": "SERVER_NAME_NOT_EQ_CONDITION",
+          "label": "CGI_ENV: SERVER_NAME != Value"
+        },
+        {
+          "name": "cgiEnvHttpHost=value",
+          "returnValue": "HTTP_HOST_EQ_CONDITION",
+          "label": "CGI_ENV: HTTP_HOST = Value"
+        },
+        {
+          "name": "cgiEnvHttpHost!=value",
+          "returnValue": "HTTP_HOST_NOT_EQ_CONDITION",
+          "label": "CGI_ENV: HTTP_HOST != Value"
+        },
+        {
+          "name": "never",
+          "returnValue": "NEVER",
+          "label": "Never"
+        }
+      ],
+      "condition": null,
+      "maxLength": null,
+      "description": "Type (select list) in facet.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:5101",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "5101",
+      "builderLabel": "SQL Query",
+      "apexlangPath": "facet.serverSideCondition.sqlQuery",
+      "type": "SQL",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5100",
+            "path": "facet.serverSideCondition.type",
+            "hasToExist": true,
+            "values": [
+              "EXISTS",
+              "NOT_EXISTS"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "SQL Query (sql) in facet.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:5102",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "5102",
+      "builderLabel": "Value",
+      "apexlangPath": "facet.serverSideCondition.value",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5100",
+            "path": "facet.serverSideCondition.type",
+            "hasToExist": true,
+            "values": [
+              "REQUEST_EQUALS_CONDITION",
+              "REQUEST_NOT_EQUAL_CONDITION",
+              "REQUEST_IN_CONDITION",
+              "REQUEST_NOT_IN_CONDITION",
+              "CURRENT_LANG_IN_COND1",
+              "CURRENT_LANG_NOT_IN_COND1",
+              "CURRENT_LANG_NOT_EQ_COND1",
+              "CURRENT_LANG_EQ_COND1",
+              "DAD_NAME_EQ_CONDITION",
+              "DAD_NAME_NOT_EQ_CONDITION",
+              "SERVER_NAME_EQ_CONDITION",
+              "SERVER_NAME_NOT_EQ_CONDITION",
+              "HTTP_HOST_EQ_CONDITION",
+              "HTTP_HOST_NOT_EQ_CONDITION"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Value (text) in facet.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:5103",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "5103",
+      "builderLabel": "Item",
+      "apexlangPath": "facet.serverSideCondition.item",
+      "type": "ITEM",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5100",
+            "path": "facet.serverSideCondition.type",
+            "hasToExist": true,
+            "values": [
+              "VAL_OF_ITEM_IN_COND_EQ_COND2",
+              "VAL_OF_ITEM_IN_COND_NOT_EQ_COND2",
+              "VALUE_OF_ITEM_IN_COND_1_EQ_COND_2",
+              "VALUE_OF_ITEM_IN_COND_1_NOT_EQ_COND_2",
+              "ITEM_IS_NULL",
+              "ITEM_IS_NOT_NULL",
+              "ITEM_IS_ZERO",
+              "ITEM_IS_NOT_ZERO",
+              "ITEM_IS_NULL_OR_ZERO",
+              "ITEM_NOT_NULL_OR_ZERO",
+              "ITEM_CONTAINS_NO_SPACES",
+              "ITEM_IS_NUMERIC",
+              "ITEM_IS_NOT_NUMERIC",
+              "ITEM_IS_ALPHANUMERIC",
+              "VALUE_OF_ITEM_IN_CONDITION_IN_COLON_DELIMITED_LIST",
+              "VALUE_OF_ITEM_IN_CONDITION_NOT_IN_COLON_DELIMITED_LIST"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Item (item) in facet.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:5104",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "5104",
+      "builderLabel": "List",
+      "apexlangPath": "facet.serverSideCondition.list",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5100",
+            "path": "facet.serverSideCondition.type",
+            "hasToExist": true,
+            "values": [
+              "VALUE_OF_ITEM_IN_CONDITION_IN_COLON_DELIMITED_LIST",
+              "VALUE_OF_ITEM_IN_CONDITION_NOT_IN_COLON_DELIMITED_LIST"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "List (text) in facet.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:5105",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "5105",
+      "builderLabel": "Preference",
+      "apexlangPath": "facet.serverSideCondition.preference",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5100",
+            "path": "facet.serverSideCondition.type",
+            "hasToExist": true,
+            "values": [
+              "USER_PREF_IN_COND_EQ_COND2",
+              "USER_PREF_IN_COND_NOT_EQ_COND2"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Preference (text) in facet.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:5106",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "5106",
+      "builderLabel": "Page",
+      "apexlangPath": "facet.serverSideCondition.page",
+      "type": "PAGE",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5100",
+            "path": "facet.serverSideCondition.type",
+            "hasToExist": true,
+            "values": [
+              "CURRENT_PAGE_EQUALS_CONDITION",
+              "CURRENT_PAGE_NOT_EQUAL_CONDITION"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Page (page) in facet.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:5107",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "5107",
+      "builderLabel": "Pages",
+      "apexlangPath": "facet.serverSideCondition.pages",
+      "type": "PAGE",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5100",
+            "path": "facet.serverSideCondition.type",
+            "hasToExist": true,
+            "values": [
+              "CURRENT_PAGE_IN_CONDITION",
+              "CURRENT_PAGE_NOT_IN_CONDITION"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Pages (page) in facet.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:5108",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "5108",
+      "builderLabel": "Text",
+      "apexlangPath": "facet.serverSideCondition.text",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5100",
+            "path": "facet.serverSideCondition.type",
+            "hasToExist": true,
+            "values": [
+              "CONDITION1_IN_VALUE_OF_ITEM_IN_CONDITION2",
+              "DISPLAY_COND_IN_COND_TEXT",
+              "DISPLAY_COND_NOT_IN_COND_TEXT",
+              "DISPLAY_COND_EQUAL_COND_TEXT",
+              "DISP_COND_NOT_EQUAL_COND_TEXT"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Text (text) in facet.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:5109",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "5109",
+      "builderLabel": "Value",
+      "apexlangPath": "facet.serverSideCondition.value",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5100",
+            "path": "facet.serverSideCondition.type",
+            "hasToExist": true,
+            "values": [
+              "VAL_OF_ITEM_IN_COND_EQ_COND2",
+              "VAL_OF_ITEM_IN_COND_NOT_EQ_COND2",
+              "VALUE_OF_ITEM_IN_COND_1_EQ_COND_2",
+              "VALUE_OF_ITEM_IN_COND_1_NOT_EQ_COND_2"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Value (text) in facet.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:5110",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "5110",
+      "builderLabel": "Item",
+      "apexlangPath": "facet.serverSideCondition.item",
+      "type": "ITEM",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5100",
+            "path": "facet.serverSideCondition.type",
+            "hasToExist": true,
+            "value": "CONDITION1_IN_VALUE_OF_ITEM_IN_CONDITION2"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Item (item) in facet.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:5111",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "5111",
+      "builderLabel": "Value",
+      "apexlangPath": "facet.serverSideCondition.value",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5100",
+            "path": "facet.serverSideCondition.type",
+            "hasToExist": true,
+            "values": [
+              "DISPLAY_COND_IN_COND_TEXT",
+              "DISPLAY_COND_NOT_IN_COND_TEXT",
+              "DISPLAY_COND_EQUAL_COND_TEXT",
+              "DISP_COND_NOT_EQUAL_COND_TEXT"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Value (text) in facet.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:5112",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "5112",
+      "builderLabel": "Language",
+      "apexlangPath": "facet.serverSideCondition.language",
+      "type": "CODE LANGUAGE",
+      "required": true,
+      "defaultValue": "PLSQL",
+      "values": [
+        {
+          "name": "sql",
+          "returnValue": "SQL",
+          "label": "SQL"
+        },
+        {
+          "name": "plsql",
+          "returnValue": "PLSQL",
+          "label": "PL/SQL"
+        },
+        {
+          "name": "javaScript-mle",
+          "returnValue": "JAVASCRIPT",
+          "label": "JavaScript (MLE)"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5100",
+            "path": "facet.serverSideCondition.type",
+            "hasToExist": true,
+            "value": "EXPRESSION"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Language (code language) in facet.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:5113",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "5113",
+      "builderLabel": "SQL Expression",
+      "apexlangPath": "facet.serverSideCondition.sqlExpression",
+      "type": "SQL EXPRESSION BOOLEAN",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5112",
+            "path": "facet.serverSideCondition.language",
+            "hasToExist": true,
+            "value": "SQL"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "SQL Expression (sql expression boolean) in facet.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:5114",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "5114",
+      "builderLabel": "PL/SQL Expression",
+      "apexlangPath": "facet.serverSideCondition.plsqlExpression",
+      "type": "PLSQL EXPRESSION BOOLEAN",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5112",
+            "path": "facet.serverSideCondition.language",
+            "hasToExist": true,
+            "value": "PLSQL"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "PL/SQL Expression (plsql expression boolean) in facet.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:5115",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "5115",
+      "builderLabel": "JavaScript Expression",
+      "apexlangPath": "facet.serverSideCondition.javaScriptExpression",
+      "type": "MLE JAVASCRIPT EXPRESSION BOOLEAN",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5112",
+            "path": "facet.serverSideCondition.language",
+            "hasToExist": true,
+            "value": "JAVASCRIPT"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "JavaScript Expression (mle javascript expression boolean) in facet.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:5132",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "5132",
+      "builderLabel": "Language",
+      "apexlangPath": "facet.serverSideCondition.language",
+      "type": "CODE LANGUAGE",
+      "required": true,
+      "defaultValue": "PLSQL",
+      "values": [
+        {
+          "name": "plsql",
+          "returnValue": "PLSQL",
+          "label": "PL/SQL"
+        },
+        {
+          "name": "javaScript-mle",
+          "returnValue": "JAVASCRIPT",
+          "label": "JavaScript (MLE)"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5100",
+            "path": "facet.serverSideCondition.type",
+            "hasToExist": true,
+            "value": "FUNCTION_BODY"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Language (code language) in facet.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:5133",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "5133",
+      "builderLabel": "PL/SQL Function Body",
+      "apexlangPath": "facet.serverSideCondition.plsqlFunctionBody",
+      "type": "PLSQL FUNCTION BODY BOOLEAN",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5132",
+            "path": "facet.serverSideCondition.language",
+            "hasToExist": true,
+            "value": "PLSQL"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "PL/SQL Function Body (plsql function body boolean) in facet.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:5134",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "5134",
+      "builderLabel": "JavaScript Function Body",
+      "apexlangPath": "facet.serverSideCondition.javaScriptFunctionBody",
+      "type": "MLE JAVASCRIPT FUNCTION BODY BOOLEAN",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5132",
+            "path": "facet.serverSideCondition.language",
+            "hasToExist": true,
+            "value": "JAVASCRIPT"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "JavaScript Function Body (mle javascript function body boolean) in facet.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:5290",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "5290",
+      "builderLabel": "Language",
+      "apexlangPath": "facet.default.language",
+      "type": "CODE LANGUAGE",
+      "required": true,
+      "defaultValue": "PLSQL",
+      "values": [
+        {
+          "name": "sql",
+          "returnValue": "SQL",
+          "label": "SQL"
+        },
+        {
+          "name": "plsql",
+          "returnValue": "PLSQL",
+          "label": "PL/SQL"
+        },
+        {
+          "name": "javaScript-mle",
+          "returnValue": "JAVASCRIPT",
+          "label": "JavaScript (MLE)"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "145",
+            "path": "facet.default.type",
+            "hasToExist": true,
+            "value": "EXPRESSION"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Language (code language) in facet.default.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:5291",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "5291",
+      "builderLabel": "SQL Expression",
+      "apexlangPath": "facet.default.sqlExpression",
+      "type": "SQL EXPRESSION CUSTOM",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5290",
+            "path": "facet.default.language",
+            "hasToExist": true,
+            "value": "SQL"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "SQL Expression (sql expression custom) in facet.default.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:5292",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "5292",
+      "builderLabel": "PL/SQL Expression",
+      "apexlangPath": "facet.default.plsqlExpression",
+      "type": "PLSQL EXPRESSION CUSTOM",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5290",
+            "path": "facet.default.language",
+            "hasToExist": true,
+            "value": "PLSQL"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "PL/SQL Expression (plsql expression custom) in facet.default.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:5293",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "5293",
+      "builderLabel": "JavaScript Expression",
+      "apexlangPath": "facet.default.javaScriptExpression",
+      "type": "MLE JAVASCRIPT EXPRESSION CUSTOM",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5290",
+            "path": "facet.default.language",
+            "hasToExist": true,
+            "value": "JAVASCRIPT"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "JavaScript Expression (mle javascript expression custom) in facet.default.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:5310",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "5310",
+      "builderLabel": "Language",
+      "apexlangPath": "facet.default.language",
+      "type": "CODE LANGUAGE",
+      "required": true,
+      "defaultValue": "PLSQL",
+      "values": [
+        {
+          "name": "plsql",
+          "returnValue": "PLSQL",
+          "label": "PL/SQL"
+        },
+        {
+          "name": "javaScript-mle",
+          "returnValue": "JAVASCRIPT",
+          "label": "JavaScript (MLE)"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "145",
+            "path": "facet.default.type",
+            "hasToExist": true,
+            "value": "FUNCTION_BODY"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Language (code language) in facet.default.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:5311",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "5311",
+      "builderLabel": "PL/SQL Function Body",
+      "apexlangPath": "facet.default.plsqlFunctionBody",
+      "type": "PLSQL FUNCTION BODY CUSTOM",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5310",
+            "path": "facet.default.language",
+            "hasToExist": true,
+            "value": "PLSQL"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "PL/SQL Function Body (plsql function body custom) in facet.default.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:5312",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "5312",
+      "builderLabel": "JavaScript Function Body",
+      "apexlangPath": "facet.default.javaScriptFunctionBody",
+      "type": "MLE JAVASCRIPT FUNCTION BODY CUSTOM",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5310",
+            "path": "facet.default.language",
+            "hasToExist": true,
+            "value": "JAVASCRIPT"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "JavaScript Function Body (mle javascript function body custom) in facet.default.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:5320",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "5320",
+      "builderLabel": "Language",
+      "apexlangPath": "facet.lov.language",
+      "type": "CODE LANGUAGE",
+      "required": true,
+      "defaultValue": "PLSQL",
+      "values": [
+        {
+          "name": "plsql",
+          "returnValue": "PLSQL",
+          "label": "PL/SQL"
+        },
+        {
+          "name": "javaScript-mle",
+          "returnValue": "JAVASCRIPT",
+          "label": "JavaScript (MLE)"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1091",
+            "path": "facet.lov.type",
+            "hasToExist": true,
+            "value": "FUNCTION_BODY"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Language (code language) in facet.lov.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:5321",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "5321",
+      "builderLabel": "PL/SQL Function Body returning SQL Query",
+      "apexlangPath": "facet.lov.plsqlFunctionBody",
+      "type": "PLSQL FUNCTION BODY SQL",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5320",
+            "path": "facet.lov.language",
+            "hasToExist": true,
+            "value": "PLSQL"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "PL/SQL Function Body returning SQL Query (plsql function body sql) in facet.lov.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:5322",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "5322",
+      "builderLabel": "JavaScript Function Body returning SQL Query",
+      "apexlangPath": "facet.lov.javaScriptFunctionBody",
+      "type": "MLE JAVASCRIPT FUNCTION BODY SQL",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5320",
+            "path": "facet.lov.language",
+            "hasToExist": true,
+            "value": "JAVASCRIPT"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "JavaScript Function Body returning SQL Query (mle javascript function body sql) in facet.lov.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8010:12123001",
+      "context": "facet",
+      "componentTypeId": "8010",
+      "componentTitle": "Facet",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "12123001",
+      "builderLabel": "Allow to Exclude",
+      "apexlangPath": "facet.listEntries.allowToExclude",
+      "type": "YES NO",
+      "required": true,
+      "defaultValue": "N",
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "93",
+            "path": "facet.type",
+            "hasToExist": true,
+            "values": [
+              "NATIVE_CHECKBOX",
+              "NATIVE_RADIOGROUP",
+              "NATIVE_RANGE"
+            ]
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Allow to Exclude (yes no) in facet.listEntries.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8020:4",
+      "context": "facetGroup",
+      "componentTypeId": "8020",
+      "componentTitle": "Facet Group",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "4",
+      "builderLabel": "Comments",
+      "apexlangPath": "facetGroup.comments.comments",
+      "type": "TEXT EDITOR",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": null,
+      "maxLength": 4000,
+      "description": "Comments (text editor) in facetGroup.comments.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8020:24",
+      "context": "facetGroup",
+      "componentTypeId": "8020",
+      "componentTitle": "Facet Group",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "24",
+      "builderLabel": "Authorization Scheme",
+      "apexlangPath": "facetGroup.security.authorizationScheme",
+      "type": "COMPONENT",
+      "required": false,
+      "defaultValue": null,
+      "values": [
+        {
+          "name": "mustNotBePublicUser",
+          "returnValue": "MUST_NOT_BE_PUBLIC_USER",
+          "label": "MODEL.LOV.MUST_NOT_BE_PUBLIC_USER"
+        }
+      ],
+      "condition": null,
+      "maxLength": null,
+      "description": "Authorization Scheme (component) in facetGroup.security.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8020:38",
+      "context": "facetGroup",
+      "componentTypeId": "8020",
+      "componentTitle": "Facet Group",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "38",
+      "builderLabel": "Build Option",
+      "apexlangPath": "facetGroup.config.buildOption",
+      "type": "COMPONENT",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": null,
+      "maxLength": null,
+      "description": "Build Option (component) in facetGroup.config.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8020:97",
+      "context": "facetGroup",
+      "componentTypeId": "8020",
+      "componentTitle": "Facet Group",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "97",
+      "builderLabel": "Sequence",
+      "apexlangPath": "facetGroup.layout.sequence",
+      "type": "NUMBER",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": null,
+      "maxLength": 22,
+      "description": "Sequence (number) in facetGroup.layout.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8020:99",
+      "context": "facetGroup",
+      "componentTypeId": "8020",
+      "componentTitle": "Facet Group",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "99",
+      "builderLabel": "Label",
+      "apexlangPath": "facetGroup.label.label",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": null,
+      "maxLength": 4000,
+      "description": "Label (text) in facetGroup.label.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8020:128",
+      "context": "facetGroup",
+      "componentTypeId": "8020",
+      "componentTitle": "Facet Group",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "128",
+      "builderLabel": "CSS Classes",
+      "apexlangPath": "facetGroup.advanced.cssClasses",
+      "type": "COMBOBOX",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1219",
+            "path": "facetGroup.appearance.display",
+            "hasToExist": true,
+            "value": "INLINE"
+          }
+        ]
+      },
+      "maxLength": 255,
+      "description": "CSS Classes (combobox) in facetGroup.advanced.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8020:180",
+      "context": "facetGroup",
+      "componentTypeId": "8020",
+      "componentTitle": "Facet Group",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "180",
+      "builderLabel": "Static ID",
+      "apexlangPath": "facetGroup.advanced.staticId",
+      "type": "STATIC ID",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": null,
+      "maxLength": 255,
+      "description": "Static ID (static id) in facetGroup.advanced.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8020:739",
+      "context": "facetGroup",
+      "componentTypeId": "8020",
+      "componentTitle": "Facet Group",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "739",
+      "builderLabel": "Icon",
+      "apexlangPath": "facetGroup.appearance.icon",
+      "type": "ICON",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": null,
+      "maxLength": 255,
+      "description": "Icon (icon) in facetGroup.appearance.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8020:1092",
+      "context": "facetGroup",
+      "componentTypeId": "8020",
+      "componentTitle": "Facet Group",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "1092",
+      "builderLabel": "Compute Counts",
+      "apexlangPath": "facetGroup.listEntries.computeCounts",
+      "type": "YES NO",
+      "required": true,
+      "defaultValue": "Y",
+      "values": [],
+      "condition": null,
+      "maxLength": 32767,
+      "description": "Compute Counts (yes no) in facetGroup.listEntries.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8020:1093",
+      "context": "facetGroup",
+      "componentTypeId": "8020",
+      "componentTitle": "Facet Group",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "1093",
+      "builderLabel": "Show Counts",
+      "apexlangPath": "facetGroup.listEntries.showCounts",
+      "type": "YES NO",
+      "required": true,
+      "defaultValue": "Y",
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1092",
+            "path": "facetGroup.listEntries.computeCounts",
+            "hasToExist": true,
+            "value": "Y"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Show Counts (yes no) in facetGroup.listEntries.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8020:1094",
+      "context": "facetGroup",
+      "componentTypeId": "8020",
+      "componentTitle": "Facet Group",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "1094",
+      "builderLabel": "Zero Count Entries",
+      "apexlangPath": "facetGroup.listEntries.zeroCountEntries",
+      "type": "SELECT LIST",
+      "required": true,
+      "defaultValue": "H",
+      "values": [
+        {
+          "name": "hide",
+          "returnValue": "H",
+          "label": "Hide"
+        },
+        {
+          "name": "disable",
+          "returnValue": "D",
+          "label": "Disable"
+        },
+        {
+          "name": "showLast",
+          "returnValue": "L",
+          "label": "Show Last"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1092",
+            "path": "facetGroup.listEntries.computeCounts",
+            "hasToExist": true,
+            "value": "Y"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Zero Count Entries (select list) in facetGroup.listEntries.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8020:1096",
+      "context": "facetGroup",
+      "componentTypeId": "8020",
+      "componentTitle": "Facet Group",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "1096",
+      "builderLabel": "Show Selected First",
+      "apexlangPath": "facetGroup.listEntries.showSelectedFirst",
+      "type": "YES NO",
+      "required": true,
+      "defaultValue": "N",
+      "values": [],
+      "condition": null,
+      "maxLength": 32767,
+      "description": "Show Selected First (yes no) in facetGroup.listEntries.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8020:1098",
+      "context": "facetGroup",
+      "componentTypeId": "8020",
+      "componentTitle": "Facet Group",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "1098",
+      "builderLabel": "Maximum Displayed Entries",
+      "apexlangPath": "facetGroup.listEntries.maxDisplayedEntries",
+      "type": "INTEGER",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": null,
+      "maxLength": 32767,
+      "description": "Maximum Displayed Entries (integer) in facetGroup.listEntries.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8020:1099",
+      "context": "facetGroup",
+      "componentTypeId": "8020",
+      "componentTitle": "Facet Group",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "1099",
+      "builderLabel": "Collapsible",
+      "apexlangPath": "facetGroup.advanced.collapsible",
+      "type": "YES NO",
+      "required": true,
+      "defaultValue": "N",
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1219",
+            "path": "facetGroup.appearance.display",
+            "hasToExist": true,
+            "value": "INLINE"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Collapsible (yes no) in facetGroup.advanced.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8020:1100",
+      "context": "facetGroup",
+      "componentTypeId": "8020",
+      "componentTitle": "Facet Group",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "1100",
+      "builderLabel": "Initially Collapsed",
+      "apexlangPath": "facetGroup.advanced.initiallyCollapsed",
+      "type": "YES NO",
+      "required": true,
+      "defaultValue": "N",
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1099",
+            "path": "facetGroup.advanced.collapsible",
+            "hasToExist": true,
+            "value": "Y"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Initially Collapsed (yes no) in facetGroup.advanced.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8020:1101",
+      "context": "facetGroup",
+      "componentTypeId": "8020",
+      "componentTitle": "Facet Group",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "1101",
+      "builderLabel": "Maximum Height",
+      "apexlangPath": "facetGroup.layout.maxHeight",
+      "type": "INTEGER",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": null,
+      "maxLength": 32767,
+      "description": "Maximum Height (integer) in facetGroup.layout.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8020:1103",
+      "context": "facetGroup",
+      "componentTypeId": "8020",
+      "componentTitle": "Facet Group",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "1103",
+      "builderLabel": "Sort By Top Counts",
+      "apexlangPath": "facetGroup.listEntries.sortByTopCounts",
+      "type": "YES NO",
+      "required": true,
+      "defaultValue": "Y",
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1093",
+            "path": "facetGroup.listEntries.showCounts",
+            "hasToExist": true,
+            "value": "Y"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Sort By Top Counts (yes no) in facetGroup.listEntries.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8020:1174",
+      "context": "facetGroup",
+      "componentTypeId": "8020",
+      "componentTitle": "Facet Group",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "1174",
+      "builderLabel": "Combine Filters",
+      "apexlangPath": "facetGroup.advanced.combineFilters",
+      "type": "SELECT LIST",
+      "required": true,
+      "defaultValue": "OR",
+      "values": [
+        {
+          "name": "or",
+          "returnValue": "OR",
+          "label": "OR (Union)"
+        },
+        {
+          "name": "and",
+          "returnValue": "AND",
+          "label": "AND (Intersect)"
+        }
+      ],
+      "condition": null,
+      "maxLength": null,
+      "description": "Combine Filters (select list) in facetGroup.advanced.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8020:1176",
+      "context": "facetGroup",
+      "componentTypeId": "8020",
+      "componentTitle": "Facet Group",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "1176",
+      "builderLabel": "Chart",
+      "apexlangPath": "facetGroup.actionsMenu.chart",
+      "type": "YES NO",
+      "required": true,
+      "defaultValue": "Y",
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1092",
+            "path": "facetGroup.listEntries.computeCounts",
+            "hasToExist": true,
+            "value": "Y"
+          },
+          {
+            "type": "EQUALS",
+            "propertyId": "1219",
+            "path": "facetGroup.appearance.display",
+            "hasToExist": true,
+            "value": "INLINE"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Chart (yes no) in facetGroup.actionsMenu.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8020:1177",
+      "context": "facetGroup",
+      "componentTypeId": "8020",
+      "componentTitle": "Facet Group",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "1177",
+      "builderLabel": "Show Chart Initially",
+      "apexlangPath": "facetGroup.advanced.showChartInitially",
+      "type": "YES NO",
+      "required": true,
+      "defaultValue": "N",
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1176",
+            "path": "facetGroup.actionsMenu.chart",
+            "hasToExist": true,
+            "value": "Y"
+          },
+          {
+            "type": "EQUALS",
+            "propertyId": "1219",
+            "path": "facetGroup.appearance.display",
+            "hasToExist": true,
+            "value": "INLINE"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Show Chart Initially (yes no) in facetGroup.advanced.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8020:1219",
+      "context": "facetGroup",
+      "componentTypeId": "8020",
+      "componentTitle": "Facet Group",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "1219",
+      "builderLabel": "Display",
+      "apexlangPath": "facetGroup.appearance.display",
+      "type": "PILL BUTTONS",
+      "required": true,
+      "defaultValue": "INLINE",
+      "values": [
+        {
+          "name": "inline",
+          "returnValue": "INLINE",
+          "label": "Inline"
+        },
+        {
+          "name": "addFilterDialog",
+          "returnValue": "FILTER_DIALOG",
+          "label": "Add Filter Dialog"
+        }
+      ],
+      "condition": null,
+      "maxLength": null,
+      "description": "Display (pill buttons) in facetGroup.appearance.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8020:5100",
+      "context": "facetGroup",
+      "componentTypeId": "8020",
+      "componentTitle": "Facet Group",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "5100",
+      "builderLabel": "Type",
+      "apexlangPath": "facetGroup.serverSideCondition.type",
+      "type": "SELECT LIST",
+      "required": false,
+      "defaultValue": null,
+      "values": [
+        {
+          "name": "always",
+          "returnValue": "ALWAYS",
+          "label": "Always"
+        },
+        {
+          "name": "rowsReturned",
+          "returnValue": "EXISTS",
+          "label": "Rows returned"
+        },
+        {
+          "name": "noRowsReturned",
+          "returnValue": "NOT_EXISTS",
+          "label": "No Rows returned"
+        },
+        {
+          "name": "expression",
+          "returnValue": "EXPRESSION",
+          "label": "Expression"
+        },
+        {
+          "name": "functionBody",
+          "returnValue": "FUNCTION_BODY",
+          "label": "Function Body"
+        },
+        {
+          "name": "request=Value",
+          "returnValue": "REQUEST_EQUALS_CONDITION",
+          "label": "Request = Value"
+        },
+        {
+          "name": "request!=Value",
+          "returnValue": "REQUEST_NOT_EQUAL_CONDITION",
+          "label": "Request != Value"
+        },
+        {
+          "name": "requestIsContainedInValue",
+          "returnValue": "REQUEST_IN_CONDITION",
+          "label": "Request is contained in Value"
+        },
+        {
+          "name": "requestIsNotContainedInValue",
+          "returnValue": "REQUEST_NOT_IN_CONDITION",
+          "label": "Request is NOT contained in Value"
+        },
+        {
+          "name": "item=value",
+          "returnValue": "VAL_OF_ITEM_IN_COND_EQ_COND2",
+          "label": "Item = Value"
+        },
+        {
+          "name": "item!=value",
+          "returnValue": "VAL_OF_ITEM_IN_COND_NOT_EQ_COND2",
+          "label": "Item != Value"
+        },
+        {
+          "name": "itemIsNull",
+          "returnValue": "ITEM_IS_NULL",
+          "label": "Item is NULL"
+        },
+        {
+          "name": "itemIsNotNull",
+          "returnValue": "ITEM_IS_NOT_NULL",
+          "label": "Item is NOT NULL"
+        },
+        {
+          "name": "itemIsZero",
+          "returnValue": "ITEM_IS_ZERO",
+          "label": "Item is zero"
+        },
+        {
+          "name": "itemIsNotZero",
+          "returnValue": "ITEM_IS_NOT_ZERO",
+          "label": "Item is NOT zero"
+        },
+        {
+          "name": "itemIsNullOrZero",
+          "returnValue": "ITEM_IS_NULL_OR_ZERO",
+          "label": "Item is NULL or zero"
+        },
+        {
+          "name": "itemIsNotNullAndNotZero",
+          "returnValue": "ITEM_NOT_NULL_OR_ZERO",
+          "label": "Item is NOT NULL and NOT zero"
+        },
+        {
+          "name": "itemContainsNoSpaces",
+          "returnValue": "ITEM_CONTAINS_NO_SPACES",
+          "label": "Item contains no spaces"
+        },
+        {
+          "name": "itemIsNumeric",
+          "returnValue": "ITEM_IS_NUMERIC",
+          "label": "Item is numeric"
+        },
+        {
+          "name": "itemIsNotNumeric",
+          "returnValue": "ITEM_IS_NOT_NUMERIC",
+          "label": "Item is NOT numeric"
+        },
+        {
+          "name": "itemIsAlphanumeric",
+          "returnValue": "ITEM_IS_ALPHANUMERIC",
+          "label": "Item is alphanumeric"
+        },
+        {
+          "name": "itemIsInColonDelimitedList",
+          "returnValue": "VALUE_OF_ITEM_IN_CONDITION_IN_COLON_DELIMITED_LIST",
+          "label": "Item is in colon delimited list"
+        },
+        {
+          "name": "itemIsNotInColonDelimitedList",
+          "returnValue": "VALUE_OF_ITEM_IN_CONDITION_NOT_IN_COLON_DELIMITED_LIST",
+          "label": "Item is NOT in colon delimited list"
+        },
+        {
+          "name": "textIsContainedInItem",
+          "returnValue": "CONDITION1_IN_VALUE_OF_ITEM_IN_CONDITION2",
+          "label": "Text is contained in Item"
+        },
+        {
+          "name": "text=value",
+          "returnValue": "DISPLAY_COND_EQUAL_COND_TEXT",
+          "label": "Text = Value"
+        },
+        {
+          "name": "text!=value",
+          "returnValue": "DISP_COND_NOT_EQUAL_COND_TEXT",
+          "label": "Text != Value"
+        },
+        {
+          "name": "textIsContainedInValue",
+          "returnValue": "DISPLAY_COND_IN_COND_TEXT",
+          "label": "Text is contained in Value"
+        },
+        {
+          "name": "textIsNotContainedInValue",
+          "returnValue": "DISPLAY_COND_NOT_IN_COND_TEXT",
+          "label": "Text is NOT contained in Value"
+        },
+        {
+          "name": "userPreference=value",
+          "returnValue": "USER_PREF_IN_COND_EQ_COND2",
+          "label": "User Preference = Value"
+        },
+        {
+          "name": "userPreference!=value",
+          "returnValue": "USER_PREF_IN_COND_NOT_EQ_COND2",
+          "label": "User Preference != Value"
+        },
+        {
+          "name": "currentPage=page",
+          "returnValue": "CURRENT_PAGE_EQUALS_CONDITION",
+          "label": "Current Page = Page"
+        },
+        {
+          "name": "currentPage!=page",
+          "returnValue": "CURRENT_PAGE_NOT_EQUAL_CONDITION",
+          "label": "Current Page != Page"
+        },
+        {
+          "name": "currentPageInList",
+          "returnValue": "CURRENT_PAGE_IN_CONDITION",
+          "label": "Current Page is in comma delimited list"
+        },
+        {
+          "name": "currentPageNotInList",
+          "returnValue": "CURRENT_PAGE_NOT_IN_CONDITION",
+          "label": "Current Page is NOT in comma delimited list"
+        },
+        {
+          "name": "currentPage=pageSubmitted",
+          "returnValue": "WHEN_THIS_PAGE_SUBMITTED",
+          "label": "Current Page = Page Submitted (posted)"
+        },
+        {
+          "name": "currentPage!=pageSubmitted",
+          "returnValue": "WHEN_THIS_PAGE_NOT_SUBMITTED",
+          "label": "Current Page != Page Submitted (posted)"
+        },
+        {
+          "name": "currentPageIsInPrinterFriendlyMode",
+          "returnValue": "PAGE_IS_IN_PRINTER_FRIENDLY_MODE",
+          "label": "Current Page is in Printer Friendly Mode"
+        },
+        {
+          "name": "currentPageIsNotInPrinterFriendlyMode",
+          "returnValue": "PAGE_IS_NOT_IN_PRINTER_FRIENDLY_MODE",
+          "label": "Current page is NOT in Printer Friendly Mode"
+        },
+        {
+          "name": "pageRegionIsReadOnly",
+          "returnValue": "IS_READ_ONLY",
+          "label": "Page/Region is Read Only"
+        },
+        {
+          "name": "pageRegionIsNotReadOnly",
+          "returnValue": "IS_NOT_READ_ONLY",
+          "label": "Page/Region is NOT Read Only"
+        },
+        {
+          "name": "userIsAuthenticated",
+          "returnValue": "USER_IS_NOT_PUBLIC_USER",
+          "label": "User is Authenticated (not public)"
+        },
+        {
+          "name": "userIsPublicUser",
+          "returnValue": "USER_IS_PUBLIC_USER",
+          "label": "User is the Public User (user has not authenticated)"
+        },
+        {
+          "name": "inlineValidationErrorsDisplayed",
+          "returnValue": "DISPLAYING_INLINE_VALIDATION_ERRORS",
+          "label": "Inline Validation Errors displayed"
+        },
+        {
+          "name": "inlineValidationErrorsNotDisplayed",
+          "returnValue": "NOT_DISPLAYING_INLINE_VALIDATION_ERRORS",
+          "label": "Inline Validation Errors NOT displayed"
+        },
+        {
+          "name": "sqlReportsOkToShowForwardButton",
+          "returnValue": "MAX_ROWS_LT_ROWS_FETCHED",
+          "label": "SQL Reports (OK to show the forward button)"
+        },
+        {
+          "name": "sqlReportsOkToShowBackButton",
+          "returnValue": "MIN_ROW_GT_THAN_ONE",
+          "label": "SQL Reports (OK to show the back button)"
+        },
+        {
+          "name": "currentLanguage=value",
+          "returnValue": "CURRENT_LANG_EQ_COND1",
+          "label": "Current Language = Value"
+        },
+        {
+          "name": "currentLanguage!=value",
+          "returnValue": "CURRENT_LANG_NOT_EQ_COND1",
+          "label": "Current Language != Value"
+        },
+        {
+          "name": "currentLanguageIsContainedInValue",
+          "returnValue": "CURRENT_LANG_IN_COND1",
+          "label": "Current Language is contained in Value"
+        },
+        {
+          "name": "currentLanguageIsNotContainedInValue",
+          "returnValue": "CURRENT_LANG_NOT_IN_COND1",
+          "label": "Current Language is NOT contained in Value"
+        },
+        {
+          "name": "clientBrowserIsMozilla",
+          "returnValue": "BROWSER_IS_NSCP",
+          "label": "Client Browser is Mozilla, Netscape 6.x/7x or higher"
+        },
+        {
+          "name": "clientBrowserIsIE7higher",
+          "returnValue": "BROWSER_IS_MSIE",
+          "label": "Client Browser is Microsoft Internet Explorer 7.0 or higher"
+        },
+        {
+          "name": "clientBrowserIsXhtmlCssCapable",
+          "returnValue": "BROWSER_IS_MSIE_OR_NSCP",
+          "label": "Client Browser is XHTML / CSS capable browser"
+        },
+        {
+          "name": "clientBrowserIsOther",
+          "returnValue": "BROWSER_IS_OTHER",
+          "label": "Client Browser is Other browsers (or older version)"
+        },
+        {
+          "name": "cgiEnvDadName=value",
+          "returnValue": "DAD_NAME_EQ_CONDITION",
+          "label": "CGI_ENV: DAD_NAME = Value"
+        },
+        {
+          "name": "cgiEnvDadName!=value",
+          "returnValue": "DAD_NAME_NOT_EQ_CONDITION",
+          "label": "CGI_ENV: DAD_NAME != Value"
+        },
+        {
+          "name": "cgiEnvServerName=value",
+          "returnValue": "SERVER_NAME_EQ_CONDITION",
+          "label": "CGI_ENV: SERVER_NAME = Value"
+        },
+        {
+          "name": "cgiEnvServerName!=value",
+          "returnValue": "SERVER_NAME_NOT_EQ_CONDITION",
+          "label": "CGI_ENV: SERVER_NAME != Value"
+        },
+        {
+          "name": "cgiEnvHttpHost=value",
+          "returnValue": "HTTP_HOST_EQ_CONDITION",
+          "label": "CGI_ENV: HTTP_HOST = Value"
+        },
+        {
+          "name": "cgiEnvHttpHost!=value",
+          "returnValue": "HTTP_HOST_NOT_EQ_CONDITION",
+          "label": "CGI_ENV: HTTP_HOST != Value"
+        },
+        {
+          "name": "never",
+          "returnValue": "NEVER",
+          "label": "Never"
+        }
+      ],
+      "condition": null,
+      "maxLength": null,
+      "description": "Type (select list) in facetGroup.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8020:5101",
+      "context": "facetGroup",
+      "componentTypeId": "8020",
+      "componentTitle": "Facet Group",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "5101",
+      "builderLabel": "SQL Query",
+      "apexlangPath": "facetGroup.serverSideCondition.sqlQuery",
+      "type": "SQL",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5100",
+            "path": "facetGroup.serverSideCondition.type",
+            "hasToExist": true,
+            "values": [
+              "EXISTS",
+              "NOT_EXISTS"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "SQL Query (sql) in facetGroup.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8020:5102",
+      "context": "facetGroup",
+      "componentTypeId": "8020",
+      "componentTitle": "Facet Group",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "5102",
+      "builderLabel": "Value",
+      "apexlangPath": "facetGroup.serverSideCondition.value",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5100",
+            "path": "facetGroup.serverSideCondition.type",
+            "hasToExist": true,
+            "values": [
+              "REQUEST_EQUALS_CONDITION",
+              "REQUEST_NOT_EQUAL_CONDITION",
+              "REQUEST_IN_CONDITION",
+              "REQUEST_NOT_IN_CONDITION",
+              "CURRENT_LANG_IN_COND1",
+              "CURRENT_LANG_NOT_IN_COND1",
+              "CURRENT_LANG_NOT_EQ_COND1",
+              "CURRENT_LANG_EQ_COND1",
+              "DAD_NAME_EQ_CONDITION",
+              "DAD_NAME_NOT_EQ_CONDITION",
+              "SERVER_NAME_EQ_CONDITION",
+              "SERVER_NAME_NOT_EQ_CONDITION",
+              "HTTP_HOST_EQ_CONDITION",
+              "HTTP_HOST_NOT_EQ_CONDITION"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Value (text) in facetGroup.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8020:5103",
+      "context": "facetGroup",
+      "componentTypeId": "8020",
+      "componentTitle": "Facet Group",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "5103",
+      "builderLabel": "Item",
+      "apexlangPath": "facetGroup.serverSideCondition.item",
+      "type": "ITEM",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5100",
+            "path": "facetGroup.serverSideCondition.type",
+            "hasToExist": true,
+            "values": [
+              "VAL_OF_ITEM_IN_COND_EQ_COND2",
+              "VAL_OF_ITEM_IN_COND_NOT_EQ_COND2",
+              "VALUE_OF_ITEM_IN_COND_1_EQ_COND_2",
+              "VALUE_OF_ITEM_IN_COND_1_NOT_EQ_COND_2",
+              "ITEM_IS_NULL",
+              "ITEM_IS_NOT_NULL",
+              "ITEM_IS_ZERO",
+              "ITEM_IS_NOT_ZERO",
+              "ITEM_IS_NULL_OR_ZERO",
+              "ITEM_NOT_NULL_OR_ZERO",
+              "ITEM_CONTAINS_NO_SPACES",
+              "ITEM_IS_NUMERIC",
+              "ITEM_IS_NOT_NUMERIC",
+              "ITEM_IS_ALPHANUMERIC",
+              "VALUE_OF_ITEM_IN_CONDITION_IN_COLON_DELIMITED_LIST",
+              "VALUE_OF_ITEM_IN_CONDITION_NOT_IN_COLON_DELIMITED_LIST"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Item (item) in facetGroup.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8020:5104",
+      "context": "facetGroup",
+      "componentTypeId": "8020",
+      "componentTitle": "Facet Group",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "5104",
+      "builderLabel": "List",
+      "apexlangPath": "facetGroup.serverSideCondition.list",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5100",
+            "path": "facetGroup.serverSideCondition.type",
+            "hasToExist": true,
+            "values": [
+              "VALUE_OF_ITEM_IN_CONDITION_IN_COLON_DELIMITED_LIST",
+              "VALUE_OF_ITEM_IN_CONDITION_NOT_IN_COLON_DELIMITED_LIST"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "List (text) in facetGroup.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8020:5105",
+      "context": "facetGroup",
+      "componentTypeId": "8020",
+      "componentTitle": "Facet Group",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "5105",
+      "builderLabel": "Preference",
+      "apexlangPath": "facetGroup.serverSideCondition.preference",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5100",
+            "path": "facetGroup.serverSideCondition.type",
+            "hasToExist": true,
+            "values": [
+              "USER_PREF_IN_COND_EQ_COND2",
+              "USER_PREF_IN_COND_NOT_EQ_COND2"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Preference (text) in facetGroup.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8020:5106",
+      "context": "facetGroup",
+      "componentTypeId": "8020",
+      "componentTitle": "Facet Group",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "5106",
+      "builderLabel": "Page",
+      "apexlangPath": "facetGroup.serverSideCondition.page",
+      "type": "PAGE",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5100",
+            "path": "facetGroup.serverSideCondition.type",
+            "hasToExist": true,
+            "values": [
+              "CURRENT_PAGE_EQUALS_CONDITION",
+              "CURRENT_PAGE_NOT_EQUAL_CONDITION"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Page (page) in facetGroup.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8020:5107",
+      "context": "facetGroup",
+      "componentTypeId": "8020",
+      "componentTitle": "Facet Group",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "5107",
+      "builderLabel": "Pages",
+      "apexlangPath": "facetGroup.serverSideCondition.pages",
+      "type": "PAGE",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5100",
+            "path": "facetGroup.serverSideCondition.type",
+            "hasToExist": true,
+            "values": [
+              "CURRENT_PAGE_IN_CONDITION",
+              "CURRENT_PAGE_NOT_IN_CONDITION"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Pages (page) in facetGroup.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8020:5108",
+      "context": "facetGroup",
+      "componentTypeId": "8020",
+      "componentTitle": "Facet Group",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "5108",
+      "builderLabel": "Text",
+      "apexlangPath": "facetGroup.serverSideCondition.text",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5100",
+            "path": "facetGroup.serverSideCondition.type",
+            "hasToExist": true,
+            "values": [
+              "CONDITION1_IN_VALUE_OF_ITEM_IN_CONDITION2",
+              "DISPLAY_COND_IN_COND_TEXT",
+              "DISPLAY_COND_NOT_IN_COND_TEXT",
+              "DISPLAY_COND_EQUAL_COND_TEXT",
+              "DISP_COND_NOT_EQUAL_COND_TEXT"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Text (text) in facetGroup.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8020:5109",
+      "context": "facetGroup",
+      "componentTypeId": "8020",
+      "componentTitle": "Facet Group",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "5109",
+      "builderLabel": "Value",
+      "apexlangPath": "facetGroup.serverSideCondition.value",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5100",
+            "path": "facetGroup.serverSideCondition.type",
+            "hasToExist": true,
+            "values": [
+              "VAL_OF_ITEM_IN_COND_EQ_COND2",
+              "VAL_OF_ITEM_IN_COND_NOT_EQ_COND2",
+              "VALUE_OF_ITEM_IN_COND_1_EQ_COND_2",
+              "VALUE_OF_ITEM_IN_COND_1_NOT_EQ_COND_2"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Value (text) in facetGroup.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8020:5110",
+      "context": "facetGroup",
+      "componentTypeId": "8020",
+      "componentTitle": "Facet Group",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "5110",
+      "builderLabel": "Item",
+      "apexlangPath": "facetGroup.serverSideCondition.item",
+      "type": "ITEM",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5100",
+            "path": "facetGroup.serverSideCondition.type",
+            "hasToExist": true,
+            "value": "CONDITION1_IN_VALUE_OF_ITEM_IN_CONDITION2"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Item (item) in facetGroup.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8020:5111",
+      "context": "facetGroup",
+      "componentTypeId": "8020",
+      "componentTitle": "Facet Group",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "5111",
+      "builderLabel": "Value",
+      "apexlangPath": "facetGroup.serverSideCondition.value",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5100",
+            "path": "facetGroup.serverSideCondition.type",
+            "hasToExist": true,
+            "values": [
+              "DISPLAY_COND_IN_COND_TEXT",
+              "DISPLAY_COND_NOT_IN_COND_TEXT",
+              "DISPLAY_COND_EQUAL_COND_TEXT",
+              "DISP_COND_NOT_EQUAL_COND_TEXT"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Value (text) in facetGroup.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8020:5112",
+      "context": "facetGroup",
+      "componentTypeId": "8020",
+      "componentTitle": "Facet Group",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "5112",
+      "builderLabel": "Language",
+      "apexlangPath": "facetGroup.serverSideCondition.language",
+      "type": "CODE LANGUAGE",
+      "required": true,
+      "defaultValue": "PLSQL",
+      "values": [
+        {
+          "name": "sql",
+          "returnValue": "SQL",
+          "label": "SQL"
+        },
+        {
+          "name": "plsql",
+          "returnValue": "PLSQL",
+          "label": "PL/SQL"
+        },
+        {
+          "name": "javaScript-mle",
+          "returnValue": "JAVASCRIPT",
+          "label": "JavaScript (MLE)"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5100",
+            "path": "facetGroup.serverSideCondition.type",
+            "hasToExist": true,
+            "value": "EXPRESSION"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Language (code language) in facetGroup.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8020:5113",
+      "context": "facetGroup",
+      "componentTypeId": "8020",
+      "componentTitle": "Facet Group",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "5113",
+      "builderLabel": "SQL Expression",
+      "apexlangPath": "facetGroup.serverSideCondition.sqlExpression",
+      "type": "SQL EXPRESSION BOOLEAN",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5112",
+            "path": "facetGroup.serverSideCondition.language",
+            "hasToExist": true,
+            "value": "SQL"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "SQL Expression (sql expression boolean) in facetGroup.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8020:5114",
+      "context": "facetGroup",
+      "componentTypeId": "8020",
+      "componentTitle": "Facet Group",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "5114",
+      "builderLabel": "PL/SQL Expression",
+      "apexlangPath": "facetGroup.serverSideCondition.plsqlExpression",
+      "type": "PLSQL EXPRESSION BOOLEAN",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5112",
+            "path": "facetGroup.serverSideCondition.language",
+            "hasToExist": true,
+            "value": "PLSQL"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "PL/SQL Expression (plsql expression boolean) in facetGroup.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8020:5115",
+      "context": "facetGroup",
+      "componentTypeId": "8020",
+      "componentTitle": "Facet Group",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "5115",
+      "builderLabel": "JavaScript Expression",
+      "apexlangPath": "facetGroup.serverSideCondition.javaScriptExpression",
+      "type": "MLE JAVASCRIPT EXPRESSION BOOLEAN",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5112",
+            "path": "facetGroup.serverSideCondition.language",
+            "hasToExist": true,
+            "value": "JAVASCRIPT"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "JavaScript Expression (mle javascript expression boolean) in facetGroup.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8020:5132",
+      "context": "facetGroup",
+      "componentTypeId": "8020",
+      "componentTitle": "Facet Group",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "5132",
+      "builderLabel": "Language",
+      "apexlangPath": "facetGroup.serverSideCondition.language",
+      "type": "CODE LANGUAGE",
+      "required": true,
+      "defaultValue": "PLSQL",
+      "values": [
+        {
+          "name": "plsql",
+          "returnValue": "PLSQL",
+          "label": "PL/SQL"
+        },
+        {
+          "name": "javaScript-mle",
+          "returnValue": "JAVASCRIPT",
+          "label": "JavaScript (MLE)"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5100",
+            "path": "facetGroup.serverSideCondition.type",
+            "hasToExist": true,
+            "value": "FUNCTION_BODY"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Language (code language) in facetGroup.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8020:5133",
+      "context": "facetGroup",
+      "componentTypeId": "8020",
+      "componentTitle": "Facet Group",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "5133",
+      "builderLabel": "PL/SQL Function Body",
+      "apexlangPath": "facetGroup.serverSideCondition.plsqlFunctionBody",
+      "type": "PLSQL FUNCTION BODY BOOLEAN",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5132",
+            "path": "facetGroup.serverSideCondition.language",
+            "hasToExist": true,
+            "value": "PLSQL"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "PL/SQL Function Body (plsql function body boolean) in facetGroup.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8020:5134",
+      "context": "facetGroup",
+      "componentTypeId": "8020",
+      "componentTitle": "Facet Group",
+      "parentContext": "region",
+      "parentComponentTypeId": "5110",
+      "componentCondition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "94",
+            "path": "region.type",
+            "hasToExist": true,
+            "value": "NATIVE_FACETED_SEARCH"
+          }
+        ]
+      },
+      "propertyId": "5134",
+      "builderLabel": "JavaScript Function Body",
+      "apexlangPath": "facetGroup.serverSideCondition.javaScriptFunctionBody",
+      "type": "MLE JAVASCRIPT FUNCTION BODY BOOLEAN",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5132",
+            "path": "facetGroup.serverSideCondition.language",
+            "hasToExist": true,
+            "value": "JAVASCRIPT"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "JavaScript Function Body (mle javascript function body boolean) in facetGroup.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:4",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "4",
+      "builderLabel": "Comments",
+      "apexlangPath": "checkbox.comments.comments",
+      "type": "TEXT EDITOR",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": null,
+      "maxLength": 4000,
+      "description": "Comments (text editor) in checkbox.comments.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:24",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "24",
+      "builderLabel": "Authorization Scheme",
+      "apexlangPath": "checkbox.security.authorizationScheme",
+      "type": "COMPONENT",
+      "required": false,
+      "defaultValue": null,
+      "values": [
+        {
+          "name": "mustNotBePublicUser",
+          "returnValue": "MUST_NOT_BE_PUBLIC_USER",
+          "label": "MODEL.LOV.MUST_NOT_BE_PUBLIC_USER"
+        }
+      ],
+      "condition": null,
+      "maxLength": null,
+      "description": "Authorization Scheme (component) in checkbox.security.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:38",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "38",
+      "builderLabel": "Build Option",
+      "apexlangPath": "checkbox.config.buildOption",
+      "type": "COMPONENT",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": null,
+      "maxLength": null,
+      "description": "Build Option (component) in checkbox.config.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:93",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "93",
+      "builderLabel": "Type",
+      "apexlangPath": "checkbox.type",
+      "type": "SUPPORTED UI",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": null,
+      "maxLength": null,
+      "description": "Type (supported ui) in checkbox.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:96",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "96",
+      "builderLabel": "Name",
+      "apexlangPath": "checkbox.name",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": "P#PAGE_ID#_NEW",
+      "values": [],
+      "condition": null,
+      "maxLength": 255,
+      "description": "Name (text) in checkbox.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:97",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "97",
+      "builderLabel": "Sequence",
+      "apexlangPath": "checkbox.layout.sequence",
+      "type": "NUMBER",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": null,
+      "maxLength": 22,
+      "description": "Sequence (number) in checkbox.layout.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:99",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "99",
+      "builderLabel": "Label",
+      "apexlangPath": "checkbox.label.label",
+      "type": "TEXT",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "93",
+            "path": "checkbox.type",
+            "hasToExist": true,
+            "values": [
+              "VISIBLE"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Label (text) in checkbox.label.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:112",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "112",
+      "builderLabel": "Format Mask",
+      "apexlangPath": "checkbox.appearance.formatMask",
+      "type": "COMBOBOX",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "93",
+            "path": "checkbox.type",
+            "hasToExist": true,
+            "values": [
+              "FORMAT_MASK_DATE"
+            ]
+          },
+          {
+            "type": "IN_LIST",
+            "propertyId": "818",
+            "path": "checkbox.source.dataType",
+            "hasToExist": true,
+            "values": [
+              "DATE",
+              "TIMESTAMP",
+              "TIMESTAMP_TZ",
+              "TIMESTAMP_LTZ"
+            ]
+          }
+        ]
+      },
+      "maxLength": 255,
+      "description": "Format Mask (combobox) in checkbox.appearance.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:114",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "114",
+      "builderLabel": "List of Values",
+      "apexlangPath": "checkbox.lov.lov",
+      "type": "COMPONENT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1091",
+            "path": "checkbox.lov.type",
+            "hasToExist": true,
+            "value": "SHARED"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "List of Values (component) in checkbox.lov.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:117",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "117",
+      "builderLabel": "Null Display Value",
+      "apexlangPath": "checkbox.lov.nullDisplayValue",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1097",
+            "path": "checkbox.lov.includeNullOption",
+            "hasToExist": true,
+            "value": "Y"
+          }
+        ]
+      },
+      "maxLength": 255,
+      "description": "Null Display Value (text) in checkbox.lov.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:121",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "121",
+      "builderLabel": "Parent Required",
+      "apexlangPath": "checkbox.cascadingLov.parentRequired",
+      "type": "YES NO",
+      "required": true,
+      "defaultValue": "Y",
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_NULL",
+            "propertyId": "1109",
+            "path": "checkbox.cascadingLov.parentFacet",
+            "hasToExist": true
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Parent Required (yes no) in checkbox.cascadingLov.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:122",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "122",
+      "builderLabel": "SQL Query",
+      "apexlangPath": "checkbox.lov.sqlQuery",
+      "type": "SQL",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1091",
+            "path": "checkbox.lov.type",
+            "hasToExist": true,
+            "value": "SQL_QUERY"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "SQL Query (sql) in checkbox.lov.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:127",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "127",
+      "builderLabel": "Value Placeholder",
+      "apexlangPath": "checkbox.appearance.valuePlaceholder",
+      "type": "TEXT",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "93",
+            "path": "checkbox.type",
+            "hasToExist": true,
+            "values": [
+              "PLACEHOLDER"
+            ]
+          }
+        ]
+      },
+      "maxLength": 255,
+      "description": "Value Placeholder (text) in checkbox.appearance.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:141",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "141",
+      "builderLabel": "Database Column",
+      "apexlangPath": "checkbox.source.databaseColumn",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_EQUALS",
+            "propertyId": "93",
+            "path": "checkbox.type",
+            "hasToExist": true,
+            "value": "NATIVE_SEARCH"
+          }
+        ]
+      },
+      "maxLength": 128,
+      "description": "Database Column (text) in checkbox.source.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:145",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "145",
+      "builderLabel": "Type",
+      "apexlangPath": "checkbox.default.type",
+      "type": "SELECT LIST",
+      "required": false,
+      "defaultValue": null,
+      "values": [
+        {
+          "name": "static",
+          "returnValue": "STATIC_TEXT_WITH_SUBSTITUTIONS",
+          "label": "Static"
+        },
+        {
+          "name": "item",
+          "returnValue": "ITEM",
+          "label": "Item"
+        },
+        {
+          "name": "sqlQuerySingleValue",
+          "returnValue": "SQL_QUERY",
+          "label": "SQL Query (return single value)"
+        },
+        {
+          "name": "sqlQueryMultipleValues",
+          "returnValue": "SQL_QUERY_COLON",
+          "label": "SQL Query (return multiple values)"
+        },
+        {
+          "name": "expression",
+          "returnValue": "EXPRESSION",
+          "label": "Expression"
+        },
+        {
+          "name": "functionBody",
+          "returnValue": "FUNCTION_BODY",
+          "label": "Function Body"
+        },
+        {
+          "name": "sequence",
+          "returnValue": "SEQUENCE",
+          "label": "Sequence"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "93",
+            "path": "checkbox.type",
+            "hasToExist": true,
+            "values": [
+              "SOURCE"
+            ]
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Type (select list) in checkbox.default.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:146",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "146",
+      "builderLabel": "Static Value",
+      "apexlangPath": "checkbox.default.staticValue",
+      "type": "TEXT EDITOR",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "145",
+            "path": "checkbox.default.type",
+            "hasToExist": true,
+            "value": "STATIC_TEXT_WITH_SUBSTITUTIONS"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Static Value (text editor) in checkbox.default.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:173",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "173",
+      "builderLabel": "Store value encrypted in session state",
+      "apexlangPath": "checkbox.security.encryptSessionState",
+      "type": "YES NO",
+      "required": true,
+      "defaultValue": "Y",
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "93",
+            "path": "checkbox.type",
+            "hasToExist": true,
+            "values": [
+              "ENCRYPT"
+            ]
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Store value encrypted in session state (yes no) in checkbox.security.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:174",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "174",
+      "builderLabel": "Escape Special Characters",
+      "apexlangPath": "checkbox.security.escapeSpecialChars",
+      "type": "YES NO",
+      "required": true,
+      "defaultValue": "Y",
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "93",
+            "path": "checkbox.type",
+            "hasToExist": true,
+            "values": [
+              "ESCAPE_OUTPUT"
+            ]
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Escape Special Characters (yes no) in checkbox.security.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:374",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "374",
+      "builderLabel": "Static Values",
+      "apexlangPath": "checkbox.lov.staticValues",
+      "type": "STATIC LOV",
+      "required": true,
+      "defaultValue": "STATIC:Display1;Return1,Display2;Return2",
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1091",
+            "path": "checkbox.lov.type",
+            "hasToExist": true,
+            "value": "STATIC"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Static Values (static lov) in checkbox.lov.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:461",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "461",
+      "builderLabel": "Item",
+      "apexlangPath": "checkbox.default.item",
+      "type": "ITEM",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "145",
+            "path": "checkbox.default.type",
+            "hasToExist": true,
+            "value": "ITEM"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Item (item) in checkbox.default.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:739",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "739",
+      "builderLabel": "Icon",
+      "apexlangPath": "checkbox.appearance.icon",
+      "type": "ICON",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_EQUALS",
+            "propertyId": "93",
+            "path": "checkbox.type",
+            "hasToExist": true,
+            "value": "NATIVE_SEARCH"
+          }
+        ]
+      },
+      "maxLength": 255,
+      "description": "Icon (icon) in checkbox.appearance.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:818",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "818",
+      "builderLabel": "Data Type",
+      "apexlangPath": "checkbox.source.dataType",
+      "type": "SELECT LIST",
+      "required": true,
+      "defaultValue": "VARCHAR2",
+      "values": [
+        {
+          "name": "varchar2",
+          "returnValue": "VARCHAR2",
+          "label": "VARCHAR2"
+        },
+        {
+          "name": "number",
+          "returnValue": "NUMBER",
+          "label": "NUMBER"
+        },
+        {
+          "name": "date",
+          "returnValue": "DATE",
+          "label": "DATE"
+        },
+        {
+          "name": "timestamp",
+          "returnValue": "TIMESTAMP",
+          "label": "TIMESTAMP"
+        },
+        {
+          "name": "timestampWithTimeZone",
+          "returnValue": "TIMESTAMP_TZ",
+          "label": "TIMESTAMP WITH TIME ZONE"
+        },
+        {
+          "name": "timestampWithLocalTimeZone",
+          "returnValue": "TIMESTAMP_LTZ",
+          "label": "TIMESTAMP WITH LOCAL TIME ZONE"
+        },
+        {
+          "name": "intervalYearToMonth",
+          "returnValue": "INTERVAL_Y2M",
+          "label": "INTERVAL YEAR TO MONTH"
+        },
+        {
+          "name": "intervalDayToSecond",
+          "returnValue": "INTERVAL_D2S",
+          "label": "INTERVAL DAY TO SECOND"
+        },
+        {
+          "name": "clob",
+          "returnValue": "CLOB",
+          "label": "CLOB"
+        },
+        {
+          "name": "blob",
+          "returnValue": "BLOB",
+          "label": "BLOB"
+        },
+        {
+          "name": "boolean",
+          "returnValue": "BOOLEAN",
+          "label": "BOOLEAN"
+        },
+        {
+          "name": "rowid",
+          "returnValue": "ROWID",
+          "label": "ROWID"
+        },
+        {
+          "name": "bfile",
+          "returnValue": "BFILE",
+          "label": "BFILE"
+        },
+        {
+          "name": "sdoGeometry",
+          "returnValue": "SDO_GEOMETRY",
+          "label": "SDO_GEOMETRY"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_EQUALS",
+            "propertyId": "93",
+            "path": "checkbox.type",
+            "hasToExist": true,
+            "value": "NATIVE_SEARCH"
+          }
+        ]
+      },
+      "maxLength": 128,
+      "description": "Data Type (select list) in checkbox.source.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:824",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "824",
+      "builderLabel": "SQL Query (return single value)",
+      "apexlangPath": "checkbox.default.sqlQuerySingleValue",
+      "type": "SQL",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "145",
+            "path": "checkbox.default.type",
+            "hasToExist": true,
+            "value": "SQL_QUERY"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "SQL Query (return single value) (sql) in checkbox.default.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:825",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "825",
+      "builderLabel": "SQL Query (return multiple values)",
+      "apexlangPath": "checkbox.default.sqlQueryMultipleValues",
+      "type": "SQL",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "145",
+            "path": "checkbox.default.type",
+            "hasToExist": true,
+            "value": "SQL_QUERY_COLON"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "SQL Query (return multiple values) (sql) in checkbox.default.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:826",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "826",
+      "builderLabel": "Sequence",
+      "apexlangPath": "checkbox.default.sequence",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "145",
+            "path": "checkbox.default.type",
+            "hasToExist": true,
+            "value": "SEQUENCE"
+          }
+        ]
+      },
+      "maxLength": 128,
+      "description": "Sequence (text) in checkbox.default.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:1091",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "1091",
+      "builderLabel": "Type",
+      "apexlangPath": "checkbox.lov.type",
+      "type": "SELECT LIST",
+      "required": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURE_IS_REQUIRED",
+            "hasToExist": true,
+            "value": "LOV",
+            "propertyId": "93"
+          }
+        ]
+      },
+      "defaultValue": null,
+      "values": [
+        {
+          "name": "sharedComponent",
+          "returnValue": "SHARED",
+          "label": "Shared Component"
+        },
+        {
+          "name": "sqlQuery",
+          "returnValue": "SQL_QUERY",
+          "label": "SQL Query"
+        },
+        {
+          "name": "staticValues",
+          "returnValue": "STATIC",
+          "label": "Static Values"
+        },
+        {
+          "name": "functionBody",
+          "returnValue": "FUNCTION_BODY",
+          "label": "Function Body returning SQL Query"
+        },
+        {
+          "name": "distinctValues",
+          "returnValue": "DISTINCT",
+          "label": "Distinct Values"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "93",
+            "path": "checkbox.type",
+            "hasToExist": true,
+            "values": [
+              "LOV"
+            ]
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Type (select list) in checkbox.lov.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:1097",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "1097",
+      "builderLabel": "Include Null Option",
+      "apexlangPath": "checkbox.lov.includeNullOption",
+      "type": "YES NO",
+      "required": true,
+      "defaultValue": "N",
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "93",
+            "path": "checkbox.type",
+            "hasToExist": true,
+            "values": [
+              "FC_LOV_DISPLAY_NULL"
+            ]
+          },
+          {
+            "type": "NOT_NULL",
+            "propertyId": "1091",
+            "path": "checkbox.lov.type",
+            "hasToExist": true
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Include Null Option (yes no) in checkbox.lov.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:1105",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "1105",
+      "builderLabel": "Type",
+      "apexlangPath": "checkbox.dependingOn.type",
+      "type": "SELECT LIST",
+      "required": true,
+      "defaultValue": "NOT_NULL",
+      "values": [
+        {
+          "name": "=",
+          "returnValue": "EQUALS",
+          "label": "equal to"
+        },
+        {
+          "name": "!=",
+          "returnValue": "NOT_EQUALS",
+          "label": "not equal to"
+        },
+        {
+          "name": "inList",
+          "returnValue": "IN_LIST",
+          "label": "in list"
+        },
+        {
+          "name": "notInList",
+          "returnValue": "NOT_IN_LIST",
+          "label": "not in list"
+        },
+        {
+          "name": "isNull",
+          "returnValue": "NULL",
+          "label": "is null"
+        },
+        {
+          "name": "isNotNull",
+          "returnValue": "NOT_NULL",
+          "label": "is not null"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_NULL",
+            "propertyId": "1175",
+            "path": "checkbox.dependingOn.checkbox",
+            "hasToExist": true
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Type (select list) in checkbox.dependingOn.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:1106",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "1106",
+      "builderLabel": "Value",
+      "apexlangPath": "checkbox.dependingOn.value",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "1105",
+            "path": "checkbox.dependingOn.type",
+            "hasToExist": true,
+            "values": [
+              "EQUALS",
+              "NOT_EQUALS"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Value (text) in checkbox.dependingOn.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:1107",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "1107",
+      "builderLabel": "List",
+      "apexlangPath": "checkbox.dependingOn.list",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "1105",
+            "path": "checkbox.dependingOn.type",
+            "hasToExist": true,
+            "values": [
+              "IN_LIST",
+              "NOT_IN_LIST"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "List (text) in checkbox.dependingOn.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:1108",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "1108",
+      "builderLabel": "LOV Column",
+      "apexlangPath": "checkbox.cascadingLov.lovColumn",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_NULL",
+            "propertyId": "1109",
+            "path": "checkbox.cascadingLov.parentFacet",
+            "hasToExist": true
+          }
+        ]
+      },
+      "maxLength": 128,
+      "description": "LOV Column (text) in checkbox.cascadingLov.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:1109",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "1109",
+      "builderLabel": "Parent Facet",
+      "apexlangPath": "checkbox.cascadingLov.parentFacet",
+      "type": "FACET",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1091",
+            "path": "checkbox.lov.type",
+            "hasToExist": true,
+            "value": "SHARED"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Parent Facet (facet) in checkbox.cascadingLov.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:1119",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "1119",
+      "builderLabel": "Sort Direction",
+      "apexlangPath": "checkbox.lov.sortDirection",
+      "type": "SELECT LIST",
+      "required": true,
+      "defaultValue": "ASC",
+      "values": [
+        {
+          "name": "asc",
+          "returnValue": "ASC",
+          "label": "Ascending"
+        },
+        {
+          "name": "desc",
+          "returnValue": "DESC",
+          "label": "Descending"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1091",
+            "path": "checkbox.lov.type",
+            "hasToExist": true,
+            "value": "DISTINCT"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Sort Direction (select list) in checkbox.lov.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:1172",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "1172",
+      "builderLabel": "Facet Group",
+      "apexlangPath": "checkbox.layout.facetGroup",
+      "type": "COMPONENT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": null,
+      "maxLength": null,
+      "description": "Facet Group (component) in checkbox.layout.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:1175",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "1175",
+      "builderLabel": "Checkbox",
+      "apexlangPath": "checkbox.dependingOn.checkbox",
+      "type": "COMPONENT",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "NOT_EQUALS",
+            "propertyId": "93",
+            "path": "checkbox.type",
+            "hasToExist": true,
+            "value": "NATIVE_SEARCH"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Checkbox (component) in checkbox.dependingOn.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:1235",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "1235",
+      "builderLabel": "Show Label for Current Facet",
+      "apexlangPath": "checkbox.label.showLabelForCurrentFacet",
+      "type": "YES NO",
+      "required": true,
+      "defaultValue": "Y",
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "FEATURES",
+            "propertyId": "93",
+            "path": "checkbox.type",
+            "hasToExist": true,
+            "values": [
+              "VISIBLE"
+            ]
+          },
+          {
+            "type": "NOT_EQUALS",
+            "propertyId": "93",
+            "path": "checkbox.type",
+            "hasToExist": true,
+            "value": "NATIVE_SEARCH"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "Show Label for Current Facet (yes no) in checkbox.label.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:5100",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "5100",
+      "builderLabel": "Type",
+      "apexlangPath": "checkbox.serverSideCondition.type",
+      "type": "SELECT LIST",
+      "required": false,
+      "defaultValue": null,
+      "values": [
+        {
+          "name": "always",
+          "returnValue": "ALWAYS",
+          "label": "Always"
+        },
+        {
+          "name": "rowsReturned",
+          "returnValue": "EXISTS",
+          "label": "Rows returned"
+        },
+        {
+          "name": "noRowsReturned",
+          "returnValue": "NOT_EXISTS",
+          "label": "No Rows returned"
+        },
+        {
+          "name": "expression",
+          "returnValue": "EXPRESSION",
+          "label": "Expression"
+        },
+        {
+          "name": "functionBody",
+          "returnValue": "FUNCTION_BODY",
+          "label": "Function Body"
+        },
+        {
+          "name": "request=Value",
+          "returnValue": "REQUEST_EQUALS_CONDITION",
+          "label": "Request = Value"
+        },
+        {
+          "name": "request!=Value",
+          "returnValue": "REQUEST_NOT_EQUAL_CONDITION",
+          "label": "Request != Value"
+        },
+        {
+          "name": "requestIsContainedInValue",
+          "returnValue": "REQUEST_IN_CONDITION",
+          "label": "Request is contained in Value"
+        },
+        {
+          "name": "requestIsNotContainedInValue",
+          "returnValue": "REQUEST_NOT_IN_CONDITION",
+          "label": "Request is NOT contained in Value"
+        },
+        {
+          "name": "item=value",
+          "returnValue": "VAL_OF_ITEM_IN_COND_EQ_COND2",
+          "label": "Item = Value"
+        },
+        {
+          "name": "item!=value",
+          "returnValue": "VAL_OF_ITEM_IN_COND_NOT_EQ_COND2",
+          "label": "Item != Value"
+        },
+        {
+          "name": "itemIsNull",
+          "returnValue": "ITEM_IS_NULL",
+          "label": "Item is NULL"
+        },
+        {
+          "name": "itemIsNotNull",
+          "returnValue": "ITEM_IS_NOT_NULL",
+          "label": "Item is NOT NULL"
+        },
+        {
+          "name": "itemIsZero",
+          "returnValue": "ITEM_IS_ZERO",
+          "label": "Item is zero"
+        },
+        {
+          "name": "itemIsNotZero",
+          "returnValue": "ITEM_IS_NOT_ZERO",
+          "label": "Item is NOT zero"
+        },
+        {
+          "name": "itemIsNullOrZero",
+          "returnValue": "ITEM_IS_NULL_OR_ZERO",
+          "label": "Item is NULL or zero"
+        },
+        {
+          "name": "itemIsNotNullAndNotZero",
+          "returnValue": "ITEM_NOT_NULL_OR_ZERO",
+          "label": "Item is NOT NULL and NOT zero"
+        },
+        {
+          "name": "itemContainsNoSpaces",
+          "returnValue": "ITEM_CONTAINS_NO_SPACES",
+          "label": "Item contains no spaces"
+        },
+        {
+          "name": "itemIsNumeric",
+          "returnValue": "ITEM_IS_NUMERIC",
+          "label": "Item is numeric"
+        },
+        {
+          "name": "itemIsNotNumeric",
+          "returnValue": "ITEM_IS_NOT_NUMERIC",
+          "label": "Item is NOT numeric"
+        },
+        {
+          "name": "itemIsAlphanumeric",
+          "returnValue": "ITEM_IS_ALPHANUMERIC",
+          "label": "Item is alphanumeric"
+        },
+        {
+          "name": "itemIsInColonDelimitedList",
+          "returnValue": "VALUE_OF_ITEM_IN_CONDITION_IN_COLON_DELIMITED_LIST",
+          "label": "Item is in colon delimited list"
+        },
+        {
+          "name": "itemIsNotInColonDelimitedList",
+          "returnValue": "VALUE_OF_ITEM_IN_CONDITION_NOT_IN_COLON_DELIMITED_LIST",
+          "label": "Item is NOT in colon delimited list"
+        },
+        {
+          "name": "textIsContainedInItem",
+          "returnValue": "CONDITION1_IN_VALUE_OF_ITEM_IN_CONDITION2",
+          "label": "Text is contained in Item"
+        },
+        {
+          "name": "text=value",
+          "returnValue": "DISPLAY_COND_EQUAL_COND_TEXT",
+          "label": "Text = Value"
+        },
+        {
+          "name": "text!=value",
+          "returnValue": "DISP_COND_NOT_EQUAL_COND_TEXT",
+          "label": "Text != Value"
+        },
+        {
+          "name": "textIsContainedInValue",
+          "returnValue": "DISPLAY_COND_IN_COND_TEXT",
+          "label": "Text is contained in Value"
+        },
+        {
+          "name": "textIsNotContainedInValue",
+          "returnValue": "DISPLAY_COND_NOT_IN_COND_TEXT",
+          "label": "Text is NOT contained in Value"
+        },
+        {
+          "name": "userPreference=value",
+          "returnValue": "USER_PREF_IN_COND_EQ_COND2",
+          "label": "User Preference = Value"
+        },
+        {
+          "name": "userPreference!=value",
+          "returnValue": "USER_PREF_IN_COND_NOT_EQ_COND2",
+          "label": "User Preference != Value"
+        },
+        {
+          "name": "currentPage=page",
+          "returnValue": "CURRENT_PAGE_EQUALS_CONDITION",
+          "label": "Current Page = Page"
+        },
+        {
+          "name": "currentPage!=page",
+          "returnValue": "CURRENT_PAGE_NOT_EQUAL_CONDITION",
+          "label": "Current Page != Page"
+        },
+        {
+          "name": "currentPageInList",
+          "returnValue": "CURRENT_PAGE_IN_CONDITION",
+          "label": "Current Page is in comma delimited list"
+        },
+        {
+          "name": "currentPageNotInList",
+          "returnValue": "CURRENT_PAGE_NOT_IN_CONDITION",
+          "label": "Current Page is NOT in comma delimited list"
+        },
+        {
+          "name": "currentPage=pageSubmitted",
+          "returnValue": "WHEN_THIS_PAGE_SUBMITTED",
+          "label": "Current Page = Page Submitted (posted)"
+        },
+        {
+          "name": "currentPage!=pageSubmitted",
+          "returnValue": "WHEN_THIS_PAGE_NOT_SUBMITTED",
+          "label": "Current Page != Page Submitted (posted)"
+        },
+        {
+          "name": "currentPageIsInPrinterFriendlyMode",
+          "returnValue": "PAGE_IS_IN_PRINTER_FRIENDLY_MODE",
+          "label": "Current Page is in Printer Friendly Mode"
+        },
+        {
+          "name": "currentPageIsNotInPrinterFriendlyMode",
+          "returnValue": "PAGE_IS_NOT_IN_PRINTER_FRIENDLY_MODE",
+          "label": "Current page is NOT in Printer Friendly Mode"
+        },
+        {
+          "name": "pageRegionIsReadOnly",
+          "returnValue": "IS_READ_ONLY",
+          "label": "Page/Region is Read Only"
+        },
+        {
+          "name": "pageRegionIsNotReadOnly",
+          "returnValue": "IS_NOT_READ_ONLY",
+          "label": "Page/Region is NOT Read Only"
+        },
+        {
+          "name": "userIsAuthenticated",
+          "returnValue": "USER_IS_NOT_PUBLIC_USER",
+          "label": "User is Authenticated (not public)"
+        },
+        {
+          "name": "userIsPublicUser",
+          "returnValue": "USER_IS_PUBLIC_USER",
+          "label": "User is the Public User (user has not authenticated)"
+        },
+        {
+          "name": "inlineValidationErrorsDisplayed",
+          "returnValue": "DISPLAYING_INLINE_VALIDATION_ERRORS",
+          "label": "Inline Validation Errors displayed"
+        },
+        {
+          "name": "inlineValidationErrorsNotDisplayed",
+          "returnValue": "NOT_DISPLAYING_INLINE_VALIDATION_ERRORS",
+          "label": "Inline Validation Errors NOT displayed"
+        },
+        {
+          "name": "sqlReportsOkToShowForwardButton",
+          "returnValue": "MAX_ROWS_LT_ROWS_FETCHED",
+          "label": "SQL Reports (OK to show the forward button)"
+        },
+        {
+          "name": "sqlReportsOkToShowBackButton",
+          "returnValue": "MIN_ROW_GT_THAN_ONE",
+          "label": "SQL Reports (OK to show the back button)"
+        },
+        {
+          "name": "currentLanguage=value",
+          "returnValue": "CURRENT_LANG_EQ_COND1",
+          "label": "Current Language = Value"
+        },
+        {
+          "name": "currentLanguage!=value",
+          "returnValue": "CURRENT_LANG_NOT_EQ_COND1",
+          "label": "Current Language != Value"
+        },
+        {
+          "name": "currentLanguageIsContainedInValue",
+          "returnValue": "CURRENT_LANG_IN_COND1",
+          "label": "Current Language is contained in Value"
+        },
+        {
+          "name": "currentLanguageIsNotContainedInValue",
+          "returnValue": "CURRENT_LANG_NOT_IN_COND1",
+          "label": "Current Language is NOT contained in Value"
+        },
+        {
+          "name": "clientBrowserIsMozilla",
+          "returnValue": "BROWSER_IS_NSCP",
+          "label": "Client Browser is Mozilla, Netscape 6.x/7x or higher"
+        },
+        {
+          "name": "clientBrowserIsIE7higher",
+          "returnValue": "BROWSER_IS_MSIE",
+          "label": "Client Browser is Microsoft Internet Explorer 7.0 or higher"
+        },
+        {
+          "name": "clientBrowserIsXhtmlCssCapable",
+          "returnValue": "BROWSER_IS_MSIE_OR_NSCP",
+          "label": "Client Browser is XHTML / CSS capable browser"
+        },
+        {
+          "name": "clientBrowserIsOther",
+          "returnValue": "BROWSER_IS_OTHER",
+          "label": "Client Browser is Other browsers (or older version)"
+        },
+        {
+          "name": "cgiEnvDadName=value",
+          "returnValue": "DAD_NAME_EQ_CONDITION",
+          "label": "CGI_ENV: DAD_NAME = Value"
+        },
+        {
+          "name": "cgiEnvDadName!=value",
+          "returnValue": "DAD_NAME_NOT_EQ_CONDITION",
+          "label": "CGI_ENV: DAD_NAME != Value"
+        },
+        {
+          "name": "cgiEnvServerName=value",
+          "returnValue": "SERVER_NAME_EQ_CONDITION",
+          "label": "CGI_ENV: SERVER_NAME = Value"
+        },
+        {
+          "name": "cgiEnvServerName!=value",
+          "returnValue": "SERVER_NAME_NOT_EQ_CONDITION",
+          "label": "CGI_ENV: SERVER_NAME != Value"
+        },
+        {
+          "name": "cgiEnvHttpHost=value",
+          "returnValue": "HTTP_HOST_EQ_CONDITION",
+          "label": "CGI_ENV: HTTP_HOST = Value"
+        },
+        {
+          "name": "cgiEnvHttpHost!=value",
+          "returnValue": "HTTP_HOST_NOT_EQ_CONDITION",
+          "label": "CGI_ENV: HTTP_HOST != Value"
+        },
+        {
+          "name": "never",
+          "returnValue": "NEVER",
+          "label": "Never"
+        }
+      ],
+      "condition": null,
+      "maxLength": null,
+      "description": "Type (select list) in checkbox.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:5101",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "5101",
+      "builderLabel": "SQL Query",
+      "apexlangPath": "checkbox.serverSideCondition.sqlQuery",
+      "type": "SQL",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5100",
+            "path": "checkbox.serverSideCondition.type",
+            "hasToExist": true,
+            "values": [
+              "EXISTS",
+              "NOT_EXISTS"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "SQL Query (sql) in checkbox.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:5102",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "5102",
+      "builderLabel": "Value",
+      "apexlangPath": "checkbox.serverSideCondition.value",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5100",
+            "path": "checkbox.serverSideCondition.type",
+            "hasToExist": true,
+            "values": [
+              "REQUEST_EQUALS_CONDITION",
+              "REQUEST_NOT_EQUAL_CONDITION",
+              "REQUEST_IN_CONDITION",
+              "REQUEST_NOT_IN_CONDITION",
+              "CURRENT_LANG_IN_COND1",
+              "CURRENT_LANG_NOT_IN_COND1",
+              "CURRENT_LANG_NOT_EQ_COND1",
+              "CURRENT_LANG_EQ_COND1",
+              "DAD_NAME_EQ_CONDITION",
+              "DAD_NAME_NOT_EQ_CONDITION",
+              "SERVER_NAME_EQ_CONDITION",
+              "SERVER_NAME_NOT_EQ_CONDITION",
+              "HTTP_HOST_EQ_CONDITION",
+              "HTTP_HOST_NOT_EQ_CONDITION"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Value (text) in checkbox.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:5103",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "5103",
+      "builderLabel": "Item",
+      "apexlangPath": "checkbox.serverSideCondition.item",
+      "type": "ITEM",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5100",
+            "path": "checkbox.serverSideCondition.type",
+            "hasToExist": true,
+            "values": [
+              "VAL_OF_ITEM_IN_COND_EQ_COND2",
+              "VAL_OF_ITEM_IN_COND_NOT_EQ_COND2",
+              "VALUE_OF_ITEM_IN_COND_1_EQ_COND_2",
+              "VALUE_OF_ITEM_IN_COND_1_NOT_EQ_COND_2",
+              "ITEM_IS_NULL",
+              "ITEM_IS_NOT_NULL",
+              "ITEM_IS_ZERO",
+              "ITEM_IS_NOT_ZERO",
+              "ITEM_IS_NULL_OR_ZERO",
+              "ITEM_NOT_NULL_OR_ZERO",
+              "ITEM_CONTAINS_NO_SPACES",
+              "ITEM_IS_NUMERIC",
+              "ITEM_IS_NOT_NUMERIC",
+              "ITEM_IS_ALPHANUMERIC",
+              "VALUE_OF_ITEM_IN_CONDITION_IN_COLON_DELIMITED_LIST",
+              "VALUE_OF_ITEM_IN_CONDITION_NOT_IN_COLON_DELIMITED_LIST"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Item (item) in checkbox.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:5104",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "5104",
+      "builderLabel": "List",
+      "apexlangPath": "checkbox.serverSideCondition.list",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5100",
+            "path": "checkbox.serverSideCondition.type",
+            "hasToExist": true,
+            "values": [
+              "VALUE_OF_ITEM_IN_CONDITION_IN_COLON_DELIMITED_LIST",
+              "VALUE_OF_ITEM_IN_CONDITION_NOT_IN_COLON_DELIMITED_LIST"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "List (text) in checkbox.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:5105",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "5105",
+      "builderLabel": "Preference",
+      "apexlangPath": "checkbox.serverSideCondition.preference",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5100",
+            "path": "checkbox.serverSideCondition.type",
+            "hasToExist": true,
+            "values": [
+              "USER_PREF_IN_COND_EQ_COND2",
+              "USER_PREF_IN_COND_NOT_EQ_COND2"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Preference (text) in checkbox.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:5106",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "5106",
+      "builderLabel": "Page",
+      "apexlangPath": "checkbox.serverSideCondition.page",
+      "type": "PAGE",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5100",
+            "path": "checkbox.serverSideCondition.type",
+            "hasToExist": true,
+            "values": [
+              "CURRENT_PAGE_EQUALS_CONDITION",
+              "CURRENT_PAGE_NOT_EQUAL_CONDITION"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Page (page) in checkbox.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:5107",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "5107",
+      "builderLabel": "Pages",
+      "apexlangPath": "checkbox.serverSideCondition.pages",
+      "type": "PAGE",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5100",
+            "path": "checkbox.serverSideCondition.type",
+            "hasToExist": true,
+            "values": [
+              "CURRENT_PAGE_IN_CONDITION",
+              "CURRENT_PAGE_NOT_IN_CONDITION"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Pages (page) in checkbox.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:5108",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "5108",
+      "builderLabel": "Text",
+      "apexlangPath": "checkbox.serverSideCondition.text",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5100",
+            "path": "checkbox.serverSideCondition.type",
+            "hasToExist": true,
+            "values": [
+              "CONDITION1_IN_VALUE_OF_ITEM_IN_CONDITION2",
+              "DISPLAY_COND_IN_COND_TEXT",
+              "DISPLAY_COND_NOT_IN_COND_TEXT",
+              "DISPLAY_COND_EQUAL_COND_TEXT",
+              "DISP_COND_NOT_EQUAL_COND_TEXT"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Text (text) in checkbox.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:5109",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "5109",
+      "builderLabel": "Value",
+      "apexlangPath": "checkbox.serverSideCondition.value",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5100",
+            "path": "checkbox.serverSideCondition.type",
+            "hasToExist": true,
+            "values": [
+              "VAL_OF_ITEM_IN_COND_EQ_COND2",
+              "VAL_OF_ITEM_IN_COND_NOT_EQ_COND2",
+              "VALUE_OF_ITEM_IN_COND_1_EQ_COND_2",
+              "VALUE_OF_ITEM_IN_COND_1_NOT_EQ_COND_2"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Value (text) in checkbox.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:5110",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "5110",
+      "builderLabel": "Item",
+      "apexlangPath": "checkbox.serverSideCondition.item",
+      "type": "ITEM",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5100",
+            "path": "checkbox.serverSideCondition.type",
+            "hasToExist": true,
+            "value": "CONDITION1_IN_VALUE_OF_ITEM_IN_CONDITION2"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Item (item) in checkbox.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:5111",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "5111",
+      "builderLabel": "Value",
+      "apexlangPath": "checkbox.serverSideCondition.value",
+      "type": "TEXT",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "IN_LIST",
+            "propertyId": "5100",
+            "path": "checkbox.serverSideCondition.type",
+            "hasToExist": true,
+            "values": [
+              "DISPLAY_COND_IN_COND_TEXT",
+              "DISPLAY_COND_NOT_IN_COND_TEXT",
+              "DISPLAY_COND_EQUAL_COND_TEXT",
+              "DISP_COND_NOT_EQUAL_COND_TEXT"
+            ]
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "Value (text) in checkbox.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:5112",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "5112",
+      "builderLabel": "Language",
+      "apexlangPath": "checkbox.serverSideCondition.language",
+      "type": "CODE LANGUAGE",
+      "required": true,
+      "defaultValue": "PLSQL",
+      "values": [
+        {
+          "name": "sql",
+          "returnValue": "SQL",
+          "label": "SQL"
+        },
+        {
+          "name": "plsql",
+          "returnValue": "PLSQL",
+          "label": "PL/SQL"
+        },
+        {
+          "name": "javaScript-mle",
+          "returnValue": "JAVASCRIPT",
+          "label": "JavaScript (MLE)"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5100",
+            "path": "checkbox.serverSideCondition.type",
+            "hasToExist": true,
+            "value": "EXPRESSION"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Language (code language) in checkbox.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:5113",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "5113",
+      "builderLabel": "SQL Expression",
+      "apexlangPath": "checkbox.serverSideCondition.sqlExpression",
+      "type": "SQL EXPRESSION BOOLEAN",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5112",
+            "path": "checkbox.serverSideCondition.language",
+            "hasToExist": true,
+            "value": "SQL"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "SQL Expression (sql expression boolean) in checkbox.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:5114",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "5114",
+      "builderLabel": "PL/SQL Expression",
+      "apexlangPath": "checkbox.serverSideCondition.plsqlExpression",
+      "type": "PLSQL EXPRESSION BOOLEAN",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5112",
+            "path": "checkbox.serverSideCondition.language",
+            "hasToExist": true,
+            "value": "PLSQL"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "PL/SQL Expression (plsql expression boolean) in checkbox.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:5115",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "5115",
+      "builderLabel": "JavaScript Expression",
+      "apexlangPath": "checkbox.serverSideCondition.javaScriptExpression",
+      "type": "MLE JAVASCRIPT EXPRESSION BOOLEAN",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5112",
+            "path": "checkbox.serverSideCondition.language",
+            "hasToExist": true,
+            "value": "JAVASCRIPT"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "JavaScript Expression (mle javascript expression boolean) in checkbox.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:5132",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "5132",
+      "builderLabel": "Language",
+      "apexlangPath": "checkbox.serverSideCondition.language",
+      "type": "CODE LANGUAGE",
+      "required": true,
+      "defaultValue": "PLSQL",
+      "values": [
+        {
+          "name": "plsql",
+          "returnValue": "PLSQL",
+          "label": "PL/SQL"
+        },
+        {
+          "name": "javaScript-mle",
+          "returnValue": "JAVASCRIPT",
+          "label": "JavaScript (MLE)"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5100",
+            "path": "checkbox.serverSideCondition.type",
+            "hasToExist": true,
+            "value": "FUNCTION_BODY"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Language (code language) in checkbox.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:5133",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "5133",
+      "builderLabel": "PL/SQL Function Body",
+      "apexlangPath": "checkbox.serverSideCondition.plsqlFunctionBody",
+      "type": "PLSQL FUNCTION BODY BOOLEAN",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5132",
+            "path": "checkbox.serverSideCondition.language",
+            "hasToExist": true,
+            "value": "PLSQL"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "PL/SQL Function Body (plsql function body boolean) in checkbox.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:5134",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "5134",
+      "builderLabel": "JavaScript Function Body",
+      "apexlangPath": "checkbox.serverSideCondition.javaScriptFunctionBody",
+      "type": "MLE JAVASCRIPT FUNCTION BODY BOOLEAN",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5132",
+            "path": "checkbox.serverSideCondition.language",
+            "hasToExist": true,
+            "value": "JAVASCRIPT"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "JavaScript Function Body (mle javascript function body boolean) in checkbox.serverSideCondition.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:5290",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "5290",
+      "builderLabel": "Language",
+      "apexlangPath": "checkbox.default.language",
+      "type": "CODE LANGUAGE",
+      "required": true,
+      "defaultValue": "PLSQL",
+      "values": [
+        {
+          "name": "sql",
+          "returnValue": "SQL",
+          "label": "SQL"
+        },
+        {
+          "name": "plsql",
+          "returnValue": "PLSQL",
+          "label": "PL/SQL"
+        },
+        {
+          "name": "javaScript-mle",
+          "returnValue": "JAVASCRIPT",
+          "label": "JavaScript (MLE)"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "145",
+            "path": "checkbox.default.type",
+            "hasToExist": true,
+            "value": "EXPRESSION"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Language (code language) in checkbox.default.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:5291",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "5291",
+      "builderLabel": "SQL Expression",
+      "apexlangPath": "checkbox.default.sqlExpression",
+      "type": "SQL EXPRESSION CUSTOM",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5290",
+            "path": "checkbox.default.language",
+            "hasToExist": true,
+            "value": "SQL"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "SQL Expression (sql expression custom) in checkbox.default.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:5292",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "5292",
+      "builderLabel": "PL/SQL Expression",
+      "apexlangPath": "checkbox.default.plsqlExpression",
+      "type": "PLSQL EXPRESSION CUSTOM",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5290",
+            "path": "checkbox.default.language",
+            "hasToExist": true,
+            "value": "PLSQL"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "PL/SQL Expression (plsql expression custom) in checkbox.default.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:5293",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "5293",
+      "builderLabel": "JavaScript Expression",
+      "apexlangPath": "checkbox.default.javaScriptExpression",
+      "type": "MLE JAVASCRIPT EXPRESSION CUSTOM",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5290",
+            "path": "checkbox.default.language",
+            "hasToExist": true,
+            "value": "JAVASCRIPT"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "JavaScript Expression (mle javascript expression custom) in checkbox.default.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:5310",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "5310",
+      "builderLabel": "Language",
+      "apexlangPath": "checkbox.default.language",
+      "type": "CODE LANGUAGE",
+      "required": true,
+      "defaultValue": "PLSQL",
+      "values": [
+        {
+          "name": "plsql",
+          "returnValue": "PLSQL",
+          "label": "PL/SQL"
+        },
+        {
+          "name": "javaScript-mle",
+          "returnValue": "JAVASCRIPT",
+          "label": "JavaScript (MLE)"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "145",
+            "path": "checkbox.default.type",
+            "hasToExist": true,
+            "value": "FUNCTION_BODY"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Language (code language) in checkbox.default.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:5311",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "5311",
+      "builderLabel": "PL/SQL Function Body",
+      "apexlangPath": "checkbox.default.plsqlFunctionBody",
+      "type": "PLSQL FUNCTION BODY CUSTOM",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5310",
+            "path": "checkbox.default.language",
+            "hasToExist": true,
+            "value": "PLSQL"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "PL/SQL Function Body (plsql function body custom) in checkbox.default.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:5312",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "5312",
+      "builderLabel": "JavaScript Function Body",
+      "apexlangPath": "checkbox.default.javaScriptFunctionBody",
+      "type": "MLE JAVASCRIPT FUNCTION BODY CUSTOM",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5310",
+            "path": "checkbox.default.language",
+            "hasToExist": true,
+            "value": "JAVASCRIPT"
+          }
+        ]
+      },
+      "maxLength": 4000,
+      "description": "JavaScript Function Body (mle javascript function body custom) in checkbox.default.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:5320",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "5320",
+      "builderLabel": "Language",
+      "apexlangPath": "checkbox.lov.language",
+      "type": "CODE LANGUAGE",
+      "required": true,
+      "defaultValue": "PLSQL",
+      "values": [
+        {
+          "name": "plsql",
+          "returnValue": "PLSQL",
+          "label": "PL/SQL"
+        },
+        {
+          "name": "javaScript-mle",
+          "returnValue": "JAVASCRIPT",
+          "label": "JavaScript (MLE)"
+        }
+      ],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "1091",
+            "path": "checkbox.lov.type",
+            "hasToExist": true,
+            "value": "FUNCTION_BODY"
+          }
+        ]
+      },
+      "maxLength": null,
+      "description": "Language (code language) in checkbox.lov.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:5321",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "5321",
+      "builderLabel": "PL/SQL Function Body returning SQL Query",
+      "apexlangPath": "checkbox.lov.plsqlFunctionBody",
+      "type": "PLSQL FUNCTION BODY SQL",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5320",
+            "path": "checkbox.lov.language",
+            "hasToExist": true,
+            "value": "PLSQL"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "PL/SQL Function Body returning SQL Query (plsql function body sql) in checkbox.lov.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "mmd:8030:5322",
+      "context": "checkbox",
+      "componentTypeId": "8030",
+      "componentTitle": "Checkbox",
+      "parentContext": "facetGroup",
+      "parentComponentTypeId": "8020",
+      "componentCondition": null,
+      "propertyId": "5322",
+      "builderLabel": "JavaScript Function Body returning SQL Query",
+      "apexlangPath": "checkbox.lov.javaScriptFunctionBody",
+      "type": "MLE JAVASCRIPT FUNCTION BODY SQL",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "operator": "AND",
+        "conditions": [
+          {
+            "type": "EQUALS",
+            "propertyId": "5320",
+            "path": "checkbox.lov.language",
+            "hasToExist": true,
+            "value": "JAVASCRIPT"
+          }
+        ]
+      },
+      "maxLength": 32767,
+      "description": "JavaScript Function Body returning SQL Query (mle javascript function body sql) in checkbox.lov.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "source": "SQLcl MMD 26.1.0+3102",
+      "sourceHasHelp": false,
+      "nativeType": "facetedSearch"
+    },
+    {
+      "id": "native:region/facetedSearch/component/batch_facet_search",
+      "context": "region",
+      "scope": "component",
+      "nativeType": "facetedSearch",
+      "attributeKey": "batchFacetChanges",
+      "builderLabel": "Batch Facet Changes",
+      "apexlangPath": "region.settings.batchFacetChanges",
+      "type": "yesNo",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {},
+      "source": "SQLcl native declarations 26.1.0+3102",
+      "description": "Batch Facet Changes setting for facetedSearch.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "sourceDigest": "2806d98da0b6e0c272d261749f0816a1dd60ae47168f0a118f5f0feb05ccd453"
+    },
+    {
+      "id": "native:region/facetedSearch/component/charts_selector",
+      "context": "region",
+      "scope": "component",
+      "nativeType": "facetedSearch",
+      "attributeKey": "chartsSelector",
+      "builderLabel": "Charts Selector",
+      "apexlangPath": "region.settings.chartsSelector",
+      "type": "text",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "dependingOn.attribute": "@show_charts/component",
+        "dependingOn.conditionType": "=",
+        "dependingOn.value": "E"
+      },
+      "source": "SQLcl native declarations 26.1.0+3102",
+      "description": "Charts Selector setting for facetedSearch.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "sourceDigest": "3b6f092453227993ecc5d2741a9bbbc9dcbc5e25644ab6fcf2c99cadbab22758"
+    },
+    {
+      "id": "native:region/facetedSearch/component/compact_numbers_threshold",
+      "context": "region",
+      "scope": "component",
+      "nativeType": "facetedSearch",
+      "attributeKey": "compactNosThreshold",
+      "builderLabel": "Compact Numbers Threshold",
+      "apexlangPath": "region.settings.compactNosThreshold",
+      "type": "number",
+      "required": false,
+      "defaultValue": "10000",
+      "values": [],
+      "condition": {},
+      "source": "SQLcl native declarations 26.1.0+3102",
+      "description": "Compact Numbers Threshold setting for facetedSearch.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "sourceDigest": "4bf23dbb5749aafa3deb2447fe6377ca2facfa6c14fc562ffb1f9b6e2652fe18"
+    },
+    {
+      "id": "native:region/facetedSearch/component/current_facets_selector",
+      "context": "region",
+      "scope": "component",
+      "nativeType": "facetedSearch",
+      "attributeKey": "currentFacetsSelector",
+      "builderLabel": "Current Facets Selector",
+      "apexlangPath": "region.settings.currentFacetsSelector",
+      "type": "text",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "dependingOn.attribute": "@show_current_facets/component",
+        "dependingOn.conditionType": "=",
+        "dependingOn.value": "E"
+      },
+      "source": "SQLcl native declarations 26.1.0+3102",
+      "description": "Current Facets Selector setting for facetedSearch.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "sourceDigest": "fe0bd254874854914133611be973990ea074ce25ee611cf156497f8a1bfa58fc"
+    },
+    {
+      "id": "native:region/facetedSearch/component/display_chart_for_top_n_values",
+      "context": "region",
+      "scope": "component",
+      "nativeType": "facetedSearch",
+      "attributeKey": "displayChartForTopNValues",
+      "builderLabel": "Display Chart for Top N Values",
+      "apexlangPath": "region.settings.displayChartForTopNValues",
+      "type": "number",
+      "required": false,
+      "defaultValue": "10",
+      "values": [],
+      "condition": {
+        "dependingOn.attribute": "@show_charts/component",
+        "dependingOn.conditionType": "inList"
+      },
+      "source": "SQLcl native declarations 26.1.0+3102",
+      "description": "Display Chart for Top N Values setting for facetedSearch.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "sourceDigest": "8d06c89298b3c1257a6251cf33a35f79d266a6b1ade5b28e828e96a1f8b555ff"
+    },
+    {
+      "id": "native:region/facetedSearch/component/show_charts",
+      "context": "region",
+      "scope": "component",
+      "nativeType": "facetedSearch",
+      "attributeKey": "showCharts",
+      "builderLabel": "Show Charts",
+      "apexlangPath": "region.settings.showCharts",
+      "type": "selectList",
+      "required": true,
+      "defaultValue": "Y",
+      "values": [
+        {
+          "name": "dialog",
+          "label": "Dialog",
+          "returnValue": "Y"
+        },
+        {
+          "name": "false",
+          "label": "No",
+          "returnValue": "N"
+        },
+        {
+          "name": "selector",
+          "label": "Selector",
+          "returnValue": "E"
+        }
+      ],
+      "condition": {},
+      "source": "SQLcl native declarations 26.1.0+3102",
+      "description": "Show Charts setting for facetedSearch.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "sourceDigest": "6c7bb955f60a54b089cc143913470a74e0935534fd1bb1d11771c2054d3c3987"
+    },
+    {
+      "id": "native:region/facetedSearch/component/show_current_facets",
+      "context": "region",
+      "scope": "component",
+      "nativeType": "facetedSearch",
+      "attributeKey": "showCurrentFacets",
+      "builderLabel": "Show Current Facets",
+      "apexlangPath": "region.settings.showCurrentFacets",
+      "type": "selectList",
+      "required": true,
+      "defaultValue": "N",
+      "values": [
+        {
+          "name": "false",
+          "label": "No",
+          "returnValue": "N"
+        },
+        {
+          "name": "selector",
+          "label": "Selector",
+          "returnValue": "E"
+        },
+        {
+          "name": "true",
+          "label": "Yes",
+          "returnValue": "Y"
+        }
+      ],
+      "condition": {},
+      "source": "SQLcl native declarations 26.1.0+3102",
+      "description": "Show Current Facets setting for facetedSearch.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "sourceDigest": "31dbf18b21475f08e2d913442d90813b74e197b21322c310d88456372979df05"
+    },
+    {
+      "id": "native:region/facetedSearch/component/show_total_row_count",
+      "context": "region",
+      "scope": "component",
+      "nativeType": "facetedSearch",
+      "attributeKey": "showTotalRowCount",
+      "builderLabel": "Show Total Row Count",
+      "apexlangPath": "region.settings.showTotalRowCount",
+      "type": "selectList",
+      "required": true,
+      "defaultValue": "N",
+      "values": [
+        {
+          "name": "false",
+          "label": "No",
+          "returnValue": "N"
+        },
+        {
+          "name": "selector",
+          "label": "Selector",
+          "returnValue": "E"
+        },
+        {
+          "name": "true",
+          "label": "Yes",
+          "returnValue": "Y"
+        }
+      ],
+      "condition": {},
+      "source": "SQLcl native declarations 26.1.0+3102",
+      "description": "Show Total Row Count setting for facetedSearch.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "sourceDigest": "c82c2e13880740ac949d16812257c52f1364285dcd29e1b8042a382727bb597b"
+    },
+    {
+      "id": "native:region/facetedSearch/component/total_row_count_label",
+      "context": "region",
+      "scope": "component",
+      "nativeType": "facetedSearch",
+      "attributeKey": "totalRowCountLabel",
+      "builderLabel": "Total Row Count Label",
+      "apexlangPath": "region.settings.totalRowCountLabel",
+      "type": "text",
+      "required": false,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "dependingOn.attribute": "@show_total_row_count/component",
+        "dependingOn.conditionType": "=",
+        "dependingOn.value": "Y"
+      },
+      "source": "SQLcl native declarations 26.1.0+3102",
+      "description": "Total Row Count Label setting for facetedSearch.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "sourceDigest": "7485767501209d585f39960cd482826903c507c92e3508f450d17a528cc9cd24"
+    },
+    {
+      "id": "native:region/facetedSearch/component/total_row_count_selector",
+      "context": "region",
+      "scope": "component",
+      "nativeType": "facetedSearch",
+      "attributeKey": "totalRowCountSelector",
+      "builderLabel": "Total Row Count Selector",
+      "apexlangPath": "region.settings.totalRowCountSelector",
+      "type": "text",
+      "required": true,
+      "defaultValue": null,
+      "values": [],
+      "condition": {
+        "dependingOn.attribute": "@show_total_row_count/component",
+        "dependingOn.conditionType": "=",
+        "dependingOn.value": "E"
+      },
+      "source": "SQLcl native declarations 26.1.0+3102",
+      "description": "Total Row Count Selector setting for facetedSearch.",
+      "descriptionOrigin": "apexrest-factual-summary",
+      "sourceDigest": "28cf4b9a6e0c26b89eed5b507a42762771d65935b2fd300123a801f9329a050f"
+    }
+  ],
+  "currentExamples": {
+    "regions": [
+      {
+        "id": "page:1411/region:filters",
+        "pageId": 1411,
+        "key": "filters",
+        "type": "facetedSearch",
+        "template": "Standard",
+        "componentTemplate": null,
+        "regionOptions": [
+          "#DEFAULT#",
+          "t-Region--noPadding",
+          "t-Region--hideHeader js-addHiddenHeadingRoleDesc",
+          "t-Region--scrollBody"
+        ],
+        "componentOptions": [],
+        "settings": {
+          "compactNosThreshold": "10000",
+          "showCurrentFacets": "selector",
+          "currentFacetsSelector": "#active_facets",
+          "showTotalRowCount": "true",
+          "displayChartForTopNValues": "10"
+        }
+      }
+    ],
+    "items": [],
+    "buttons": [],
+    "pages": []
+  }
+}
+```
+
+Complete option groups, defaults, presets and source context are available in component:source/parameters.

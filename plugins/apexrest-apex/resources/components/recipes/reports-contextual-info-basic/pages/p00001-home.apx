@@ -1,0 +1,57 @@
+page 1 (
+    name: Component Example
+    alias: HOME
+    title: Component Example
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region results (
+        name: Legacy Report Template
+        type: classicReport
+        source {
+            location: localDatabase
+            type: sqlQuery
+            sqlQuery:
+                ```sql
+                select 'Example title' TITLE, 'Example status' STATUS from dual
+                ```
+        }
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        componentAppearance {
+            template: @/contextual-info
+            templateOptions: #DEFAULT#
+        }
+        column TITLE (
+            reportColumnQueryId: 1
+            derivedColumn: N
+            heading {
+                heading: Title
+            }
+            layout {
+                sequence: 10
+            }
+        )
+        column STATUS (
+            reportColumnQueryId: 2
+            derivedColumn: N
+            heading {
+                heading: Status
+            }
+            layout {
+                sequence: 20
+            }
+        )
+    )
+
+)

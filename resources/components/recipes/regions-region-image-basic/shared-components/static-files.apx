@@ -1,0 +1,4 @@
+file "catalog/example.svg" (
+    mimeType: image/svg+xml
+    charSet: utf-8
+)

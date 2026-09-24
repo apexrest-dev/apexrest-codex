@@ -1,0 +1,94 @@
+page 1 (
+    name: Component Example
+    alias: HOME
+    title: Component Example
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region filters (
+        name: Filters
+        type: staticContent
+        source {
+            htmlCode: <p>Local component example.</p>
+        }
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+    )
+    pageItem P1_FILTER (
+        type: textField
+        label {
+            label: Filter status
+        }
+        layout {
+            sequence: 10
+            region: @filters
+            slot: regionBody
+        }
+        appearance {
+            template: @/optional-floating
+            templateOptions: #DEFAULT#
+        }
+    )
+    region cards (
+        name: Cards
+        type: cards
+        source {
+            location: localDatabase
+            type: sqlQuery
+            pageItemsToSubmit: P1_FILTER
+            sqlQuery:
+                ```sql
+                select 1 ID, 'Example one' TITLE, 'Open' STATUS from dual where :P1_FILTER is null or :P1_FILTER = 'Open'
+                ```
+        }
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/cards-container
+            templateOptions: #DEFAULT#
+        }
+        card {
+            primaryKeyColumn1: ID
+        }
+        title {
+            column: TITLE
+        }
+        body {
+            column: STATUS
+        }
+    )
+    dynamicAction refresh-results (
+        name: Refresh cards
+        execution {
+            sequence: 10
+        }
+        when {
+            event: change
+            selectionType: items
+            items: P1_FILTER
+        }
+        action refresh-cards (
+            action: refresh
+            affectedElements {
+                selectionType: region
+                region: @cards
+            }
+            execution {
+                sequence: 10
+            }
+        )
+    )
+
+)

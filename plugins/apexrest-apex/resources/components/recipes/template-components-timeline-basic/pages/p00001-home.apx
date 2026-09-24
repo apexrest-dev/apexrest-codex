@@ -1,0 +1,68 @@
+page 1 (
+    name: Component Example
+    alias: HOME
+    title: Component Example
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region example (
+        name: Timeline
+        type: themeTemplateComponent/timeline
+        source {
+            location: localDatabase
+            type: sqlQuery
+            sqlQuery:
+                ```sql
+                select 'Example user' USER_NAME, 'Record created' TITLE, timestamp '2026-01-01 09:00:00' EVENT_DATE from dual
+                ```
+        }
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/blank-with-attributes
+            templateOptions: #DEFAULT#
+        }
+        componentAppearance {
+            display: report
+        }
+        settings {
+            userName: USER_NAME
+            title: TITLE
+            date: EVENT_DATE
+        }
+        column USER_NAME (
+            layout {
+                sequence: 10
+            }
+            source {
+                databaseColumn: USER_NAME
+                dataType: varchar2
+            }
+        )
+        column TITLE (
+            layout {
+                sequence: 20
+            }
+            source {
+                databaseColumn: TITLE
+                dataType: varchar2
+            }
+        )
+        column EVENT_DATE (
+            layout {
+                sequence: 30
+            }
+            source {
+                databaseColumn: EVENT_DATE
+                dataType: timestamp
+            }
+        )
+    )
+
+)

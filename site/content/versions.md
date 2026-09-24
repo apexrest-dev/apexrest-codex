@@ -2,11 +2,11 @@
 
 English | [Українська](versions.uk.md)
 
-Release {{version}} is packaged as `apexrest@1.0.0` and available through the source repository. Install with `npm install -g apexrest`; [release notes](../../docs/release-notes.md) record distribution status. Native-platform and Oracle integration qualification retains its documented limits.
+Release {{version}} is packaged as `apexrest@1.1.0` and available through the source repository. Install with `npm install -g apexrest`; [release notes](../../docs/release-notes.md) record distribution status. Native-platform and Oracle integration qualification retains its documented limits.
 
 The supported toolchain targets Node 24 LTS (supported range: Node 24–26), SQLcl 26.1.2.132.1334, Java 21 and APEX 26.1+. ORDS APEXlang operations require a JDK 21+ containing `jdk.compiler`; SQLcl's managed JRE alone is insufficient for the Java bridge. Local generated MMD: 26.1.0+3102. Playwright is pinned at 1.63.0 with its matching browser revisions.
 
-APEXREST works directly in the existing Codex session with 18 MCP tools and 12 skills. The host controls its model, context and permissions. Six long tools wait within one call; metadata batches, summary inspection, cached references and bounded output reduce routine exchanges while preserving diagnostics, recovery and deployment safety. SQLcl and ORDS operations remain available. UTF-8 bytes are payload measurements, not billed tokens. See [current local evidence](../../docs/evidence/current-session-100-local.json).
+APEXREST works directly in the existing Codex session with 18 MCP tools and 12 skills. The host controls its model, context and permissions. Six long tools wait within one call; metadata batches, summary inspection, cached references and bounded output reduce routine exchanges while preserving diagnostics, recovery and deployment safety. SQLcl and ORDS operations remain available. UTF-8 bytes are payload measurements, not billed tokens. See [catalog evidence](../../docs/evidence/component-catalog-local.json); the [historical 1.0.0 record](../../docs/evidence/current-session-100-local.json) retains its original scope.
 
 - macOS arm64: local native host, client setup and compiler checks completed.
 - Linux x64: locked client artifacts and installer code; hosted quality gates are configured, while native client and Oracle integration remain unverified.

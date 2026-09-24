@@ -4,7 +4,7 @@ English | [Українська](getting-started.uk.md)
 
 Install the CLI from npm, open its terminal menu to install tools and the plugin, then configure a direct SQLcl or ORDS HTTP(S) connection. The npm package includes the built runtime, so no Git checkout, TypeScript build or `npm ci` is needed. Repository installation and direct registration through the Codex CLI are also documented below.
 
-The release version is `1.0.0`; [release notes](release-notes.md) track npm distribution separately. Native-host evidence is specific to the tested Codex and platform combination; the remaining [release qualification checks](next-actions.md) stay open.
+The release version is `1.1.0`; [release notes](release-notes.md) track npm distribution separately. Native-host evidence is specific to the tested Codex and platform combination; the remaining [release qualification checks](next-actions.md) stay open.
 
 ## Codex Cloud
 
@@ -25,7 +25,7 @@ An existing clean APEX installation is enough for ordinary deployment. Service t
 
 ## Install from npm
 
-Use Node 24 LTS (supported range: Node 24–26). Install [apexrest](https://www.npmjs.com/package/apexrest) from npm. The stable release version is `1.0.0`; the commands below use `latest`. See [release notes](release-notes.md) for distribution and verification status.
+Use Node 24 LTS (supported range: Node 24–26). Install [apexrest](https://www.npmjs.com/package/apexrest) from npm. The stable release target is `1.1.0`; registry verification is pending. The commands below use `latest`. See [release notes](release-notes.md) for distribution and verification status.
 
 Install the CLI globally and check its version:
 
@@ -45,7 +45,7 @@ npx apexrest --version
 npx apexrest
 ```
 
-To pin this version, use `npm install -g apexrest@1.0.0`. The repository installation below remains available.
+To pin this version, use `npm install -g apexrest@1.1.0`. The repository installation below remains available.
 
 ## Install with the terminal menu
 
@@ -195,7 +195,7 @@ Replace `Development connection` with the exact saved name. These `--saved` comm
 
 For either transport, project deployment requires explicit connection references and target configuration. Use separate read and deploy connections when available. Once both references are configured, give Codex their names and non-secret target identity:
 
-> Configure an APEXREST test environment using the connection references `dev-read` and `dev-deploy`. The workspace is `YOUR_WORKSPACE`, parsing schema `YOUR_SCHEMA`, application ID `100`, database unique name `YOUR_DB`, service `YOUR_SERVICE`, and application URL `https://your-host.example/ords/r/workspace/app/`. Verify that the read connection matches this identity.
+> Configure an APEXREST test environment using the connection references `dev-read` and `dev-deploy`. The workspace is `YOUR_WORKSPACE`, parsing schema `YOUR_SCHEMA`, application ID `YOUR_APPLICATION_ID`, database unique name `YOUR_DB`, service `YOUR_SERVICE`, and application URL `https://your-host.example/ords/r/workspace/app/`. Verify that the read connection matches this identity.
 
 Replace every placeholder with the actual target. Project configuration records connection reference names rather than passwords. No target environment is invented by project initialization. Follow [configuration](configuration.md) for the exact environment schema, private trust policy and test origins.
 

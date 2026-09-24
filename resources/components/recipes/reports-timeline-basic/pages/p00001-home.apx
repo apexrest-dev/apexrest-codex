@@ -1,0 +1,127 @@
+page 1 (
+    name: Component Example
+    alias: HOME
+    title: Component Example
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region results (
+        name: Legacy Report Template
+        type: classicReport
+        source {
+            location: localDatabase
+            type: sqlQuery
+            sqlQuery:
+                ```sql
+                select 'EX' USER_AVATAR, 'Example user name' USER_NAME, date '2026-01-01' EVENT_DATE, 'Example event title' EVENT_TITLE, 'Example event desc' EVENT_DESC, 'fa-info-circle' EVENT_ICON, 'Example event status' EVENT_STATUS, cast(null as varchar2(100)) EVENT_LINK, 'Example event type' EVENT_TYPE from dual
+                ```
+        }
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        componentAppearance {
+            template: @/timeline
+            templateOptions: #DEFAULT#
+        }
+        column USER_AVATAR (
+            reportColumnQueryId: 1
+            derivedColumn: N
+            heading {
+                heading: User Avatar
+            }
+            layout {
+                sequence: 10
+            }
+        )
+        column USER_NAME (
+            reportColumnQueryId: 2
+            derivedColumn: N
+            heading {
+                heading: User Name
+            }
+            layout {
+                sequence: 20
+            }
+        )
+        column EVENT_DATE (
+            reportColumnQueryId: 3
+            derivedColumn: N
+            heading {
+                heading: Event Date
+            }
+            layout {
+                sequence: 30
+            }
+        )
+        column EVENT_TITLE (
+            reportColumnQueryId: 4
+            derivedColumn: N
+            heading {
+                heading: Event Title
+            }
+            layout {
+                sequence: 40
+            }
+        )
+        column EVENT_DESC (
+            reportColumnQueryId: 5
+            derivedColumn: N
+            heading {
+                heading: Event Desc
+            }
+            layout {
+                sequence: 50
+            }
+        )
+        column EVENT_ICON (
+            reportColumnQueryId: 6
+            derivedColumn: N
+            heading {
+                heading: Event Icon
+            }
+            layout {
+                sequence: 60
+            }
+        )
+        column EVENT_STATUS (
+            reportColumnQueryId: 7
+            derivedColumn: N
+            heading {
+                heading: Event Status
+            }
+            layout {
+                sequence: 70
+            }
+        )
+        column EVENT_LINK (
+            reportColumnQueryId: 8
+            derivedColumn: N
+            heading {
+                heading: Event Link
+            }
+            layout {
+                sequence: 80
+            }
+        )
+        column EVENT_TYPE (
+            reportColumnQueryId: 9
+            derivedColumn: N
+            heading {
+                heading: Event Type
+            }
+            layout {
+                sequence: 90
+            }
+        )
+    )
+
+)

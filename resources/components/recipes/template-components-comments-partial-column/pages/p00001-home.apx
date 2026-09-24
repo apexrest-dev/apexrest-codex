@@ -1,0 +1,86 @@
+page 1 (
+    name: Component Example
+    alias: HOME
+    title: Component Example
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region results (
+        name: Partial Column Example
+        type: interactiveReport
+        source {
+            location: localDatabase
+            type: sqlQuery
+            sqlQuery:
+                ```sql
+                select 'Example user' USER_NAME, 'A local comment.' COMMENT_TEXT, timestamp '2026-01-01 09:00:00' COMMENT_DATE, 'component' COMPONENT from dual
+                ```
+        }
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/interactive-report
+            templateOptions: #DEFAULT#
+        }
+        column USER_NAME (
+            type: plainText
+            heading {
+                heading: User Name
+            }
+            layout {
+                sequence: 10
+            }
+            source {
+                dataType: STRING
+            }
+        )
+        column COMMENT_TEXT (
+            type: plainText
+            heading {
+                heading: Comment Text
+            }
+            layout {
+                sequence: 20
+            }
+            source {
+                dataType: STRING
+            }
+        )
+        column COMMENT_DATE (
+            type: plainText
+            heading {
+                heading: Comment Date
+            }
+            layout {
+                sequence: 30
+            }
+            source {
+                dataType: DATE
+            }
+        )
+        column COMPONENT (
+            type: themeTemplateComponent/comments
+            heading {
+                heading: Comments
+            }
+            layout {
+                sequence: 100
+            }
+            source {
+                dataType: STRING
+            }
+            settings {
+            userName: USER_NAME
+            commentText: COMMENT_TEXT
+            date: COMMENT_DATE
+            }
+        )
+    )
+
+)

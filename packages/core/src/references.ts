@@ -9,6 +9,7 @@ import { resourceRoot } from './project.ts';
 import { managedHome } from './config.ts';
 import { readJson, exists, writeJson, canonical, hash } from './fs.ts';
 import { Fault } from './result.ts';
+import { componentSearch, componentRead } from './components.ts';
 
 type Kind = 'grammar' | 'template' | 'contract' | 'guide';
 export type Reference = {
@@ -124,6 +125,7 @@ async function referenceIndex() {
   }
 }
 export type SearchOptions = {
+  corpus?: 'apexlang' | 'components' | undefined;
   kind?: Kind | undefined;
   family?: string | undefined;
   offset?: number | undefined;
@@ -150,6 +152,7 @@ function snippet(text: string, query: string, terms: string[]) {
   };
 }
 export async function referenceSearch(query: string, version?: string, options: SearchOptions = {}) {
+  if (options.corpus === 'components') return componentSearch(query, version, options);
   const terms = termsFor(query);
   if (!terms.length) return [];
   const index = await referenceIndex();
@@ -228,6 +231,7 @@ export async function referenceSearch(query: string, version?: string, options: 
   });
 }
 export async function referenceRead(id: string, offset: number, limit: number) {
+  if (id.startsWith('component:')) return componentRead(id, offset, limit);
   const index = await referenceIndex();
   const item = index.byId.get(id) ?? index.byId.get(index.bySymbol.get(id.replace(/^grammar:/, '')) ?? '');
   if (!item)

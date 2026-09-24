@@ -54,6 +54,20 @@ try {
   assert.equal(summary.targetVerified, false);
   const refs = await query('apexrest_reference_search', { query: 'validate' });
   assert.ok(JSON.stringify(refs).includes('validate'));
+  const components = await query('apexrest_reference_search', {
+    corpus: 'components',
+    query: 'картка показника',
+    kind: 'template',
+    version: '26.1',
+    limit: 3,
+  });
+  assert.ok(components.some((entry) => entry.id.includes('template-components/metric-card/recipes/')));
+  const component = await query('apexrest_reference_read', {
+    id: components.find((entry) => entry.id.includes('template-components/metric-card/recipes/')).id,
+    limit: 2048,
+  });
+  assert.equal(component.readiness, 'ready');
+  assert.equal(component.compatibility.mmdVersion, '26.1.0+3102');
   const resource = await client.readResource({ uri: 'ui://apexrest/development-panel.html' });
   assert.equal(resource.contents[0].mimeType, 'text/html;profile=mcp-app');
   assert.doesNotMatch(resource.contents[0].text, /multiAgentEnabled|Agent team/);
@@ -69,6 +83,7 @@ try {
         'stdio MCP catalog',
         'project summary',
         'pinned reference search',
+        'offline Ukrainian component search and recipe read',
         'panel resource',
       ],
       scope: 'Local installed files and stdio MCP; no model, Oracle or native-host execution.',

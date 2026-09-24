@@ -1,0 +1,77 @@
+page 1 (
+    name: Component Example
+    alias: HOME
+    title: Component Example
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region results (
+        name: Media List Report
+        type: classicReport
+        source {
+            location: localDatabase
+            type: sqlQuery
+            sqlQuery:
+                ```sql
+                select 'Example entry' TITLE, 'Local description' DESCRIPTION, 'fa-info-circle' ICON_CLASS, apex_page.get_url(p_page => 1) LINK from dual
+                ```
+        }
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        componentAppearance {
+            template: @/media-list
+            templateOptions: #DEFAULT#
+        }
+        column TITLE (
+            reportColumnQueryId: 1
+            derivedColumn: N
+            heading {
+                heading: Title
+            }
+            layout {
+                sequence: 10
+            }
+        )
+        column DESCRIPTION (
+            reportColumnQueryId: 2
+            derivedColumn: N
+            heading {
+                heading: Description
+            }
+            layout {
+                sequence: 20
+            }
+        )
+        column ICON_CLASS (
+            reportColumnQueryId: 3
+            derivedColumn: N
+            heading {
+                heading: Icon Class
+            }
+            layout {
+                sequence: 30
+            }
+        )
+        column LINK (
+            reportColumnQueryId: 4
+            derivedColumn: N
+            heading {
+                heading: Link
+            }
+            layout {
+                sequence: 40
+            }
+        )
+    )
+
+)

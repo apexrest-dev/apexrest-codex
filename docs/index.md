@@ -4,7 +4,7 @@ English | [Українська](index.uk.md)
 
 ![APEXREST pencil and ruler symbol](assets/apexrest-logo.svg)
 
-APEXREST is a native Codex plugin for Oracle APEX development, controlled imports and verification. Install `apexrest@1.0.0` from npm with `npm install -g apexrest`, then open `apexrest` to install tools and register the plugin. [Implementation and evidence records](implementation-status.md) track the remaining release qualification checks separately.
+APEXREST is a native Codex plugin for Oracle APEX development, controlled imports and verification. The 1.1.0 release adds the offline component catalog; npm publication verification is pending. Use `npm install -g apexrest` for the npm `latest` version, then open `apexrest` to install tools and register the plugin. [Implementation and evidence records](implementation-status.md) track the remaining release qualification checks separately.
 
 ## Start here
 
@@ -13,6 +13,7 @@ APEXREST is a native Codex plugin for Oracle APEX development, controlled import
 | Install from npm or the repository and connect a target      | [Getting started](getting-started.md)             |
 | Run the CLI in a Cloud container with ORDS                   | [Codex Cloud](codex-cloud.md)                     |
 | Implement an APEX change in the current conversation         | [Chat workflow](chat-workflow.md)                 |
+| Find a component, parameter contract and APEXlang recipe     | [Component catalog](component-catalog.md)         |
 | Install/remove tools and test connections in the terminal    | [Terminal interface](tui.md)                      |
 | Understand the product and examples                          | [README](../README.md)                            |
 | Bring an existing application into source control            | [Existing applications](existing-app.md)          |

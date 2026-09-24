@@ -2,11 +2,13 @@
 
 English | [Українська](next-actions.uk.md)
 
-## Release 1.0.0
+## Release 1.1.0
 
-Use the [current local evidence](evidence/current-session-100-local.json) and [release notes](release-notes.md) for the exact refactor checks and distribution state. Verify the installed plugin in a new Codex conversation after update. Keep npm metadata, the checked-in native bundle and canonical GitHub source aligned; a registry clean install does not establish desktop behavior or Oracle correctness.
+Use the [catalog evidence](evidence/component-catalog-local.json) and [release notes](release-notes.md) for the exact checks and distribution state. Complete the authorized npm publication, then record registry integrity and clean installs in the [1.1.0 publication record](evidence/npm-110-publication.json). Verify the installed plugin in a new Codex conversation after update. Keep npm metadata, the checked-in native bundle and canonical GitHub source aligned; a registry clean install does not establish desktop behavior or Oracle correctness.
 
 ## Connected and platform verification
+
+- For the [component catalog](component-catalog.md), test adapted recipes on a separately authorized development application. Record source-query, import and browser evidence independently of offline compilation; the reference application remains read-only. npm publication does not establish application runtime behavior.
 
 - Exercise changed APEX imports, component/static-file/MMD preservation and SQL restore on an explicitly authorized test target, with source/target identity and verified backups.
 - Record real database interruption, lost-response reconciliation and coordination evidence. Separate homes/machines need external serialization or explicitly configured database coordination.

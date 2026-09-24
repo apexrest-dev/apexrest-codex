@@ -1,0 +1,60 @@
+page 1 (
+    name: Component Example
+    alias: HOME
+    title: Component Example
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region example (
+        name: Example
+        type: staticContent
+        source {
+            htmlCode: <p>Local component example.</p>
+        }
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/carousel-container
+            templateOptions: #DEFAULT#
+        }
+    )
+    region first-panel (
+        name: First Panel
+        type: staticContent
+        source {
+            htmlCode: <p>Local component example.</p>
+        }
+        layout {
+            sequence: 10
+            parentRegion: @example
+            slot: slides
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+    )
+    region second-panel (
+        name: Second Panel
+        type: staticContent
+        source {
+            htmlCode: <p>Local component example.</p>
+        }
+        layout {
+            sequence: 20
+            parentRegion: @example
+            slot: slides
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+    )
+
+)

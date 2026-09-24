@@ -34,22 +34,30 @@ const safeArtifactPages = new WeakSet<object>();
 // Only pages produced here may bypass subsequent recursive redaction. The full
 // document is sanitized first and the page is frozen; arbitrary tool objects
 // cannot opt out. Re-redacting a partial JSON/secret marker corrupts pagination.
-export function artifactPage(
+export function artifactPage<T extends Record<string, unknown> = Record<string, never>>(
   content: string,
   format: 'text' | 'json',
   id: string,
   offset: number,
   limit: number,
+  metadata: T = {} as T,
 ) {
   const safe = format === 'json' ? JSON.stringify(sanitized(JSON.parse(content))) : redact(content);
+  const safeMetadata = sanitized(metadata) as T;
   let count = Math.min(limit, Math.max(0, safe.length - offset));
-  const create = () => ({
-    id,
-    offset,
-    content: safe.slice(offset, offset + count),
-    nextOffset: offset + count < safe.length ? offset + count : null,
-    dataClassification: 'untrusted_operation_output',
-  });
+  const create = () => {
+    let end = offset + count;
+    if (count > 0 && /[\uD800-\uDBFF]/.test(safe[end - 1]!) && /[\uDC00-\uDFFF]/.test(safe[end] ?? ''))
+      end += count === 1 ? 1 : -1;
+    return {
+      ...safeMetadata,
+      id: redact(id),
+      offset,
+      content: safe.slice(offset, end),
+      nextOffset: end < safe.length ? end : null,
+      dataClassification: 'untrusted_operation_output',
+    };
+  };
   let page = create();
   while (JSON.stringify(page).length > 24000 && count > 1) {
     count = Math.floor(count / 2);

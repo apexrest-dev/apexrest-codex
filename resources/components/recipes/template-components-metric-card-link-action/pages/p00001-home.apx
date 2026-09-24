@@ -1,0 +1,80 @@
+page 1 (
+    name: Component Example
+    alias: HOME
+    title: Component Example
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region example (
+        name: Metric Card
+        type: themeTemplateComponent/metricCard
+        source {
+            location: localDatabase
+            type: sqlQuery
+            sqlQuery:
+                ```sql
+                select 'Open tasks' TITLE, 12 METRIC, 'Synthetic example' META from dual
+                ```
+        }
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/blank-with-attributes
+            templateOptions: #DEFAULT#
+        }
+        componentAppearance {
+            display: report
+        }
+        settings {
+            title: &TITLE.
+            metric: &METRIC.
+            meta: &META.
+        }
+        column TITLE (
+            layout {
+                sequence: 10
+            }
+            source {
+                databaseColumn: TITLE
+                dataType: varchar2
+            }
+        )
+        column METRIC (
+            layout {
+                sequence: 20
+            }
+            source {
+                databaseColumn: METRIC
+                dataType: number
+            }
+        )
+        column META (
+            layout {
+                sequence: 30
+            }
+            source {
+                databaseColumn: META
+                dataType: varchar2
+            }
+        )
+        action open-home (
+            position: link
+            layout {
+                sequence: 10
+            }
+            behavior {
+                type: redirectThisApp
+                target: {
+                    page: 1
+                }
+            }
+        )
+    )
+
+)

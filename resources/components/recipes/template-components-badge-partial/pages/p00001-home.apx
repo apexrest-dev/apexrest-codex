@@ -1,0 +1,49 @@
+page 1 (
+    name: Component Example
+    alias: HOME
+    title: Component Example
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region example (
+        name: Badge
+        type: themeTemplateComponent/badge
+        source {
+            location: localDatabase
+            type: sqlQuery
+            sqlQuery:
+                ```sql
+                select 'Open' STATUS from dual where rownum <= 1
+                ```
+        }
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/blank-with-attributes
+            templateOptions: #DEFAULT#
+        }
+        componentAppearance {
+            display: partial
+        }
+        settings {
+            label: Status
+            value: STATUS
+        }
+        column STATUS (
+            layout {
+                sequence: 10
+            }
+            source {
+                databaseColumn: STATUS
+                dataType: varchar2
+            }
+        )
+    )
+
+)

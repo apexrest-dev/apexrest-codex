@@ -1,0 +1,28 @@
+page 1 (
+    name: Component Example
+    alias: HOME
+    title: Component Example
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region example (
+        name: Example
+        type: staticContent
+        layout {
+            sequence: 10
+            slot: body
+        }
+        image {
+            fileUrl: #APP_FILES#catalog/example.svg
+        }
+        appearance {
+            template: @/image
+            templateOptions: #DEFAULT#
+        }
+    )
+
+)

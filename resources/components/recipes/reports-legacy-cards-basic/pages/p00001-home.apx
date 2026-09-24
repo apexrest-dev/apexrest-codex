@@ -1,0 +1,77 @@
+page 1 (
+    name: Component Example
+    alias: HOME
+    title: Component Example
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region results (
+        name: Legacy Report Template
+        type: classicReport
+        source {
+            location: localDatabase
+            type: sqlQuery
+            sqlQuery:
+                ```sql
+                select 'Example card title' CARD_TITLE, 'Example card text' CARD_TEXT, 'Example card subtext' CARD_SUBTEXT, 'fa-info-circle' CARD_ICON from dual
+                ```
+        }
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        componentAppearance {
+            template: @/cards
+            templateOptions: #DEFAULT#
+        }
+        column CARD_TITLE (
+            reportColumnQueryId: 1
+            derivedColumn: N
+            heading {
+                heading: Card Title
+            }
+            layout {
+                sequence: 10
+            }
+        )
+        column CARD_TEXT (
+            reportColumnQueryId: 2
+            derivedColumn: N
+            heading {
+                heading: Card Text
+            }
+            layout {
+                sequence: 20
+            }
+        )
+        column CARD_SUBTEXT (
+            reportColumnQueryId: 3
+            derivedColumn: N
+            heading {
+                heading: Card Subtext
+            }
+            layout {
+                sequence: 30
+            }
+        )
+        column CARD_ICON (
+            reportColumnQueryId: 4
+            derivedColumn: N
+            heading {
+                heading: Card Icon
+            }
+            layout {
+                sequence: 40
+            }
+        )
+    )
+
+)

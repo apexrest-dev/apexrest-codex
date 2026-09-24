@@ -1,5 +1,7 @@
 import { build } from 'esbuild';
 import { mkdir, readFile, writeFile, cp, rm, chmod } from 'node:fs/promises';
+import { buildComponentCatalog } from './build-component-catalog.mjs';
+await buildComponentCatalog('resources/components', true);
 const metadata = JSON.parse(await readFile('plugins/metadata.json', 'utf8'));
 await rm('dist/runtime', { recursive: true, force: true });
 await mkdir('dist/runtime', { recursive: true });

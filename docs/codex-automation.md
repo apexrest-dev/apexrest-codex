@@ -31,7 +31,7 @@ None of these handlers needs another model merely to format a report, poll a wor
 
 ## Current evidence and scope
 
-[Local 1.0.0 evidence](evidence/current-session-100-local.json) records the current catalog and validation. The [earlier automation measurement](evidence/codex-automation-runtime.json) retains its original version: a synthetic 50-file project summary used 659 UTF-8 bytes versus 4,494 for full inspection. It is historical response-size evidence, not current host token accounting.
+[Historical 1.0.0 evidence](evidence/current-session-100-local.json) records its tool catalog and validation; [1.1.0 catalog evidence](evidence/component-catalog-local.json) records the new component corpus. The [earlier automation measurement](evidence/codex-automation-runtime.json) retains its original version: a synthetic 50-file project summary used 659 UTF-8 bytes versus 4,494 for full inspection. It is historical response-size evidence, not current host token accounting.
 
 Work starts directly in the Codex conversation without a plugin registration call. Retrieve only relevant skills/references, reuse summaries and existing job IDs, and open the panel when useful. Codex owns models and collaboration. APEXREST owns recoverable operation state, with no duplicate conversational context.
 

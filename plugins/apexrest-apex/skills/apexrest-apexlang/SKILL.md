@@ -9,6 +9,10 @@ Pass the user's absolute workspace as `project` on project-scoped calls.
 
 Inspect relevant source and pinned toolchain once. Reuse existing components, IDs, templates and shared components; export only for missing/stale source. For a new app, use `apexrest_apex_generate` or an installed project template. Preserve `.apex/apexlang.json` and MMD; generate/export into new destinations.
 
+For a reusable component, search `apexrest_reference_search` with `corpus: "components"`, the requested English or Ukrainian name, target `version`, `kind: "template"` and `limit: 3`. Read the selected `component:` recipe and its required parameter/Oracle contracts. Compare its APEX, theme and MMD compatibility with the project. `ready` proves the recorded offline compilation only; inspect SQL/import/browser statuses separately. Read an unresolved result's reason instead of inventing support. The catalog is local reference data: ordinary lookup never connects to the source application. Do not read the complete inventory unless maintaining the catalog.
+
+Keep component hosts distinct (for example, a Media List list template versus its template component). Adapt recipe page/item names, DOM IDs, source projections, keys, shared references and submitted items together. Merge into the existing application; the recipe compiler scaffold is not permission to replace authentication, authorization or app settings. Synthetic sources show a data contract and do not establish the user's business schema.
+
 ## Retrieve only what changes the edit
 
 Read the selected contract through [component routes](references/component-routes.md). Reuse prior reads; do not dump the reference index or load unrelated families.

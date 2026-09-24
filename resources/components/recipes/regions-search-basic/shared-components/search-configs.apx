@@ -1,0 +1,20 @@
+searchConfig example-search (
+    name: Example Search
+    source {
+        location: localDatabase
+        type: sqlQuery
+        sqlQuery:
+            ```sql
+            select 1 ID, 'Example document' TITLE, 'Local searchable description' DESCRIPTION from dual
+            ```
+        searchableColumns: [
+            TITLE
+            DESCRIPTION
+        ]
+    }
+    columnMapping {
+        primaryKey1Column: ID
+        titleColumn: TITLE
+        descriptionColumn: DESCRIPTION
+    }
+)

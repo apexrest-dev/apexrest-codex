@@ -6,6 +6,13 @@ Oracle APEXlang reference fragments and adapted form/report/dashboard examples:
 Copyright Oracle and/or its affiliates. Licensed under UPL-1.0.
 Pinned source and hashes: toolchains/sources.lock.json.
 Full license: resources/references/ORACLE-LICENSE.txt.
+The component catalog contains normalized facts observed in Universal Theme 26.1
+Reference and matching compiler metadata, with source hashes and provenance.
+Oracle Universal Theme parameter help retained in the catalog is licensed under
+UPL-1.0 (Copyright Oracle and/or its affiliates); see resources/references/ORACLE-LICENSE.txt.
+Catalog explanations and synthetic recipes are maintained by APEXREST contributors.
+Referenced Oracle documents retain their own notices; raw reference-app exports,
+private deployment configuration and the Oracle compiler bundle are not included.
 Oracle-generated blank-app files retain their original headers and MMD metadata.
 Node.js, Java, SQLcl and Chromium are downloaded separately from their vendors.
 No Oracle or Java executable is redistributed in APEXREST packages.

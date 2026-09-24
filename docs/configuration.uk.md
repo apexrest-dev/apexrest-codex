@@ -17,7 +17,7 @@
   "deployConnectionRef": "dev-deploy",
   "workspace": "YOUR_WORKSPACE",
   "parsingSchema": "YOUR_SCHEMA",
-  "applicationId": 100,
+  "applicationId": 123,
   "baseUrl": "https://your-host.example/ords/r/workspace/crm/",
   "databaseIdentity": {
     "dbUniqueName": "YOUR_DB",

@@ -1,0 +1,50 @@
+page 1 (
+    name: Component Example
+    alias: HOME
+    title: Component Example
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region example (
+        name: Search
+        type: search
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/search-results-container
+            templateOptions: #DEFAULT#
+        }
+        settings {
+            searchPageItem: P1_SEARCH
+        }
+        searchSource example (
+            name: Example Search
+            searchConfig: @example-search
+            layout {
+                sequence: 10
+            }
+        )
+    )
+    pageItem P1_SEARCH (
+        type: textField
+        label {
+            label: Search
+        }
+        layout {
+            sequence: 10
+            region: @example
+            slot: searchField
+        }
+        appearance {
+            template: @/optional-floating
+            templateOptions: #DEFAULT#
+        }
+    )
+
+)

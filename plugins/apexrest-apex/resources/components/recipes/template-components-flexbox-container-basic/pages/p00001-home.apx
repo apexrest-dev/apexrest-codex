@@ -1,0 +1,60 @@
+page 1 (
+    name: Component Example
+    alias: HOME
+    title: Component Example
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region example (
+        name: Flexbox Container
+        type: themeTemplateComponent/flexboxContainer
+        layout {
+            sequence: 10
+            slot: body
+        }
+        componentAppearance {
+            display: regionOnly
+        }
+        settings {
+            direction: row
+            gap: md
+        }
+    )
+    region first-child (
+        name: First Child
+        type: staticContent
+        source {
+            htmlCode: <p>Local component example.</p>
+        }
+        layout {
+            sequence: 10
+            parentRegion: @example
+            slot: plugin-body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+    )
+    region second-child (
+        name: Second Child
+        type: staticContent
+        source {
+            htmlCode: <p>Local component example.</p>
+        }
+        layout {
+            sequence: 20
+            parentRegion: @example
+            slot: plugin-body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+    )
+
+)

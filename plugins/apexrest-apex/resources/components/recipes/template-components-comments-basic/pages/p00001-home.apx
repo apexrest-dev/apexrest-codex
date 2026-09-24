@@ -1,0 +1,69 @@
+page 1 (
+    name: Component Example
+    alias: HOME
+    title: Component Example
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region example (
+        name: Comments
+        type: themeTemplateComponent/comments
+        source {
+            location: localDatabase
+            type: sqlQuery
+            sqlQuery:
+                ```sql
+                select 'Example user' USER_NAME, 'A local comment.' COMMENT_TEXT, timestamp '2026-01-01 09:00:00' COMMENT_DATE from dual
+                ```
+        }
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/blank-with-attributes
+            templateOptions: #DEFAULT#
+        }
+        componentAppearance {
+            display: report
+        }
+        settings {
+            userName: USER_NAME
+            commentText: COMMENT_TEXT
+            date: COMMENT_DATE
+            style: basic
+        }
+        column USER_NAME (
+            layout {
+                sequence: 10
+            }
+            source {
+                databaseColumn: USER_NAME
+                dataType: varchar2
+            }
+        )
+        column COMMENT_TEXT (
+            layout {
+                sequence: 20
+            }
+            source {
+                databaseColumn: COMMENT_TEXT
+                dataType: varchar2
+            }
+        )
+        column COMMENT_DATE (
+            layout {
+                sequence: 30
+            }
+            source {
+                databaseColumn: COMMENT_DATE
+                dataType: timestamp
+            }
+        )
+    )
+
+)

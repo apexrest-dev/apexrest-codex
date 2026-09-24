@@ -2,6 +2,14 @@
 
 English | [Українська](CHANGELOG.uk.md)
 
+## 1.1.0 — component catalog
+
+- Add offline Universal Theme discovery across 109 component families, contextual parameters and 138 compiler-checked APEXlang recipes through the existing MCP reference tools and CLI. One unsupported recipe remains discoverable with an explicit unresolved reason.
+- Capture an identity-checked read-only application snapshot, preserve full inventory and separate compiler, SQL, import and browser evidence.
+- Package reviewed source facts, UPL-licensed parameter help and synthetic examples with hashes, stable IDs and bounded retrieval. See the [catalog guide](docs/component-catalog.md).
+
+The optional `corpus: "components"` selector preserves the existing `apexlang` default and reference IDs. npm publication of `apexrest@1.1.0` is authorized and pending registry verification; the [publication record](docs/evidence/npm-110-publication.json) tracks the outcome.
+
 ## 1.0.0 — current-session release
 
 - Work directly in the open Codex conversation; remove plugin-owned model sessions, task registration, role routing, team tools/skill and panel controls.
@@ -12,7 +20,7 @@ See [release notes](docs/release-notes.md) and [current local evidence](docs/evi
 
 ## Historical entries
 
-The entries below describe earlier releases. Their removed features are not available in 1.0.0; publication statements refer to the date/version recorded.
+The entries below describe earlier releases. Their removed features remain unavailable in 1.1.0; publication statements refer to the date/version recorded.
 
 ## 0.5.0 — stable release
 

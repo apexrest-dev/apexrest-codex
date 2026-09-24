@@ -1,0 +1,241 @@
+page 1 (
+    name: Component Example
+    alias: HOME
+    title: Component Example
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region form (
+        name: Editable Form
+        type: form
+        source {
+            location: localDatabase
+            tableName: APEXREST_EXAMPLE_ROWS
+        }
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        edit {
+            enabled: true
+            allowedOperations: [
+                add
+                update
+                delete
+            ]
+            lostUpdateType: rowVersionColumn
+            rowVersionColumn: ROW_VERSION
+        }
+    )
+    region buttons (
+        name: Buttons
+        type: staticContent
+        source {
+            htmlCode: <p>Local component example.</p>
+        }
+        layout {
+            sequence: 20
+            slot: body
+        }
+        appearance {
+            template: @/buttons-container
+            templateOptions: #DEFAULT#
+        }
+    )
+    pageItem P1_ID (
+        type: hidden
+        layout {
+            sequence: 10
+            region: @form
+            slot: regionBody
+        }
+        source {
+            formRegion: @form
+            column: ID
+            dataType: number
+            primaryKey: true
+            queryOnly: true
+        }
+        security {
+            sessionStateProtection: checksumRequiredSessionLevel
+        }
+    )
+    pageItem P1_NAME (
+        type: textField
+        label {
+            label: Name
+        }
+        layout {
+            sequence: 20
+            region: @form
+            slot: regionBody
+        }
+        appearance {
+            template: @/required-floating
+            templateOptions: #DEFAULT#
+        }
+        validation {
+            valueRequired: true
+        }
+        source {
+            formRegion: @form
+            column: NAME
+            dataType: varchar2
+        }
+    )
+    pageItem P1_STATUS (
+        type: textField
+        label {
+            label: Status
+        }
+        layout {
+            sequence: 30
+            region: @form
+            slot: regionBody
+        }
+        appearance {
+            template: @/required-floating
+            templateOptions: #DEFAULT#
+        }
+        validation {
+            valueRequired: true
+        }
+        source {
+            formRegion: @form
+            column: STATUS
+            dataType: varchar2
+        }
+    )
+    pageItem P1_ROW_VERSION (
+        type: hidden
+        layout {
+            sequence: 40
+            region: @form
+            slot: regionBody
+        }
+        source {
+            formRegion: @form
+            column: ROW_VERSION
+            dataType: number
+            queryOnly: true
+        }
+    )
+    button insert (
+        buttonName: INSERT
+        label: Insert
+        layout {
+            sequence: 10
+            region: @buttons
+            slot: next
+        }
+        appearance {
+            buttonTemplate: @/text
+            templateOptions: #DEFAULT#
+        }
+        behavior {
+            action: submitPage
+            databaseAction: insert
+        }
+        serverSideCondition {
+            type: itemIsNull
+            item: P1_ID
+        }
+    )
+    button update (
+        buttonName: UPDATE
+        label: Update
+        layout {
+            sequence: 20
+            region: @buttons
+            slot: next
+        }
+        appearance {
+            buttonTemplate: @/text
+            templateOptions: #DEFAULT#
+        }
+        behavior {
+            action: submitPage
+            databaseAction: update
+        }
+        serverSideCondition {
+            type: itemIsNotNull
+            item: P1_ID
+        }
+    )
+    button delete (
+        buttonName: DELETE
+        label: Delete
+        layout {
+            sequence: 30
+            region: @buttons
+            slot: next
+        }
+        appearance {
+            buttonTemplate: @/text
+            templateOptions: #DEFAULT#
+        }
+        behavior {
+            action: submitPage
+            databaseAction: delete
+            requiresConfirmation: true
+            executeValidations: false
+        }
+        confirmation {
+            message: Delete this example row?
+            style: danger
+        }
+        serverSideCondition {
+            type: itemIsNotNull
+            item: P1_ID
+        }
+    )
+    process initialize-form (
+        name: Initialize form
+        type: formInitialization
+        formRegion: @form
+        execution {
+            sequence: 10
+            point: beforeHeader
+        }
+    )
+    process save-form (
+        name: Save form
+        type: formAutoRowProcessing
+        formRegion: @form
+        execution {
+            sequence: 10
+        }
+        successMessage {
+            successMessage: Example row saved.
+        }
+        serverSideCondition {
+            type: requestIsContainedInValue
+            value: INSERT,UPDATE,DELETE
+        }
+    )
+
+    branch (
+        name: Return after delete
+        execution {
+            sequence: 10
+        }
+        behavior {
+            target: {
+                page: 1
+                clearCache: 1
+            }
+        }
+        serverSideCondition {
+            whenButtonPressed: @delete
+        }
+    )
+
+)
