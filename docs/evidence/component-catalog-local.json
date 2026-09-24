@@ -177,7 +177,7 @@
     "reason": "No separate deployment target was specified; the reference application remains read-only."
   },
   "publication": {
-    "npm": "prepared-not-published",
+    "npm": "published-and-registry-verified",
     "evidence": "docs/evidence/npm-110-publication.json",
     "tag": "not-created",
     "release": "not-published"

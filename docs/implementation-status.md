@@ -22,7 +22,7 @@ The [acceptance matrix](acceptance.json) distinguishes current criteria, retired
 
 ## Distribution and remaining checks
 
-The stable npm target is 1.1.0. Commit, push and npm publication are authorized; publication and registry verification are pending in the [1.1.0 publication record](evidence/npm-110-publication.json). The [historical 1.0.0 publication record](evidence/npm-100-publication.json) retains its verified integrity, clean installs and Ubuntu/macOS/Windows CI results.
+`apexrest@1.1.0` is published as npm `latest`. The [1.1.0 publication record](evidence/npm-110-publication.json) confirms registry integrity and clean local/global installs for source commit `284b554d762545e76b64913b7f34c45c44f01833`. The [release CI run](https://github.com/apexrest-dev/apexrest-codex/actions/runs/35987234098) passed on Ubuntu, macOS and Windows. The [historical 1.0.0 publication record](evidence/npm-100-publication.json) retains its verified integrity, clean installs and Ubuntu/macOS/Windows CI results.
 
 The package and native plugin version is `1.1.0`. npm publication is independent of the disabled protected GitHub artifact publisher. [Release notes](release-notes.md) track distribution separately from implementation and verification. Registry installation, local packaging, GitHub source and deployed website are separate outcomes.
 

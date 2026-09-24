@@ -25,7 +25,7 @@ An existing clean APEX installation is enough for ordinary deployment. Service t
 
 ## Install from npm
 
-Use Node 24 LTS (supported range: Node 24–26). Install [apexrest](https://www.npmjs.com/package/apexrest) from npm. The stable release target is `1.1.0`; registry verification is pending. The commands below use `latest`. See [release notes](release-notes.md) for distribution and verification status.
+Use Node 24 LTS (supported range: Node 24–26). Install [apexrest](https://www.npmjs.com/package/apexrest) from npm. The stable npm `latest` release is `1.1.0`; the commands below use `latest`. See [release notes](release-notes.md) for distribution and verification status.
 
 Install the CLI globally and check its version:
 

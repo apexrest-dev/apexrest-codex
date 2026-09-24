@@ -4,7 +4,7 @@ English | [Українська](index.uk.md)
 
 ![APEXREST pencil and ruler symbol](assets/apexrest-logo.svg)
 
-APEXREST is a native Codex plugin for Oracle APEX development, controlled imports and verification. The 1.1.0 release adds the offline component catalog; npm publication verification is pending. Use `npm install -g apexrest` for the npm `latest` version, then open `apexrest` to install tools and register the plugin. [Implementation and evidence records](implementation-status.md) track the remaining release qualification checks separately.
+APEXREST is a native Codex plugin for Oracle APEX development, controlled imports and verification. The 1.1.0 release includes the offline component catalog and is published as npm `latest`. Use `npm install -g apexrest` for the npm `latest` version, then open `apexrest` to install tools and register the plugin. [Implementation and evidence records](implementation-status.md) track the remaining release qualification checks separately.
 
 ## Start here
 

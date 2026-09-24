@@ -8,7 +8,7 @@ English | [Українська](CHANGELOG.uk.md)
 - Capture an identity-checked read-only application snapshot, preserve full inventory and separate compiler, SQL, import and browser evidence.
 - Package reviewed source facts, UPL-licensed parameter help and synthetic examples with hashes, stable IDs and bounded retrieval. See the [catalog guide](docs/component-catalog.md).
 
-The optional `corpus: "components"` selector preserves the existing `apexlang` default and reference IDs. npm publication of `apexrest@1.1.0` is authorized and pending registry verification; the [publication record](docs/evidence/npm-110-publication.json) tracks the outcome.
+The optional `corpus: "components"` selector preserves the existing `apexlang` default and reference IDs. `apexrest@1.1.0` is published as npm `latest`; the [publication record](docs/evidence/npm-110-publication.json) confirms registry integrity and clean local/global installs.
 
 ## 1.0.0 — current-session release
 

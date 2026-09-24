@@ -20,7 +20,7 @@ Browse the [Universal Theme component list and examples](https://apex.oracle.com
 
 ## Distribution
 
-The stable npm target is `apexrest@1.1.0`. Commit, push and npm publication are authorized; **publication and registry verification are pending** in the [1.1.0 publication record](evidence/npm-110-publication.json). The previous 1.0.0 publication remains recorded separately below.
+`apexrest@1.1.0` is published as npm `latest`. The [1.1.0 publication record](evidence/npm-110-publication.json) confirms registry integrity and clean local/global installs for source commit `284b554d762545e76b64913b7f34c45c44f01833`. The [release CI run](https://github.com/apexrest-dev/apexrest-codex/actions/runs/35987234098) passed on Ubuntu, macOS and Windows. The previous 1.0.0 publication remains recorded separately below.
 
 npm publication is separate from the disabled protected GitHub artifact publisher. It does not claim signed GitHub artifacts, a Git tag, website deployment or full platform/Oracle qualification. Updating the active Codex plugin cache and opening a new conversation to load its tools are separate installation actions.
 

@@ -62,4 +62,4 @@ npm run build
 
 The reviewed package contains factual metadata, original explanations, reusable examples and source attribution. It excludes raw application exports, deployment credentials, private URLs and the compiler bundle. A new source snapshot is reviewed through its inventory and content diff before it replaces the bundled revision. Preserve existing IDs where their meaning is unchanged.
 
-See [implementation status](implementation-status.md), the [acceptance matrix](acceptance.json) and [next actions](next-actions.md) for verification and distribution limits. The 1.1.0 npm publication is authorized; its pending verification is tracked in the [publication record](evidence/npm-110-publication.json). Publication does not establish browser behavior.
+See [implementation status](implementation-status.md), the [acceptance matrix](acceptance.json) and [next actions](next-actions.md) for verification and distribution limits. `apexrest@1.1.0` is published as npm `latest`; the [publication record](evidence/npm-110-publication.json) confirms registry integrity and clean local/global installs. Publication does not establish browser behavior.

@@ -4,7 +4,7 @@ English | [Українська](next-actions.uk.md)
 
 ## Release 1.1.0
 
-Use the [catalog evidence](evidence/component-catalog-local.json) and [release notes](release-notes.md) for the exact checks and distribution state. Complete the authorized npm publication, then record registry integrity and clean installs in the [1.1.0 publication record](evidence/npm-110-publication.json). Verify the installed plugin in a new Codex conversation after update. Keep npm metadata, the checked-in native bundle and canonical GitHub source aligned; a registry clean install does not establish desktop behavior or Oracle correctness.
+Use the [catalog evidence](evidence/component-catalog-local.json) and [release notes](release-notes.md) for the exact checks and distribution state. Registry integrity and clean local/global installs for `apexrest@1.1.0` on npm `latest` are recorded in the [1.1.0 publication record](evidence/npm-110-publication.json). Verify the installed plugin in a new Codex conversation after update. Keep npm metadata, the checked-in native bundle and canonical GitHub source aligned; a registry clean install does not establish desktop behavior or Oracle correctness.
 
 ## Connected and platform verification
 
