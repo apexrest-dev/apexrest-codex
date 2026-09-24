@@ -1,0 +1,100 @@
+page 1 (
+    name: Related collection overview
+    alias: HOME
+    title: Related collection overview
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region collections (
+        name: Related collections
+        type: themeTemplateComponent/contentRow
+        source {
+            location: localDatabase
+            type: sqlQuery
+            sqlQuery:
+                ```sql
+                select COLLECTION_ID ID, case COLLECTION_ID when 10 then 'Checks' else 'Notes' end TITLE, 'Related records' DESCRIPTION, count(*) ITEM_COUNT, apex_page.get_url(p_page => 2, p_items => 'P2_COLLECTION_ID', p_values => COLLECTION_ID) TARGET_URL from (select 1 ID, 10 COLLECTION_ID, 'Check source mapping' TITLE from dual union all select 2, 10, 'Review naming' from dual union all select 3, 20, 'Confirm acceptance note' from dual) group by COLLECTION_ID
+                ```
+        }
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        componentAppearance {
+            display: report
+        }
+        settings {
+            title: &TITLE.
+            description: &DESCRIPTION.
+            displayBadge: true
+        }
+        plugin-badge {
+            label: Records
+            value: ITEM_COUNT
+        }
+        column ID (
+            layout {
+                sequence: 10
+            }
+            source {
+                databaseColumn: ID
+                dataType: number
+                primaryKey: true
+            }
+        )
+        column TITLE (
+            layout {
+                sequence: 20
+            }
+            source {
+                databaseColumn: TITLE
+                dataType: varchar2
+            }
+        )
+        column DESCRIPTION (
+            layout {
+                sequence: 30
+            }
+            source {
+                databaseColumn: DESCRIPTION
+                dataType: varchar2
+            }
+        )
+        column TARGET_URL (
+            layout {
+                sequence: 40
+            }
+            source {
+                databaseColumn: TARGET_URL
+                dataType: varchar2
+            }
+        )
+        column ITEM_COUNT (
+            layout {
+                sequence: 50
+            }
+            source {
+                databaseColumn: ITEM_COUNT
+                dataType: number
+            }
+        )
+        action open-record (
+            position: titleLink
+            layout {
+                sequence: 10
+            }
+            behavior {
+                type: redirectUrl
+                targetUrl: &TARGET_URL.
+            }
+        )
+    )
+)

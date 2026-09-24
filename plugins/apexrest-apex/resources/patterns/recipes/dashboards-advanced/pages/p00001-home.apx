@@ -1,0 +1,357 @@
+page 1 (
+    name: Operational overview
+    alias: HOME
+    title: Operational overview
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region open-work (
+        name: Open work
+        type: themeTemplateComponent/metricCard
+        source {
+            location: localDatabase
+            type: sqlQuery
+            sqlQuery:
+                ```sql
+                select 'Open requests' TITLE, 36 METRIC, 'Across all service queues' META from dual
+                ```
+        }
+        layout {
+            sequence: 10
+            slot: body
+            startNewRow: true
+            columnSpan: 4
+            columnCssClasses: col-sm-12
+        }
+        appearance {
+            template: @/blank-with-attributes
+            templateOptions: #DEFAULT#
+        }
+        componentAppearance {
+            display: report
+        }
+        settings {
+            title: &TITLE.
+            metric: &METRIC.
+            meta: &META.
+        }
+        column TITLE (
+            layout {
+                sequence: 10
+            }
+            source {
+                databaseColumn: TITLE
+                dataType: varchar2
+            }
+        )
+        column METRIC (
+            layout {
+                sequence: 20
+            }
+            source {
+                databaseColumn: METRIC
+                dataType: number
+            }
+        )
+        column META (
+            layout {
+                sequence: 30
+            }
+            source {
+                databaseColumn: META
+                dataType: varchar2
+            }
+        )
+    )
+
+    region completed-work (
+        name: Completed work
+        type: themeTemplateComponent/metricCard
+        source {
+            location: localDatabase
+            type: sqlQuery
+            sqlQuery:
+                ```sql
+                select 'Completed this month' TITLE, 114 METRIC, 'Recorded completions' META from dual
+                ```
+        }
+        layout {
+            sequence: 20
+            slot: body
+            startNewRow: false
+            columnSpan: 4
+            columnCssClasses: col-sm-12
+        }
+        appearance {
+            template: @/blank-with-attributes
+            templateOptions: #DEFAULT#
+        }
+        componentAppearance {
+            display: report
+        }
+        settings {
+            title: &TITLE.
+            metric: &METRIC.
+            meta: &META.
+        }
+        column TITLE (
+            layout {
+                sequence: 10
+            }
+            source {
+                databaseColumn: TITLE
+                dataType: varchar2
+            }
+        )
+        column METRIC (
+            layout {
+                sequence: 20
+            }
+            source {
+                databaseColumn: METRIC
+                dataType: number
+            }
+        )
+        column META (
+            layout {
+                sequence: 30
+            }
+            source {
+                databaseColumn: META
+                dataType: varchar2
+            }
+        )
+    )
+
+    region backlog-age (
+        name: Backlog age
+        type: themeTemplateComponent/metricCard
+        source {
+            location: localDatabase
+            type: sqlQuery
+            sqlQuery:
+                ```sql
+                select 'Average age (days)' TITLE, 2.4 METRIC, 'Open requests only' META from dual
+                ```
+        }
+        layout {
+            sequence: 30
+            slot: body
+            startNewRow: false
+            columnSpan: 4
+            columnCssClasses: col-sm-12
+        }
+        appearance {
+            template: @/blank-with-attributes
+            templateOptions: #DEFAULT#
+        }
+        componentAppearance {
+            display: report
+        }
+        settings {
+            title: &TITLE.
+            metric: &METRIC.
+            meta: &META.
+        }
+        column TITLE (
+            layout {
+                sequence: 10
+            }
+            source {
+                databaseColumn: TITLE
+                dataType: varchar2
+            }
+        )
+        column METRIC (
+            layout {
+                sequence: 20
+            }
+            source {
+                databaseColumn: METRIC
+                dataType: number
+            }
+        )
+        column META (
+            layout {
+                sequence: 30
+            }
+            source {
+                databaseColumn: META
+                dataType: varchar2
+            }
+        )
+    )
+
+    region team-throughput (
+        name: Completed requests by team
+        type: chart
+        layout {
+            sequence: 40
+            slot: body
+            startNewRow: true
+            columnSpan: 6
+            columnCssClasses: col-sm-12
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        chart {
+            type: bar
+        }
+        axis x (
+            name: x
+        )
+        axis y (
+            name: y
+        )
+        series values (
+            name: Values
+            execution {
+                sequence: 10
+            }
+            source {
+                type: sqlQuery
+                sqlQuery:
+                    ```sql
+                    select 'Service' LABEL, 52 VALUE from dual union all select 'Delivery', 38 from dual union all select 'Support', 24 from dual
+                    ```
+            }
+            columnMapping {
+                label: LABEL
+                value: VALUE
+            }
+        )
+    )
+
+    region weekly-volume (
+        name: Completed requests by week
+        type: chart
+        layout {
+            sequence: 50
+            slot: body
+            startNewRow: false
+            columnSpan: 6
+            columnCssClasses: col-sm-12
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        chart {
+            type: line
+        }
+        axis x (
+            name: x
+        )
+        axis y (
+            name: y
+        )
+        series values (
+            name: Values
+            execution {
+                sequence: 10
+            }
+            source {
+                type: sqlQuery
+                sqlQuery:
+                    ```sql
+                    select LABEL, VALUE from (select 1 SORT_ORDER, 'Week 1' LABEL, 22 VALUE from dual union all select 2, 'Week 2', 28 from dual union all select 3, 'Week 3', 30 from dual union all select 4, 'Week 4', 34 from dual) order by SORT_ORDER
+                    ```
+            }
+            columnMapping {
+                label: LABEL
+                value: VALUE
+            }
+        )
+    )
+
+    region work-mix (
+        name: Open requests by category
+        type: chart
+        layout {
+            sequence: 60
+            slot: body
+            startNewRow: true
+            columnSpan: 4
+            columnCssClasses: col-sm-12
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        chart {
+            type: pie
+        }
+        series values (
+            name: Values
+            execution {
+                sequence: 10
+            }
+            source {
+                type: sqlQuery
+                sqlQuery:
+                    ```sql
+                    select 'Questions' LABEL, 18 VALUE from dual union all select 'Changes', 12 from dual union all select 'Incidents', 6 from dual
+                    ```
+            }
+            columnMapping {
+                label: LABEL
+                value: VALUE
+            }
+        )
+    )
+
+    region queue-status (
+        name: Queue review
+        type: themeTemplateComponent/contentRow
+        source {
+            location: localDatabase
+            type: sqlQuery
+            sqlQuery:
+                ```sql
+                select 'Questions' TITLE, '18 open requests; none past the response target.' DESCRIPTION from dual union all select 'Changes', '12 open requests; two need scheduling.' from dual union all select 'Incidents', '6 open requests; one needs specialist review.' from dual
+                ```
+        }
+        layout {
+            sequence: 70
+            slot: body
+            startNewRow: false
+            columnSpan: 8
+            columnCssClasses: col-sm-12
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        componentAppearance {
+            display: report
+        }
+        settings {
+            title: &TITLE.
+            description: &DESCRIPTION.
+        }
+        column TITLE (
+            layout {
+                sequence: 10
+            }
+            source {
+                databaseColumn: TITLE
+                dataType: varchar2
+            }
+        )
+        column DESCRIPTION (
+            layout {
+                sequence: 20
+            }
+            source {
+                databaseColumn: DESCRIPTION
+                dataType: varchar2
+            }
+        )
+    )
+)

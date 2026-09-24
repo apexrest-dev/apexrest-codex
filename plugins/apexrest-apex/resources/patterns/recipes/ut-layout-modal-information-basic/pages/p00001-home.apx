@@ -1,0 +1,46 @@
+page 1 (
+    name: Service workspace
+    alias: HOME
+    title: Service workspace
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region intro (
+        name: Service guidelines
+        type: staticContent
+        source {
+            htmlCode: <p>Open a short reference without leaving the workspace.</p>
+        }
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+    )
+    button open-info (
+        buttonName: OPEN_INFO
+        label: Read guidelines
+        layout {
+            sequence: 10
+            region: @intro
+            slot: next
+        }
+        appearance {
+            buttonTemplate: @/text
+            templateOptions: #DEFAULT#
+        }
+        behavior {
+            action: redirectThisApp
+            target: {
+                page: 2
+            }
+        }
+    )
+)

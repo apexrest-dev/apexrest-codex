@@ -15,6 +15,8 @@ Show these choices and load only the selected workflow. Opening the menu is navi
 | Diagnose tools, configure SQLcl CLI/MCP or connections, inspect installation   | [Setup](../apexrest-setup/SKILL.md)                       |
 | Initialize/adopt a project; inspect source and environments                    | [Projects](../apexrest-project/SKILL.md)                  |
 | Generate/edit/export/validate/compare APEXlang; pinned Oracle references       | [APEXlang](../apexrest-apexlang/SKILL.md)                 |
+| Find and adapt a bundled component or UX pattern recipe                       | [APEXlang](../apexrest-apexlang/SKILL.md)                 |
+| Add/update catalog patterns from an identified APEX application               | [Pattern catalog](../apexrest-pattern-catalog/SKILL.md)   |
 | Metadata, migrations and PL/SQL                                                | [Database](../apexrest-database/SKILL.md)                 |
 | Plan/apply authorized changes, deployment status and restore plans             | [Deployment](../apexrest-deploy/SKILL.md)                 |
 | SQL/API/browser suites, interactive authentication and selected-browser checks | [Tests](../apexrest-test/SKILL.md)                        |

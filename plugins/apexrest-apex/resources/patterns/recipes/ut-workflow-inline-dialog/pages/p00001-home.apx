@@ -1,0 +1,136 @@
+page 1 (
+    name: Inline dialog workspace
+    alias: HOME
+    title: Inline dialog workspace
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region example (
+        name: Local reference
+        type: staticContent
+        source {
+            htmlCode: <p>Inspect this local reference and close the panel to return to the page.</p>
+        }
+        layout {
+            sequence: 10
+            slot: dialogsDrawersAndPopups
+        }
+        advanced {
+            htmlDomId: workflow_inline_dialog
+        }
+        appearance {
+            template: @/inline-dialog
+            templateOptions: #DEFAULT#
+        }
+    )
+
+    region controls (
+        name: Reference controls
+        type: staticContent
+        layout {
+            sequence: 20
+            slot: body
+        }
+        appearance {
+            template: @/buttons-container
+            templateOptions: #DEFAULT#
+        }
+    )
+    button open (
+        buttonName: OPEN
+        label: Open
+        layout {
+            sequence: 10
+            region: @controls
+            slot: next
+        }
+        appearance {
+            buttonTemplate: @/text
+            templateOptions: #DEFAULT#
+        }
+        behavior {
+            action: definedByDynamicAction
+        }
+    )
+    dynamicAction open-inline (
+        name: Open inline region
+        execution {
+            sequence: 10
+        }
+        when {
+            event: click
+            selectionType: button
+            button: @open
+        }
+        action open-region (
+            action: openRegion
+            affectedElements {
+                selectionType: region
+                region: @example
+            }
+            execution {
+                sequence: 10
+                fireOnInit: false
+            }
+        )
+    )
+    button close (
+        buttonName: CLOSE
+        label: Close
+        layout {
+            sequence: 10
+            region: @example
+            slot: close
+        }
+        appearance {
+            buttonTemplate: @/text
+            templateOptions: #DEFAULT#
+        }
+        behavior {
+            action: definedByDynamicAction
+        }
+    )
+    dynamicAction close-inline (
+        name: Close inline region
+        execution {
+            sequence: 20
+        }
+        when {
+            event: click
+            selectionType: button
+            button: @close
+        }
+        action close-region (
+            action: closeRegion
+            affectedElements {
+                selectionType: region
+                region: @example
+            }
+            execution {
+                sequence: 10
+                fireOnInit: false
+            }
+        )
+    )
+
+    region more-detail (
+        name: Additional detail
+        type: staticContent
+        source {
+            htmlCode: <p>Supporting details can be expanded independently inside the overlay.</p>
+        }
+        layout {
+            sequence: 10
+            parentRegion: @example
+            slot: regionBody
+        }
+        appearance {
+            template: @/collapsible
+            templateOptions: #DEFAULT#
+        }
+    )
+)

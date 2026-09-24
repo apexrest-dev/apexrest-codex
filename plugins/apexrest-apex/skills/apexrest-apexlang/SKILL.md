@@ -13,6 +13,8 @@ For a reusable component, search `apexrest_reference_search` with `corpus: "comp
 
 Keep component hosts distinct (for example, a Media List list template versus its template component). Adapt recipe page/item names, DOM IDs, source projections, keys, shared references and submitted items together. Merge into the existing application; the recipe compiler scaffold is not permission to replace authentication, authorization or app settings. Synthetic sources show a data contract and do not establish the user's business schema.
 
+For a reusable UX flow or page composition, search the separate pattern catalog with `corpus: "patterns"`, a short English or Ukrainian query, `kind: "template"`, the target `version` and `limit: 3`. Read the returned `pattern:` recipe and its required component/Oracle contracts. Preserve its dependency closure and adapt the actual interaction, not just its layout. Ordinary pattern lookup is offline and adds no source-application dependency. Use [pattern catalog maintenance](../apexrest-pattern-catalog/SKILL.md) only when asked to add or update catalog entries from an application.
+
 ## Retrieve only what changes the edit
 
 Read the selected contract through [component routes](references/component-routes.md). Reuse prior reads; do not dump the reference index or load unrelated families.

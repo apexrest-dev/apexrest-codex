@@ -8,13 +8,16 @@ import { fileURLToPath } from 'node:url';
 import { assertPinnedCompilerVersion, reusableCompilerRun } from './component-recipe-verification.mjs';
 
 const repo = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const catalog = path.join(repo, 'resources/components');
+const catalogArgument = process.argv.find((argument) => argument.startsWith('--catalog='))?.slice(10);
+const catalog = path.resolve(catalogArgument ?? path.join(repo, 'resources/components'));
 const registryPath = path.join(catalog, 'recipes/registry.json');
 const evidencePath = path.join(catalog, 'recipes/compiler-evidence.json');
 const registry = JSON.parse(await readFile(registryPath, 'utf8'));
 const sqlcl = process.env.APEXREST_SQLCL ?? 'sql';
 const filter = process.argv.find((argument) => argument.startsWith('--filter='))?.slice(9);
 const changedOnly = process.argv.includes('--changed');
+const hasClosedDependencies = (recipe) =>
+  recipe.patternId ? recipe.dependenciesClosed === true : recipe.dependenciesClosed !== false;
 let selected = registry.recipes.filter(
   (recipe) => recipe.files.length && (!filter || new RegExp(filter).test(recipe.id)),
 );
@@ -75,6 +78,7 @@ if (changedOnly) {
       inputs[file] = sha(await readFile(path.join(catalog, recipe.directory, file)));
     const prior = previous.runs.find((entry) => entry.recipeId === recipe.id);
     if (
+      !hasClosedDependencies(recipe) ||
       !reusableCompilerRun({
         recipe,
         evidence: previous,
@@ -158,11 +162,13 @@ async function worker() {
         scaffoldSha256,
         mmdVersion: mmd.mmdVersion,
       };
-      recipe.readiness = passed ? 'ready' : 'unresolved';
-      if (passed) delete recipe.reason;
-      else
+      const dependenciesClosed = hasClosedDependencies(recipe);
+      recipe.readiness = passed && dependenciesClosed ? 'ready' : 'unresolved';
+      if (passed && dependenciesClosed) delete recipe.reason;
+      else if (!passed)
         recipe.reason =
           'Offline Oracle validation did not pass without warnings. See the exact recipe run in compiler-evidence.json.';
+      else recipe.reason ??= 'Compiler validation passed; the declared dependencies are not yet closed.';
       console.log(`${passed ? 'PASS' : 'FAIL'} ${recipe.id}${passed ? '' : '\n' + output}`);
     } finally {
       await rm(temporary, { recursive: true, force: true });

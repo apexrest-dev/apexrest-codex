@@ -1,0 +1,126 @@
+page 1 (
+    name: Nested flexible workspace
+    alias: HOME
+    title: Nested flexible workspace
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region workspace (
+        name: Workspace
+        type: themeTemplateComponent/flexboxContainer
+        layout {
+            sequence: 10
+            slot: body
+        }
+        componentAppearance {
+            display: regionOnly
+        }
+        settings {
+            direction: row
+            wrap: wrap
+            gap: lg
+        }
+    )
+    region primary (
+        name: Main content
+        type: themeTemplateComponent/flexboxContainer
+        layout {
+            sequence: 10
+            parentRegion: @workspace
+            slot: plugin-body
+        }
+        componentAppearance {
+            display: regionOnly
+        }
+        settings {
+            direction: column
+            wrap: wrap
+            gap: lg
+        }
+    )
+    region secondary (
+        name: Supporting context
+        type: themeTemplateComponent/flexboxContainer
+        layout {
+            sequence: 20
+            parentRegion: @workspace
+            slot: plugin-body
+        }
+        componentAppearance {
+            display: regionOnly
+        }
+        settings {
+            direction: column
+            wrap: wrap
+            gap: lg
+        }
+    )
+    region overview (
+        name: Overview
+        type: staticContent
+        layout {
+            sequence: 10
+            parentRegion: @primary
+            slot: plugin-body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        source {
+            htmlCode: <p>Record overview.</p>
+        }
+    )
+    region history (
+        name: History
+        type: staticContent
+        layout {
+            sequence: 20
+            parentRegion: @primary
+            slot: plugin-body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        source {
+            htmlCode: <p>Chronological activity.</p>
+        }
+    )
+    region status (
+        name: Status
+        type: staticContent
+        layout {
+            sequence: 10
+            parentRegion: @secondary
+            slot: plugin-body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        source {
+            htmlCode: <p>Open, awaiting review.</p>
+        }
+    )
+    region help (
+        name: Help
+        type: staticContent
+        layout {
+            sequence: 20
+            parentRegion: @secondary
+            slot: plugin-body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        source {
+            htmlCode: <p>Contextual guidance.</p>
+        }
+    )
+)

@@ -1,0 +1,77 @@
+page 1 (
+    name: Project progress overview
+    alias: HOME
+    title: Project progress overview
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region progress (
+        name: Project completion
+        type: classicReport
+        source {
+            location: localDatabase
+            type: sqlQuery
+            sqlQuery:
+                ```sql
+                select ID, TITLE, case when TOTAL_COUNT > 0 then round(100 * DONE_COUNT / TOTAL_COUNT) end PROGRESS_PCT, to_char(DONE_COUNT) || ' of ' || to_char(TOTAL_COUNT) || ' tasks' DETAIL from (select 1 ID, 'Documentation refresh' TITLE, 6 DONE_COUNT, 8 TOTAL_COUNT from dual union all select 2, 'Access review', 2, 5 from dual union all select 3, 'New workstream', 0, 0 from dual)
+                ```
+        }
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        componentAppearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        column ID (
+            reportColumnQueryId: 1
+            derivedColumn: N
+            heading {
+                heading: ID
+            }
+            layout {
+                sequence: 10
+            }
+        )
+        column TITLE (
+            reportColumnQueryId: 2
+            derivedColumn: N
+            heading {
+                heading: TITLE
+            }
+            layout {
+                sequence: 20
+            }
+        )
+        column PROGRESS_PCT (
+            reportColumnQueryId: 3
+            derivedColumn: N
+            type: percentGraph
+            heading {
+                heading: Completion
+            }
+            layout {
+                sequence: 30
+            }
+        )
+        column DETAIL (
+            reportColumnQueryId: 4
+            derivedColumn: N
+            heading {
+                heading: DETAIL
+            }
+            layout {
+                sequence: 40
+            }
+        )
+    )
+)

@@ -1,0 +1,89 @@
+page 2 (
+    name: Reference drawer
+    alias: REFERENCE
+    title: Reference drawer
+    appearance {
+        pageMode: modalDialog
+        dialogTemplate: @/drawer
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region details (
+        name: Reference details
+        type: staticContent
+        source {
+            htmlCode: <p>This included destination displays local reference information.</p>
+        }
+        layout {
+            sequence: 10
+            slot: contentBody
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+    )
+    region more-detail (
+        name: Additional detail
+        type: staticContent
+        source {
+            htmlCode: <p>Expand this section to review supporting information.</p>
+        }
+        layout {
+            sequence: 20
+            slot: contentBody
+        }
+        appearance {
+            template: @/collapsible
+            templateOptions: #DEFAULT#
+        }
+    )
+    region buttons (
+        name: Actions
+        type: staticContent
+        layout {
+            sequence: 30
+            slot: dialogFooter
+        }
+        appearance {
+            template: @/buttons-container
+            templateOptions: #DEFAULT#
+        }
+    )
+    button close (
+        buttonName: CLOSE
+        label: Close
+        layout {
+            sequence: 10
+            region: @buttons
+            slot: close
+        }
+        appearance {
+            buttonTemplate: @/text
+            templateOptions: #DEFAULT#
+        }
+        behavior {
+            action: definedByDynamicAction
+        }
+    )
+    dynamicAction dismiss-dialog (
+        name: Close the dialog
+        execution {
+            sequence: 10
+        }
+        when {
+            event: click
+            selectionType: button
+            button: @close
+        }
+        action close (
+            action: cancelDialog
+            execution {
+                sequence: 10
+                fireOnInit: false
+            }
+        )
+    )
+)

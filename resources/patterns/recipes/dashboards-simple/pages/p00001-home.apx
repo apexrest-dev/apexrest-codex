@@ -1,0 +1,279 @@
+page 1 (
+    name: Service overview
+    alias: HOME
+    title: Service overview
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region open-work (
+        name: Open work
+        type: themeTemplateComponent/metricCard
+        source {
+            location: localDatabase
+            type: sqlQuery
+            sqlQuery:
+                ```sql
+                select 'Open requests' TITLE, 24 METRIC, 'Awaiting completion' META from dual
+                ```
+        }
+        layout {
+            sequence: 10
+            slot: body
+            startNewRow: true
+            columnSpan: 4
+            columnCssClasses: col-sm-12
+        }
+        appearance {
+            template: @/blank-with-attributes
+            templateOptions: #DEFAULT#
+        }
+        componentAppearance {
+            display: report
+        }
+        settings {
+            title: &TITLE.
+            metric: &METRIC.
+            meta: &META.
+        }
+        column TITLE (
+            layout {
+                sequence: 10
+            }
+            source {
+                databaseColumn: TITLE
+                dataType: varchar2
+            }
+        )
+        column METRIC (
+            layout {
+                sequence: 20
+            }
+            source {
+                databaseColumn: METRIC
+                dataType: number
+            }
+        )
+        column META (
+            layout {
+                sequence: 30
+            }
+            source {
+                databaseColumn: META
+                dataType: varchar2
+            }
+        )
+    )
+
+    region completed-work (
+        name: Completed work
+        type: themeTemplateComponent/metricCard
+        source {
+            location: localDatabase
+            type: sqlQuery
+            sqlQuery:
+                ```sql
+                select 'Completed requests' TITLE, 76 METRIC, 'This reporting period' META from dual
+                ```
+        }
+        layout {
+            sequence: 20
+            slot: body
+            startNewRow: false
+            columnSpan: 4
+            columnCssClasses: col-sm-12
+        }
+        appearance {
+            template: @/blank-with-attributes
+            templateOptions: #DEFAULT#
+        }
+        componentAppearance {
+            display: report
+        }
+        settings {
+            title: &TITLE.
+            metric: &METRIC.
+            meta: &META.
+        }
+        column TITLE (
+            layout {
+                sequence: 10
+            }
+            source {
+                databaseColumn: TITLE
+                dataType: varchar2
+            }
+        )
+        column METRIC (
+            layout {
+                sequence: 20
+            }
+            source {
+                databaseColumn: METRIC
+                dataType: number
+            }
+        )
+        column META (
+            layout {
+                sequence: 30
+            }
+            source {
+                databaseColumn: META
+                dataType: varchar2
+            }
+        )
+    )
+
+    region on-time (
+        name: On-time work
+        type: themeTemplateComponent/metricCard
+        source {
+            location: localDatabase
+            type: sqlQuery
+            sqlQuery:
+                ```sql
+                select 'On-time delivery (%)' TITLE, 97.5 METRIC, 'Against a 95 percent target' META from dual
+                ```
+        }
+        layout {
+            sequence: 30
+            slot: body
+            startNewRow: false
+            columnSpan: 4
+            columnCssClasses: col-sm-12
+        }
+        appearance {
+            template: @/blank-with-attributes
+            templateOptions: #DEFAULT#
+        }
+        componentAppearance {
+            display: report
+        }
+        settings {
+            title: &TITLE.
+            metric: &METRIC.
+            meta: &META.
+        }
+        column TITLE (
+            layout {
+                sequence: 10
+            }
+            source {
+                databaseColumn: TITLE
+                dataType: varchar2
+            }
+        )
+        column METRIC (
+            layout {
+                sequence: 20
+            }
+            source {
+                databaseColumn: METRIC
+                dataType: number
+            }
+        )
+        column META (
+            layout {
+                sequence: 30
+            }
+            source {
+                databaseColumn: META
+                dataType: varchar2
+            }
+        )
+    )
+
+    region throughput (
+        name: Completed requests by week
+        type: chart
+        layout {
+            sequence: 40
+            slot: body
+            startNewRow: true
+            columnSpan: 8
+            columnCssClasses: col-sm-12
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        chart {
+            type: line
+        }
+        axis x (
+            name: x
+        )
+        axis y (
+            name: y
+        )
+        series values (
+            name: Values
+            execution {
+                sequence: 10
+            }
+            source {
+                type: sqlQuery
+                sqlQuery:
+                    ```sql
+                    select LABEL, VALUE from (select 1 SORT_ORDER, 'Week 1' LABEL, 14 VALUE from dual union all select 2, 'Week 2', 18 from dual union all select 3, 'Week 3', 20 from dual union all select 4, 'Week 4', 24 from dual) order by SORT_ORDER
+                    ```
+            }
+            columnMapping {
+                label: LABEL
+                value: VALUE
+            }
+        )
+    )
+
+    region operating-status (
+        name: Operating status
+        type: themeTemplateComponent/contentRow
+        source {
+            location: localDatabase
+            type: sqlQuery
+            sqlQuery:
+                ```sql
+                select 'Intake' TITLE, 'Eight requests await triage.' DESCRIPTION from dual union all select 'Fulfillment', 'Sixteen requests are in progress.' from dual
+                ```
+        }
+        layout {
+            sequence: 50
+            slot: body
+            startNewRow: false
+            columnSpan: 4
+            columnCssClasses: col-sm-12
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        componentAppearance {
+            display: report
+        }
+        settings {
+            title: &TITLE.
+            description: &DESCRIPTION.
+        }
+        column TITLE (
+            layout {
+                sequence: 10
+            }
+            source {
+                databaseColumn: TITLE
+                dataType: varchar2
+            }
+        )
+        column DESCRIPTION (
+            layout {
+                sequence: 20
+            }
+            source {
+                databaseColumn: DESCRIPTION
+                dataType: varchar2
+            }
+        )
+    )
+)

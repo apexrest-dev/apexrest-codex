@@ -187,7 +187,7 @@ export function parseApxDeclarations(text, wantedIndent) {
   });
   const result = [];
   for (let i = 0; i < masked.length; i++) {
-    const match = masked[i].match(/^(\s*)([A-Za-z][A-Za-z\d]*) ([^\n]+) \(\s*$/);
+    const match = masked[i].match(/^(\s*)([A-Za-z][A-Za-z\d]*)(?: ([^\n]+?))? \(\s*$/);
     if (!match || (wantedIndent !== undefined && match[1].length !== wantedIndent)) continue;
     const indent = match[1].length;
     let j = i + 1;
@@ -200,7 +200,7 @@ export function parseApxDeclarations(text, wantedIndent) {
       const line = masked[k];
       const depth = line.length - line.trimStart().length;
       // Nested component declarations do not contribute parent properties.
-      if (line.match(/^\s*[A-Za-z][A-Za-z\d]* [^\n]+ \(\s*$/)) {
+      if (line.match(/^\s*[A-Za-z][A-Za-z\d]*(?: [^\n]+?)? \(\s*$/)) {
         while (++k < j && masked[k] !== `${' '.repeat(depth)})`) {}
         continue;
       }
@@ -221,7 +221,7 @@ export function parseApxDeclarations(text, wantedIndent) {
     }
     result.push({
       kind: match[2],
-      key: match[3],
+      key: match[3] ?? properties.name ?? `anonymous-${i + 1}`,
       properties,
       arrays,
       line: i + 1,

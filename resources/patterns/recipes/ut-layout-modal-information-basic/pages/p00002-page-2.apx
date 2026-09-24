@@ -1,0 +1,62 @@
+page 2 (
+    name: Response guidelines
+    alias: PAGE-2
+    title: Response guidelines
+    appearance {
+        pageMode: modalDialog
+        dialogTemplate: @/modal-dialog
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region info (
+        name: Response guidelines
+        type: staticContent
+        source {
+            htmlCode: <p>Acknowledge requests promptly, record the responsible team and agree the next review time.</p>
+        }
+        layout {
+            sequence: 10
+            slot: contentBody
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+    )
+    button close-info (
+        buttonName: CLOSE_INFO
+        label: Close
+        layout {
+            sequence: 10
+            region: @info
+            slot: next
+        }
+        appearance {
+            buttonTemplate: @/text
+            templateOptions: #DEFAULT#
+        }
+        behavior {
+            action: definedByDynamicAction
+        }
+    )
+    dynamicAction dismiss (
+        name: Dismiss information
+        execution {
+            sequence: 10
+        }
+        when {
+            event: click
+            selectionType: button
+            button: @close-info
+        }
+        action close (
+            action: cancelDialog
+            execution {
+                sequence: 10
+                fireOnInit: false
+            }
+        )
+    )
+)

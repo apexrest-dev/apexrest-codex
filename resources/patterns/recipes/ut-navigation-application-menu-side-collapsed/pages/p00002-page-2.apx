@@ -1,0 +1,38 @@
+page 2 (
+    name: Work queue
+    alias: PAGE-2
+    title: Work queue
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    navigationMenu {
+        overrideUserInterfaceLevel: true
+        list: @workspace-menu
+        listPosition: side
+        listTemplate: @/side-navigation-menu
+        templateOptions: [
+            #DEFAULT#
+            js-defaultCollapsed
+            js-navCollapsed--hidden
+        ]
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region content (
+        name: Work queue
+        type: staticContent
+        source {
+            htmlCode: <p>Work queue is an original local navigation destination.</p>
+        }
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+    )
+)

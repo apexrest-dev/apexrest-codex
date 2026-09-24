@@ -1,0 +1,283 @@
+page 1 (
+    name: Full-page search
+    alias: HOME
+    title: Full-page search
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region search-controls (
+        name: Search records
+        type: staticContent
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+    )
+    pageItem P1_QUERY (
+        type: textField
+        label {
+            label: Search title or description
+        }
+        layout {
+            sequence: 10
+            region: @search-controls
+            slot: regionBody
+        }
+        appearance {
+            template: @/optional-floating
+            templateOptions: #DEFAULT#
+        }
+    )
+    region search-prompt (
+        name: Start a search
+        type: staticContent
+        source {
+            htmlCode: <p>Enter a word from a record title or description. Try archive, catalog, access or service.</p>
+        }
+        layout {
+            sequence: 20
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+    )
+    region results (
+        name: Matching records
+        type: themeTemplateComponent/contentRow
+        source {
+            location: localDatabase
+            type: sqlQuery
+            pageItemsToSubmit: P1_QUERY
+            sqlQuery:
+                ```sql
+                with records as (
+                select 1 ID, 'Archive review' TITLE, 'Review the retention schedule.' DESCRIPTION, 'Operations' CATEGORY, 'Open' STATUS from dual
+                union all select 2, 'Catalog refresh', 'Publish the current catalog entries.', 'Documentation', 'Open' from dual
+                union all select 3, 'Access audit', 'Check the project access list.', 'Operations', 'Done' from dual
+                union all select 4, 'Service notes', 'Record the latest support observations.', 'Documentation', 'Done' from dual
+                )
+                select ID, TITLE, DESCRIPTION, CATEGORY, STATUS from records
+                where trim(:P1_QUERY) is not null
+                  and instr(lower(TITLE || ' ' || DESCRIPTION), lower(trim(:P1_QUERY))) > 0
+                ```
+        }
+        layout {
+            sequence: 30
+            slot: body
+        }
+        appearance {
+            template: @/blank-with-attributes
+            templateOptions: #DEFAULT#
+        }
+        componentAppearance {
+            display: report
+        }
+        settings {
+            title: &TITLE.
+            description: &DESCRIPTION.
+        }
+        messages {
+            whenNoDataFound: No matching records. Change or clear your search.
+        }
+        column ID (
+            layout {
+                sequence: 10
+            }
+            source {
+                databaseColumn: ID
+                dataType: number
+            }
+        )
+        column TITLE (
+            layout {
+                sequence: 20
+            }
+            source {
+                databaseColumn: TITLE
+                dataType: varchar2
+            }
+        )
+        column DESCRIPTION (
+            layout {
+                sequence: 30
+            }
+            source {
+                databaseColumn: DESCRIPTION
+                dataType: varchar2
+            }
+        )
+        column CATEGORY (
+            layout {
+                sequence: 40
+            }
+            source {
+                databaseColumn: CATEGORY
+                dataType: varchar2
+            }
+        )
+        column STATUS (
+            layout {
+                sequence: 50
+            }
+            source {
+                databaseColumn: STATUS
+                dataType: varchar2
+            }
+        )
+    )
+    dynamicAction query-changed (
+        name: Refresh search results
+        execution {
+            sequence: 10
+            type: debounce
+            time: 250
+        }
+        when {
+            event: input
+            selectionType: items
+            items: P1_QUERY
+        }
+        clientSideCondition {
+            type: jsExpression
+            javaScriptExpression: String(apex.item("P1_QUERY").getValue()).trim().length > 0
+        }
+        action show-results (
+            action: show
+            affectedElements {
+                selectionType: region
+                region: @results
+            }
+            execution {
+                sequence: 10
+                fireWhenEventResultIs: true
+                fireOnInit: false
+            }
+        )
+        action hide-search-prompt (
+            action: hide
+            affectedElements {
+                selectionType: region
+                region: @search-prompt
+            }
+            execution {
+                sequence: 20
+                fireWhenEventResultIs: true
+                fireOnInit: false
+            }
+        )
+        action hide-results (
+            action: hide
+            affectedElements {
+                selectionType: region
+                region: @results
+            }
+            execution {
+                sequence: 30
+                fireWhenEventResultIs: false
+                fireOnInit: false
+            }
+        )
+        action show-search-prompt (
+            action: show
+            affectedElements {
+                selectionType: region
+                region: @search-prompt
+            }
+            execution {
+                sequence: 40
+                fireWhenEventResultIs: false
+                fireOnInit: false
+            }
+        )
+        action refresh-results (
+            action: refresh
+            affectedElements {
+                selectionType: region
+                region: @results
+            }
+            execution {
+                sequence: 50
+                fireOnInit: false
+            }
+        )
+        action clear-results (
+            action: refresh
+            affectedElements {
+                selectionType: region
+                region: @results
+            }
+            execution {
+                sequence: 50
+                fireWhenEventResultIs: false
+                fireOnInit: false
+            }
+        )
+    )
+    dynamicAction initial-search-state (
+        name: Restore search state
+        execution {
+            sequence: 20
+        }
+        when {
+            event: ready
+        }
+        clientSideCondition {
+            type: jsExpression
+            javaScriptExpression: String(apex.item("P1_QUERY").getValue()).trim().length > 0
+        }
+        action show-results (
+            action: show
+            affectedElements {
+                selectionType: region
+                region: @results
+            }
+            execution {
+                sequence: 10
+                fireWhenEventResultIs: true
+            }
+        )
+        action hide-search-prompt (
+            action: hide
+            affectedElements {
+                selectionType: region
+                region: @search-prompt
+            }
+            execution {
+                sequence: 20
+                fireWhenEventResultIs: true
+            }
+        )
+        action hide-results (
+            action: hide
+            affectedElements {
+                selectionType: region
+                region: @results
+            }
+            execution {
+                sequence: 30
+                fireWhenEventResultIs: false
+            }
+        )
+        action show-search-prompt (
+            action: show
+            affectedElements {
+                selectionType: region
+                region: @search-prompt
+            }
+            execution {
+                sequence: 40
+                fireWhenEventResultIs: false
+            }
+        )
+    )
+)

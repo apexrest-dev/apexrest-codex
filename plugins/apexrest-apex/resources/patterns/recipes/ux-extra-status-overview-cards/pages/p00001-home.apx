@@ -1,0 +1,44 @@
+page 1 (
+    name: Status overview
+    alias: HOME
+    title: Status overview
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region statuses (
+        name: Service conditions
+        type: cards
+        source {
+            location: localDatabase
+            type: sqlQuery
+            sqlQuery:
+                ```sql
+                select 1 ID, 'Import service' TITLE, 'The latest batch completed.' DESCRIPTION, 'Healthy' STATUS, 'success' BADGE_STATE from dual union all select 2, 'Review queue', 'Two records need review.', 'Attention', 'warning' from dual union all select 3, 'Outbound delivery', 'One delivery requires correction.', 'Blocked', 'danger' from dual
+                ```
+        }
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/cards-container
+            templateOptions: #DEFAULT#
+        }
+        card {
+            primaryKeyColumn1: ID
+        }
+        title {
+            column: TITLE
+        }
+        body {
+            column: DESCRIPTION
+        }
+        secondaryBody {
+            column: STATUS
+        }
+    )
+)

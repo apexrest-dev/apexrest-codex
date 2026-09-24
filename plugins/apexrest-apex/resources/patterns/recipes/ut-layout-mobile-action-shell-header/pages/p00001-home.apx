@@ -1,0 +1,140 @@
+page 1 (
+    name: Service overview
+    alias: HOME
+    title: Service overview
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: [
+            #DEFAULT#
+            js-pageStickyMobileHeader
+        ]
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region section-1 (
+        name: Service topic 1
+        type: staticContent
+        source {
+            htmlCode: <p>Review the service scope, assigned responsibility and next expected update. Review the service scope, assigned responsibility and next expected update. Review the service scope, assigned responsibility and next expected update. Review the service scope, assigned responsibility and next expected update. </p>
+        }
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+    )
+    region section-2 (
+        name: Service topic 2
+        type: staticContent
+        source {
+            htmlCode: <p>Review the service scope, assigned responsibility and next expected update. Review the service scope, assigned responsibility and next expected update. Review the service scope, assigned responsibility and next expected update. Review the service scope, assigned responsibility and next expected update. </p>
+        }
+        layout {
+            sequence: 20
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+    )
+    region section-3 (
+        name: Service topic 3
+        type: staticContent
+        source {
+            htmlCode: <p>Review the service scope, assigned responsibility and next expected update. Review the service scope, assigned responsibility and next expected update. Review the service scope, assigned responsibility and next expected update. Review the service scope, assigned responsibility and next expected update. </p>
+        }
+        layout {
+            sequence: 30
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+    )
+    region section-4 (
+        name: Service topic 4
+        type: staticContent
+        source {
+            htmlCode: <p>Review the service scope, assigned responsibility and next expected update. Review the service scope, assigned responsibility and next expected update. Review the service scope, assigned responsibility and next expected update. Review the service scope, assigned responsibility and next expected update. </p>
+        }
+        layout {
+            sequence: 40
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+    )
+    region section-5 (
+        name: Service topic 5
+        type: staticContent
+        source {
+            htmlCode: <p>Review the service scope, assigned responsibility and next expected update. Review the service scope, assigned responsibility and next expected update. Review the service scope, assigned responsibility and next expected update. Review the service scope, assigned responsibility and next expected update. </p>
+        }
+        layout {
+            sequence: 50
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+    )
+    region section-6 (
+        name: Service topic 6
+        type: staticContent
+        source {
+            htmlCode: <p>Review the service scope, assigned responsibility and next expected update. Review the service scope, assigned responsibility and next expected update. Review the service scope, assigned responsibility and next expected update. Review the service scope, assigned responsibility and next expected update. </p>
+        }
+        layout {
+            sequence: 60
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+    )
+    region actions (
+        name: Page navigation
+        type: staticContent
+        layout {
+            sequence: 80
+            slot: breadcrumbBar
+        }
+        appearance {
+            template: @/buttons-container
+            templateOptions: [
+                #DEFAULT#
+                t-ButtonRegion--slimPadding
+                t-ButtonRegion--noUI
+            ]
+        }
+    )
+    button navigate (
+        buttonName: NAVIGATE
+        label: View details
+        layout {
+            sequence: 10
+            region: @actions
+            slot: next
+        }
+        appearance {
+            buttonTemplate: @/text
+            templateOptions: #DEFAULT#
+        }
+        behavior {
+            action: redirectThisApp
+            target: {
+                page: 2
+            }
+        }
+    )
+)

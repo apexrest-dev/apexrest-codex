@@ -1,0 +1,56 @@
+page 1 (
+    name: Drawer workspace
+    alias: HOME
+    title: Drawer workspace
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+
+}
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+
+}
+    region workspace (
+        name: Workspace
+        type: staticContent
+        source {
+            htmlCode: <p>Create a record without losing this page.</p>
+
+  }
+        layout {
+            sequence: 10
+            slot: body
+
+  }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+
+  }
+    )
+    button create-record (
+        buttonName: CREATE_RECORD
+        label: New record
+        layout {
+            sequence: 10
+            region: @workspace
+            slot: next
+
+  }
+        appearance {
+            buttonTemplate: @/text
+            templateOptions: #DEFAULT#
+
+  }
+        behavior {
+            action: redirectThisApp
+            target: {
+                page: 2
+                clearCache: 2
+
+      }
+
+  }
+    )
+)

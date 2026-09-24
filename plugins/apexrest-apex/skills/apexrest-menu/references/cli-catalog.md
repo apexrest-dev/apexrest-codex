@@ -18,4 +18,6 @@ Read when the user requests a complete command inventory or needs a CLI-only act
 
 `mcp` starts server transport, not an application action. Sandbox commands return unsupported diagnostics, not Oracle provisioning. `docs.sync` uses pinned references, not arbitrary downloads. Plugin maintenance retains installation ownership checks; never uninstall or switch marketplace just to display a menu.
 
+`docs search --corpus components` selects reusable components; `docs search --corpus patterns` selects UX compositions. `docs read --id ID` accepts the returned `component:` or `pattern:` IDs. Both catalogs work offline; the default search corpus remains `apexlang`. Adding a source application is a [pattern catalog maintainer workflow](../../apexrest-pattern-catalog/SKILL.md), not a side effect of search or `docs.sync`.
+
 `panel.open` returns a local desktop URL; `panel.status` reads configuration and operation state; `panel.action` updates browser/connection settings or queues checks. `panel tui --project PATH` opens the terminal view. Follow [panel guidance](../../apexrest-panel/SKILL.md).

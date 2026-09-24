@@ -8,3 +8,4 @@
 plugins/apexrest-apex/resources/** -text -whitespace
 # Compiler scaffold bytes are bound to the recorded recipe validation hashes.
 resources/components/recipes/_scaffold/** -whitespace
+resources/patterns/recipes/_scaffold/** -whitespace

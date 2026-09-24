@@ -1,0 +1,131 @@
+list navigation-bar (
+    name: Navigation Bar
+    entry --- (
+        label: ---
+        layout {
+            sequence: 20
+            parentEntry: @app-user
+        }
+        link {
+            target: {
+                type: url
+                url: separator
+            }
+        }
+        serverSideCondition {
+            type: userIsAuthenticated
+        }
+    )
+    entry app-user (
+        label: &APP_USER.
+        icon {
+            imageIconCssClasses: fa-user
+        }
+        layout {
+            sequence: 10
+        }
+        link {
+            target: {
+                type: url
+                url: #
+            }
+        }
+        userDefinedAttributes {
+            2: has-username
+        }
+    )
+    entry sign-out (
+        label: Sign Out
+        icon {
+            imageIconCssClasses: fa-sign-out
+        }
+        layout {
+            sequence: 30
+            parentEntry: @app-user
+        }
+        link {
+            target: {
+                type: url
+                url: &LOGOUT_URL.
+            }
+        }
+        serverSideCondition {
+            type: userIsAuthenticated
+        }
+    )
+)
+list navigation-menu (
+    name: Navigation Menu
+    entry home (
+        label: Home
+        icon {
+            imageIconCssClasses: fa-home
+        }
+        layout {
+            sequence: 10
+        }
+        link {
+            target: {
+                page: 1
+            }
+        }
+    )
+)
+list workspace-menu (
+    name: Workspace menu
+    entry overview (
+        label: Overview
+        layout {
+            sequence: 10
+        }
+        icon {
+            imageIconCssClasses: fa-home
+        }
+        link {
+            target: {
+                page: 1
+            }
+        }
+    )
+    entry work (
+        label: Work queue
+        layout {
+            sequence: 20
+        }
+        icon {
+            imageIconCssClasses: fa-list
+        }
+        link {
+            target: {
+                page: 2
+            }
+        }
+    )
+    entry completed (
+        label: Completed
+        layout {
+            sequence: 30
+            parentEntry: @work
+        }
+        icon {
+            imageIconCssClasses: fa-list
+        }
+        link {
+            target: {
+                page: 3
+            }
+        }
+    )
+    entry divider (
+        label: ---
+        layout {
+            sequence: 15
+        }
+        link {
+            target: {
+                type: url
+                url: separator
+            }
+        }
+    )
+)

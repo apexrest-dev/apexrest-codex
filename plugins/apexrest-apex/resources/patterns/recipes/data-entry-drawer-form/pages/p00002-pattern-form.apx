@@ -1,0 +1,386 @@
+page 2 (
+    name: Drawer data entry
+    alias: PATTERN-FORM
+    title: Drawer data entry
+    appearance {
+        pageMode: modalDialog
+        dialogTemplate: @/drawer
+        templateOptions: [
+            #DEFAULT#
+            js-dialog-class-t-Drawer--pullOutEnd
+        ]
+
+}
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+
+}
+    region form (
+        name: Editable Form
+        type: form
+        source {
+            location: localDatabase
+            tableName: APEXREST_PATTERN_RECORDS
+
+  }
+        layout {
+            sequence: 10
+            slot: contentBody
+
+  }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+
+  }
+        edit {
+            enabled: true
+            allowedOperations: [
+                add
+                update
+                delete
+            ]
+            lostUpdateType: rowVersionColumn
+            rowVersionColumn: ROW_VERSION
+
+  }
+    )
+    region buttons (
+        name: Buttons
+        type: staticContent
+        source {
+            htmlCode: <span></span>
+
+  }
+        layout {
+            sequence: 20
+            slot: dialogFooter
+
+  }
+        appearance {
+            template: @/buttons-container
+            templateOptions: #DEFAULT#
+
+  }
+    )
+    region identity-section (
+        name: Identity
+        type: staticContent
+        source {
+            htmlCode: <span></span>
+
+  }
+        layout {
+            sequence: 10
+            slot: regionBody
+            parentRegion: @form
+
+  }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+
+  }
+    )
+    region state-section (
+        name: Classification
+        type: staticContent
+        source {
+            htmlCode: <span></span>
+
+  }
+        layout {
+            sequence: 20
+            slot: regionBody
+            parentRegion: @form
+
+  }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+
+  }
+    )
+    pageItem P2_ID (
+        type: hidden
+        layout {
+            sequence: 10
+            region: @form
+            slot: regionBody
+
+  }
+        source {
+            formRegion: @form
+            column: ID
+            dataType: number
+            primaryKey: true
+            queryOnly: true
+
+  }
+        security {
+            sessionStateProtection: checksumRequiredSessionLevel
+
+  }
+    )
+    pageItem P2_NAME (
+        type: textField
+        label {
+            label: Name
+
+  }
+        layout {
+            sequence: 20
+            region: @identity-section
+            slot: regionBody
+
+  }
+        appearance {
+            template: @/required-floating
+            templateOptions: #DEFAULT#
+
+  }
+        validation {
+            valueRequired: true
+
+  }
+        source {
+            formRegion: @form
+            column: NAME
+            dataType: varchar2
+
+  }
+    )
+    pageItem P2_STATUS (
+        type: selectList
+        label {
+            label: Status
+
+  }
+        layout {
+            sequence: 30
+            region: @state-section
+            slot: regionBody
+
+  }
+        appearance {
+            template: @/required-floating
+            templateOptions: #DEFAULT#
+
+  }
+        validation {
+            valueRequired: true
+
+  }
+        lov {
+            type: staticValues
+            staticValues: STATIC:Open;Open,Closed;Closed
+            displayNullValue: false
+
+  }
+        source {
+            formRegion: @form
+            column: STATUS
+            dataType: varchar2
+
+  }
+    )
+    pageItem P2_ROW_VERSION (
+        type: hidden
+        layout {
+            sequence: 40
+            region: @form
+            slot: regionBody
+
+  }
+        source {
+            formRegion: @form
+            column: ROW_VERSION
+            dataType: number
+            queryOnly: true
+
+  }
+    )
+    button insert (
+        buttonName: INSERT
+        label: Insert
+        layout {
+            sequence: 10
+            region: @buttons
+            slot: next
+
+  }
+        appearance {
+            buttonTemplate: @/text
+            templateOptions: #DEFAULT#
+
+  }
+        behavior {
+            action: submitPage
+            databaseAction: insert
+
+  }
+        serverSideCondition {
+            type: itemIsNull
+            item: P2_ID
+
+  }
+    )
+    button update (
+        buttonName: UPDATE
+        label: Update
+        layout {
+            sequence: 20
+            region: @buttons
+            slot: next
+
+  }
+        appearance {
+            buttonTemplate: @/text
+            templateOptions: #DEFAULT#
+
+  }
+        behavior {
+            action: submitPage
+            databaseAction: update
+
+  }
+        serverSideCondition {
+            type: itemIsNotNull
+            item: P2_ID
+
+  }
+    )
+    button delete (
+        buttonName: DELETE
+        label: Delete
+        layout {
+            sequence: 30
+            region: @buttons
+            slot: next
+
+  }
+        appearance {
+            buttonTemplate: @/text
+            templateOptions: #DEFAULT#
+
+  }
+        behavior {
+            action: submitPage
+            databaseAction: delete
+            requiresConfirmation: true
+            executeValidations: false
+
+  }
+        confirmation {
+            message: Delete this example row?
+            style: danger
+
+  }
+        serverSideCondition {
+            type: itemIsNotNull
+            item: P2_ID
+
+  }
+    )
+    process initialize-form (
+        name: Initialize form
+        type: formInitialization
+        formRegion: @form
+        execution {
+            sequence: 10
+            point: beforeHeader
+
+  }
+    )
+    process save-form (
+        name: Save form
+        type: formAutoRowProcessing
+        formRegion: @form
+        execution {
+            sequence: 10
+
+  }
+        successMessage {
+            successMessage: Example row saved.
+
+  }
+        serverSideCondition {
+            type: requestIsContainedInValue
+            value: INSERT,UPDATE,DELETE
+
+  }
+    )
+
+    branch (
+        name: Return after delete
+        execution {
+            sequence: 10
+
+  }
+        behavior {
+            target: {
+                page: 1
+                clearCache: 1
+
+      }
+
+  }
+        serverSideCondition {
+            whenButtonPressed: @delete
+
+  }
+    )
+
+    process close-after-save (
+        name: Close after successful save
+        type: closeDialog
+        execution {
+            sequence: 100
+
+  }
+        serverSideCondition {
+            type: requestIsContainedInValue
+            value: INSERT,UPDATE,DELETE
+
+  }
+    )
+    button cancel (
+        buttonName: CANCEL
+        label: Cancel
+        layout {
+            sequence: 40
+            region: @buttons
+            slot: previous
+
+  }
+        appearance {
+            buttonTemplate: @/text
+            templateOptions: #DEFAULT#
+
+  }
+        behavior {
+            action: definedByDynamicAction
+            executeValidations: false
+
+  }
+    )
+    dynamicAction cancel-edit (
+        name: Cancel edit
+        execution {
+            sequence: 10
+        }
+        when {
+            event: click
+            selectionType: button
+            button: @cancel
+
+  }
+        action cancel (
+            action: cancelDialog
+            execution {
+                sequence: 10
+                fireOnInit: false
+            }
+        )
+    )
+)

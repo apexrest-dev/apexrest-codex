@@ -1,0 +1,60 @@
+page 1 (
+    name: Tabbed reference workspace
+    alias: HOME
+    title: Tabbed reference workspace
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region example (
+        name: Reference sections
+        type: staticContent
+        source {
+            htmlCode: <p>Choose a section to inspect its content.</p>
+        }
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/tabs-container
+            templateOptions: #DEFAULT#
+        }
+    )
+    region first-panel (
+        name: Overview
+        type: staticContent
+        source {
+            htmlCode: <p>The overview describes the record and its purpose.</p>
+        }
+        layout {
+            sequence: 10
+            parentRegion: @example
+            slot: regionBody
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+    )
+    region second-panel (
+        name: Checklist
+        type: staticContent
+        source {
+            htmlCode: <ul><li>Review the scope.</li><li>Confirm the next action.</li></ul>
+        }
+        layout {
+            sequence: 20
+            parentRegion: @example
+            slot: regionBody
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+    )
+
+)

@@ -1,0 +1,86 @@
+page 1 (
+    name: Destination hub
+    alias: HOME
+    title: Destination hub
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region directory (
+        name: Destination hub
+        type: themeTemplateComponent/contentRow
+        source {
+            location: localDatabase
+            type: sqlQuery
+            sqlQuery:
+                ```sql
+                select d.*, apex_page.get_url(p_page => 2, p_items => 'P2_ID', p_values => ID) TARGET_URL from (select 1 ID, 'Open work' TITLE, 'Current assignments and owners' DESCRIPTION from dual union all select 2, 'Recent changes', 'Latest reviewed changes' from dual) d
+                ```
+        }
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        componentAppearance {
+            display: report
+        }
+        settings {
+            title: &TITLE.
+            description: &DESCRIPTION.
+        }
+        column ID (
+            layout {
+                sequence: 10
+            }
+            source {
+                databaseColumn: ID
+                dataType: number
+                primaryKey: true
+            }
+        )
+        column TITLE (
+            layout {
+                sequence: 20
+            }
+            source {
+                databaseColumn: TITLE
+                dataType: varchar2
+            }
+        )
+        column DESCRIPTION (
+            layout {
+                sequence: 30
+            }
+            source {
+                databaseColumn: DESCRIPTION
+                dataType: varchar2
+            }
+        )
+        column TARGET_URL (
+            layout {
+                sequence: 40
+            }
+            source {
+                databaseColumn: TARGET_URL
+                dataType: varchar2
+            }
+        )
+        action open-record (
+            position: titleLink
+            layout {
+                sequence: 10
+            }
+            behavior {
+                type: redirectUrl
+                targetUrl: &TARGET_URL.
+            }
+        )
+    )
+)

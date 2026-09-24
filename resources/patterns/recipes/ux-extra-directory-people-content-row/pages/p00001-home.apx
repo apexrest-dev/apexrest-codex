@@ -1,0 +1,126 @@
+page 1 (
+    name: People directory
+    alias: HOME
+    title: People directory
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region directory (
+        name: People directory
+        type: themeTemplateComponent/contentRow
+        source {
+            location: localDatabase
+            type: sqlQuery
+            sqlQuery:
+                ```sql
+                select d.*, apex_page.get_url(p_page => 2, p_items => 'P2_ID', p_values => ID) TARGET_URL from (select 1 ID, 'Example analyst' TITLE, 'Planning team' DESCRIPTION, 'EA' INITIALS, 'Available' STATUS, 'success' BADGE_STATE from dual union all select 2, 'Example reviewer', 'Quality team', 'ER', 'Away', 'warning' from dual) d
+                ```
+        }
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        componentAppearance {
+            display: report
+        }
+        settings {
+            title: &TITLE.
+            description: &DESCRIPTION.
+            displayAvatar: true
+            displayBadge: true
+        }
+        plugin-avatar {
+            type: initials
+            initials: INITIALS
+            shape: circular
+        }
+        plugin-badge {
+            label: Presence
+            value: STATUS
+            state: BADGE_STATE
+            style: subtle
+        }
+        column ID (
+            layout {
+                sequence: 10
+            }
+            source {
+                databaseColumn: ID
+                dataType: number
+                primaryKey: true
+            }
+        )
+        column TITLE (
+            layout {
+                sequence: 20
+            }
+            source {
+                databaseColumn: TITLE
+                dataType: varchar2
+            }
+        )
+        column DESCRIPTION (
+            layout {
+                sequence: 30
+            }
+            source {
+                databaseColumn: DESCRIPTION
+                dataType: varchar2
+            }
+        )
+        column INITIALS (
+            layout {
+                sequence: 40
+            }
+            source {
+                databaseColumn: INITIALS
+                dataType: varchar2
+            }
+        )
+        column STATUS (
+            layout {
+                sequence: 50
+            }
+            source {
+                databaseColumn: STATUS
+                dataType: varchar2
+            }
+        )
+        column BADGE_STATE (
+            layout {
+                sequence: 60
+            }
+            source {
+                databaseColumn: BADGE_STATE
+                dataType: varchar2
+            }
+        )
+        column TARGET_URL (
+            layout {
+                sequence: 70
+            }
+            source {
+                databaseColumn: TARGET_URL
+                dataType: varchar2
+            }
+        )
+        action open-record (
+            position: titleLink
+            layout {
+                sequence: 10
+            }
+            behavior {
+                type: redirectUrl
+                targetUrl: &TARGET_URL.
+            }
+        )
+    )
+)

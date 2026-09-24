@@ -1,0 +1,133 @@
+# Reviewed source coverage: universal-theme-reference
+
+Scope: all observed pages and meaningful structural or behavioral variants in the captured source. This is not an enumeration of hypothetical combinations of every option.
+
+```json
+{
+  "pages": 122,
+  "variants": 707
+}
+```
+
+- Page 0: Page Zero; scaffolding; 0 pattern references.
+- Page 100: Redirect; scaffolding; 0 pattern references.
+- Page 300: Grid Layout; pattern; 1 pattern references.
+- Page 400: Design; group; 0 pattern references.
+- Page 401: Design Overview; documentation; 0 pattern references.
+- Page 402: Colors; documentation; 0 pattern references.
+- Page 405: Theme Styles; documentation; 0 pattern references.
+- Page 407: Navigation; group; 1 pattern references.
+- Page 421: Navigation; documentation; 0 pattern references.
+- Page 422: Headers and Footers; group; 1 pattern references.
+- Page 423: Data Entry; primitives; 0 pattern references.
+- Page 424: Touch Gestures; primitives; 0 pattern references.
+- Page 425: jQuery Mobile Components; documentation; 0 pattern references.
+- Page 500: Getting Started; group; 0 pattern references.
+- Page 700: Layout; group; 0 pattern references.
+- Page 1100: Pages; group; 1 pattern references.
+- Page 1101: Standard Page Template with Side Navigation; pattern; 1 pattern references.
+- Page 1102: Standard Page Template with Top Navigation; pattern; 1 pattern references.
+- Page 1103: Left Column Page with Side Navigation ; pattern; 1 pattern references.
+- Page 1104: Left Column Page with Top Navigation; pattern; 1 pattern references.
+- Page 1105: Right Column Page with Side Navigation; pattern; 1 pattern references.
+- Page 1106: Right Column Page with Top Navigation; pattern; 1 pattern references.
+- Page 1107: Marquee Detail Page with Side Navigation; pattern; 1 pattern references.
+- Page 1108: Marquee Detail Page with Top Navigation; pattern; 1 pattern references.
+- Page 1109: Side Columns Page with Side Navigation; pattern; 1 pattern references.
+- Page 1110: Side Columns Page with Top Navigation; pattern; 1 pattern references.
+- Page 1111: Standard Dialog Page; pattern; 1 pattern references.
+- Page 1112: Wizard Dialog Page; primitives; 1 pattern references.
+- Page 1113: Minimal Page Template; primitives; 0 pattern references.
+- Page 1114: Login Page Template; primitives; 0 pattern references.
+- Page 1115: Standard Page Template with Tabs Navigation; pattern; 1 pattern references.
+- Page 1116: Sticky Mobile Header; pattern; 1 pattern references.
+- Page 1117: Sticky Mobile Footer; pattern; 1 pattern references.
+- Page 1120: Navigation Menu - Menu Bar Preview; pattern; 1 pattern references.
+- Page 1121: Navigation Menu - Tabs Preview; pattern; 1 pattern references.
+- Page 1122: Navigation Menu - Mega Menu Preview; pattern; 1 pattern references.
+- Page 1123: Navigation Menu - Side Tree Navigation Preview; pattern; 1 pattern references.
+- Page 1124: Navigation Menu - Mega Menu Preview 2; pattern; 1 pattern references.
+- Page 1201: Regions - Standard; primitives; 0 pattern references.
+- Page 1202: Region - Alert; primitives; 0 pattern references.
+- Page 1203: Region - Hero; primitives; 0 pattern references.
+- Page 1204: Region - Button Container; primitives; 0 pattern references.
+- Page 1205: Region - Carousel; pattern; 1 pattern references.
+- Page 1206: Region - Collapsible; primitives; 0 pattern references.
+- Page 1207: Region - Title Bar; primitives; 0 pattern references.
+- Page 1208: Region - Wizard; primitives; 1 pattern references.
+- Page 1209: Content Block; primitives; 0 pattern references.
+- Page 1210: Region Image; primitives; 0 pattern references.
+- Page 1250: Button Container; primitives; 0 pattern references.
+- Page 1301: Lists - Media List ; primitives; 0 pattern references.
+- Page 1303: Lists - Links; primitives; 0 pattern references.
+- Page 1304: List - Badges; primitives; 0 pattern references.
+- Page 1305: List - Menu Bar; pattern; 1 pattern references.
+- Page 1306: Menu Popup; pattern; 1 pattern references.
+- Page 1307: Contextual Info; primitives; 0 pattern references.
+- Page 1401: Reports - Standard; primitives; 0 pattern references.
+- Page 1402: Reports - Interactive Report; primitives; 0 pattern references.
+- Page 1403: Value Attribute Pairs; primitives; 0 pattern references.
+- Page 1405: Reports - Comments; primitives; 0 pattern references.
+- Page 1406: Reports - Timeline; primitives; 0 pattern references.
+- Page 1407: Reports - Content Row; primitives; 0 pattern references.
+- Page 1410: Interactive Grid; primitives; 0 pattern references.
+- Page 1411: Reports - Faceted Search; pattern; 1 pattern references.
+- Page 1412: Reports - Smart Filters; pattern; 1 pattern references.
+- Page 1413: Reports - Search Region; pattern; 1 pattern references.
+- Page 1500: Buttons; primitives; 0 pattern references.
+- Page 1600: Forms; primitives; 0 pattern references.
+- Page 1601: Form Item Types; primitives; 0 pattern references.
+- Page 1700: List View; primitives; 0 pattern references.
+- Page 1701: Region - List View Mobile Example; primitives; 0 pattern references.
+- Page 1710: Reflow Report; primitives; 0 pattern references.
+- Page 1711: Reflow Report - Mobile Examples; primitives; 0 pattern references.
+- Page 1720: Column Toggle Report; primitives; 0 pattern references.
+- Page 1721: Column Toggle Report - Mobile Examples; primitives; 0 pattern references.
+- Page 1800: Calendars; primitives; 0 pattern references.
+- Page 1901: Tree; primitives; 0 pattern references.
+- Page 1902: Charts; primitives; 0 pattern references.
+- Page 1903: Help Text; documentation; 0 pattern references.
+- Page 1905: Static Content; primitives; 0 pattern references.
+- Page 1906: Map; primitives; 0 pattern references.
+- Page 1907: Tabs; pattern; 1 pattern references.
+- Page 1908: Dynamic Content Region; primitives; 0 pattern references.
+- Page 1909: Redirect; scaffolding; 0 pattern references.
+- Page 1910: Page Dialog; pattern; 1 pattern references.
+- Page 1911: Inline Dialog; pattern; 1 pattern references.
+- Page 1912: Modal Dialog Demo; pattern; 1 pattern references.
+- Page 1913: Modal Dialog Demo - Fixed Size; pattern; 1 pattern references.
+- Page 1914: Modal Dialog Demo - Fit Window; pattern; 1 pattern references.
+- Page 1915: Inline Popup; pattern; 1 pattern references.
+- Page 1916: Inline Drawer; pattern; 1 pattern references.
+- Page 1917: Page Drawer; pattern; 1 pattern references.
+- Page 1918: Drawer Demo; pattern; 1 pattern references.
+- Page 1919: Drawer Demo - Fixed Size; pattern; 1 pattern references.
+- Page 1920: Step 1; pattern; 1 pattern references.
+- Page 1921: Step 2; pattern; 1 pattern references.
+- Page 1922: Step 3; pattern; 1 pattern references.
+- Page 1923: Region Display Selector; pattern; 1 pattern references.
+- Page 2000: Migration Guide; documentation; 0 pattern references.
+- Page 3000: Components; group; 0 pattern references.
+- Page 3001: Components - Avatar; primitives; 0 pattern references.
+- Page 3002: Components - Badge; primitives; 0 pattern references.
+- Page 3003: Components - Comments; pattern; 1 pattern references.
+- Page 3004: Components - Content Row; pattern; 1 pattern references.
+- Page 3005: Components - Media List; pattern; 1 pattern references.
+- Page 3006: Components - Timeline; primitives; 0 pattern references.
+- Page 3007: Components: Metric Card; primitives; 0 pattern references.
+- Page 3008: Components - Flexbox Container; pattern; 1 pattern references.
+- Page 3100: Card Templates; primitives; 0 pattern references.
+- Page 3110: Card Regions; pattern; 1 pattern references.
+- Page 3810: Breadcrumb; pattern; 1 pattern references.
+- Page 4000: Icons; pattern; 1 pattern references.
+- Page 6000: Reference; group; 0 pattern references.
+- Page 6100: Button Builder; pattern; 1 pattern references.
+- Page 6200: JavaScript Events; documentation; 0 pattern references.
+- Page 6201: JavaScript APIs; documentation; 0 pattern references.
+- Page 6302: Color and Status Modifiers; documentation; 0 pattern references.
+- Page 6303: Layout Modifiers; documentation; 0 pattern references.
+- Page 6304: Content Modifiers; documentation; 0 pattern references.
+- Page 6305: Change Log; documentation; 0 pattern references.
+- Page 6307: CSS Variables; documentation; 0 pattern references.
+- Page 6400: Template Directives; documentation; 0 pattern references.
+- Page 9999: Login Page; scaffolding; 0 pattern references.

@@ -1,0 +1,190 @@
+page 1 (
+    name: Capacity consumption summary
+    alias: HOME
+    title: Capacity consumption summary
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region review-seats (
+        name: Assigned seats
+        type: chart
+        layout {
+            sequence: 10
+            slot: body
+            columnSpan: 4
+            startNewRow: true
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        chart {
+            type: statusMeterGauge
+        }
+        gauge {
+            orientation: horizontal
+        }
+        series series-1 (
+            name: Assigned seats
+            execution {
+                sequence: 10
+            }
+            source {
+                type: sqlQuery
+                sqlQuery:
+                    ```sql
+                    select 'Assigned seats' LABEL, 7 VALUE, 12 MAX_VALUE from dual
+                    ```
+            }
+            columnMapping {
+                label: LABEL
+                value: VALUE
+                maxValue: MAX_VALUE
+            }
+        )
+    )
+    region queue-capacity (
+        name: Queue utilization
+        type: chart
+        layout {
+            sequence: 20
+            slot: body
+            columnSpan: 4
+            startNewRow: false
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        chart {
+            type: statusMeterGauge
+        }
+        gauge {
+            orientation: horizontal
+        }
+        series series-1 (
+            name: Queue utilization
+            execution {
+                sequence: 10
+            }
+            source {
+                type: sqlQuery
+                sqlQuery:
+                    ```sql
+                    select 'Queue utilization' LABEL, 65 VALUE, 100 MAX_VALUE from dual
+                    ```
+            }
+            columnMapping {
+                label: LABEL
+                value: VALUE
+                maxValue: MAX_VALUE
+            }
+        )
+    )
+    region budget (
+        name: Allocated budget
+        type: chart
+        layout {
+            sequence: 30
+            slot: body
+            columnSpan: 4
+            startNewRow: false
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        chart {
+            type: statusMeterGauge
+        }
+        gauge {
+            orientation: horizontal
+        }
+        series series-1 (
+            name: Allocated budget
+            execution {
+                sequence: 10
+            }
+            source {
+                type: sqlQuery
+                sqlQuery:
+                    ```sql
+                    select 'Allocated budget' LABEL, 720 VALUE, 1000 MAX_VALUE from dual
+                    ```
+            }
+            columnMapping {
+                label: LABEL
+                value: VALUE
+                maxValue: MAX_VALUE
+            }
+        )
+    )
+    region usage (
+        name: Exact usage
+        type: classicReport
+        source {
+            location: localDatabase
+            type: sqlQuery
+            sqlQuery:
+                ```sql
+                select 'Assigned seats' RESOURCE, 7 USED, 12 CAPACITY, 'Seats' UNIT from dual union all select 'Queue utilization' RESOURCE, 65 USED, 100 CAPACITY, 'Percent' UNIT from dual union all select 'Allocated budget' RESOURCE, 720 USED, 1000 CAPACITY, 'Currency units' UNIT from dual
+                ```
+        }
+        layout {
+            sequence: 50
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        componentAppearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        column RESOURCE (
+            reportColumnQueryId: 1
+            derivedColumn: N
+            heading {
+                heading: RESOURCE
+            }
+            layout {
+                sequence: 10
+            }
+        )
+        column USED (
+            reportColumnQueryId: 2
+            derivedColumn: N
+            heading {
+                heading: USED
+            }
+            layout {
+                sequence: 20
+            }
+        )
+        column CAPACITY (
+            reportColumnQueryId: 3
+            derivedColumn: N
+            heading {
+                heading: CAPACITY
+            }
+            layout {
+                sequence: 30
+            }
+        )
+        column UNIT (
+            reportColumnQueryId: 4
+            derivedColumn: N
+            heading {
+                heading: UNIT
+            }
+            layout {
+                sequence: 40
+            }
+        )
+    )
+)

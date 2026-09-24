@@ -1,0 +1,38 @@
+page 3 (
+    name: Completed
+    alias: PAGE-3
+    title: Completed
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    navigationMenu {
+        overrideUserInterfaceLevel: true
+        list: @workspace-menu
+        listPosition: side
+        listTemplate: @/side-navigation-menu
+        templateOptions: [
+            #DEFAULT#
+            js-defaultCollapsed
+            js-navCollapsed--hidden
+        ]
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region content (
+        name: Completed
+        type: staticContent
+        source {
+            htmlCode: <p>Completed is an original local navigation destination.</p>
+        }
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+    )
+)

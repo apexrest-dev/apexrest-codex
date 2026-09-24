@@ -1,0 +1,224 @@
+page 1 (
+    name: Search and select a record
+    alias: HOME
+    title: Search and select a record
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region search (
+        name: Find a record
+        type: staticContent
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+    )
+    pageItem P1_QUERY (
+        type: textField
+        label {
+            label: Search records
+        }
+        layout {
+            sequence: 10
+            region: @search
+            slot: regionBody
+        }
+        appearance {
+            template: @/optional-floating
+            templateOptions: #DEFAULT#
+        }
+    )
+    region selection (
+        name: Review hierarchy
+        type: tree
+        source {
+            location: localDatabase
+            type: sqlQuery
+            pageItemsToSubmit: P1_QUERY
+            sqlQuery:
+                ```sql
+                select STATUS,TREE_LEVEL,TITLE,ICON,NODE_ID from (select 1 STATUS,1 TREE_LEVEL,'Reviews' TITLE,'fa-folder' ICON,0 NODE_ID from dual union all select 0,2,TITLE,'fa-file-o',ID from (select 1 ID, 'North review' TITLE, 'Open' STATUS from dual union all select 2, 'South review', 'Closed' from dual) where :P1_QUERY is null or instr(lower(TITLE),lower(trim(:P1_QUERY)))>0) order by TREE_LEVEL,NODE_ID
+                ```
+        }
+        layout {
+            sequence: 20
+            slot: body
+            columnSpan: 4
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        advanced {
+            htmlDomId: ux_example_tree
+        }
+        settings {
+            nodeLabelColumn: TITLE
+            nodeValueColumn: NODE_ID
+            hierarchy: notComputed
+            nodeStatusColumn: STATUS
+            hierarchyLevelColumn: TREE_LEVEL
+            iconCssClassColumn: ICON
+            iconTypeCssClass: fa
+        }
+    )
+    region details (
+        name: Selected record
+        type: classicReport
+        source {
+            location: localDatabase
+            type: sqlQuery
+            pageItemsToSubmit: P1_SELECTED_ID
+            sqlQuery:
+                ```sql
+                select ID,TITLE,STATUS from (select 1 ID, 'North review' TITLE, 'Open' STATUS from dual union all select 2, 'South review', 'Closed' from dual) where ID=:P1_SELECTED_ID
+                ```
+        }
+        layout {
+            sequence: 20
+            slot: body
+            startNewRow: false
+            columnSpan: 8
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        componentAppearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        messages {
+            whenNoDataFound: Choose a record to see its details.
+        }
+        column ID (
+            reportColumnQueryId: 1
+            derivedColumn: N
+            heading {
+                heading: ID
+            }
+            layout {
+                sequence: 10
+            }
+        )
+        column TITLE (
+            reportColumnQueryId: 2
+            derivedColumn: N
+            heading {
+                heading: TITLE
+            }
+            layout {
+                sequence: 20
+            }
+        )
+        column STATUS (
+            reportColumnQueryId: 3
+            derivedColumn: N
+            heading {
+                heading: STATUS
+            }
+            layout {
+                sequence: 30
+            }
+        )
+    )
+    pageItem P1_SELECTED_ID (
+        type: hidden
+        layout {
+            sequence: 10
+            region: @selection
+            slot: regionBody
+        }
+        security {
+            sessionStateProtection: unrestricted
+        }
+    )
+    dynamicAction select-node (
+        name: Set selected record
+        execution {
+            sequence: 10
+        }
+        when {
+            event: region/tree/treeviewselectionchange
+            selectionType: region
+            region: @selection
+        }
+        action set-key (
+            action: executeJsCode
+            settings {
+                jsCode:
+                    ```javascript-browser
+                    const nodes = apex.region("ux_example_tree").call("getSelectedNodes");
+                    const key = nodes.length ? Number(nodes[0].id) : 0;
+                    apex.item("P1_SELECTED_ID").setValue(Number.isInteger(key) && key > 0 ? String(key) : "");
+                    ```
+            }
+            execution {
+                sequence: 10
+                fireOnInit: false
+            }
+        )
+    )
+    dynamicAction refresh-detail (
+        name: Refresh dependent results
+        execution {
+            sequence: 20
+        }
+        when {
+            event: change
+            selectionType: items
+            items: P1_SELECTED_ID
+        }
+        action refresh (
+            action: refresh
+            affectedElements {
+                selectionType: region
+                region: @details
+            }
+            execution {
+                sequence: 10
+                fireOnInit: false
+            }
+        )
+    )
+    dynamicAction filter-tree (
+        name: Refresh dependent results
+        execution {
+            sequence: 30
+        }
+        when {
+            event: change
+            selectionType: items
+            items: P1_QUERY
+        }
+        action clear-key (
+            action: executeJsCode
+            settings {
+                jsCode: apex.item("P1_SELECTED_ID").setValue("");
+            }
+            execution {
+                sequence: 5
+                fireOnInit: false
+            }
+        )
+        action refresh (
+            action: refresh
+            affectedElements {
+                selectionType: region
+                region: @selection
+            }
+            execution {
+                sequence: 10
+                fireOnInit: false
+            }
+        )
+    )
+)

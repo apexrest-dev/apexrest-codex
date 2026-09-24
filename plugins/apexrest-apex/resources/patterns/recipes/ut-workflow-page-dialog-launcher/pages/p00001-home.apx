@@ -1,0 +1,46 @@
+page 1 (
+    name: Open page dialog
+    alias: HOME
+    title: Open page dialog
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region controls (
+        name: Reference
+        type: staticContent
+        source {
+            htmlCode: <p>Open the reference in a separate dialog page.</p>
+        }
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+    )
+    button open (
+        buttonName: OPEN
+        label: Open reference
+        layout {
+            sequence: 10
+            region: @controls
+            slot: next
+        }
+        appearance {
+            buttonTemplate: @/text
+            templateOptions: #DEFAULT#
+        }
+        behavior {
+            action: redirectThisApp
+            target: {
+                page: 2
+            }
+        }
+    )
+)

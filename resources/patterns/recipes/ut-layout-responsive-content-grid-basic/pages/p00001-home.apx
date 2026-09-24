@@ -1,0 +1,86 @@
+page 1 (
+    name: Responsive workspace
+    alias: HOME
+    title: Responsive workspace
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region primary (
+        name: Work summary
+        type: staticContent
+        source {
+            htmlCode: <p>Review the current service workload.</p>
+        }
+        layout {
+            sequence: 10
+            slot: body
+            columnSpan: 8
+            columnCssClasses: col-sm-12
+            startNewRow: true
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+    )
+    region secondary (
+        name: Context
+        type: staticContent
+        source {
+            htmlCode: <p>Three teams share this workspace.</p>
+        }
+        layout {
+            sequence: 20
+            slot: body
+            columnSpan: 4
+            columnCssClasses: col-sm-12
+            startNewRow: false
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+    )
+    region intake (
+        name: Intake
+        type: staticContent
+        source {
+            htmlCode: <p>Twelve requests are ready for triage.</p>
+        }
+        layout {
+            sequence: 10
+            parentRegion: @primary
+            slot: subRegions
+            columnSpan: 6
+            columnCssClasses: col-sm-12
+            startNewRow: true
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+    )
+    region delivery (
+        name: Delivery
+        type: staticContent
+        source {
+            htmlCode: <p>Eight requests are being prepared.</p>
+        }
+        layout {
+            sequence: 20
+            parentRegion: @primary
+            slot: subRegions
+            columnSpan: 6
+            columnCssClasses: col-sm-12
+            startNewRow: false
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+    )
+)

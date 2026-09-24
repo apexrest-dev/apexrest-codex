@@ -1,0 +1,57 @@
+page 1 (
+    name: Search two collections
+    alias: HOME
+    title: Search two collections
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region example (
+        name: Search
+        type: search
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/search-results-container
+            templateOptions: #DEFAULT#
+        }
+        settings {
+            searchPageItem: P1_SEARCH
+        }
+        searchSource handbook (
+            name: Handbook entries
+            searchConfig: @workflow-handbook
+            layout {
+                sequence: 10
+            }
+        )
+        searchSource notes (
+            name: Service notes
+            searchConfig: @workflow-notes
+            layout {
+                sequence: 20
+            }
+        )
+    )
+    pageItem P1_SEARCH (
+        type: textField
+        label {
+            label: Search
+        }
+        layout {
+            sequence: 10
+            region: @example
+            slot: searchField
+        }
+        appearance {
+            template: @/optional-floating
+            templateOptions: #DEFAULT#
+        }
+    )
+
+)

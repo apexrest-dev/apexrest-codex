@@ -1,0 +1,68 @@
+page 1 (
+    name: Workspace navigation
+    alias: HOME
+    title: Workspace navigation
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region intro (
+        name: Workspace navigation
+        type: staticContent
+        source {
+            htmlCode: <p>Choose a destination from the menu.</p>
+        }
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+    )
+    region popup (
+        name: Destinations
+        type: list
+        source {
+            list: @workspace-menu
+        }
+        layout {
+            sequence: 20
+            slot: body
+        }
+        appearance {
+            template: @/blank-with-attributes
+            templateOptions: #DEFAULT#
+        }
+        advanced {
+            htmlDomId: workspace_popup
+        }
+        componentAppearance {
+            listTemplate: @/menu-popup
+            templateOptions: #DEFAULT#
+        }
+    )
+    button open-menu (
+        buttonName: OPEN_MENU
+        label: Choose destination
+        layout {
+            sequence: 10
+            region: @intro
+            slot: next
+        }
+        appearance {
+            buttonTemplate: @/text
+            templateOptions: #DEFAULT#
+        }
+        behavior {
+            action: definedByDynamicAction
+        }
+        advanced {
+            customAttributes: data-menu="workspace_popup_menu"
+        }
+    )
+)

@@ -1,0 +1,72 @@
+page 1 (
+    name: Service topics
+    alias: HOME
+    title: Service topics
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region topics (
+        name: Service topics
+        type: staticContent
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/carousel-container
+            templateOptions: #DEFAULT#
+        }
+    )
+    region intake (
+        name: Intake
+        type: staticContent
+        source {
+            htmlCode: <p>Record the request and confirm its scope.</p>
+        }
+        layout {
+            sequence: 10
+            parentRegion: @topics
+            slot: slides
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+    )
+    region delivery (
+        name: Delivery
+        type: staticContent
+        source {
+            htmlCode: <p>Assign a responsible team and review progress.</p>
+        }
+        layout {
+            sequence: 20
+            parentRegion: @topics
+            slot: slides
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+    )
+    region completion (
+        name: Completion
+        type: staticContent
+        source {
+            htmlCode: <p>Confirm the outcome and document the next steps.</p>
+        }
+        layout {
+            sequence: 30
+            parentRegion: @topics
+            slot: slides
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+    )
+)

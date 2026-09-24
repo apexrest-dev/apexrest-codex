@@ -1,0 +1,70 @@
+page 1 (
+    name: Section navigation
+    alias: HOME
+    title: Section navigation
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region selector (
+        name: Sections
+        type: regionDisplaySelector
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/blank-with-attributes
+            templateOptions: #DEFAULT#
+        }
+        advanced {
+            htmlDomId: workflow_selector
+        }
+        settings {
+            mode: scrollWindow
+            rememberSelection: false
+        }
+    )
+    region first (
+        name: Overview
+        type: staticContent
+        source {
+            htmlCode: <p>Review this overview before moving to the checklist.</p>
+        }
+        layout {
+            sequence: 20
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        advanced {
+            htmlDomId: workflow_overview
+            regionDisplaySelector: true
+        }
+    )
+    region second (
+        name: Checklist
+        type: staticContent
+        source {
+            htmlCode: <ul><li>Check the selected record.</li><li>Choose the next task.</li></ul>
+        }
+        layout {
+            sequence: 30
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        advanced {
+            htmlDomId: workflow_checklist
+            regionDisplaySelector: true
+        }
+    )
+
+)

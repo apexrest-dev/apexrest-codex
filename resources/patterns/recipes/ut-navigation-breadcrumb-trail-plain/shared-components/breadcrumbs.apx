@@ -1,0 +1,30 @@
+breadcrumb workspace-trail (
+    name: Workspace trail
+    entry overview (
+        name: Overview
+        pageNumber: 1
+        execution {
+            sequence: 10
+        }
+        link {
+            target: {
+                page: 1
+            }
+        }
+    )
+    entry detail (
+        name: Work details
+        pageNumber: 2
+        execution {
+            sequence: 20
+        }
+        appearance {
+            parentEntry: @overview
+        }
+        link {
+            target: {
+                page: 2
+            }
+        }
+    )
+)

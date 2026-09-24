@@ -1,0 +1,90 @@
+page 2 (
+    name: Selected destination
+    alias: DESTINATION
+    title: Selected destination
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region profile (
+        name: Selected destination
+        type: classicReport
+        source {
+            location: localDatabase
+            type: sqlQuery
+            pageItemsToSubmit: P2_ID
+            sqlQuery:
+                ```sql
+                select TITLE, DESCRIPTION from (select 1 ID, 'Open work' TITLE, 'Current assignments and owners' DESCRIPTION from dual union all select 2, 'Recent changes', 'Latest reviewed changes' from dual) where ID = :P2_ID
+                ```
+        }
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        componentAppearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        messages {
+            whenNoDataFound: No matching destination.
+        }
+        column TITLE (
+            reportColumnQueryId: 1
+            derivedColumn: N
+            heading {
+                heading: TITLE
+            }
+            layout {
+                sequence: 10
+            }
+        )
+        column DESCRIPTION (
+            reportColumnQueryId: 2
+            derivedColumn: N
+            heading {
+                heading: DESCRIPTION
+            }
+            layout {
+                sequence: 20
+            }
+        )
+    )
+    pageItem P2_ID (
+        type: hidden
+        layout {
+            sequence: 10
+            region: @profile
+            slot: regionBody
+        }
+        security {
+            sessionStateProtection: checksumRequiredSessionLevel
+        }
+    )
+    button back (
+        buttonName: BACK
+        label: Back
+        layout {
+            sequence: 10
+            region: @profile
+            slot: previous
+        }
+        appearance {
+            buttonTemplate: @/text
+            templateOptions: #DEFAULT#
+        }
+        behavior {
+            action: redirectThisApp
+            target: {
+                page: 1
+            }
+        }
+    )
+)

@@ -1,0 +1,135 @@
+page 1 (
+    name: Actual and target review
+    alias: HOME
+    title: Actual and target review
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region benchmark (
+        name: Actual and target
+        type: chart
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        chart {
+            type: combination
+        }
+        settings {
+            timeAxisType: enabled
+        }
+        axis x (
+            name: x
+        )
+        axis y (
+            name: y
+        )
+        series series-1 (
+            name: Actual
+            execution {
+                sequence: 10
+            }
+            source {
+                type: sqlQuery
+                sqlQuery:
+                    ```sql
+                    select PERIOD_DATE LABEL, ACTUAL VALUE from (select date '2026-01-01' PERIOD_DATE, 18 ACTUAL, 20 TARGET from dual union all select date '2026-02-01', 24, 22 from dual union all select date '2026-03-01', cast(null as number), 25 from dual) order by PERIOD_DATE
+                    ```
+            }
+            columnMapping {
+                label: LABEL
+                value: VALUE
+            }
+        )
+        series series-2 (
+            name: Target
+            type: line
+            execution {
+                sequence: 20
+            }
+            source {
+                type: sqlQuery
+                sqlQuery:
+                    ```sql
+                    select PERIOD_DATE LABEL, TARGET VALUE from (select date '2026-01-01' PERIOD_DATE, 18 ACTUAL, 20 TARGET from dual union all select date '2026-02-01', 24, 22 from dual union all select date '2026-03-01', cast(null as number), 25 from dual) order by PERIOD_DATE
+                    ```
+            }
+            columnMapping {
+                label: LABEL
+                value: VALUE
+            }
+        )
+    )
+    region variance (
+        name: Exact period values
+        type: classicReport
+        source {
+            location: localDatabase
+            type: sqlQuery
+            sqlQuery:
+                ```sql
+                select PERIOD_DATE,ACTUAL,TARGET,ACTUAL-TARGET VARIANCE from (select date '2026-01-01' PERIOD_DATE, 18 ACTUAL, 20 TARGET from dual union all select date '2026-02-01', 24, 22 from dual union all select date '2026-03-01', cast(null as number), 25 from dual) order by PERIOD_DATE
+                ```
+        }
+        layout {
+            sequence: 20
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        componentAppearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        column PERIOD_DATE (
+            reportColumnQueryId: 1
+            derivedColumn: N
+            heading {
+                heading: PERIOD_DATE
+            }
+            layout {
+                sequence: 10
+            }
+        )
+        column ACTUAL (
+            reportColumnQueryId: 2
+            derivedColumn: N
+            heading {
+                heading: ACTUAL
+            }
+            layout {
+                sequence: 20
+            }
+        )
+        column TARGET (
+            reportColumnQueryId: 3
+            derivedColumn: N
+            heading {
+                heading: TARGET
+            }
+            layout {
+                sequence: 30
+            }
+        )
+        column VARIANCE (
+            reportColumnQueryId: 4
+            derivedColumn: N
+            heading {
+                heading: VARIANCE
+            }
+            layout {
+                sequence: 40
+            }
+        )
+    )
+)

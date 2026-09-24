@@ -3,12 +3,12 @@ import { createRequire as __createRequire } from 'node:module'; const require = 
 import {
   dispatch,
   schemas
-} from "./chunk-MCGGUXVV.mjs";
+} from "./chunk-TXVQLYTH.mjs";
 import {
   executeJob
-} from "./chunk-VR43YRSH.mjs";
+} from "./chunk-BD2AVCFU.mjs";
 import "./chunk-4MYHJ2IU.mjs";
-import "./chunk-G25EM726.mjs";
+import "./chunk-S24BD6PY.mjs";
 import {
   loadProject
 } from "./chunk-3MDDJFXN.mjs";
@@ -63,6 +63,18 @@ function help() {
         (k) => "  --" + k.replace(/[A-Z]/g, (c) => "-" + c.toLowerCase())
       ),
       ...(positional[key] ?? []).map((p) => "  <" + p + ">")
+    );
+  if (key === "docs.search")
+    lines.push(
+      "",
+      "--corpus apexlang|components|patterns selects the offline catalog (default: apexlang).",
+      "Filter with --kind, --family and --version; follow nextResultOffset using --offset for more hits."
+    );
+  if (key === "docs.read")
+    lines.push(
+      "",
+      "Read a result ID, grammar:production-name, component: ID or pattern: ID.",
+      "Follow nextOffset using --offset; catalog navigationOffset recovers all dependency links."
     );
   if (key === "panel.action")
     lines.push(
@@ -124,24 +136,24 @@ try {
   else if (argv[0] === "tui" || !argv.length && process.stdin.isTTY && process.stdout.isTTY && process.env.TERM !== "dumb") {
     if (argv.length > 1 && (argv.length !== 3 || argv[1] !== "--project" || !argv[2] || argv[2].startsWith("--")))
       throw new Fault("INVALID_INPUT", "Usage: apexrest tui [--project PATH]", 2);
-    const { runTui } = await import("./chunk-3K3IEQO2.mjs");
+    const { runTui } = await import("./chunk-7RZW5QV2.mjs");
     await runTui(argv[2] ? { project: argv[2] } : {});
   } else if (!argv.length) help();
   else if (argv[0] === "panel" && argv[1] === "tui") {
     if (argv.length !== 2 && (argv.length !== 4 || argv[2] !== "--project" || !argv[3]))
       throw new Fault("INVALID_INPUT", "Usage: apexrest panel tui [--project PATH]", 2);
-    const { runPanelTui } = await import("./chunk-AV6UOZYH.mjs");
+    const { runPanelTui } = await import("./chunk-SPZVXAM5.mjs");
     await runPanelTui(argv[3] ?? process.cwd());
   } else if (argv[0] === "--panel-worker") {
     if (argv.length !== 2 || !argv[1]) throw new Fault("INVALID_INPUT", "Invalid panel worker request.", 2);
-    const { servePanel } = await import("./chunk-QLL5V3TF.mjs");
+    const { servePanel } = await import("./chunk-IX6V6ZGW.mjs");
     await servePanel(argv[1]);
   } else if (argv[0] === "--job-worker") {
     if (argv.length !== 3) throw new Fault("INVALID_INPUT", "Invalid internal job request.", 2);
     await executeJob(await loadProject(argv[1]), argv[2], dispatch);
   } else if (argv[0] === "mcp") {
     if (argv.length !== 1) throw new Fault("INVALID_INPUT", "mcp accepts no arguments.", 2);
-    const { startMcp } = await import("./chunk-CZ2X6OBV.mjs");
+    const { startMcp } = await import("./chunk-YLXJ6H4J.mjs");
     await startMcp();
   } else {
     const selectedOp = argv[0] === "--version" ? { op: "version", start: 1 } : selected;

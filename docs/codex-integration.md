@@ -2,7 +2,7 @@
 
 English | [Українська](codex-integration.uk.md)
 
-APEXREST targets Codex desktop and CLI. The native plugin contains 12 focused skills and 18 bounded MCP tools. Codex executes the user's task in the open conversation; APEXREST supplies deterministic Oracle/APEX operations through local stdio MCP and the equivalent CLI.
+APEXREST targets Codex desktop and CLI. Version 1.2.0 contains 13 focused skills and 18 bounded MCP tools, including the new [pattern-catalog skill](pattern-catalog.md). See [release notes](release-notes.md) for publication status. Codex executes the user's task in the open conversation; APEXREST supplies deterministic Oracle/APEX operations through local stdio MCP and the equivalent CLI.
 
 ## Ownership
 

@@ -1,0 +1,51 @@
+page 1 (
+    name: Destination hub
+    alias: HOME
+    title: Destination hub
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region directory (
+        name: Destination hub
+        type: cards
+        source {
+            location: localDatabase
+            type: sqlQuery
+            sqlQuery:
+                ```sql
+                select d.*, apex_page.get_url(p_page => 2, p_items => 'P2_ID', p_values => ID) TARGET_URL from (select 1 ID, 'Open work' TITLE, 'Current assignments and owners' DESCRIPTION from dual union all select 2, 'Recent changes', 'Latest reviewed changes' from dual) d
+                ```
+        }
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/cards-container
+            templateOptions: #DEFAULT#
+        }
+        card {
+            primaryKeyColumn1: ID
+        }
+        title {
+            column: TITLE
+        }
+        body {
+            column: DESCRIPTION
+        }
+        action open-record (
+            type: fullCard
+            layout {
+                sequence: 10
+            }
+            behavior {
+                type: redirectUrl
+                targetUrl: &TARGET_URL.
+            }
+        )
+    )
+)

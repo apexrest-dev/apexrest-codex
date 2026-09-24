@@ -1,0 +1,90 @@
+page 2 (
+    name: Collection records
+    alias: DESTINATION
+    title: Collection records
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region children (
+        name: Selected collection
+        type: classicReport
+        source {
+            location: localDatabase
+            type: sqlQuery
+            pageItemsToSubmit: P2_COLLECTION_ID
+            sqlQuery:
+                ```sql
+                select ID,TITLE from (select 1 ID, 10 COLLECTION_ID, 'Check source mapping' TITLE from dual union all select 2, 10, 'Review naming' from dual union all select 3, 20, 'Confirm acceptance note' from dual) where COLLECTION_ID = :P2_COLLECTION_ID
+                ```
+        }
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        componentAppearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        messages {
+            whenNoDataFound: No records in this collection.
+        }
+        column ID (
+            reportColumnQueryId: 1
+            derivedColumn: N
+            heading {
+                heading: ID
+            }
+            layout {
+                sequence: 10
+            }
+        )
+        column TITLE (
+            reportColumnQueryId: 2
+            derivedColumn: N
+            heading {
+                heading: TITLE
+            }
+            layout {
+                sequence: 20
+            }
+        )
+    )
+    pageItem P2_COLLECTION_ID (
+        type: hidden
+        layout {
+            sequence: 10
+            region: @children
+            slot: regionBody
+        }
+        security {
+            sessionStateProtection: checksumRequiredSessionLevel
+        }
+    )
+    button back (
+        buttonName: BACK
+        label: Back
+        layout {
+            sequence: 10
+            region: @children
+            slot: previous
+        }
+        appearance {
+            buttonTemplate: @/text
+            templateOptions: #DEFAULT#
+        }
+        behavior {
+            action: redirectThisApp
+            target: {
+                page: 1
+            }
+        }
+    )
+)

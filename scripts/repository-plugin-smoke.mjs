@@ -40,7 +40,8 @@ try {
   assert.equal(catalog.tools.length, 18);
   assert.ok(catalog.tools.every((tool) => !/^apexrest_(team|work)_/.test(tool.name)));
   const skills = await readdir(path.join(root, 'skills'));
-  assert.equal(skills.length, 12);
+  assert.equal(skills.length, 13);
+  assert.ok(skills.includes('apexrest-pattern-catalog'));
   assert.ok(!skills.includes('apexrest-team'));
   const query = async (name, args) => {
     const result = await client.callTool({ name, arguments: args });
@@ -68,6 +69,39 @@ try {
   });
   assert.equal(component.readiness, 'ready');
   assert.equal(component.compatibility.mmdVersion, '26.1.0+3102');
+  const patterns = await query('apexrest_reference_search', {
+    corpus: 'patterns',
+    query: 'Повносторінковий пошук',
+    kind: 'template',
+    family: 'browse',
+    version: '26.1',
+    limit: 3,
+  });
+  const patternId = 'pattern:browse/full-page-search/recipes/basic';
+  assert.ok(patterns.some((entry) => entry.id === patternId));
+  const pattern = await query('apexrest_reference_read', { id: patternId, limit: 2048 });
+  assert.equal(pattern.readiness, 'ready');
+  assert.equal(pattern.classification, 'pattern-reference-data');
+  assert.equal(pattern.compatibility.mmdVersion, '26.1.0+3102');
+  assert.ok(pattern.content.length > 0 && pattern.nextOffset > 0);
+  const patternCli = cli(
+    'docs',
+    'search',
+    'Повносторінковий пошук',
+    '--corpus',
+    'patterns',
+    '--kind',
+    'template',
+    '--family',
+    'browse',
+    '--version',
+    '26.1',
+    '--limit',
+    '3',
+    '--json',
+  );
+  assert.deepEqual(patternCli.data, patterns);
+  assert.equal(cli('docs', 'read', patternId, '--limit', '2048', '--json').data.content, pattern.content);
   const resource = await client.readResource({ uri: 'ui://apexrest/development-panel.html' });
   assert.equal(resource.contents[0].mimeType, 'text/html;profile=mcp-app');
   assert.doesNotMatch(resource.contents[0].text, /multiAgentEnabled|Agent team/);
@@ -84,6 +118,7 @@ try {
         'project summary',
         'pinned reference search',
         'offline Ukrainian component search and recipe read',
+        'projectless Ukrainian pattern search and recipe read through CLI and MCP',
         'panel resource',
       ],
       scope: 'Local installed files and stdio MCP; no model, Oracle or native-host execution.',

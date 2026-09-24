@@ -1,0 +1,46 @@
+page 2 (
+    name: Work details
+    alias: PAGE-2
+    title: Work details
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region trail (
+        name: Page trail
+        type: breadcrumb
+        source {
+            breadcrumb: @workspace-trail
+        }
+        layout {
+            sequence: 10
+            slot: breadcrumbBar
+        }
+        appearance {
+            template: @/title-bar
+            templateOptions: #DEFAULT#
+        }
+        componentAppearance {
+            breadcrumbTemplate: @/breadcrumb
+            templateOptions: #DEFAULT#
+        }
+    )
+    region content (
+        name: Work details
+        type: staticContent
+        source {
+            htmlCode: <p>Review the current service work and use the page trail to return.</p>
+        }
+        layout {
+            sequence: 20
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+    )
+)

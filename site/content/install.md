@@ -14,7 +14,7 @@ apexrest --version
 apexrest
 ```
 
-The default npm tag is `latest`. To pin release 1.1.0, use `npm install -g apexrest@1.1.0`. See [release notes](../../docs/release-notes.md) for distribution and verification status.
+The default npm tag is `latest`. To pin release 1.2.0, use `npm install -g apexrest@1.2.0`. See [release notes](../../docs/release-notes.md) for distribution and verification status.
 
 For a project-local CLI installation, run these commands from the project directory:
 

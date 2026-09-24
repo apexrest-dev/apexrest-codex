@@ -577,6 +577,26 @@
         "docs/evidence/component-catalog-local.json"
       ],
       "blocker": null
+    },
+    {
+      "id": "A38",
+      "criterion": "A separate offline UX pattern catalog accounts for every page and meaningful variant from both reviewed sources, rejects missing or stale page reviews, retrieves original compositions through CLI/MCP, binds ready recipes to compiler evidence, and provides a source-isolated maintenance skill for further applications.",
+      "implementation": "implemented",
+      "verification": "passed",
+      "evidence": [
+        "resources/patterns/manifest.json",
+        "resources/patterns/source/ux-pattern-catalog/snapshot.json",
+        "resources/patterns/recipes/compiler-evidence.json",
+        "plugins/apexrest-apex/skills/apexrest-pattern-catalog/SKILL.md",
+        "tests/unit/pattern-references.test.ts",
+        "tests/contracts/pattern-source.test.mjs",
+        "tests/contracts/pattern-recipes.test.mjs",
+        "tests/packaging/patterns.test.mjs",
+        "docs/evidence/pattern-catalog-local.json",
+        "resources/patterns/source/universal-theme-reference/snapshot.json",
+        "tests/contracts/pattern-coverage.test.mjs"
+      ],
+      "blocker": null
     }
   ],
   "amendments": [

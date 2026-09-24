@@ -53,6 +53,18 @@ function help() {
       ),
       ...(positional[key] ?? []).map((p) => '  <' + p + '>'),
     );
+  if (key === 'docs.search')
+    lines.push(
+      '',
+      '--corpus apexlang|components|patterns selects the offline catalog (default: apexlang).',
+      'Filter with --kind, --family and --version; follow nextResultOffset using --offset for more hits.',
+    );
+  if (key === 'docs.read')
+    lines.push(
+      '',
+      'Read a result ID, grammar:production-name, component: ID or pattern: ID.',
+      'Follow nextOffset using --offset; catalog navigationOffset recovers all dependency links.',
+    );
   if (key === 'panel.action')
     lines.push(
       '',

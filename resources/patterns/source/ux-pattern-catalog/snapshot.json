@@ -1,0 +1,478 @@
+{
+  "schemaVersion": 1,
+  "sourceId": "ux-pattern-catalog",
+  "capturedAt": "2026-09-24T14:24:28.103Z",
+  "source": {
+    "applicationId": 101,
+    "name": "Oracle APEX UX Pattern Catalog",
+    "alias": "UX-PATTERN-CATALOG",
+    "applicationVersion": "26.1.6",
+    "apexVersion": "26.1.4",
+    "themeNumber": 42,
+    "themeName": "Universal Theme",
+    "themeVersion": "26.1",
+    "themeStyle": "Iris - UX Pattern Catalog",
+    "mmdVersion": "26.1.0+3102",
+    "officialUrl": null
+  },
+  "rights": {
+    "status": "unverified",
+    "publication": "structural-facts-and-original-summaries-only",
+    "sourceLicense": null,
+    "sourceLicenseEvidence": "No redistribution terms have been verified for this application; Universal Theme licensing is not assumed to cover its source code, prose or assets.",
+    "sourceCodeRedistributed": false,
+    "sourceProseRedistributed": false,
+    "sourceAssetsRedistributed": false
+  },
+  "counts": {
+    "pages": 28,
+    "regions": 230,
+    "items": 32,
+    "buttons": 58,
+    "dynamicActions": 12,
+    "dynamicActionSteps": 20,
+    "actions": 74,
+    "processes": 2,
+    "validations": 0,
+    "branches": 0,
+    "sharedComponents": 102,
+    "sharedReferences": 636,
+    "objects": 1099,
+    "resources": 25,
+    "patternPages": 14,
+    "groupPages": 5,
+    "primitivePages": 4,
+    "lists": 4,
+    "listEntries": 39,
+    "plugins": 10
+  },
+  "sourceDigests": {
+    "metadata": "4394f5f7d2da624148bbec7b04856070241f183fe93191bd5cfc2cc699085035",
+    "capture": "6d1f072fd8f695172b992bed01be87c06ded3c1b0bb686ffe9956caa4c47cf8a",
+    "mmd": "6a1eb24a95ae3e9b760b8ddbbc217eda8fd669e9366452062f172c0ab08e82d6",
+    "compilerDefinitions": "36c3b47d5de0bc2fb0e368879f29bc5b83d945308735d338c3846282d2cdde89",
+    "export": "fbcb38a4e6b78f9aaa90ab0ba41296350199d6cdd5f03464e8e6f4cf34933c37",
+    "files": [
+      {
+        "file": "application.apx",
+        "sha256": "cbe1a4e8331179d95cb4790ba3492f4f7845e0c2d8eaf2f0c0c3d384e81c2fff",
+        "bytes": 1313,
+        "contentPublished": false
+      },
+      {
+        "file": "page-groups.apx",
+        "sha256": "46d760ce3168fd934b0ba382a31c4eb59187579edc85939cd0bfcef8832eee65",
+        "bytes": 55,
+        "contentPublished": false
+      },
+      {
+        "file": "pages/p00000-global-page.apx",
+        "sha256": "00df156b213512f9c44abe57d9358324a2b043c891b94905065e8157d006f7ee",
+        "bytes": 34,
+        "contentPublished": false
+      },
+      {
+        "file": "pages/p00001-home.apx",
+        "sha256": "c33a9db61be612048072d0666276ebb5344f1aadcef64bf6a8e910a30b85bff5",
+        "bytes": 11413,
+        "contentPublished": false
+      },
+      {
+        "file": "pages/p00002-patterns.apx",
+        "sha256": "e07681d2491e1795ef27186b67583afad3caeb4bccc4f57960e7feb87aa63e1d",
+        "bytes": 5333,
+        "contentPublished": false
+      },
+      {
+        "file": "pages/p00003-reference.apx",
+        "sha256": "deb772ab1b67c2d117492d4ab8b0ee5ec8159c054fb0f65df932955723fdc613",
+        "bytes": 9357,
+        "contentPublished": false
+      },
+      {
+        "file": "pages/p00004-component-primitives.apx",
+        "sha256": "f300d6eff793a818e7494f4d56cbc2e2d58b5110912a1f60bc07bb3abb7c4d14",
+        "bytes": 8689,
+        "contentPublished": false
+      },
+      {
+        "file": "pages/p00100-dashboards.apx",
+        "sha256": "30d59d1d03f8070cc2a60fc6aabc391256ea8fd89aa4990ef46a994b4879b6ca",
+        "bytes": 6388,
+        "contentPublished": false
+      },
+      {
+        "file": "pages/p00110-dashboard-simple.apx",
+        "sha256": "e4fd9108a0587c4c244267aabc0f692ce8df3a61b98d0ae3068b9d450536d326",
+        "bytes": 36573,
+        "contentPublished": false
+      },
+      {
+        "file": "pages/p00120-dashboard-advanced.apx",
+        "sha256": "35e356efbec878c7195f6583bed9a8320f54d492b5bd5ed22e06e09ace2c9441",
+        "bytes": 57662,
+        "contentPublished": false
+      },
+      {
+        "file": "pages/p00130-dashboard-executive.apx",
+        "sha256": "5f49ba505ead7308b4fa73a9736723f05f05e057714d1dd36b15a416e6f205bd",
+        "bytes": 39617,
+        "contentPublished": false
+      },
+      {
+        "file": "pages/p00200-browse-search.apx",
+        "sha256": "8258a425ba659983c4b5882f8b4ce3480eb6493972bcfa6d51c75370dc8e8356",
+        "bytes": 6440,
+        "contentPublished": false
+      },
+      {
+        "file": "pages/p00210-faceted-search-cards.apx",
+        "sha256": "123eee722028f28d9d62430f541d3256ae4e358d169453f5bb53fa6b9a6a4c4e",
+        "bytes": 16205,
+        "contentPublished": false
+      },
+      {
+        "file": "pages/p00220-faceted-search-content-row.apx",
+        "sha256": "f54c1b1a0267b69bd703ebecbb6fab45928ee7ed53d7394b7046e75f631eacc6",
+        "bytes": 19894,
+        "contentPublished": false
+      },
+      {
+        "file": "pages/p00230-browse-interactive-report.apx",
+        "sha256": "1e5b658bd03a6fa9ef58155cab6ef8a297d09c7f164f7ea791f158a7772d4532",
+        "bytes": 19743,
+        "contentPublished": false
+      },
+      {
+        "file": "pages/p00240-full-page-search.apx",
+        "sha256": "ad38608faf1b48fb86d0c0d14f58d467fe831ecc1f2770c5866be0b6e599b373",
+        "bytes": 18563,
+        "contentPublished": false
+      },
+      {
+        "file": "pages/p00250-ai-chat.apx",
+        "sha256": "089402287e7ebb4073615e8c557cbdb1d916fef47f34d47f7d27871127c688df",
+        "bytes": 6365,
+        "contentPublished": false
+      },
+      {
+        "file": "pages/p00300-item-details.apx",
+        "sha256": "a0a20ffbb80e71e7cdfba998665a35fd248991ee513360b30eb9d67f18845e65",
+        "bytes": 6167,
+        "contentPublished": false
+      },
+      {
+        "file": "pages/p00310-item-detail-summary.apx",
+        "sha256": "8a6f44935b183fd334d73bdebcb5a5de1f7b122aabb6408848ce53a68856b76a",
+        "bytes": 40405,
+        "contentPublished": false
+      },
+      {
+        "file": "pages/p00320-item-detail-full.apx",
+        "sha256": "fcd34a8cd5e21f0c8830651344f2d885e4825906c389b74338e331b3dedb3032",
+        "bytes": 76785,
+        "contentPublished": false
+      },
+      {
+        "file": "pages/p00330-item-selection.apx",
+        "sha256": "d3d5c5987c09ca031a4d4c8769f7ad5cfbc713614ef20ffa84ccf40d4159486d",
+        "bytes": 63429,
+        "contentPublished": false
+      },
+      {
+        "file": "pages/p00340-tree-selection.apx",
+        "sha256": "3044e7b389930f4e8ee3cee37f10a8e0e47050eb4842c4e11e8432168cb9ae2d",
+        "bytes": 60488,
+        "contentPublished": false
+      },
+      {
+        "file": "pages/p00400-data-entry.apx",
+        "sha256": "ff7b69fcc66c0645a6622cba0384abb3669ee382d3269bbb467332a937de53ac",
+        "bytes": 6353,
+        "contentPublished": false
+      },
+      {
+        "file": "pages/p00410-data-entry-simple-form.apx",
+        "sha256": "9c1dda200900cfaa7a8a00a9d6bf604523c914179a792a5bfd0df5c3729856d1",
+        "bytes": 13149,
+        "contentPublished": false
+      },
+      {
+        "file": "pages/p00420-data-entry-drawer-form.apx",
+        "sha256": "34c7aee2adffaa91c7ca53a4ebc8740797c5daf0e9bf11bb5724404805ee937d",
+        "bytes": 15618,
+        "contentPublished": false
+      },
+      {
+        "file": "pages/p00500-master-detail.apx",
+        "sha256": "aff1f4ef14a73a31b39fb4f35c80baa29ad94258fdd4cc7a34757d7098a00cfd",
+        "bytes": 6503,
+        "contentPublished": false
+      },
+      {
+        "file": "pages/p01100-content-rows.apx",
+        "sha256": "4ff40db2791e5047ddd276a52092c06f8172b7c2661904bc17c0d31d001906f4",
+        "bytes": 89209,
+        "contentPublished": false
+      },
+      {
+        "file": "pages/p01110-cards.apx",
+        "sha256": "88542cbdb6be68b69d162973bfb4ebe8ebaeccf4fdb9fa576599e366dfb02d07",
+        "bytes": 63647,
+        "contentPublished": false
+      },
+      {
+        "file": "pages/p01120-metrics.apx",
+        "sha256": "3f6b4e537243bf1e77d192790ec7839a173eb313a5db94a071e94d62e2f963c1",
+        "bytes": 40698,
+        "contentPublished": false
+      },
+      {
+        "file": "pages/p01130-charts.apx",
+        "sha256": "2239595d6ebe6b331eb5e04ad0bfacbed670f563790c3e361b0eac0ff07c28ef",
+        "bytes": 66041,
+        "contentPublished": false
+      },
+      {
+        "file": "shared-components/authentications.apx",
+        "sha256": "00469cd117fec6c4481885cb2f4b5d8cfdb09b76b691adcd14d5d196e121c78b",
+        "bytes": 182,
+        "contentPublished": false
+      },
+      {
+        "file": "shared-components/authorizations.apx",
+        "sha256": "ebb959b32997340cbadedc08d1a97b5f5d3d6833cda33c24d47137024c76a57b",
+        "bytes": 256,
+        "contentPublished": false
+      },
+      {
+        "file": "shared-components/breadcrumbs.apx",
+        "sha256": "679ccbdea469623eaf84c43e12b7b32e67baed2c683645b30cc773c8df32bb75",
+        "bytes": 2638,
+        "contentPublished": false
+      },
+      {
+        "file": "shared-components/build-options.apx",
+        "sha256": "12230668a2184415adaab97b3bfb8194f4d3afae23d395ca49c5d2dd82907d3f",
+        "bytes": 96,
+        "contentPublished": false
+      },
+      {
+        "file": "shared-components/component-settings.apx",
+        "sha256": "8b60ca2cd5c3a237ae14244a26d3625a803b8e8047cdba7d36a6690686e85a8d",
+        "bytes": 1257,
+        "contentPublished": false
+      },
+      {
+        "file": "shared-components/lists.apx",
+        "sha256": "bdc2c6e6d836dbd731e4dac0447fea244fcccdc3d4d3482a8e1360ad5bae81ac",
+        "bytes": 12064,
+        "contentPublished": false
+      },
+      {
+        "file": "shared-components/lovs.apx",
+        "sha256": "6213b034c07f979b23105e6acf5f7db0f09a93c6b3cf00befc7347b57c2943db",
+        "bytes": 259,
+        "contentPublished": false
+      },
+      {
+        "file": "shared-components/static-files/avatars/persona-female01.png",
+        "sha256": "6dccdaaa6d0a530fb9af6f24c75739c13e7fc25679dcd508fabb8472d9b809be",
+        "bytes": 12133,
+        "contentPublished": false
+      },
+      {
+        "file": "shared-components/static-files/avatars/persona-female02.png",
+        "sha256": "b808cb0dd8df2ee174da7c48850cf5ef191714e5fc65107e9f2fca8ab49af6e2",
+        "bytes": 15780,
+        "contentPublished": false
+      },
+      {
+        "file": "shared-components/static-files/avatars/persona-female03.png",
+        "sha256": "fafa4177c8146304914fb800aa979191fc73a73490496217bc3f72ac4bcc7dac",
+        "bytes": 12901,
+        "contentPublished": false
+      },
+      {
+        "file": "shared-components/static-files/avatars/persona-male01.png",
+        "sha256": "25d910221bcb3649a686c79e622b64fa001ac3bb08b1a2ee329682a8953ca342",
+        "bytes": 12776,
+        "contentPublished": false
+      },
+      {
+        "file": "shared-components/static-files/avatars/persona-male02.png",
+        "sha256": "abb6ceb10073c2866c400275ee55a865095518238431f5403a9e6515b5a08025",
+        "bytes": 13263,
+        "contentPublished": false
+      },
+      {
+        "file": "shared-components/static-files/avatars/persona-male03.png",
+        "sha256": "64be565d5557735db78707c0d2f0042a221a54bbb75995d4efb9481292e815c3",
+        "bytes": 11390,
+        "contentPublished": false
+      },
+      {
+        "file": "shared-components/static-files/documents/budget-forecast-preview.jpg",
+        "sha256": "fd3f2a7c9b9e0f4cd4718388757f3ff1ae4175611b67faeeccfda8014c4dcc4c",
+        "bytes": 63171,
+        "contentPublished": false
+      },
+      {
+        "file": "shared-components/static-files/documents/launch-plan-preview.jpg",
+        "sha256": "c5915a3c43c567a9d8c191b5cd06bd62d4819089f08146a7b489183b5c4d9a0f",
+        "bytes": 67922,
+        "contentPublished": false
+      },
+      {
+        "file": "shared-components/static-files/documents/project-charter-preview.jpg",
+        "sha256": "243b0843e7d3b0be0ee57d9da0033c651026c4794aa9ffcb898b64ea955cd379",
+        "bytes": 50001,
+        "contentPublished": false
+      },
+      {
+        "file": "shared-components/static-files/documents/release-readiness-checklist-preview.jpg",
+        "sha256": "b62c31864044764da83ae241758fedecdee6a5eb9c959001a709d4bc145e1c84",
+        "bytes": 63597,
+        "contentPublished": false
+      },
+      {
+        "file": "shared-components/static-files/documents/research-findings-preview.jpg",
+        "sha256": "e5f7159216017e38a34d29c02f6c8035a8923cf77bc34bf1493a91c8af357882",
+        "bytes": 49529,
+        "contentPublished": false
+      },
+      {
+        "file": "shared-components/static-files/icons/app-icon-144-rounded.png",
+        "sha256": "ea0c4649c900b286be74f1bac655e674a8b81460bd604e78e995c17420b1c21c",
+        "bytes": 22801,
+        "contentPublished": false
+      },
+      {
+        "file": "shared-components/static-files/icons/app-icon-192.png",
+        "sha256": "dcb40742a1d51571521a8c7905545f9c6ed1fddf4f3109b3f48e8fe710048449",
+        "bytes": 58660,
+        "contentPublished": false
+      },
+      {
+        "file": "shared-components/static-files/icons/app-icon-256-rounded.png",
+        "sha256": "04fb0d913f58b47df977e2adeec8b9a7d002bbd64f8772ff67a5ccf0b5336462",
+        "bytes": 67277,
+        "contentPublished": false
+      },
+      {
+        "file": "shared-components/static-files/icons/app-icon-32.png",
+        "sha256": "0292bcb9941c2436e7715a176bd4f4f928cc0028d42dc6b2fc4d823a0d9f3589",
+        "bytes": 2325,
+        "contentPublished": false
+      },
+      {
+        "file": "shared-components/static-files/icons/app-icon-512.png",
+        "sha256": "ecc15e5fa1ae243db98072d2730a297e98d27328fd8690cd9d6539a5c81fa6f3",
+        "bytes": 353524,
+        "contentPublished": false
+      },
+      {
+        "file": "shared-components/static-files/js/split-view-selection.js",
+        "sha256": "3803d87450245077b7c4c53672bcaf061cd6ac55bae4aeff199fbb7f79238d0c",
+        "bytes": 3964,
+        "contentPublished": false
+      },
+      {
+        "file": "shared-components/static-files/js/split-view-selection.min.js",
+        "sha256": "7c267b1b9958b9be09d66d56b595354a857b6215abec79ea98438245a3183629",
+        "bytes": 1122,
+        "contentPublished": false
+      },
+      {
+        "file": "shared-components/static-files/media-cards/business-travel-hotel.png",
+        "sha256": "7bd5d3ca02ea3c4bb69f6d4d3c5432bf32e38a5a30744e13ff66d0add89b0dd3",
+        "bytes": 16667,
+        "contentPublished": false
+      },
+      {
+        "file": "shared-components/static-files/media-cards/city-hostel.png",
+        "sha256": "550b35ff43411449b9ed9b2e741ebfd74291f49422c4a22de4465ea613f19bc3",
+        "bytes": 16130,
+        "contentPublished": false
+      },
+      {
+        "file": "shared-components/static-files/media-cards/family-stay-hotel.png",
+        "sha256": "2fe0e1084306b7e7a854bf7ae6fcbd03eec74324a657c5a95022cdb16d29e2ce",
+        "bytes": 16674,
+        "contentPublished": false
+      },
+      {
+        "file": "shared-components/static-files/media-cards/luxury-hotel.png",
+        "sha256": "7ca7a7f25cf87fd7c0f223ed14173f24fd4231bbe1cf8a37e9d90f69c408ea5d",
+        "bytes": 19170,
+        "contentPublished": false
+      },
+      {
+        "file": "shared-components/static-files/standards/shared-guidelines.md",
+        "sha256": "c661fdababa3dec84808534a4169f9e4dfd3b80f8270a84aeef638bf1b695729",
+        "bytes": 3295,
+        "contentPublished": false
+      },
+      {
+        "file": "shared-components/static-files.apx",
+        "sha256": "55ebc41759822647b2cdd2738a1c13caa7a7d21d02052bcb83d8c39dfa95eb45",
+        "bytes": 2002,
+        "contentPublished": false
+      },
+      {
+        "file": "shared-components/themes/universal-theme/static-files/24895213365247667045.css",
+        "sha256": "09dab4b08f9f883e1f63574791d1de4832250ec3f7d1eb696e2506d49c929528",
+        "bytes": 94732,
+        "contentPublished": false
+      },
+      {
+        "file": "shared-components/themes/universal-theme/static-files.apx",
+        "sha256": "1f4d2f3724d2d4c2eccd253872342bc7c53aab1ed6235c00585cbe5e74d5b372",
+        "bytes": 77,
+        "contentPublished": false
+      },
+      {
+        "file": "shared-components/themes/universal-theme/theme.apx",
+        "sha256": "b867d690cf7fee12a613fe9f34685fbe2aa6f8ac2689ff8fda1b73528150b84f",
+        "bytes": 4924,
+        "contentPublished": false
+      },
+      {
+        "file": "supporting-objects/deinstall-script.sql",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "contentPublished": false
+      },
+      {
+        "file": "supporting-objects/substitutions.apx",
+        "sha256": "7142587d09abfb53ca31530fbcca3b0a89fee6f4c01cb129f4f3bc010c270558",
+        "bytes": 27,
+        "contentPublished": false
+      },
+      {
+        "file": "supporting-objects/supporting-objects.apx",
+        "sha256": "30bde4850c6d39644421f38cdbdccbfc0d4d56dc6cf48eb8de04fb9e339835d3",
+        "bytes": 139,
+        "contentPublished": false
+      }
+    ]
+  },
+  "verification": {
+    "provenance": "identity-checked-read-only-export",
+    "recipeCompilation": "not-established-by-source-capture",
+    "sourceQueries": "not-run",
+    "import": "not-run",
+    "browser": "not-run"
+  },
+  "publication": {
+    "excluded": [
+      "raw exports",
+      "deployment configuration",
+      "workspace and schema values",
+      "credentials and security settings",
+      "source SQL and body code",
+      "source prose and binary assets",
+      "compiler bundle"
+    ]
+  }
+}

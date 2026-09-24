@@ -1,0 +1,40 @@
+searchConfig workflow-handbook (
+    name: Workflow handbook
+    source {
+        location: localDatabase
+        type: sqlQuery
+        sqlQuery:
+            ```sql
+            select 1 ID, 'Equipment guide' TITLE, 'Steps for maintaining shared equipment.' DESCRIPTION from dual union all select 2, 'Travel guide', 'Planning work travel.' from dual
+            ```
+        searchableColumns: [
+            TITLE
+            DESCRIPTION
+        ]
+    }
+    columnMapping {
+        primaryKey1Column: ID
+        titleColumn: TITLE
+        descriptionColumn: DESCRIPTION
+    }
+)
+searchConfig workflow-notes (
+    name: Workflow notes
+    source {
+        location: localDatabase
+        type: sqlQuery
+        sqlQuery:
+            ```sql
+            select 10 ID, 'Equipment service' TITLE, 'A scheduled equipment inspection.' DESCRIPTION from dual union all select 11, 'Workspace update', 'A summary of workspace changes.' from dual
+            ```
+        searchableColumns: [
+            TITLE
+            DESCRIPTION
+        ]
+    }
+    columnMapping {
+        primaryKey1Column: ID
+        titleColumn: TITLE
+        descriptionColumn: DESCRIPTION
+    }
+)

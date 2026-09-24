@@ -1,0 +1,46 @@
+page 3 (
+    name: Completed
+    alias: PAGE-3
+    title: Completed
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region content (
+        name: Completed
+        type: staticContent
+        source {
+            htmlCode: <p>This local page is a working menu destination.</p>
+        }
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+    )
+    button home (
+        buttonName: HOME
+        label: Return to menu
+        layout {
+            sequence: 10
+            region: @content
+            slot: next
+        }
+        appearance {
+            buttonTemplate: @/text
+            templateOptions: #DEFAULT#
+        }
+        behavior {
+            action: redirectThisApp
+            target: {
+                page: 1
+            }
+        }
+    )
+)

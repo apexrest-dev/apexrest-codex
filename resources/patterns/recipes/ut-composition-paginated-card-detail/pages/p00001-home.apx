@@ -1,0 +1,134 @@
+page 1 (
+    name: Paginated cards with record detail
+    alias: HOME
+    title: Paginated cards with record detail
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region controls (
+        name: Controls
+        type: staticContent
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+
+    )
+    pageItem P1_SELECTED_ID (
+        type: hidden
+        layout {
+            sequence: 10
+            region: @controls
+            slot: regionBody
+        }
+
+    )
+    region cards (
+        name: Records
+        type: cards
+        layout {
+            sequence: 20
+            slot: body
+        }
+        appearance {
+            template: @/cards-container
+            templateOptions: #DEFAULT#
+        }
+        source {
+            location: localDatabase
+            type: sqlQuery
+            sqlQuery:
+                ```sql
+                with records (ID,TITLE,STATUS) as (select 1,'First record','Open' from dual union all select 2,'Second record','Closed' from dual union all select 3,'Third record','Open' from dual)
+                select ID,TITLE,STATUS,apex_page.get_url(p_page=>1,p_items=>'P1_SELECTED_ID',p_values=>to_char(ID)) TARGET_URL from records order by ID
+                ```
+        }
+        card {
+            primaryKeyColumn1: ID
+        }
+        title {
+            column: TITLE
+        }
+        body {
+            column: STATUS
+        }
+        pagination {
+            type: page
+            cardsPerPage: 2
+        }
+        action open-record (
+            label: Details
+            layout {
+                sequence: 10
+            }
+            behavior {
+                type: redirectUrl
+                targetUrl: &TARGET_URL.
+            }
+        )
+    )
+    region detail (
+        name: Record detail
+        type: classicReport
+        layout {
+            sequence: 20
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        source {
+            location: localDatabase
+            type: sqlQuery
+            pageItemsToSubmit: P1_SELECTED_ID
+            sqlQuery:
+                ```sql
+                with records (ID,TITLE,STATUS) as (select 1,'First record','Open' from dual union all select 2,'Second record','Closed' from dual union all select 3,'Third record','Open' from dual)
+                select ID,TITLE,STATUS from records where to_char(ID)=:P1_SELECTED_ID
+                ```
+        }
+        componentAppearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        column ID (
+            reportColumnQueryId: 1
+            derivedColumn: N
+            heading {
+                heading: ID
+            }
+            layout {
+                sequence: 10
+            }
+        )
+        column TITLE (
+            reportColumnQueryId: 2
+            derivedColumn: N
+            heading {
+                heading: TITLE
+            }
+            layout {
+                sequence: 20
+            }
+        )
+        column STATUS (
+            reportColumnQueryId: 3
+            derivedColumn: N
+            heading {
+                heading: STATUS
+            }
+            layout {
+                sequence: 30
+            }
+        )
+    )
+)

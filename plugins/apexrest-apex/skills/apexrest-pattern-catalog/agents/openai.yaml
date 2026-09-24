@@ -1,0 +1,3 @@
+interface:
+  display_name: "APEXREST Pattern Catalog"
+  short_description: "Add reusable APEX UX patterns to the catalog"

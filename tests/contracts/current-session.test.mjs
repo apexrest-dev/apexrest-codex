@@ -82,7 +82,7 @@ test('removed agent entrypoints cannot start work through CLI, MCP or legacy env
 test('distributed runtime and skills contain no model orchestration', async () => {
   const root = 'dist/codex-compat/plugins/apexrest-apex';
   const skills = await readdir(root + '/skills');
-  assert.equal(skills.length, 12);
+  assert.equal(skills.length, 13);
   assert.ok(!skills.includes('apexrest-team'));
   const work = await readFile(root + '/skills/apexrest-work/SKILL.md', 'utf8');
   assert.match(work, /current.*Codex|Codex.*current/i);

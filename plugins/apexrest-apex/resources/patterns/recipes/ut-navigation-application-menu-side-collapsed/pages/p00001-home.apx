@@ -1,0 +1,38 @@
+page 1 (
+    name: Overview
+    alias: HOME
+    title: Overview
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    navigationMenu {
+        overrideUserInterfaceLevel: true
+        list: @workspace-menu
+        listPosition: side
+        listTemplate: @/side-navigation-menu
+        templateOptions: [
+            #DEFAULT#
+            js-defaultCollapsed
+            js-navCollapsed--hidden
+        ]
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region content (
+        name: Overview
+        type: staticContent
+        source {
+            htmlCode: <p>Overview is an original local navigation destination.</p>
+        }
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+    )
+)

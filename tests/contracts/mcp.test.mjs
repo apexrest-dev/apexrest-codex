@@ -39,7 +39,7 @@ test('real stdio MCP initialize/list/call, CLI parity and bounded catalog', asyn
   assert.ok(!searchSchema.required.includes('limit'));
   assert.ok(!searchSchema.required.includes('offset'));
   assert.ok(!searchSchema.required.includes('corpus'));
-  assert.deepEqual(searchSchema.properties.corpus.enum, ['apexlang', 'components']);
+  assert.deepEqual(searchSchema.properties.corpus.enum, ['apexlang', 'components', 'patterns']);
   assert.equal(searchSchema.properties.corpus.default, 'apexlang');
   const settings = catalog.tools
     .find((tool) => tool.name === 'apexrest_panel_action')

@@ -16,7 +16,7 @@ APEXREST connects native Codex skills and MCP tools to Oracle SQLcl. Generate AP
 
 ![APEXREST connects a Codex request to APEXlang source, a verified deployment plan, Oracle APEX and runtime checks.](docs/assets/overview.svg)
 
-> **Release `1.1.0`.** Work directly in your current Codex session with 18 MCP tools and 12 focused skills. Codex owns the conversation and its execution; APEXREST handles Oracle/APEX operations. Programmatic job waiting, metadata batches, concise project inspection and focused references reduce routine tool exchanges. See [release notes](docs/release-notes.md) for changes and evidence limits. Independent tooling; not an official Oracle or OpenAI product.
+> **Release `1.2.0`.** Work directly in your current Codex session with 18 MCP tools and 13 focused skills. Codex owns the conversation and its execution; APEXREST handles Oracle/APEX operations. Programmatic job waiting, metadata batches, concise project inspection and focused references reduce routine tool exchanges. See [release notes](docs/release-notes.md) for changes and evidence limits. Independent tooling; not an official Oracle or OpenAI product.
 
 Describe the change in Codex chat or use `$apexrest-work`. Implementation starts in the same context without a plugin startup call. See the [chat workflow](docs/chat-workflow.md) and [Codex integration](docs/codex-integration.md). Choose **Codex in-app browser / External system browser** for APEX verification in Settings.
 
@@ -24,7 +24,9 @@ Describe the change in Codex chat or use `$apexrest-work`. Implementation starts
 
 Open `$apexrest-panel` for project and connection settings, actual Oracle/APEX jobs and diagnostics inside Codex. The console view is `apexrest panel tui`. See the [development panel](docs/panel.md).
 
-The [component catalog](docs/component-catalog.md) in 1.1.0 provides offline discovery across 109 component families, contextual parameters and 138 compiler-checked APEXlang recipes; one unsupported recipe remains explicitly unresolved. Browse the [component list and examples](https://apex.oracle.com/ut). Search through the existing reference tools or CLI with `--corpus components`; compiler, SQL, import and browser evidence remain separate.
+The [component catalog](docs/component-catalog.md) provides offline discovery across 109 component families, contextual parameters and 138 compiler-checked APEXlang recipes; one unsupported recipe remains explicitly unresolved. Browse the [component list and examples](https://apex.oracle.com/ut). Search through the existing reference tools or CLI with `--corpus components`; compiler, SQL, import and browser evidence remain separate.
+
+Release 1.2.0 adds a separate offline [pattern catalog](docs/pattern-catalog.md): 58 reusable UX patterns and 84 recipes, with 69 compiler-checked recipes and 15 explicit gaps. Its review covers 150 source pages and 818 variant decisions. Search with `--corpus patterns`; use the new `$apexrest-pattern-catalog` skill to add reviewed patterns from another APEX application. Compiler readiness does not imply SQL, import or browser verification.
 
 ## ORDS SQL: a path to Codex Cloud
 
@@ -54,7 +56,7 @@ The [Cloud setup guide](docs/codex-cloud.md) covers CLI + ORDS in a configured c
 
 ## Install from npm
 
-Use Node 24 LTS (supported range: Node 24–26). Install [apexrest](https://www.npmjs.com/package/apexrest) from npm. This package version is `1.1.0`; the commands below use `latest`. See [release notes](docs/release-notes.md) for distribution and verification status.
+Use Node 24 LTS (supported range: Node 24–26). Install [apexrest](https://www.npmjs.com/package/apexrest) from npm. This package version is `1.2.0`; the commands below use `latest`. See [release notes](docs/release-notes.md) for distribution and verification status.
 
 Install the CLI globally and check its version:
 
@@ -74,7 +76,7 @@ npx apexrest --version
 npx apexrest
 ```
 
-To pin this version, use `npm install -g apexrest@1.1.0`. npm includes the built runtime, so no Git checkout or local build is needed. The repository installation below remains available.
+To pin this version, use `npm install -g apexrest@1.2.0`. npm includes the built runtime, so no Git checkout or local build is needed. The repository installation below remains available.
 
 ## Install with the terminal menu
 

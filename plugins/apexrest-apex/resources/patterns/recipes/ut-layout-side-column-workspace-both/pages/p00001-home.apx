@@ -1,0 +1,72 @@
+page 1 (
+    name: Service workspace
+    alias: HOME
+    title: Service workspace
+    appearance {
+        pageTemplate: @/left-and-right-side-columns
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region overview (
+        name: Current work
+        type: staticContent
+        source {
+            htmlCode: <p>The workspace contains twenty open service requests.</p>
+        }
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+    )
+    region summary (
+        name: Delivery summary
+        type: staticContent
+        source {
+            htmlCode: <p>Four requests are due today.</p>
+        }
+        layout {
+            sequence: 20
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+    )
+    region context (
+        name: Workspace context
+        type: staticContent
+        source {
+            htmlCode: <p>Operations workspace. Current reporting week.</p>
+        }
+        layout {
+            sequence: 30
+            slot: leftColumn
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+    )
+    region support (
+        name: Supporting information
+        type: staticContent
+        source {
+            htmlCode: <p>Escalation owner: Service team. Target response: one business day.</p>
+        }
+        layout {
+            sequence: 40
+            slot: rightColumn
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+    )
+)

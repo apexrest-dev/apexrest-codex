@@ -1,0 +1,115 @@
+page 1 (
+    name: Service review
+    alias: HOME
+    title: Service review
+    appearance {
+        pageTemplate: @/marquee
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region summary (
+        name: Quarterly service review
+        type: staticContent
+        source {
+            htmlCode: <p>Read the overview, workload and follow-up sections.</p>
+        }
+        layout {
+            sequence: 10
+            slot: masterDetail
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+    )
+    region sections (
+        name: Sections
+        type: regionDisplaySelector
+        layout {
+            sequence: 20
+            slot: masterDetail
+        }
+        appearance {
+            template: @/blank-with-attributes
+            templateOptions: #DEFAULT#
+        }
+        settings {
+            mode: scrollWindow
+            rememberSelection: false
+        }
+    )
+    region overview (
+        name: Overview
+        type: staticContent
+        source {
+            htmlCode: <p>Demand remains stable across all service areas.</p>
+        }
+        layout {
+            sequence: 30
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        advanced {
+            htmlDomId: review_overview
+            regionDisplaySelector: true
+        }
+    )
+    region workload (
+        name: Workload
+        type: staticContent
+        source {
+            htmlCode: <p>Twenty requests are active and six are awaiting review.</p>
+        }
+        layout {
+            sequence: 40
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        advanced {
+            htmlDomId: review_workload
+            regionDisplaySelector: true
+        }
+    )
+    region followup (
+        name: Follow-up
+        type: staticContent
+        source {
+            htmlCode: <p>Review staffing capacity before the next planning cycle.</p>
+        }
+        layout {
+            sequence: 50
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        advanced {
+            htmlDomId: review_followup
+            regionDisplaySelector: true
+        }
+    )
+    region context (
+        name: Review context
+        type: staticContent
+        source {
+            htmlCode: <p>Reporting period: current quarter. Audience: operations leads.</p>
+        }
+        layout {
+            sequence: 60
+            slot: rightSideColumn
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+    )
+)

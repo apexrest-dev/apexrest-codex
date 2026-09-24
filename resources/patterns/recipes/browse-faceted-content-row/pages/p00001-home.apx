@@ -1,0 +1,160 @@
+page 1 (
+    name: Faceted content row browser
+    alias: HOME
+    title: Faceted content row browser
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+    }
+    region filters (
+        name: Refine records
+        type: facetedSearch
+        source {
+            filteredRegion: @results
+        }
+        layout {
+            sequence: 10
+            slot: body
+        }
+        appearance {
+            template: @/blank-with-attributes
+            templateOptions: #DEFAULT#
+        }
+        settings {
+            showCurrentFacets: true
+            showTotalRowCount: true
+            totalRowCountLabel: Matching records
+        }
+        facet P1_SEARCH (
+            type: search
+            label {
+                label: Find records
+            }
+            layout {
+                sequence: 10
+            }
+            source {
+                dbColumns: TITLE,DESCRIPTION
+            }
+        )
+        facet P1_CATEGORY (
+            type: checkboxGroup
+            label {
+                label: Category
+            }
+            layout {
+                sequence: 20
+            }
+            lov {
+                type: distinctValues
+            }
+            source {
+                databaseColumn: CATEGORY
+            }
+            listEntries {
+                computeCounts: true
+                showCounts: true
+            }
+        )
+        facet P1_STATUS (
+            type: checkboxGroup
+            label {
+                label: Status
+            }
+            layout {
+                sequence: 30
+            }
+            lov {
+                type: distinctValues
+            }
+            source {
+                databaseColumn: STATUS
+            }
+            listEntries {
+                computeCounts: true
+                showCounts: true
+            }
+        )
+    )
+    region results (
+        name: Matching records
+        type: themeTemplateComponent/contentRow
+        source {
+            location: localDatabase
+            type: sqlQuery
+            sqlQuery:
+                ```sql
+                select 1 ID, 'Archive review' TITLE, 'Review the retention schedule.' DESCRIPTION, 'Operations' CATEGORY, 'Open' STATUS from dual
+                union all select 2, 'Catalog refresh', 'Publish the current catalog entries.', 'Documentation', 'Open' from dual
+                union all select 3, 'Access audit', 'Check the project access list.', 'Operations', 'Done' from dual
+                union all select 4, 'Service notes', 'Record the latest support observations.', 'Documentation', 'Done' from dual
+                ```
+        }
+        layout {
+            sequence: 20
+            slot: body
+        }
+        appearance {
+            template: @/blank-with-attributes
+            templateOptions: #DEFAULT#
+        }
+        componentAppearance {
+            display: report
+        }
+        settings {
+            title: &TITLE.
+            description: &DESCRIPTION.
+        }
+        messages {
+            whenNoDataFound: No matching records. Change or clear your search.
+        }
+        column ID (
+            layout {
+                sequence: 10
+            }
+            source {
+                databaseColumn: ID
+                dataType: number
+            }
+        )
+        column TITLE (
+            layout {
+                sequence: 20
+            }
+            source {
+                databaseColumn: TITLE
+                dataType: varchar2
+            }
+        )
+        column DESCRIPTION (
+            layout {
+                sequence: 30
+            }
+            source {
+                databaseColumn: DESCRIPTION
+                dataType: varchar2
+            }
+        )
+        column CATEGORY (
+            layout {
+                sequence: 40
+            }
+            source {
+                databaseColumn: CATEGORY
+                dataType: varchar2
+            }
+        )
+        column STATUS (
+            layout {
+                sequence: 50
+            }
+            source {
+                databaseColumn: STATUS
+                dataType: varchar2
+            }
+        )
+    )
+)
