@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "status": "passed",
   "verifiedAt": "2026-09-24T15:04:44.229Z",
-  "scope": "Read-only re-capture of both source applications, review of every observed page and meaningful structural/behavioral variant, original recipes, real offline SQLcl compilation and local CLI/MCP/package verification. No database mutation, import, application browser check, publication or installed Codex cache update.",
-  "releaseState": "prepared-authorized-1.2.0-publication-pending",
+  "scope": "Read-only source capture, complete observed page/variant review, original recipes, real offline SQLcl compilation and local CLI/MCP/package verification. No database mutation, import, application browser check or installed Codex cache update. npm publication is verified separately in npm-120-publication.json.",
+  "releaseState": "published-1.2.0-registry-verified",
   "productVersion": "1.2.0",
   "sourceDigest": "0bb5bc9ddb6039a009767f51b78191059f1c99c96e5785ea2d724c2aca62f729",
   "catalogVersion": "26.1@d92b2cf4623f",
@@ -238,9 +238,10 @@
     "reason": "No deployment target was requested; both source applications were read-only and synthetic form fixtures were not installed."
   },
   "publication": {
-    "npm": "not-published",
+    "npm": "published-and-registry-verified",
     "tag": "not-created",
-    "release": "not-published"
+    "release": "not-published",
+    "evidence": "docs/evidence/npm-120-publication.json"
   },
   "limitations": [
     "Offline compiler readiness does not establish live SQL, import or browser behavior.",
@@ -248,7 +249,7 @@
     "Fifteen recipes remain unresolved with explicit reasons, including AI provider setup, empty master-detail concepts, secured document/media delivery, persisted decisions/favorites, icon-picker and mutation adapters.",
     "Native navigation and original selection/refresh variants declare their actual behavior; inactive source links and commands are not represented as working actions.",
     "Source redistribution rights remain unverified; only structural facts and original explanations/recipes are packaged.",
-    "Release 1.2.0 is prepared for authorized npm publication; the active Codex plugin cache is unchanged."
+    "npm 1.2.0 is published and registry-verified; the active Codex plugin cache is unchanged."
   ],
   "sources": [
     {

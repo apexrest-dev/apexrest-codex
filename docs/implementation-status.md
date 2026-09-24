@@ -4,7 +4,7 @@ English | [Українська](implementation-status.uk.md)
 
 ## Current scope — 1.2.0, 2026-09-24
 
-APEXREST works directly in the current Codex conversation. Prepared 1.2.0 provides 18 bounded MCP tools, 13 focused skills, a CLI and an optional panel for Oracle/APEX operations and settings. The pattern-catalog maintenance skill extends the catalog workflow without adding an MCP tool. Codex owns the task, context, model, permissions and native collaboration. No plugin work-start call, model session controller, role routing or model selection is part of the product.
+APEXREST works directly in the current Codex conversation. Published 1.2.0 provides 18 bounded MCP tools, 13 focused skills, a CLI and an optional panel for Oracle/APEX operations and settings. The pattern-catalog maintenance skill extends the catalog workflow without adding an MCP tool. Codex owns the task, context, model, permissions and native collaboration. No plugin work-start call, model session controller, role routing or model selection is part of the product.
 
 The release preserves APEXlang generation/export/validation, pinned reference retrieval, scoped metadata batches, SQLcl CLI/MCP and ORDS transports, deployment plan/apply, configured tests, browser handoff, durable jobs and bounded artifact recovery. The panel keeps project/connection settings and the verification-browser preference.
 
@@ -34,8 +34,8 @@ The [acceptance matrix](acceptance.json) distinguishes current criteria, retired
 
 ## Distribution and remaining checks
 
-`apexrest@1.2.0` is prepared for authorized npm publication; registry verification is pending. The [previous 1.1.0 publication record](evidence/npm-110-publication.json) confirms registry integrity and clean local/global installs for source commit `284b554d762545e76b64913b7f34c45c44f01833`. The [1.1.0 release CI run](https://github.com/apexrest-dev/apexrest-codex/actions/runs/35987234098) passed on Ubuntu, macOS and Windows. The [historical 1.0.0 publication record](evidence/npm-100-publication.json) retains its verified integrity, clean installs and Ubuntu/macOS/Windows CI results.
+`apexrest@1.2.0` is published as npm `latest`. The [1.2.0 publication record](evidence/npm-120-publication.json) confirms registry integrity and clean local/global installs for source commit `858b5d14b45370fc2ba01d63013d636f1fa11070`. The [release CI run](https://github.com/apexrest-dev/apexrest-codex/actions/runs/36017573027) passed on Ubuntu, macOS and Windows. The [previous 1.1.0 publication record](evidence/npm-110-publication.json) and [historical 1.0.0 publication record](evidence/npm-100-publication.json) retain their verified integrity, clean installs and platform CI results.
 
-The package and native plugin version is `1.2.0`. Publication remains pending and this work makes no installed-cache update claim. npm publication is independent of the disabled protected GitHub artifact publisher. [Release notes](release-notes.md) track distribution separately from implementation and verification. Registry installation, local packaging, GitHub source and deployed website are separate outcomes.
+The package and native plugin version is `1.2.0`. This publication makes no installed-cache update claim. npm publication is independent of the disabled protected GitHub artifact publisher. [Release notes](release-notes.md) track distribution separately from implementation and verification. Registry installation, local packaging, GitHub source and deployed website are separate outcomes.
 
 Broader native-platform coverage, changed Oracle imports, SQL restore, real interruption/recovery, utPLSQL and authenticated application checks remain open where the existing evidence does not cover them. UTF-8 payload measurements are not paid-token measurements. See [next actions](next-actions.md).

@@ -4,7 +4,7 @@ English | [Українська](next-actions.uk.md)
 
 ## Release 1.2.0
 
-Complete the authorized publication of `apexrest@1.2.0`, verify registry integrity and perform clean local/global installs from npm `latest`. Use the [current catalog evidence](evidence/pattern-catalog-local.json) and [release notes](release-notes.md) for the exact checks and distribution state. The [previous 1.1.0 publication record](evidence/npm-110-publication.json) remains historical evidence. Verify the installed plugin in a new Codex conversation after update. Keep npm metadata, the checked-in native bundle and canonical GitHub source aligned; a registry clean install does not establish desktop behavior or Oracle correctness.
+Registry integrity and clean local/global installs for `apexrest@1.2.0` on npm `latest` are recorded in the [1.2.0 publication record](evidence/npm-120-publication.json). Use the [current catalog evidence](evidence/pattern-catalog-local.json) and [release notes](release-notes.md) for the exact checks and distribution state. The [previous 1.1.0 publication record](evidence/npm-110-publication.json) remains historical evidence. Verify the installed plugin in a new Codex conversation after update. Keep npm metadata, the checked-in native bundle and canonical GitHub source aligned; a registry clean install does not establish desktop behavior or Oracle correctness.
 
 ## Pattern catalog maintenance
 

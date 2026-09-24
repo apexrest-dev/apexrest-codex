@@ -20,7 +20,7 @@ Browse the [Universal Theme component list and examples](https://apex.oracle.com
 
 ## Distribution
 
-`apexrest@1.2.0` is prepared for authorized publication to npm `latest`; registry integrity and clean-install verification are pending. The [previous 1.1.0 publication record](evidence/npm-110-publication.json) remains historical evidence and does not verify 1.2.0.
+`apexrest@1.2.0` is published as npm `latest`. The [1.2.0 publication record](evidence/npm-120-publication.json) confirms registry integrity and clean local/global installs for source commit `858b5d14b45370fc2ba01d63013d636f1fa11070`. The [release CI run](https://github.com/apexrest-dev/apexrest-codex/actions/runs/36017573027) passed on Ubuntu, macOS and Windows. The previous 1.1.0 publication remains recorded separately below.
 
 npm publication is separate from the disabled protected GitHub artifact publisher. It does not claim signed GitHub artifacts, a Git tag, website deployment or full platform/Oracle qualification. Updating the active Codex plugin cache and opening a new conversation to load its tools are separate installation actions.
 
